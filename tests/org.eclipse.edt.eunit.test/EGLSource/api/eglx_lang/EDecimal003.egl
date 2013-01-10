@@ -1,0 +1,304 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EDecimal003
+  * @title EDecimal003 - runComparisonFunction
+  * @description testing decimal comparison operators
+  * @testcases runComparisonFunction01 - runComparisonFunction40
+  * @sources EDecimal003.egl
+  * @keywords decimal, comparison
+ **/
+library EDecimal003 {}
+		
+	dec1 decimal(5,2);
+	dec2 decimal(5,2);
+	dec1n decimal(5,2)? = null;
+	dec2n decimal(5,2)? = 368.12;
+	result boolean;
+	variation string;
+		
+	// comparison test with bigInt literals
+	function runComparisonFunction01(){@Test}
+		variation = "literal comparison < true";
+		result = ( 368.12 < 375.75);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction02(){@Test}
+		variation = "literal comparison < false";
+		result = ( 375.75  < 368.12);
+		LogResult.assertTrue1((!result));
+	end
+	
+	function runComparisonFunction03(){@Test}
+		variation = "equal literal comparison < false";
+		result = (375.75 < 375.75);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction04(){@Test}
+		variation = "literal comparison > true";	
+		result = (375.75 > 368.12);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction05(){@Test}
+		variation = "literal comparison > false";
+		result = (368.12 > 375.75);
+		LogResult.assertTrue1(!result );
+	end	
+	
+	function runComparisonFunction06(){@Test}
+		variation = "equal literal comparison > false";
+		result = (375.75 > 375.75);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction07(){@Test}
+		variation = "literal comparison <= true";
+		result = (368.12 <= 375.75 );
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction08(){@Test}
+		variation = "literal comparison <= false";
+		result = (375.75 <= 368.12);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction09(){@Test}
+		variation = "equal literal comparison <= true";
+		result = (375.75 <= 375.75);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction10(){@Test}
+		variation = "literal comparison >= false";
+		result = (368.12 >= 375.75);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction11(){@Test}
+		variation = "literal comparison >= true";
+		result = (375.75 >= 368.12);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction12(){@Test}
+		variation = "equal literal comparison >= true";
+		result = (375.75 >= 375.75);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction13(){@Test}
+		variation = "equal literal comparison == true";
+		result = (375.75 == 375.75);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction14(){@Test}
+		variation = "equal literal comparison == false";
+		result = (375.75 == 368.12);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction15(){@Test}
+		variation = "equal literal comparison != true";
+		result = (375.75 != 368.12);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction16(){@Test}
+		variation = "equal literal comparison != false";
+		result = (375.75 != 375.75);
+		LogResult.assertTrue1( !result );
+	end
+	
+	// comparison test with bigInt variables
+	function runComparisonFunction17(){@Test}
+		variation = "variable comparison < true";
+		dec1 = 368.12;
+		dec2 = 375.75;
+		result = ( dec1 < dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction18(){@Test}
+		variation = "variable comparison < false";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 < dec2);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction19(){@Test}
+		variation = "equal variable comparison < false";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 < dec2);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction20(){@Test}	
+		variation = "variable comparison > true";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 > dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction21(){@Test}
+		variation = "variable comparison > false";
+		dec1 = 368.12;
+		dec2 = 375.75;
+		result = (dec1 > dec2);
+		LogResult.assertTrue1( !result );
+	end	
+	
+	function runComparisonFunction22(){@Test}
+		variation = "equal variable comparison > false";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 > dec2);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction23(){@Test}
+		variation = "variable comparison <= true";
+		dec1 = 368.12;
+		dec2 = 375.75;
+		result = (dec1 <= dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction24(){@Test}
+		variation = "variable comparison <= false";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 <= dec2);
+		LogResult.assertTrue1( (!result) );
+	end
+	
+	function runComparisonFunction25(){@Test}
+		variation = "equal variable comparison <= true";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 <= dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction26(){@Test}
+		variation = "equal variable comparison <= false";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 <= dec2);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction27(){@Test}
+		variation = "variable comparison >= false";
+		dec1 = 368.12;
+		dec2 = 375.75;
+		result = (dec1 >= dec2);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction28(){@Test}
+		variation = "variable comparison >= true";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 >= dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction29(){@Test}
+		variation = "equal variable comparison >= true";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 >= dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction30(){@Test}
+		variation = "equal variable comparison >= false";
+		dec1 = 368.12;
+		dec2 = 375.75;
+		result = (dec1 >= dec2);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction31(){@Test}
+		variation = "equal variable comparison == true";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 == dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction32(){@Test}
+		variation = "equal variable comparison == false";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = ( dec1 == dec2 );
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction33(){@Test}
+		variation = "equal variable comparison != true";
+		dec1 = 375.75;
+		dec2 = 368.12;
+		result = (dec1 != dec2);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction34(){@Test}
+		variation = "equal variable comparison != false";
+		dec1 = 375.75;
+		dec2 = 375.75;
+		result = (dec1 != dec2);
+		LogResult.assertTrue1( !result );
+	end
+	
+	// comparison with nullable ints and null
+	function runComparisonFunction35(){@Test}
+		variation = "null variable equals null keyword == true";
+		result = (dec1n == null);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction36(){@Test}
+		variation = "null variable not equals null keyword != false";
+		result = (dec1n != null);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction37(){@Test}
+		variation = "variable equals null keyword == false";
+		result = (dec2n == null);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction38(){@Test}
+		variation = "variable not equals null keyword != true";
+		result = (dec2n != null);
+		LogResult.assertTrue1( result );
+	end
+	
+	function runComparisonFunction39(){@Test}
+		variation = "null variable equals variable == false";
+		result = (dec1n == dec2n);
+		LogResult.assertTrue1( !result );
+	end
+	
+	function runComparisonFunction40(){@Test}
+		variation = "null variable not equals variable != false";
+		dec1n = 368.12;
+		result = (dec1n != dec2n);
+		dec1n = null;
+		LogResult.assertTrue1( !result );
+	end
+	
+end  // EDecimal003

@@ -1,0 +1,156 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EString015
+  * @title EString015 - runLimitedString
+  * @description testing string variable with a length limit
+  * @testcases runLimited01 - runLimited14
+  * @sources EString015.egl
+  * @keywords string, limited
+ **/
+library EString015 {}
+
+	variation string;
+	isIt boolean;
+	expected boolean;
+	myRecord EString015Record;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runLimited01(){@Test}
+		variation = "string length - no truncation";
+		myRecord.stringField = "abcdefg";
+		isIt = myRecord.stringField.length() == 7;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited02(){@Test}
+		variation = "string length - truncation";
+		myRecord.stringField = "abcdefghijklmnop";
+		isIt = myRecord.stringField.length() == 10;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited03(){@Test}
+		variation = "string assignment - no truncation";
+		myRecord.stringField = "abcdefg";
+		isIt = myRecord.stringField == "abcdefg";
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited04(){@Test}
+		variation = "string assignment - truncation";
+		myRecord.stringField = "abcdefghijklmnop";
+		isIt = myRecord.stringField == "abcdefghij";
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited05(){@Test}
+		variation = "string concat";
+		myRecord.stringField = "abcdefg";
+		s1 string(5) = "1234567890";
+		s2 string = s1 + myRecord.stringField;
+		isIt = s2 == "12345abcdefg";
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited06(){@Test}
+		variation = "substring - valid";
+		myRecord.stringField = "1234567890";
+		isIt = myrecord.stringField[4:6] == "456";
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited07(){@Test}
+		variation = "substring - past max length";
+		myRecord.stringField = "1234567890";
+		try
+			s string = myRecord.stringField[8:11];
+			LogResult.failed("Expecting exception");
+		onException(exception InvalidIndexException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runLimited08(){@Test}
+		variation = "substring - past curr length";
+		myRecord.stringField = "1234";
+		try
+			s string = myRecord.stringField[3:5];
+			LogResult.failed("Expecting exception");
+		onException(exception InvalidIndexException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runLimited09(){@Test}
+		variation = "string comparison";
+		myRecord.stringField = "1234567890abcdefg";
+		isIt = myRecord.stringField < "1234567890abcdefg";
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited10(){@Test}
+		variation = "string not padded";
+		myRecord.stringField = "1234";
+		isIt = myRecord.stringField.endsWith(" ");
+		expected = false;
+		assertTrue();
+	end
+	
+	function runLimited11(){@Test}
+		variation = "string allows explicit blanks";
+		myRecord.stringField = "1234 ";
+		isIt = myRecord.stringField.endsWith(" ") && !myRecord.stringField.endsWith("  ");
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited12(){@Test}
+		variation = "isa string";
+		isIt = myRecord.stringField isa string;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited13(){@Test}
+		variation = "isa string(10)";
+		isIt = myRecord.stringField isa string(10);
+		expected = true;
+		assertTrue();
+	end
+	
+	function runLimited14(){@Test}
+		variation = "isa string(20)";
+		isIt = myRecord.stringField isa string(20);
+		expected = false;
+		assertTrue();
+	end
+	
+end // EString015
+
+// basic record
+//
+record EString015Record
+	
+	stringField string(10);
+	
+end

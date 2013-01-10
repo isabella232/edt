@@ -1,0 +1,190 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestNullableBytesLib
+* @title TestNullableBytesLib - RunNullableBytesFunctions
+* @description test case for NullableBytes data type behavior
+* @sources TestNullableBytesLib.egl
+* @keywords NullableBytesRecords, functions
+**/
+
+library TestNullableBytesLib
+
+    nBytes bytes?;
+    nBytes2 bytes?;
+    aBytes bytes;
+    
+    b bytes(1);
+    bn bytes(1)?;
+
+    function runTestNullableBytesDefs1(){@Test}
+        LogResult.logStdOut("Local BYTES? definition - 1");
+        LogResult.assertTrue(" (nBytes==null)",(nBytes == null));
+    end
+
+    function runTestNullableBytesDefs2(){@Test}
+        nBytes = 0x00;
+        LogResult.logStdOut("Local BYTES? definition - 2");
+        LogResult.assertTrue(" (nBytes!=null)",(nBytes != null));
+    end
+
+    function runTestNullableBytesDefs3(){@Test}
+    	// EDT unlike RBD will not create an instance if you declare an annotation
+        nB bytes?{};
+        LogResult.logStdOut("Local BYTES?{} definition - 3");
+        LogResult.assertTrue(" (nB==null)",(nB == null));
+    end
+
+    function runTestNullableBytesAssignmentToBytes1(){@Test}
+        xBytes bytes(3) = 0x123456;
+        aBytes = xBytes;
+        LogResult.logStdOut("Null BYTES? used in assignment to BYTES");
+        LogResult.assertTrue(" aBytes,false)", aBytes as bytes(3) == 0x123456);
+    end
+
+    function runTestNullableBytesAssignmentToBytes11(){@Test}
+    	local bytes?;
+        local = localTestBytes(true);
+        LogResult.logStdOut("Function returning null BYTES? used in assign to BYTES");
+        LogResult.assertTrue(" aBytes,true)", local == null);
+    end
+
+    function runTestNullableBytesAssignmentToBytes14(){@Test}
+        nBytes = 0x56;
+        aBytes = nBytes;
+        LogResult.logStdOut("Non-null BYTES? used in assignment to BYTES");
+        LogResult.assertTrue(" aBytes,true)", aBytes as bytes(1) == 0x56);
+    end
+
+    function runTestNullableBytesAssignmentToNullableBytes1(){@Test}
+    	nBytes = null;
+        nBytes2 = nBytes;
+        LogResult.logStdOut("Null BYTES? used in assignment to BYTES?");
+        LogResult.assertTrue("(nBytes==null)",(nBytes == null));
+        LogResult.assertTrue(" nBytes2,false)", nBytes2 == null);
+    end
+
+    function runTestNullableBytesAssignmentToNullableBytes11(){@Test}
+        nBytes2 = localTestBytes(false);
+        LogResult.logStdOut("Function returning null BYTES? used in assign to BYTES?");
+        LogResult.assertTrue(" nBytes2,true)", nBytes2 as bytes(2) == 0xBE45);
+    end
+
+    function runTestNullableBytesAssignmentToNullableBytes14(){@Test}
+        nBytes = 0x56;
+        nBytes2 = nBytes;
+        LogResult.logStdOut("Non-null BYTES? used in assignment to BYTES?");
+        LogResult.assertTrue(" nBytes2,true)", nBytes2 as bytes(1) == 0x56);
+    end
+
+    function runtestNullableBytesComparisons1(){@Test}
+        bn = null;
+        LogResult.logStdOut("Null BYTES? used in == expression - 1");
+        LogResult.assertTrue(" bn == 0x52",(bn == 0x52) == false);
+    end
+
+    function runtestNullableBytesComparisons2(){@Test}
+        bn = 0x87;
+        LogResult.logStdOut("Nullable BYTES? used in == expression - 2");
+        LogResult.assertTrue(" bn == 0x87",bn == 0x87);
+    end
+
+    function runtestNullableBytesComparisons3(){@Test}
+        bn = null;
+        LogResult.logStdOut("Null BYTES? used in != expression - 1");
+        LogResult.assertTrue(" bn != 0x86", bn != 0x86);
+    end
+
+    function runtestNullableBytesComparisons4(){@Test}
+        bn = 0x87;
+        LogResult.logStdOut("Nullable BYTES? used in != expression - 2");
+        LogResult.assertTrue(" bn != 0x86",bn != 0x86);
+    end
+
+    function runtestNullableBytesComparisons5(){@Test}
+    	try
+	        bn = null;
+	        LogResult.logStdOut("Null BYTES? used in > expression - 1");
+	        LogResult.assertTrue(" bn > 0x86",(bn > 0x86) == false);
+       		wantNVE();
+       	onException(nve NullValueException)
+       		pass();
+       	end
+    end
+
+    function runtestNullableBytesComparisons6(){@Test}
+        bn = 0x87;
+        LogResult.logStdOut("Nullable BYTES? used in > expression - 2");
+        LogResult.assertTrue(" bn > 0x86",bn > 0x86);
+    end
+
+    function runtestNullableBytesComparisons7(){@Test}
+    	try
+	        bn = null;
+	        LogResult.logStdOut("Null BYTES? used in >= expression - 1");
+	        LogResult.assertTrue(" bn >= 0x86",(bn >= 0x86) == false);
+       		wantNVE();
+       	onException(nve NullValueException)
+       		pass();
+       	end
+    end
+
+    function runtestNullableBytesComparisons8(){@Test}
+        bn = 0x87;
+        LogResult.logStdOut("Nullable BYTES? used in >= expression - 2");
+        LogResult.assertTrue(" bn >= 0x86",bn >= 0x86);
+    end
+
+    function runtestNullableBytesComparisons9(){@Test}
+    	try
+	        bn = null;
+	        LogResult.logStdOut("Null BYTES? used in < expression - 1");
+	        LogResult.assertTrue(" bn < 0x86",(bn < 0x86) == false);
+       		wantNVE();
+       	onException(nve NullValueException)
+       		pass();
+       	end
+    end
+
+    function runtestNullableBytesComparisons10(){@Test}
+        bn = 0x85;
+        LogResult.logStdOut("Nullable BYTES? used in < expression - 2");
+        LogResult.assertTrue(" bn < 0x86",bn < 0x86);
+    end
+
+    function runtestNullableBytesComparisons11(){@Test}
+    	try
+	        bn = null;
+	        LogResult.logStdOut("Null BYTES? used in <= expression - 1");
+	        LogResult.assertTrue(" bn <= 0x86",(bn <= 0x86) == false);
+       		wantNVE();
+       	onException(nve NullValueException)
+       		pass();
+       	end
+    end
+
+    function runtestNullableBytesComparisons12(){@Test}
+        bn = 0x85;
+        LogResult.logStdOut("Nullable BYTES? used in <= expression - 2");
+        LogResult.assertTrue(" bn <= 0x86",bn <= 0x86);
+    end
+    
+    function localTestBytes(bRetNull boolean in) returns(bytes?)
+        if(bRetNull)
+            return(null);
+        else
+            return(0xBE45);
+        end
+    end
+
+	function wantNVE()
+		LogResult.failed("Expecting NullValueException");
+	end
+	
+	function pass()
+		LogResult.passed("OK");
+	end
+end

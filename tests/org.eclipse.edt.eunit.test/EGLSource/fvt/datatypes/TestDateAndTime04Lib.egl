@@ -1,0 +1,191 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+
+/**
+* @name TestDateAndTime04Lib
+* @title TestDateAndTime04Lib - runDateAndTime04
+* @description test case for "Date/Time" data type behavior
+* @testcases runDateAndTime04
+* @sources TestDateAndTime04Lib.egl
+* @keywords TestDateAndTime, functions
+**/
+
+library TestDateAndTime04Lib
+
+    thing, aThing, bThing any?;
+    n int;
+
+    function runDateAndTime1(){@Test}
+        LogResult.logStdOut("variation 1");
+        ts timeStamp?;
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime2(){@Test}
+        LogResult.logStdOut("variation 2");
+        d date;
+        LogResult.assertTrue("true", true);
+    end
+
+    //    function runDateAndTime3(){@Test}
+    //        LogResult.logStdOut("variation 3");
+    //        t time = dateTimeLib.currentTime();
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+    function runDateAndTime4(){@Test}
+        d date = "12*31*2004";
+        LogResult.logStdOut("variation 4");
+        expected string = "2004.12.31";
+        actual string = StrLib.formatDate(d, "yyyy.MM.dd");
+        LogResult.assertStringEqual1(expected, actual);
+    end
+
+    function runDateAndTime5(){@Test}
+        d date;
+        LogResult.logStdOut("variation 5");
+        d = dateTimeLib.dateFromJulian(2004366);
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime6(){@Test}
+        d date;
+        LogResult.logStdOut("variation 6");
+        d = dateTimeLib.dateFromGregorian(20041231);
+        LogResult.assertTrue("true", true);
+    end
+
+    //    function runDateAndTime7(){@Test}
+    //        t time = dateTimeLib.currentTime();
+    //        LogResult.logStdOut("variation 7");
+    //        strLib.defaultTimeFormat = "HH:mm:ss";
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+    function runDateAndTime8(){@Test}
+     try
+        ts timeStamp?;
+        pretty string;
+        LogResult.logStdOut("variation 8");
+        ts = "2004-12-31-12-12-12";
+        pretty = StrLib.formatTimeStamp(ts, "yyyy-MM-dd HH:mm:ss.SSSSSS");
+        LogResult.assertStringEqual1("2004-12-31 12:12:12.000000", PRETTY);
+//        WHAT string = StrLib.formatTimeStamp("2004-12-31 12:12:12.123456", "yyyy-MM-dd HH:mm:ss.SSSSSS");
+//        LogResult.logStdOut("match " + (what == pretty));
+       onexception(bad AnyException)
+       	    LogResult.failed("ops" + bad.message);
+       end
+    end
+
+    function runDateAndTime9(){@Test}
+        ts timeStamp?;
+        LogResult.logStdOut("variation 9");
+        ts = "2004-12-31-12-12-12";
+        pretty string = StrLib.formatTimeStamp(ts, "yyyymmddhhmmss");
+        LogResult.assertStringEqual1("20041231121212", PRETTY);
+    end
+
+    //    function runDateAndTime10(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        LogResult.logStdOut("variation 10");
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+    function runDateAndTime11(){@Test}
+		n int;
+        ts  timeStamp("yyyyMMdd") = "2000-10-31";
+        LogResult.logStdOut("variation 11");
+        n = ts.dayOf();
+		expected int = 31;
+		LogResult.assertBigIntEqual1(expected, n);
+    end
+
+    //    function runDateAndTime12(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 12");
+    //        n = dateTimeLib.monthOf(ts);
+    //        LogResult.assertTrue("2", 2);
+    //    end
+    
+    //    function runDateAndTime13(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 13");
+    //        n = dateTimeLib.yearOf(ts);
+    //        LogResult.assertTrue("2", 2);
+    //    end
+    
+    //    function runDateAndTime14(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 14");
+    //        n = dateTimeLib.weekdayOf(ts);
+    //        LogResult.assertTrue("2", 2);
+    //    end
+    
+    function runDateAndTime15(){@Test}
+        d date;
+        LogResult.logStdOut("variation 15");
+        d = dateTimeLib.Mdy(12, 31, 2004);
+        LogResult.assertTrue("true", true);
+    end
+
+    //    function runDateAndTime16(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 16");
+    //        d = dateTimeLib.dateOf(ts);
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+    //    function runDateAndTime17(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 17");
+    //        t = dateTimeLib.timeOf(ts);
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+    //    function runDateAndTime18(){@Test}
+    //        ts timeStamp = dateTimeLib.currentTimeStamp();
+    //        t time = dateTimeLib.currentTime();
+    //        t = dateTimeLib.timeValue("12:12:12");
+    //        d date = dateTimeLib.currentDate();
+    //        d = dateTimeLib.dateValueFromGregorian(20041231);
+    //        ts = dateTimeLib.timestampFrom(d, t);
+    //        LogResult.logStdOut("variation 18");
+    //        ts = dateTimeLib.extend(ts, "yyyymmddhhmmss");
+    //        LogResult.assertTrue("true", true);
+    //    end
+    
+end

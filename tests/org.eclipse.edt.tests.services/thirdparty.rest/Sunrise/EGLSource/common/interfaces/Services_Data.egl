@@ -1,0 +1,51 @@
+package common.interfaces;
+
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+record TimezoneData{@XMLRootElement {name = "timezone"}}
+    version string;
+    location LocationData;
+    offset int;
+    suffix string;
+    localtime string;
+    isotime string;
+    utctime string;
+    dst string;
+end
+
+record LocationData
+   latitude string;
+   longitude string;
+end
+
+record SunriseData{@XMLRootElement {name = "sun"}}
+    version string;
+    location LocationData;
+    dateF DateData{@XMLElement{name="date"}};
+    morning morningData;
+    evening eveningData;
+end
+
+record DateData
+	day int;
+ 	month int;
+    timezone int;
+    dst int;
+end
+
+record morningData
+	sunrise string;
+    twilight TwilightData;
+end
+
+record eveningData
+	sunset string;
+   	twilight TwilightData;
+end
+
+record TwilightData
+	civil string;
+    nautical string;
+    astronomical string;
+end

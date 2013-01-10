@@ -1,0 +1,12 @@
+package fvt.baseStatements;
+
+Library TestForLibrary 
+	counter smallInt;
+	start smallInt;
+	delta int;
+	stop bigInt;
+	recordBin TestForRecordBin;
+	//controls decimal(9,0)[0];
+	controls decimal(9,0)[]{};
+
+end

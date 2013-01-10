@@ -1,0 +1,705 @@
+package fvt.xml.handlers;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+import eglx.xml.XmlLib;
+import fvt.xml.handlers.data.error1;
+import fvt.xml.handlers.data.error2;
+
+/* 
+* @name NullHandingLib
+* @title The function test program for XML conversion with Error situations
+* @keywords Error situations
+* @author EDT team
+* @createDate 2011/08/26
+* @description 
+* Test XML Error Situations
+*/
+
+library NullHandlingLib
+
+    function testXMLErrorSituationsNil(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("xsi:nil=\"true\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "xsi:nil=\"true\"") == 0);
+    end
+
+    function testXMLErrorSituationsNNString(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnString") == 0);
+    end
+
+    function testXMLErrorSituationsNilString(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillString") != 0);
+    end
+
+    function testXMLErrorSituationsNnInt(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnInt") == 0);
+    end
+
+    function testXMLErrorSituationsNilInt(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillInt") != 0);
+    end
+
+    function testXMLErrorSituationsNString(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nString") != 0);
+    end
+
+    function testXMLErrorSituationsNInt(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nInt") != 0);
+    end
+
+    function testXMLErrorSituationsNStringNull(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nString!=null");
+        LogResult.assertTrue1(err2.nString != null);
+    end
+
+    function testXMLErrorSituationsNStringCom(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nString");
+        LogResult.assertStringEqual1(err.nString, err2.nString);
+    end
+
+    function testXMLErrorSituationsNNStringNull(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnString!=null");
+        LogResult.assertTrue1(err2.nnString != null);
+    end
+
+    function testXMLErrorSituationsNNStringCom(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnString");
+        LogResult.assertStringEqual1(err.nnString, err2.nnString);
+    end
+
+    function testXMLErrorSituationsNIntNull(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nInt!=null");
+        LogResult.assertTrue1(err2.nInt != null);
+    end
+
+    function testXMLErrorSituationsNIntCom(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nInt");
+        LogResult.assertBigIntEqual1(err.nInt, err2.nInt);
+    end
+
+    function testXMLErrorSituationsNnIntNull(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnInt!=null");
+        LogResult.assertTrue1(err2.nnInt != null);
+    end
+
+    function testXMLErrorSituationsNnIntCom(){@Test}
+        err error1{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+        err2 error1{};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 1: <xmp>" + xml + "</xmp>");
+
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnInt");
+        LogResult.assertBigIntEqual1(err.nnInt, err2.nnInt);
+    end
+
+    function testXMLErrorSituations2Nil(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("xsi:nil=\"true\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "xsi:nil=\"true\"") != 0);
+    end
+
+    function testXMLErrorSituations2NNString(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnString") == 0);
+    end
+
+    function testXMLErrorSituations2NilString(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillString") != 0);
+    end
+
+    function testXMLErrorSituations2NnInt(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnInt") == 0);
+    end
+
+    function testXMLErrorSituations2NilInt(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillInt") != 0);
+    end
+
+    function testXMLErrorSituations2NString(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nString") == 0);
+    end
+
+    function testXMLErrorSituations2NInt(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nInt") == 0);
+    end
+
+    function testXMLErrorSituations2NStringNull(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nString==null");
+        LogResult.assertTrue1(err2.nString == null);
+    end
+
+    function testXMLErrorSituations2NnStringNull(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnString==null");
+        LogResult.assertTrue1(err2.nnString == null);
+    end
+
+    function testXMLErrorSituations2NIntNull(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nInt==null");
+        LogResult.assertTrue1(err2.nInt == null);
+    end
+
+    function testXMLErrorSituations2NnIntNull(){@Test}
+        err error1{};
+        err.nnString = null;
+        err.nnInt = null;
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 2: <xmp>" + xml + "</xmp>");
+
+        err2 error1{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnInt==null");
+        LogResult.assertTrue1(err2.nnInt == null);
+    end
+
+    function testXMLErrorSituations3Nil(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("xsi:nil=\"true\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "xsi:nil=\"true\"") == 0);
+    end
+
+    function testXMLErrorSituations3NNString(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnString") == 0);
+    end
+
+    function testXMLErrorSituations3NilString(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillString") != 0);
+    end
+
+    function testXMLErrorSituations3NnInt(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nnInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nnInt") == 0);
+    end
+
+    function testXMLErrorSituations3NilInt(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nillInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nillInt") != 0);
+    end
+
+    function testXMLErrorSituations3NString(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nString\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nString") != 0);
+    end
+
+    function testXMLErrorSituations3NInt(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("\"nInt\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "nInt") != 0);
+    end
+
+    function testXMLErrorSituations3NStringNull(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nString!=null");
+        LogResult.assertTrue1(err2.nString != null);
+    end
+
+    function testXMLErrorSituations3NStringCom(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nString");
+        LogResult.assertStringEqual1(err.nString, err2.nString);
+    end
+
+    function testXMLErrorSituations3NnStringNull(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnString!=null");
+        LogResult.assertTrue1(err2.nnString != null);
+    end
+
+    function testXMLErrorSituations3NnStringCom(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnString");
+        LogResult.assertStringEqual1(err.nnString, err2.nnString);
+    end
+
+    function testXMLErrorSituations3NIntNull(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nInt!=null");
+        LogResult.assertTrue1(err2.nInt != null);
+    end
+
+    function testXMLErrorSituations3NIntCom(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nInt");
+        LogResult.assertBigIntEqual1(err.nInt, err2.nInt);
+    end
+
+    function testXMLErrorSituations3NnIntNull(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnInt!=null");
+        LogResult.assertTrue1(err2.nnInt != null);
+    end
+
+    function testXMLErrorSituations3NnIntCom(){@Test}
+        err error2{nString = "abc", nnString = "cde", nInt = 5, nnInt = 10};
+
+        xml string;
+        //xml = xmllib.convertToXML(err);
+        xml = xmllib.convertToXML(err, true);
+
+        LogResult.logStdOut("Situations 3: <xmp>" + xml + "</xmp>");
+
+        err2 error2{};
+        xmllib.convertFromXML(xml, err2);
+
+        LogResult.logStdOut("nnInt");
+        LogResult.assertBigIntEqual1(err.nnInt, err2.nnInt);
+    end
+
+
+end
+
+
+
+

@@ -1,0 +1,265 @@
+package fvt.baseStatements;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title The function test program for valid FOR in EDT for RichUI
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/08/03
+* @description The testFor function tests use of each data type valid as an integer, as well as numeric literals and
+* expressions for the controls of the for statement. In addition, the data items used as
+* controls may come from a standalone data item, an item of a record, a dynamic item array, 
+* an item of a fixed array of a record, an item of a library, an item of a record within
+* a library, or a dynamic item array element.
+*/
+
+library TestForStatementLib
+// Test when controls are simple data items
+// Default from and delta to 1
+// Controls use data types smallInt, int, and bigInt
+// Successful result: 15 added to total
+
+    function testForDataItem(){@Test}
+        counter smallInt;
+        stop bigInt;
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with int types");
+        total = 0;
+        stop = 5;
+
+        for(counter to stop)
+            total = total + counter;
+        end
+
+        LogResult.assertTrue1(total == 15);
+    end
+
+    // Test when controls are data items of a record
+    // No defaults, use decrement keyword
+    // Controls use data types bin(4,0), bin(9,0), bin(18,0)
+    // Successful result: 15 subtracted from total	
+    
+    function testForRecDataItem(){@Test}
+        recordBin TestForRecordBin;
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with bin types in a record");
+        total = 0;
+        recordBin.start = 5;
+        recordBin.delta = 1;
+        recordBin.stop = 1;
+
+        for(recordBin.counter from recordBin.start to recordBin.stop decrement by recordBin.delta)
+            total = total - recordBin.counter;
+        end
+
+        LogResult.assertTrue1(total == -15);
+    end
+
+    // Test when controls are data items of a fixed array
+    // No defaults
+    // Controls use data type num(4,0)
+    // Successful result: 25 added to total	
+    
+    function testForFixArrayDataItem(){@Test}
+        recFixArray TestForRecordFixArray;
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with num types in a fixed array of a record");
+        total = 0;
+        recFixArray.controls[2] = 1;  // Start value
+        recFixArray.controls[3] = 2;  // Increment
+        recFixArray.controls[4] = 9;  // Termination value
+        for(recFixArray.controls[1] from recFixArray.controls[2] to recFixArray.controls[4] by recFixArray.controls[3])
+            total = total + recFixArray.controls[1];
+        end
+        LogResult.assertTrue1(total == 25);
+    end
+
+    // Test when controls are data items of a dynamic array
+    // Array specification on identifier rather than type
+    // No defaults
+    // Controls use data types decimal(4,0)
+    // Successful result: 15 added to total	
+    
+    function testForDynArrayDataItem(){@Test}
+        //controls decimal(4, 0)[0]{maxSize = 4};
+        controls decimal(4, 0)[];
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with decimal types in a dynamic item array");
+        total = 0;
+        controls.appendElement(0);  // Counter
+        controls.appendElement(1);  // Start value
+        controls.appendElement(1);  // Increment
+        controls.appendElement(5);  // Termination value
+        
+        for(controls[1] from controls[2] to controls[4] by controls[3])
+            total = total + controls[1];
+        end
+
+        LogResult.assertTrue1(total == 15);
+    end
+
+    // Test when controls are data items of a library
+    // Default from and delta to 1
+    // Controls use data types smallInt, int, and bigInt
+    // Successful result: 15 added to total	
+    
+    function testForLibraryDataItem(){@Test}
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with int types in a library");
+        total = 0;
+        TestForLibrary.stop = 5;
+
+        for(TestForLibrary.counter to TestForLibrary.stop)
+            total = total + TestForLibrary.counter;
+        end
+
+        LogResult.assertTrue1(total == 15);
+    end
+
+    // Test when controls are data items of a record of a library
+    // No defaults, use decrement keyword
+    // Controls use data types bin(4,0), bin(9,0), bin(18,0)
+    // Successful result: 15 subtracted from total	
+    
+    function testForLibraryRecDataItem(){@Test}
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items with decimal types in a record of a library");
+        total = 0;
+        TestForLibrary.recordBin.start = 5;
+        TestForLibrary.recordBin.delta = 1;
+        TestForLibrary.recordBin.stop = 1;
+
+        for(TestForLibrary.recordBin.counter from TestForLibrary.recordBin.start to TestForLibrary.recordBin.stop decrement by TestForLibrary.recordBin.delta)
+            total = total - TestForLibrary.recordBin.counter;
+        end
+
+        LogResult.assertTrue1(total == -15);
+    end
+
+    // Test when controls are data items of an array of a library
+    // Controls use data types bin(4,0), bin(9,0), bin(18,0)
+    // Successful result: 15 added to total
+    
+    function testForLibraryArrayDataItem(){@Test}
+        total int;
+
+        LogResult.logStdOut("Controls are data items with bin types in a dynamic item array of a library");
+        total = 0;
+        TestForLibrary.controls.appendElement(0);  // Counter
+        TestForLibrary.controls.appendElement(1);  // Start value
+        TestForLibrary.controls.appendElement(1);  // Increment
+        TestForLibrary.controls.appendElement(5);  // Termination value
+        
+        for(TestForLibrary.controls[1] from TestForLibrary.controls[2] to TestForLibrary.controls[4] by TestForLibrary.controls[3])
+            total = total + TestForLibrary.controls[1];
+        end
+
+        LogResult.assertTrue1(total == 15);
+    end
+
+    // Test for statement when controls are literal expressions
+    // No defaults, use decrement keyword
+    // Successful result: 15 subtracted from total	
+    
+    function testForLiteralExpressions(){@Test}
+        counter smallInt;
+        start smallInt;
+        delta int;
+        stop bigInt;
+        total int;
+
+        LogResult.logStdOut("Controls, except for counter, are literal expressions");
+        total = 0;
+
+        for(counter from 2 + 3 to 1 decrement by 1)
+            total = total - counter;
+        end
+
+        LogResult.assertTrue1(total == -15);
+    end
+
+    // Test for statement when controls are variable expressions
+    // No defaults
+    // Successful result: 10 added to total	
+    
+    function testForVariableExpressions(){@Test}
+        counter smallInt;
+        //expVariables int[0]{maxSize = 5};
+        expVariables int[];
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls, except for counter, are variable expressions");
+        total = 0;
+        TestForLibrary.start = 5;
+        expVariables.appendElement(2);
+        expVariables.appendElement(3);
+
+        for(counter from TestForLibrary.start - expVariables[1] - expVariables[2] + 1 to 2 *(TestForLibrary.start - expVariables[2]) by 2 + 6 - 7)
+            total = total + counter;
+        end
+
+        LogResult.assertTrue1(total == 10);
+    end
+
+    // Test modifying controls within for loop
+    // Start defaults to 1 
+    // Controls are simple data items
+    // Controls use data types smallInt, int, and bigInt
+    // Successful result: 16 added to total
+    
+    function testForUpdateControls(){@Test}
+        counter smallInt;
+        delta int;
+        stop bigInt;
+        total int;
+
+        // Record start of variation 
+        LogResult.logStdOut("Controls are data items of type int and are updated in FOR loop");
+        total = 0;
+        delta = 1;
+        stop = 5;
+
+        for(counter to stop by delta)
+            total = total + counter;
+
+            if(delta == 1)
+                delta = 2;
+            end
+
+            if(delta == 2)
+                stop = 8;
+            end
+        end
+
+        LogResult.assertTrue1(total == 16);
+    end
+end
+
+record TestForRecordBin
+    counter int;
+    start int;
+    delta int;
+    stop int;
+end
+
+record TestForRecordFixArray
+//controls int[4];
+    controls int[] = new int[4];
+    //	10 controls int[4];
+end

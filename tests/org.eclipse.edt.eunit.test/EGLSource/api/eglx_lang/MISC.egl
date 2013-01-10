@@ -1,0 +1,15 @@
+package api.eglx_lang;
+
+//Put EGL Source File Contents Here
+record TestRec
+	s string;
+end
+
+enumeration ExceptionState
+	correct = 1, wrongException = 2, noException = 3
+end
+
+record TestDefaultedRec
+	s string = "Defaulted value";
+	d decimal(5,2) = 123.45;
+end

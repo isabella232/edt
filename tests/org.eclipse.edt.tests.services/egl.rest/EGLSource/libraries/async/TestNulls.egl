@@ -1,0 +1,490 @@
+package libraries.async;
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.NullRecord;
+import eglx.http.IHttp;
+import interfaces.INullPassing;
+import services.NullPassing;
+import utilities.CommonUtilities;
+
+// basic library
+library TestNulls
+	
+	INullPassing INullPassing;
+	
+	private function initArray(ar string[] out)
+		ar = new string[0];
+		ar.appendElement("Element 1");
+		ar.appendElement("Element 2");
+		ar.appendElement("Element 3");
+		ar.appendElement("Element 4");
+	end
+	
+	function initNullRecord(rec NullRecord)
+		rec.item1 = "item1";
+		rec.item_2_a = 9999;
+		rec.item3a = 999999.99;
+	end
+
+	function initNullableRecord(rec NullRecord?)
+		if(rec == null)
+			rec = new NullRecord;
+		end
+		rec.item1 = "item1";
+		rec.item_2_a = 9999;
+		rec.item3a = 999999.99;
+	end		
+	
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end	
+	
+	function testNullStringIn() {@Test}
+		stringParm string?;
+		stringParm = "Testing string"; 
+		call NullPassing.nullStringIn(stringParm) using CommonUtilities.getResource("nulls") returning to verifyNullsStringIn onException handleServiceException;
+	end
+	
+	function testNullStringInNull() {@Test}
+		stringParm string?;
+		call NullPassing.nullStringIn(stringParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringInNull onException handleServiceException; 
+	end
+	
+	function testNullStringInout() {@Test}
+		stringParm string? = "Testing string";
+		call NullPassing.nullStringInout(stringParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringInout onException handleServiceException;
+	end
+	
+	function testNullStringOut() {@Test}
+		stringParm string? = "Testing string";
+		call NullPassing.nullStringOut(stringParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringOut onException handleServiceException;
+	end
+	
+	function testNullStringAll() {@Test}
+		stringParm, stringParm2, stringParm3 String?;
+		stringParm = "Testing string";
+		stringParm2 = "Testing string";
+		stringParm3 = "Testing string";
+		call INullPassing.nullStringAll(stringParm, stringParm2, stringParm3) using CommonUtilities.getResource("nulls") returning to verifyNullStringAll onException handleServiceException;
+	end
+	
+	function testNullIntIn() {@Test}
+		intParm int? = 10;
+		call INullPassing.nullintIn(intParm) using CommonUtilities.getResource("nulls") returning to verifyNullIntIn onException handleServiceException;
+	end
+
+	function testNullIntInNull() {@Test}
+		intParm int?;
+		call INullPassing.nullintIn(intParm) using CommonUtilities.getResource("nulls") returning to verifyNullIntInNull onException handleServiceException;
+	end
+	
+	function testNullIntInout() {@Test}
+		intParm int? = 10;     
+		call INullPassing.nullintInout(intParm) using CommonUtilities.getResource("nulls") returning to verifyNullIntInout onException handleServiceException;
+	end
+	
+	function testNullIntOut() {@Test}
+		intParm int? = 10;
+		call INullPassing.nullintOut(intParm) using CommonUtilities.getResource("nulls") returning to verifyNullIntOut onException handleServiceException;
+	end
+	
+	function testNullIntAll() {@Test}
+		intParm, intParm2, intParm3 int?;
+		intParm = 10;
+		intParm2 = 20;      
+		intParm3 = 30;	
+		call INullPassing.nullintAll(intParm, intParm2, intParm3) using CommonUtilities.getResource("nulls") returning to verifyNullIntAll onException handleServiceException;	
+	end
+	
+	function testNullStringArrayIn() {@Test}
+		stringArrayParm string[]?;
+		initArray(stringArrayParm);
+		call INullPassing.nullstringArrayIn(stringArrayParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringArrayIn onException handleServiceException;
+	end
+	
+	function testNullStringArrayInNull() {@Test}
+		stringArrayParm string[]?;
+		call INullPassing.nullstringArrayIn(stringArrayParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringArrayInNull onException handleServiceException;
+	end
+	
+	function testNullStringArrayInout() {@Test}
+		stringArrayParm string[]?;
+		initArray(stringArrayParm);
+		call INullPassing.nullstringArrayInout(stringArrayParm) using CommonUtilities.getResource("nulls") returning to verifyNullStringArrayInout onException handleServiceException;
+	end
+	
+	function testNullStringArrayOut() {@Test}
+		stringArrayParm string[]?;
+		initArray(stringArrayParm);
+		call INullPassing.nullstringArrayOut(stringArrayParm) using CommonUtilities.getResource("nulls") returning to verfyNullStringArrayOut onException handleServiceException;		
+	end
+	
+	function testNullStringArrayAll() {@Test}
+		stringArrayParm, stringArrayParm2, stringArrayParm3 string[]?;
+		initArray(stringArrayParm);
+		initArray(stringArrayParm2);
+		initArray(stringArrayParm3);
+		call INullPassing.nullstringArrayAll(stringArrayParm, stringArrayParm2, stringArrayParm3) using CommonUtilities.getResource("nulls") returning to verifyNullStringArrayAll onException handleServiceException;
+	end
+	
+	function testNullRecordItemIn() {@Test}
+		nullRec NullRecord;
+		initNullRecord(nullRec);
+		call INullPassing.nullRecordItemIn(nullRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordItemIn onException handleServiceException;
+	end
+	
+	function testNullRecordItemInNull() {@Test}
+		nullRec NullRecord;
+		initNullRecord(nullRec);
+		nullRec.Item1 = null;
+		call INullPassing.nullRecordItemIn(nullRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordItemInNull onException handleServiceException;	
+	end
+	
+	function testNullRecordItemInout() {@Test}
+		nullRec NullRecord;
+		initNullRecord(nullRec);
+		call INullPassing.nullRecordItemInout(nullRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordItemInout onException handleServiceException;
+	end
+	
+	function testNullRecordItemOut1() {@Test}
+		nullRec NullRecord;
+		initNullRecord(nullRec);
+		call INullPassing.nullRecordItemOut1a(nullRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordItemOut1 onException handleServiceException;	
+	end
+	
+	function testNullRecordItemAll() {@Test}
+		nullRec, nullRec2, nullRec3 NullRecord;
+		initNullRecord(nullRec);
+		initNullRecord(nullRec2);
+		initNullRecord(nullRec3);
+		call INullPassing.nullRecordItemAll(nullRec, nullRec2, nullRec3) using CommonUtilities.getResource("nulls") returning to verifyNullRecordItemAll onException handleServiceException;
+	end
+	
+	function testNullRecordIn() {@Test}
+		nullableRec NullRecord?;
+		initNullableRecord( nullableRec );
+		call INullPassing.nullRecordIn(nullableRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordIn onException handleServiceException;
+	end
+	
+	function testNullRecordInNull() {@Test}
+		nullableRec NullRecord?;
+		call INullPassing.nullRecordIn(nullableRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordInNull onException handleServiceException;
+	end
+
+	function testNullRecordInout() {@Test}
+		nullableRec NullRecord?;
+		initNullableRecord(nullableRec);
+		call INullPassing.nullRecordInout(nullableRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordInout onException handleServiceException;
+	end
+
+	function testNullRecordOut() {@Test}
+		nullableRec NullRecord?;
+		initNullableRecord(nullableRec);
+		call INullPassing.nullRecordOut(nullableRec) using CommonUtilities.getResource("nulls") returning to verifyNullRecordOut onException handleServiceException;
+	end
+	
+	function tsetNullRecordAll() {@Test}
+		nullableRec, nullableRec2, nullableRec3 NullRecord?;
+		initNullableRecord(nullableRec);
+		initNullableRecord(nullableRec2);
+		initNullableRecord(nullableRec3);
+		call INullPassing.nullRecordAll(nullableRec, nullableRec2, nullableRec3) using CommonUtilities.getResource("nulls") returning to verifyNullRecordAll onException handleServiceException;
+	end
+
+	
+	function verifyNullsStringIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "String = Testing string", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullStringInNull(retResult string in)
+		try
+			LogResult.assertStringEqual("", "String == null", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullStringInout(nullString string? in)
+		try
+			LogResult.assertTrue("", null == nullString);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullStringOut(nullString string? in)
+		try
+			LogResult.assertTrue("", null == nullString);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullStringAll(nullString2 string? in, nullstring3 string? in, retResult string? in)
+		try
+			LogResult.assertTrue(":nullString2", null == nullString2);
+			LogResult.assertTrue(":nullString3", null == nullString3);
+			LogResult.assertStringEqual(":retResult", "Testing string", retResult);			
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyNullIntIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "int = 10", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullIntInNull(retResult string in)
+		try
+			LogResult.assertStringEqual("", "int == null", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullIntInout(nullint int? in)
+		try
+			LogResult.assertTrue("", null == nullint);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullIntOut(nullint int? in)
+		try
+			LogResult.assertTrue("", null == nullint);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullIntAll(nullint2 int? in, nullint3 int? in, retResult int? in)
+		try
+			LogResult.assertTrue(":nullint2", null == nullint2);
+			LogResult.assertTrue(":nullint3", null == nullint3);
+			LogResult.assertBigIntEqual(":retResult", 10, retResult);			
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyNullStringArrayIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "StringArray[1] = Element 1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullStringArrayInNull(retResult string in)
+		try
+			LogResult.assertStringEqual("", "StringArray == null", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullStringArrayInout(nullStringArray string[]? in)
+		try
+			LogResult.assertTrue("", null == nullStringArray);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verfyNullStringArrayOut(nullStringArray string[]? in)
+		try
+			LogResult.assertTrue("", null == nullStringArray);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyNullStringArrayAll(nullStringArray2 string[]? in, nullStringArray3 string[]? in, retResult string[]? in)
+		try
+			LogResult.assertTrue(":stringArrayParm2", null == nullStringArray2);
+			LogResult.assertTrue(":stringArrayParm3", null == nullStringArray3);
+			LogResult.assertStringEqual(":retResult[1]", "Element 1", retResult[1]);			
+			LogResult.assertStringEqual(":retResult[2]", "Element 2", retResult[2]);
+			LogResult.assertStringEqual(":retResult[3]", "Element 3", retResult[3]);
+			LogResult.assertStringEqual(":retResult[4]", "Element 4", retResult[4]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullRecordItemIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "item1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullRecordItemInNull(retResult string in)
+		try
+			LogResult.assertStringEqual("", "null", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();				
+	end
+	
+	function verifyNullRecordItemInout(nullRecord NullRecord in)
+		try
+			LogResult.assertTrue("", null == nullRecord.Item1);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyNullRecordItemOut1(nullRecord NullRecord in)
+		try
+			LogResult.assertTrue("", null == nullRecord.Item1);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyNullRecordItemAll(nullRecord2 NullRecord in, nullRecord3 NullRecord in, retResult string in)
+		try
+			LogResult.assertTrue(":nullRecord2.item1", null == nullRecord2.item1);
+			LogResult.assertBigIntEqual(":nullRecord2.item_2_a", 9999, nullRecord2.item_2_a);
+			LogResult.assertDecimalEqual(":nullRecord2.item3a", 999999.99, nullRecord2.item3a);
+			LogResult.assertTrue(":nullRecord3.item1", null == nullRecord3.item1);
+			LogResult.assertBigIntEqual(":nullRecord3.item_2_a", 9999, nullRecord3.item_2_a);
+			LogResult.assertDecimalEqual(":nullRecord3.item3a", 999999.99, nullRecord3.item3a);						
+			LogResult.assertStringEqual(":retResult[1]", "item1", retResult);			
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();				
+	end
+	
+	function verifyNullRecordIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "item1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullRecordInNull(retResult string in)
+		try
+			LogResult.assertStringEqual("", "null", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyNullRecordInout(nullRecord NullRecord? in)
+		try
+			LogResult.assertTrue("", null == nullRecord);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyNullRecordOut(nullRecord NullRecord? in)
+		try
+			LogResult.assertTrue("", null == nullRecord);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();				
+	end
+	
+	function verifyNullRecordAll(nullRecord2 NullRecord? in, nullRecord3 NullRecord? in, retResult string in)
+		try
+			LogResult.assertTrue(":nullRecord2", null == nullRecord2);
+			LogResult.assertTrue(":nullRecord3", null == nullRecord3);
+			LogResult.assertStringEqual("", "item1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();		
+
+	end
+end

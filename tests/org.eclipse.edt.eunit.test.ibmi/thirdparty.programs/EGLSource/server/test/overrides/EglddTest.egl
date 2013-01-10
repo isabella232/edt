@@ -1,0 +1,58 @@
+package server.test.overrides;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import server.host.programs.EDTOver;
+
+// basic library
+library EglddTest
+	
+	function test1(){@Test {}}
+    	unicode20 string = "XYZAS";
+		try
+        	LogResult.logStdOut("Test use egldd encoding");
+  		  	call EDTOver.PEUTF(unicode20); 
+ 			LogResult.assertTrue1(true);
+            LogResult.assertStringEqual("Fail unicode20", "XYZAZZZZZZZZZZ", unicode20);
+ 		onException(exception AnyException)
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	
+	function test2(){@Test {}}
+    	char20 string = "abcde";
+		try
+        	LogResult.logStdOut("Test override egldd encoding");
+  		  	call EDTOver.PE037(char20); 
+ 			LogResult.assertTrue1(true);
+            LogResult.assertStringEqual("Fail char20", "abcdeYYYYY", char20);
+ 		onException(exception AnyException)
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	
+	function test3(){@Test {}}
+    	date1 date = "05/19/1997";
+		try
+        	LogResult.logStdOut("Test use egldd date format");
+  		  	call EDTOver.PDTEUR(date1);
+ 			LogResult.assertTrue1(true);
+            LogResult.assertDateEqual("Fail date1", "10/24/2002", date1);
+ 		onException(exception AnyException)
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	
+	function test4(){@Test {}}
+    	date1 date = "06/20/1497";
+		try
+        	LogResult.logStdOut("Test override egldd date format");
+  		  	call EDTOver.PDTUSA(date1);
+ 			LogResult.assertTrue1(true);
+            LogResult.assertDateEqual("Fail date1", "11/25/1502", date1);
+ 		onException(exception AnyException)
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	
+end

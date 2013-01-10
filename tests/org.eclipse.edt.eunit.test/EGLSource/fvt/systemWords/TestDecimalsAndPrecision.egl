@@ -1,0 +1,465 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+// The tests in this library verify the changes made to MathLib's
+// decimals() and precision() in EDT 0.8.1 for bugs 383341, 384440,
+// and 383327.
+library TestDecimalsAndPrecision
+
+	function precOfNum1(){@Test}
+		nbr number;		
+		nbr = 1;
+		LogResult.assertBigIntEqual1( 9, nbr.precision() );
+	end
+	function precOfNum2(){@Test}
+		nbr number;		
+		nbr = 1i;
+		LogResult.assertBigIntEqual1( 4, nbr.precision() );
+	end
+	function precOfNum3(){@Test}
+		nbr number;		
+		nbr = 1I;
+		LogResult.assertBigIntEqual1( 18, nbr.precision() );
+	end
+	function precOfNum4(){@Test}
+		nbr number;		
+		nbr = 1234.;
+		LogResult.assertBigIntEqual1( 4, nbr.precision() );
+	end
+	function precOfNum5(){@Test}
+		nbr number;		
+		nbr = 1234.5678;
+		LogResult.assertBigIntEqual1( 8, nbr.precision() );
+	end
+	function precOfNum6(){@Test}
+		nbr number;		
+		nbr = 1.234f;
+		LogResult.assertBigIntEqual1( 6, nbr.precision() );
+	end
+	function precOfNum7(){@Test}
+		nbr number;		
+		nbr = 1.23456F;
+		LogResult.assertBigIntEqual1( 15, nbr.precision() );
+	end
+	function precOfNum8(){@Test}
+		nbr number?;
+		x int;
+		try
+			x = nbr.precision();
+		onException ( n NullValueException )
+			x = -1;
+		end
+		LogResult.assertBigIntEqual1( -1, x );
+	end
+	function precOfNum9(){@Test}
+		nbr number?;
+		nbr = 1;
+		LogResult.assertBigIntEqual1( 9, nbr.precision() );
+	end
+	function precOfNum10(){@Test}
+		nbr number?;
+		nbr = 1i;
+		LogResult.assertBigIntEqual1( 4, nbr.precision() );
+	end
+	function precOfNum11(){@Test}
+		nbr number?;
+		nbr = 1I;
+		LogResult.assertBigIntEqual1( 18, nbr.precision() );
+	end
+	function precOfNum12(){@Test}
+		nbr number?;
+		nbr = 1234.;
+		LogResult.assertBigIntEqual1( 4, nbr.precision() );
+	end
+	function precOfNum13(){@Test}
+		nbr number?;
+		nbr = 1234.5678;
+		LogResult.assertBigIntEqual1( 8, nbr.precision() );
+	end
+	function precOfNum14(){@Test}
+		nbr number?;
+		nbr = 1.234f;
+		LogResult.assertBigIntEqual1( 6, nbr.precision() );
+	end
+	function precOfNum15(){@Test}
+		nbr number?;
+		nbr = 1.23456F;
+		LogResult.assertBigIntEqual1( 15, nbr.precision() );
+	end
+
+	function decOfLit1(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1).decimals() );
+	end
+	function decOfLit2(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1i).decimals() );
+	end
+	function decOfLit3(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1I).decimals() );
+	end
+	function decOfLit4(){@Test}
+		LogResult.assertBigIntEqual1( 1, (12345678.9).decimals() );
+	end
+	function decOfLit5(){@Test}
+		LogResult.assertBigIntEqual1( 12, (1234567.890123456789).decimals() );
+	end
+	function decOfLit6(){@Test}
+		LogResult.assertBigIntEqual1( 0, (12345678901234567890123456789.).decimals() );
+	end
+	function decOfLit7(){@Test}
+		LogResult.assertBigIntEqual1( 3, (1.234F).decimals() );
+	end
+	function decOfLit8(){@Test}
+		LogResult.assertBigIntEqual1( 5, (1.23456F).decimals() );
+	end
+	function decOfLit9(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1.234e10).decimals() );
+	end
+	function decOfLit10(){@Test}
+		LogResult.assertBigIntEqual1( 13, (1.234e-10).decimals() );
+	end
+	function decOfLit11(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1F).decimals() );
+	end
+	function decOfLit12(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1.0F).decimals() );
+	end
+	function decOfLit13(){@Test}
+		LogResult.assertBigIntEqual1( 3, (1.234f).decimals() );
+	end
+	function decOfLit14(){@Test}
+		LogResult.assertBigIntEqual1( 5, (1.23456f).decimals() );
+	end
+	function decOfLit15(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1f).decimals() );
+	end
+	function decOfLit16(){@Test}
+		LogResult.assertBigIntEqual1( 0, (1.0f).decimals() );
+	end
+
+	function decTestDefaultValue1(){@Test}
+		i int;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue2(){@Test}
+		i smallint;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue3(){@Test}
+		i bigint;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue4(){@Test}
+		i decimal(9,1);
+		LogResult.assertBigIntEqual1( 1, i.decimals() );
+	end
+	function decTestDefaultValue5(){@Test}
+		i decimal(19,12);
+		LogResult.assertBigIntEqual1( 12, i.decimals() );
+	end
+	function decTestDefaultValue6(){@Test}
+		i decimal(29,0);
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue7(){@Test}
+		i float;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue8(){@Test}
+		i smallfloat;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestDefaultValue9(){@Test}
+		i number;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestFloat1(){@Test}
+		i float = 1.234F;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestFloat2(){@Test}
+		i float = 1.23456F;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+	function decTestFloat3(){@Test}
+		i float = 1.234e10;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestFloat4(){@Test}
+		i float = 1.234e-10;
+		LogResult.assertBigIntEqual1( 13, i.decimals() );
+	end
+	function decTestFloat5(){@Test}
+		i float = 1F;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestFloat6(){@Test}
+		i float = 1.0F;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestSmallfloat1(){@Test}
+		i smallfloat = 1.234f;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestSmallfloat2(){@Test}
+		i smallfloat = 1.23456f;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+	function decTestSmallfloat3(){@Test}
+		i smallfloat = 1f;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestSmallfloat4(){@Test}
+		i smallfloat = 1.0f;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestNumber1(){@Test}
+		i number = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNumber2(){@Test}
+		i number = 1i;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNumber3(){@Test}
+		i number = 1I;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNumber4(){@Test}
+		i number = 1234.;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNumber5(){@Test}
+		i number = 1234.5678;
+		LogResult.assertBigIntEqual1( 4, i.decimals() );
+	end
+	function decTestNumber6(){@Test}
+		i number = 1.234f;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestNumber7(){@Test}
+		i number = 1.23456F;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+
+	function decTestNullableDefaultValue1(){@Test}
+		i int?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue2(){@Test}
+		i smallint?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue3(){@Test}
+		i bigint?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue4(){@Test}
+		i decimal(9,1)?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue5(){@Test}
+		i decimal(19,12)?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue6(){@Test}
+		i decimal(29,0)?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue7(){@Test}
+		i float?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue8(){@Test}
+		i smallfloat?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+	function decTestNullableDefaultValue9(){@Test}
+		i number?;
+		d int;
+		try
+			d = i.decimals();
+			LogResult.failed("No exception thrown");
+		onException ( nvx NullValueException )
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			LogResult.failed("Wrong kind of exception thrown");
+		end
+	end
+
+	function decTestNullable1(){@Test}
+		i int? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable2(){@Test}
+		i smallint? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable3(){@Test}
+		i bigint? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable4(){@Test}
+		i decimal(9,1)? = 1;
+		LogResult.assertBigIntEqual1( 1, i.decimals() );
+	end
+	function decTestNullable5(){@Test}
+		i decimal(19,12)? = 1;
+		LogResult.assertBigIntEqual1( 12, i.decimals() );
+	end
+	function decTestNullable6(){@Test}
+		i decimal(29,0)? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable7(){@Test}
+		i float? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable8(){@Test}
+		i smallfloat? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullable9(){@Test}
+		i number? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestNullableFloat1(){@Test}
+		i float? = 1.234F;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestNullableFloat2(){@Test}
+		i float? = 1.23456F;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+	function decTestNullableFloat3(){@Test}
+		i float? = 1.234e10;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableFloat4(){@Test}
+		i float? = 1.234e-10;
+		LogResult.assertBigIntEqual1( 13, i.decimals() );
+	end
+	function decTestNullableFloat5(){@Test}
+		i float? = 1F;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableFloat6(){@Test}
+		i float? = 1.0F;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestNullableSmallfloat1(){@Test}
+		i smallfloat? = 1.234f;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestNullableSmallfloat2(){@Test}
+		i smallfloat? = 1.23456f;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+	function decTestNullableSmallfloat3(){@Test}
+		i smallfloat? = 1f;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableSmallfloat4(){@Test}
+		i smallfloat? = 1.0f;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+
+	function decTestNullableNumber1(){@Test}
+		i number? = 1;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableNumber2(){@Test}
+		i number? = 1i;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableNumber3(){@Test}
+		i number? = 1I;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableNumber4(){@Test}
+		i number? = 1234.;
+		LogResult.assertBigIntEqual1( 0, i.decimals() );
+	end
+	function decTestNullableNumber5(){@Test}
+		i number? = 1234.5678;
+		LogResult.assertBigIntEqual1( 4, i.decimals() );
+	end
+	function decTestNullableNumber6(){@Test}
+		i number? = 1.234f;
+		LogResult.assertBigIntEqual1( 3, i.decimals() );
+	end
+	function decTestNullableNumber7(){@Test}
+		i number? = 1.23456F;
+		LogResult.assertBigIntEqual1( 5, i.decimals() );
+	end
+end

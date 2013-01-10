@@ -1,0 +1,18 @@
+package services;
+
+// service
+service ExceptionProducer
+	
+	
+	// Function Declarations
+	function produceException()
+		try
+		s String[];
+		s[1] = "abc";		//should produce invalid index exception
+		onException(exception AnyException)
+			SysLib.writeStdOut("EXCEPTION:" + exception.message);
+			throw exception;
+		end		
+	end
+
+end

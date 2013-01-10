@@ -1,0 +1,2155 @@
+package fvt.librarySupport;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name Math Library 2 Support
+* @title The function test program for Math Library Support in EDT
+* @keywords Library 2
+* @author EDT team
+* @createDate 2011/09/09
+* @description 
+* Test the Math Library Support
+*/
+
+library TestMathLib2Lib
+
+    aSmallint smallInt;
+    aInt int;
+    aBigint bigInt;
+    aDecimal decimal(18, 6);
+    //	aSmallfloat smallfloat;
+    aFloat float;
+    fr float;
+    dr decimal(18, 6);
+    bir bigInt;
+    ir int;
+    sir smallInt;
+    answer float;
+    anotherFloat float;
+    anotherSmallint smallInt;
+    anotherBigInt bigInt;
+    answerInt int;
+    anotherInt int;
+    answerBig bigInt;
+    truncated decimal(18, 6);
+    anotherdecimal decimal(18, 6);
+    nullableBigint bigInt?;
+    nullableFloat float?;
+    nullableDecimal decimal(31, 5);
+    bd decimal(5, 2);
+
+    function testAbs1(){@Test}
+        aSmallint = 0;
+        ir = MathLib.abs(aSmallint);
+        LogResult.logStdOut("abs( smallint ) for zero");
+        LogResult.assertBigIntEqual1(0, ir);
+    end
+
+    function testAbs2(){@Test}
+        aSmallint = 35;
+        ir = MathLib.abs(aSmallint);
+        LogResult.logStdOut("abs( smallint ) for positive");
+        LogResult.assertBigIntEqual1(35, ir);
+    end
+
+    function testAbs3(){@Test}
+        aSmallint = -35;
+        ir = MathLib.abs(aSmallint);
+        LogResult.logStdOut("abs( smallint ) for negative");
+        LogResult.assertBigIntEqual1(35, ir);
+    end
+
+    function testAbs5(){@Test}
+        aint = 0;
+        ir = MathLib.abs(aint);
+        LogResult.logStdOut("abs( int ) for zero");
+        LogResult.assertBigIntEqual1(0, ir);
+    end
+
+    function testAbs6(){@Test}
+        aint = 123456;
+        ir = MathLib.abs(aint);
+        LogResult.logStdOut("abs( int ) for positive");
+        LogResult.assertBigIntEqual1(123456, ir);
+    end
+
+    function testAbs7(){@Test}
+        aint = -8888;
+        ir = MathLib.abs(aint);
+        LogResult.logStdOut("abs( int ) for negative");
+        LogResult.assertBigIntEqual1(8888, ir);
+    end
+
+    function testAbs9(){@Test}
+        abigint = 0;
+        ir = MathLib.abs(abigint);
+        LogResult.logStdOut("abs( bigint ) for zero");
+        LogResult.assertBigIntEqual1(0, ir);
+    end
+
+    function testAbs10(){@Test}
+        abigint = 1234567890;
+        ir = MathLib.abs(abigint);
+        LogResult.logStdOut("abs( bigint ) for positive");
+        LogResult.assertBigIntEqual1(1234567890, ir);
+    end
+
+    function testAbs11(){@Test} //error
+        abigint = -9999999999;
+        ir = MathLib.abs(abigint);
+        LogResult.logStdOut("abs( bigint ) for negative");
+        LogResult.assertBigIntEqual1(9999999999, ir);
+    end
+
+    //    function testAbs13(){@Test}
+    //        adecimal = 0;
+    //        dr = MathLib.abs(adecimal);
+    //        LogResult.logStdOut("abs( decimal ) for zero");
+    //        LogResult.assertDecimalEqual1(0, dr);
+    //    end
+    //
+    //    function testAbs14(){@Test}
+    //        adecimal = 3.14159;
+    //        dr = MathLib.abs(adecimal);
+    //        LogResult.logStdOut("abs( decimal ) for positive");
+    //        LogResult.assertDecimalEqual1(3.14159, dr);
+    //    end
+    //
+    //    function testAbs15(){@Test}
+    //        adecimal = -5432565.425421;
+    //        dr = MathLib.abs(adecimal);
+    //        LogResult.logStdOut("abs( decimal ) for negative");
+    //        LogResult.assertDecimalEqual1(5432565.425421, dr);
+    //    end
+    
+    function testAbs18(){@Test}
+        afloat = 0;
+        fr = MathLib.abs(afloat);
+        LogResult.logStdOut("abs( float ) for zero");
+        LogResult.assertFloatEqual1(0, fr);
+    end
+
+    function testAbs19(){@Test}
+        afloat = 3.14159265;
+        fr = MathLib.abs(afloat);
+        LogResult.logStdOut("abs( float ) for positive");
+        LogResult.assertFloatEqual1(3.14159265, fr);
+
+    end
+
+    function testAbs20(){@Test}
+        afloat = -2.71828183;
+        fr = MathLib.abs(afloat);
+        LogResult.logStdOut("abs( float ) for negative");
+        LogResult.assertFloatEqual1(2.71828183, fr);
+    end
+
+    // cos
+    
+    //    function testAcos0(){@Test}
+    //        aInt = 0;
+    //        answer = MathLib.acos(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("acos( int ) #1");
+    //        LogResult.assertDecimalEqual1(1.570796, truncated);
+    //    end
+    
+    function testAcos1(){@Test}
+        aInt = 1;
+        answer = MathLib.acos(aInt);
+        LogResult.logStdOut("acos( int ) #2");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testAcos2(){@Test}
+        aInt = -1;
+        answer = MathLib.acos(aInt);
+        truncated = answer;
+        LogResult.logStdOut("acos( int ) #3");
+        LogResult.assertFloatEqual1(3.141593, truncated);
+    end
+
+    function testAcos3_1(){@Test}
+        aInt = 10;
+        LogResult.logStdOut("acos( int ) #4 - throws exception");
+
+        try
+            answer = MathLib.acos(aInt);
+            LogResult.assertTrue1(false);
+
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+
+        end
+    end
+
+    function testAcos3_2(){@Test}
+        aInt = -99;
+        LogResult.logStdOut("acos( int ) #5 - throws exception");
+
+        try
+            answer = MathLib.acos(aInt);
+            LogResult.assertTrue1(false);
+
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+
+        end
+    end
+
+    function testAcos5(){@Test}
+        aFloat = 0.000006;
+        answer = MathLib.acos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("acos( float ) #1");
+        LogResult.assertFloatEqual1(1.570790, truncated);
+    end
+
+    function testAcos6(){@Test}
+        aFloat = -0.00048;
+        answer = MathLib.acos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("acos( float ) #2");
+        LogResult.assertFloatEqual1(1.571276, truncated);
+    end
+
+    function testAcos8(){@Test}
+        aDecimal = 0.866025;
+        answer = MathLib.acos(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("acos( decimal ) #1");
+        LogResult.assertFloatEqual1(0.523600, truncated);
+    end
+
+    function testAcos9(){@Test}
+        aDecimal = -0.707107;
+        answer = MathLib.acos(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("acos( decimal ) #2");
+        LogResult.assertFloatEqual1(2.356195, truncated);
+    end
+
+    //test asin
+    
+    function testAsin2(){@Test}
+        aInt = 0;
+        answer = MathLib.asin(aInt);
+        LogResult.logStdOut("asin( int ) #1");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testAsin3(){@Test}
+        aInt = 1;
+        answer = MathLib.asin(aInt);
+        truncated = answer;
+        LogResult.logStdOut("asin( int ) #2");
+        LogResult.assertFloatEqual1(1.570796, truncated);
+    end
+
+    function testAsin4(){@Test}
+        aInt = -1;
+        answer = MathLib.asin(aInt);
+        truncated = answer;
+        LogResult.logStdOut("asin( int ) #3");
+        LogResult.assertFloatEqual1(-1.570796, truncated);
+    end
+
+    function testAsin5(){@Test}
+        aInt = 10;
+        LogResult.logStdOut("asin( int ) #4 - throws exception");
+        try
+            answer = MathLib.asin(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+
+        aInt = -99;
+        LogResult.logStdOut("asin( int ) #5 - throws exception");
+        try
+            answer = MathLib.asin(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testAsin7(){@Test}
+        aFloat = 0.000008;
+        answer = MathLib.asin(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("asin( float ) #1");
+        LogResult.assertFloatEqual1(0.000008, truncated);
+    end
+
+    function testAsin8(){@Test}
+        aFloat = -0.00048;
+        answer = MathLib.asin(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("asin( float ) #2");
+        LogResult.assertFloatEqual1(-0.000480, truncated);
+    end
+
+    function testAsin10(){@Test}
+        aDecimal = 0.866025;
+        answer = MathLib.asin(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("asin( decimal ) #1");
+        LogResult.assertFloatEqual1(1.047197, truncated);
+    end
+
+    function testAsin11(){@Test}
+        aDecimal = -0.000003;
+        answer = MathLib.asin(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("asin( decimal ) #2");
+        LogResult.assertFloatEqual1(-0.000003, truncated);
+    end
+
+    // atan
+    
+    function testAtan2(){@Test}
+        aInt = 0;
+        answer = MathLib.atan(aInt);
+        LogResult.logStdOut("atan( int ) #1");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testAtan3(){@Test}
+        aInt = 1;
+        answer = MathLib.atan(aInt);
+        truncated = answer;
+        LogResult.logStdOut("atan( int ) #2");
+        LogResult.assertFloatEqual1(0.785398, truncated);
+    end
+
+    function testAtan4(){@Test}
+        aInt = -1;
+        answer = MathLib.atan(aInt);
+        truncated = answer;
+        LogResult.logStdOut("atan( int ) #3");
+        LogResult.assertFloatEqual1(-0.785398, truncated);
+    end
+
+    function testAtan6(){@Test}
+        aFloat = 0.555;
+        answer = MathLib.atan(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("atan( float ) #1");
+        LogResult.assertFloatEqual1(0.506674, truncated);
+    end
+
+    function testAtan7(){@Test}
+        aFloat = -0.000247;
+        answer = MathLib.atan(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("atan( float ) #2");
+        LogResult.assertFloatEqual1(-0.000247, truncated);
+    end
+
+    function testAtan9(){@Test}
+        aDecimal = 1.732051;
+        answer = MathLib.atan(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("atan( decimal ) #1");
+        LogResult.assertFloatEqual1(1.047198, truncated);
+    end
+
+    function testAtan10(){@Test}
+        aDecimal = -0.577350;
+        answer = MathLib.atan(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("atan( decimal ) #2");
+        LogResult.assertFloatEqual1(-0.523599, truncated);
+    end
+
+    //atan 2
+    
+    function testAtan22(){@Test}
+        aInt = 1;
+        aFloat = 5;
+        answer = MathLib.atan2(aInt, aFloat);
+        truncated = answer;
+        LogResult.logStdOut("atan2( int, float )");
+        LogResult.assertFloatEqual1(0.197396, truncated);
+    end
+
+    function testAtan23(){@Test}
+        aFloat = 1;
+        aInt = 5;
+        answer = MathLib.atan2(aFloat, aInt);
+        truncated = answer;
+        LogResult.logStdOut("atan2( float, int )");
+        LogResult.assertFloatEqual1(0.197396, truncated);
+    end
+
+    function testAtan25(){@Test}
+        aInt = 1;
+        aDecimal = 5;
+        answer = MathLib.atan2(aInt, aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("atan2( int, decimal )");
+        LogResult.assertFloatEqual1(0.197396, truncated);
+    end
+
+    function testAtan26(){@Test}
+        aDecimal = 1;
+        aFloat = 5;
+        answer = MathLib.atan2(aDecimal, aFloat);
+        truncated = answer;
+        LogResult.logStdOut("atan2( decimal, float )");
+        LogResult.assertFloatEqual1(0.197396, truncated);
+    end
+
+    // test Ceilling
+    
+    function testCeiling2(){@Test}
+        aInt = 0;
+        answerBig = MathLib.ceiling(aInt);
+        LogResult.logStdOut("ceiling( int ) #1");
+        LogResult.assertBigIntEqual1(0, answerBig);
+    end
+
+    function testCeiling3(){@Test}
+        aInt = 500;
+        answerBig = MathLib.ceiling(aInt);
+        LogResult.logStdOut("ceiling( int ) #2");
+        LogResult.assertBigIntEqual1(500, answerBig);
+    end
+
+    function testCeiling4(){@Test}
+        aInt = -500;
+        answerBig = MathLib.ceiling(aInt);
+        LogResult.logStdOut("ceiling( int ) #3");
+        LogResult.assertBigIntEqual1(-500, answerBig);
+    end
+
+    function testCeiling6(){@Test}
+        aFloat = -0.48;
+        answerBig = MathLib.ceiling(aFloat);
+        LogResult.logStdOut("ceiling( float ) #1");
+        LogResult.assertBigIntEqual1(0, answerBig);
+    end
+
+    function testCeiling7(){@Test}
+        aFloat = 0.696;
+        answerBig = MathLib.ceiling(aFloat);
+        LogResult.logStdOut("ceiling( float ) #2");
+        LogResult.assertBigIntEqual1(1, answerBig);
+    end
+
+    function testCeiling8(){@Test}
+        aFloat = 0.001976;
+        answerBig = MathLib.ceiling(aFloat);
+        LogResult.logStdOut("ceiling( float ) #3");
+        LogResult.assertBigIntEqual1(1, answerBig);
+    end
+
+    function testCeiling10(){@Test}
+        aDecimal = -429496.729700;
+        answerBig = MathLib.ceiling(aDecimal);
+        LogResult.logStdOut("ceiling( decimal ) #1");
+        LogResult.assertBigIntEqual1(-429496, answerBig);
+    end
+
+    function testCeiling11(){@Test}
+        aDecimal = 429496.729700;
+        answerBig = MathLib.ceiling(aDecimal);
+        LogResult.logStdOut("ceiling( decimal ) #2");
+        LogResult.assertBigIntEqual1(429497, answerBig);
+    end
+
+    function testCeiling12(){@Test}
+        aDecimal = 983771869.039;
+        answerBig = MathLib.ceiling(aDecimal);
+        LogResult.logStdOut("ceiling( decimal ) #3");
+        LogResult.assertBigIntEqual1(983771870, answerBig);
+    end
+
+    //Cos
+    
+    function testCos1(){@Test}
+        aInt = 0;
+        answer = MathLib.cos(aInt);
+        LogResult.logStdOut("cos( int ) #1");
+        LogResult.assertFloatEqual1(1, answer);
+    end
+
+    function testCos2(){@Test}
+        aInt = 1;
+        answer = MathLib.cos(aInt);
+        truncated = answer;
+        LogResult.logStdOut("cos( int ) #2");
+        LogResult.assertFloatEqual1(0.540302, truncated);
+    end
+
+    function testCos3(){@Test}
+        aInt = -1;
+        answer = MathLib.cos(aInt);
+        truncated = answer;
+        LogResult.logStdOut("cos( int ) #3");
+        LogResult.assertFloatEqual1(0.540302, truncated);
+    end
+
+    function testCos5(){@Test}
+        aFloat = 3.141593;
+        answer = MathLib.cos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cos( float ) #1");
+        LogResult.assertFloatEqual1(-1, truncated);
+    end
+
+    function testCos6(){@Test}
+        aFloat = -3.141593;
+        answer = MathLib.cos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cos( float ) #2");
+        LogResult.assertFloatEqual1(-1, truncated);
+    end
+
+    function testCos7(){@Test}
+        aFloat = 1.570796;
+        answer = MathLib.cos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cos( float ) #3");
+        LogResult.assertFloatEqual1(0, truncated);
+    end
+
+    function testCos8(){@Test}
+        aFloat = -1.570796;
+        answer = MathLib.cos(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cos( float ) #4");
+        LogResult.assertFloatEqual1(0, truncated);
+    end
+
+    function testCos10(){@Test}
+        aDecimal = 983771896.039;
+        answer = MathLib.cos(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("cos( decimal ) #1");
+        LogResult.assertFloatEqual1(0.686866, truncated);
+    end
+
+    function testCos11(){@Test}
+        aDecimal = -46346.951031;
+        answer = MathLib.cos(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("cos( decimal ) #2");
+        LogResult.assertFloatEqual1(-0.569098, truncated);
+    end
+
+    function testCosh2(){@Test}
+        aInt = 0;
+        answer = MathLib.cosh(aInt);
+        LogResult.logStdOut("cosh( int ) #1");
+        LogResult.assertFloatEqual1(1, answer);
+    end
+
+    function testCosh3(){@Test}
+        aInt = 1;
+        answer = MathLib.cosh(aInt);
+        truncated = answer;
+        LogResult.logStdOut("cosh( int ) #2");
+        LogResult.assertFloatEqual1(1.543081, truncated);
+    end
+
+    function testCosh4(){@Test}
+        aInt = -1;
+        answer = MathLib.cosh(aInt);
+        truncated = answer;
+        LogResult.logStdOut("cosh( int ) #3");
+        LogResult.assertFloatEqual1(1.543081, truncated);
+    end
+
+    function testCosh6(){@Test}
+        aFloat = 0.2;
+        answer = MathLib.cosh(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cosh( float ) #1");
+        LogResult.assertFloatEqual1(1.020067, truncated);
+    end
+
+    function testCosh7(){@Test}
+        aFloat = -0.2;
+        answer = MathLib.cosh(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("cosh( float ) #2");
+        LogResult.assertFloatEqual1(1.020067, truncated);
+    end
+
+    function testCosh9(){@Test}
+        aDecimal = 1.987654;
+        answer = MathLib.cosh(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("cosh( decimal ) #1");
+        LogResult.assertFloatEqual1(3.717704, truncated);
+    end
+
+    function testCosh10(){@Test}
+        aDecimal = 10;
+        answer = MathLib.cosh(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("cosh( decimal ) #2");
+        LogResult.assertFloatEqual1(11013.232920, truncated);
+    end
+
+    //testDecimals
+    
+    function testDecimals1(){@Test}
+        answerInt = MathLib.decimals(aSmallint);
+        LogResult.logStdOut("decimals( smallint )");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testDecimals2(){@Test}
+        answerInt = MathLib.decimals(aInt);
+        LogResult.logStdOut("decimals( int )");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testDecimals3(){@Test}
+        answerInt = MathLib.decimals(aBigint);
+        LogResult.logStdOut("decimals( bigint )");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testDecimals5(){@Test}
+        answerInt = MathLib.decimals(aFloat);
+        LogResult.logStdOut("decimals( float )");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testDecimals6(){@Test}
+        d1 decimal(18, 6);
+        answerInt = MathLib.decimals(d1);
+        LogResult.logStdOut("decimals( decimal(18,6) )");
+        LogResult.assertBigIntEqual1(6, answerInt);
+    end
+
+    function testDecimals7(){@Test}
+        d2 decimal(10, 4);
+        answerInt = MathLib.decimals(d2);
+        LogResult.logStdOut("decimals( decimal(10,4) )");
+        LogResult.assertBigIntEqual1(4, answerInt);
+    end
+
+    function testDecimals8(){@Test}
+        d3 decimal(5, 0);
+        answerInt = MathLib.decimals(d3);
+        LogResult.logStdOut("decimals( decimal(5,0) )");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testDecimals9(){@Test}
+        d4 decimal(8, 1);
+        answerInt = MathLib.decimals(d4);
+        LogResult.logStdOut("decimals( decimal(8,1) )");
+        LogResult.assertBigIntEqual1(1, answerInt);
+    end
+
+    function testDecimals10(){@Test}
+        d5 decimal(20, 20);
+        answerInt = MathLib.decimals(d5);
+        LogResult.logStdOut("decimals( decimal(20,20) )");
+        LogResult.assertBigIntEqual1(20, answerInt);
+    end
+
+    //    function testDecimals11(){@Test}
+    //        m money;
+    //        answerInt = MathLib.decimals(m);
+    //        LogResult.logStdOut("decimals( money )");
+    //        LogResult.assertBigIntEqual1(2, answerInt);
+    //    end
+    
+    //test Exp
+    
+    function testExp2(){@Test}
+        aInt = 0;
+        answer = MathLib.exp(aInt);
+        LogResult.logStdOut("exp( int ) #1");
+        LogResult.assertFloatEqual1(1, answer);
+    end
+
+    function testExp4(){@Test}
+        aFloat = 1.0;
+        answer = MathLib.exp(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("exp( float ) #1");
+        LogResult.assertFloatEqual1(2.718282, truncated);
+    end
+
+    function testExp5(){@Test}
+        aFloat = -1.0;
+        answer = MathLib.exp(aFloat);
+        truncated = answer;
+        LogResult.logStdOut("exp( float ) #2");
+        LogResult.assertFloatEqual1(0.367879, truncated);
+    end
+
+    function testExp7(){@Test}
+        aDecimal = -0.000480;
+        answer = MathLib.exp(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("exp( decimal ) #1");
+        LogResult.assertFloatEqual1(0.999520, truncated);
+    end
+
+    function testExp8(){@Test}
+        aDecimal = -0.000001;
+        answer = MathLib.exp(aDecimal);
+        truncated = answer;
+        LogResult.logStdOut("exp( decimal ) #2");
+        LogResult.assertFloatEqual1(0.999999, truncated);
+    end
+
+    // Floor
+    
+    function testFloor2(){@Test}
+        aInt = 0;
+        answerBig = MathLib.floor(aInt);
+        LogResult.logStdOut("floor( int ) #1");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testFloor3(){@Test}
+        aInt = 500;
+        answerBig = MathLib.floor(aInt);
+        LogResult.logStdOut("floor( int ) #2");
+        LogResult.assertBigIntEqual1(500, answerInt);
+    end
+
+    function testFloor4(){@Test}
+        aInt = -500;
+        answerBig = MathLib.floor(aInt);
+        LogResult.logStdOut("floor( int ) #3");
+        LogResult.assertBigIntEqual1(-500, answerInt);
+    end
+
+    function testFloor6(){@Test}
+        aFloat = -0.48;
+        answerBig = MathLib.floor(aFloat);
+        LogResult.logStdOut("floor( float ) #1");
+        LogResult.assertBigIntEqual1(-1, answerInt);
+    end
+
+    function testFloor7(){@Test}
+        aFloat = 0.696;
+        answerBig = MathLib.floor(aFloat);
+        LogResult.logStdOut("floor( float ) #2");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testFloor8(){@Test}
+        aFloat = 0.99987;
+        answerBig = MathLib.floor(aFloat);
+        LogResult.logStdOut("floor( float ) #3");
+        LogResult.assertBigIntEqual1(0, answerInt);
+    end
+
+    function testFloor10(){@Test}
+        aDecimal = -429496.729700;
+        answerBig = MathLib.floor(aDecimal);
+        LogResult.logStdOut("floor( decimal ) #1");
+        LogResult.assertBigIntEqual1(-429497, answerInt);
+    end
+
+    function testFloor11(){@Test}
+        aDecimal = 429496.729700;
+        answerBig = MathLib.floor(aDecimal);
+        LogResult.logStdOut("floor( decimal ) #2");
+        LogResult.assertBigIntEqual1(429496, answerInt);
+    end
+
+    function testFloor12(){@Test}
+        aDecimal = 983771869.039;
+        answerBig = MathLib.floor(aDecimal);
+        LogResult.logStdOut("floor( decimal ) #3");
+        LogResult.assertBigIntEqual1(983771869, answerInt);
+    end
+
+    //frexp
+    
+    function testFrexp1(){@Test}
+        aInt = 0;
+        answer = MathLib.frexp(aInt, ir);
+        LogResult.logStdOut("frexp( int, int ) #1");
+        LogResult.assertTrue1((answer == 0) &&(ir == 0));
+    end
+
+    function testFrexp2(){@Test}
+        aInt = 1;
+        answer = MathLib.frexp(aInt, ir);
+        LogResult.logStdOut("frexp( int, int ) #2");
+        LogResult.assertTrue1((answer == 0.5) &&(ir == 1));
+
+    end
+
+    function testFrexp3(){@Test}
+        aInt = -1;
+        answer = MathLib.frexp(aInt, ir);
+        LogResult.logStdOut("frexp( int, int ) #3");
+        LogResult.assertTrue1((answer == -0.5) &&(ir == 1));
+    end
+
+    function testFrexp4(){@Test}
+        aInt = 2;
+        answer = MathLib.frexp(aInt, ir);
+        LogResult.logStdOut("frexp( int, int ) #4");
+        LogResult.assertTrue1((answer == 0.5) &&(ir == 2));
+    end
+
+    function testFrexp5(){@Test}
+        aInt = -2;
+        answer = MathLib.frexp(aInt, ir);
+        LogResult.logStdOut("frexp( int, int ) #5");
+        LogResult.assertTrue1((answer == -0.5) &&(ir == 2));
+    end
+
+    function testFrexp7(){@Test}
+        aFloat = 0.5;
+        answer = MathLib.frexp(aFloat, ir);
+        LogResult.logStdOut("frexp( float, int ) #1");
+        LogResult.assertTrue1((answer == 0.5) &&(ir == 0));
+    end
+
+    function testFrexp8(){@Test}
+        aFloat = 0.1234;
+        answer = MathLib.frexp(aFloat, ir);
+        LogResult.logStdOut("frexp( float, int ) #2");
+        LogResult.assertTrue1((answer == 0.9872) &&(ir == -3));
+    end
+
+    function testFrexp9(){@Test}
+        aFloat = -0.1234;
+        answer = MathLib.frexp(aFloat, ir);
+        LogResult.logStdOut("frexp( float, int ) #3");
+        LogResult.assertTrue1((answer == -0.9872) &&(ir == -3));
+    end
+
+    function testFrexp10(){@Test}
+        aFloat = 0.25;
+        answer = MathLib.frexp(aFloat, ir);
+        LogResult.logStdOut("frexp( float, int ) #4");
+        LogResult.assertTrue1((answer == 0.5) &&(ir == -1));
+    end
+    //?? decimal
+    
+    function testFrexp12(){@Test}
+        aDecimal = 123.45;
+        answer = MathLib.frexp(aDecimal, ir);
+        truncated = answer;
+        LogResult.logStdOut("frexp( decimal, int ) #1");
+        LogResult.assertTrue1((truncated == 0.964453) &&(ir == 7));
+    end
+
+    function testFrexp13(){@Test}
+        aDecimal = -98765.4321;
+        answer = MathLib.frexp(aDecimal, ir);
+        truncated = answer;
+        LogResult.logStdOut("frexp( decimal, int ) #2");
+        LogResult.assertTrue1((truncated == -0.753520) &&(ir == 17));
+    end
+
+    //LD exp
+    
+    function testLdexp1(){@Test}
+        answer = MathLib.ldexp(0, 0);
+        LogResult.logStdOut("ldexp( 0, 0 )");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testLdexp2(){@Test}
+        answer = MathLib.ldexp(0, 1);
+        LogResult.logStdOut("ldexp( 0, 1 )");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testLdexp3(){@Test}
+        answer = MathLib.ldexp(1, 0);
+        LogResult.logStdOut("ldexp( 1, 0 )");
+        LogResult.assertFloatEqual1(1, answer);
+    end
+
+    function testLdexp4(){@Test}
+        answer = MathLib.ldexp(1, 1);
+        LogResult.logStdOut("ldexp( 1, 1 )");
+        LogResult.assertFloatEqual1(2, answer);
+    end
+
+    function testLdexp7(){@Test}
+        aInt = 3;
+        answer = MathLib.ldexp(aInt, aInt);
+        LogResult.logStdOut("ldexp( int, int ) #1");
+        LogResult.assertFloatEqual1(24, answer);
+    end
+
+    function testLdexp8(){@Test}
+        aInt = 3;
+        anotherInt = -2;
+        answer = MathLib.ldexp(aInt, anotherInt);
+        LogResult.logStdOut("ldexp( int, int ) #2");
+        LogResult.assertFloatEqual1(3 / 4, answer);
+    end
+
+    function testLdexp9(){@Test}
+        aInt = -3;
+        anotherInt = -4;
+        answer = MathLib.ldexp(aInt, anotherInt);
+        LogResult.logStdOut("ldexp( int, int ) #3");
+        LogResult.assertFloatEqual1(-3 / 16, answer);
+    end
+
+    function testLdexp10(){@Test}
+        aInt = -3;
+        anotherInt = 4;
+        answer = MathLib.ldexp(aInt, anotherInt);
+        LogResult.logStdOut("ldexp( int, int ) #4");
+        LogResult.assertFloatEqual1(-48, answer);
+    end
+
+    function testLdexp12(){@Test}
+        aFloat = 3.14;
+        aInt = 4;
+        answer = MathLib.ldexp(aFloat, aInt);
+        LogResult.logStdOut("ldexp( float, int ) #1");
+        LogResult.assertFloatEqual1(50.24, answer);
+    end
+
+    function testLdexp13(){@Test}
+        aFloat = -123.45;
+        aInt = 6;
+        answer = MathLib.ldexp(aFloat, aInt);
+        LogResult.logStdOut("ldexp( float, int ) #2");
+        LogResult.assertFloatEqual1(-7900.8, answer);
+    end
+
+    function testLdexp14(){@Test}
+        aFloat = 1010.88;
+        aInt = -3;
+        answer = MathLib.ldexp(aFloat, aInt);
+        LogResult.logStdOut("ldexp( float, int ) #3");
+        LogResult.assertFloatEqual1(126.36, answer);
+    end
+
+    function testLdexp15(){@Test}
+        aFloat = -54264.2;
+        aInt = -5;
+        answer = MathLib.ldexp(aFloat, aInt);
+        LogResult.logStdOut("ldexp( float, int ) #4");
+        LogResult.assertFloatEqual1(-1695.75625, answer);
+    end
+
+    function testLdexp17(){@Test}
+        aDecimal = 3.14;
+        aInt = 4;
+        answer = MathLib.ldexp(aDecimal, aInt);
+        LogResult.logStdOut("ldexp( decimal, int ) #1");
+        LogResult.assertFloatEqual1(50.24, answer);
+    end
+
+    function testLdexp18(){@Test}
+        aDecimal = -123.45;
+        aInt = 6;
+        answer = MathLib.ldexp(aDecimal, aInt);
+        LogResult.logStdOut("ldexp( decimal, int ) #2");
+        LogResult.assertFloatEqual1(-7900.8, answer);
+    end
+
+    function testLdexp19(){@Test}
+        aDecimal = 1010.88;
+        aInt = -3;
+        answer = MathLib.ldexp(aDecimal, aInt);
+        LogResult.logStdOut("ldexp( decimal, int ) #3");
+        LogResult.assertFloatEqual1(126.36, answer);
+    end
+
+    function testLdexp20(){@Test}
+        aDecimal = -54264.2;
+        aInt = -5;
+        answer = MathLib.ldexp(aDecimal, aInt);
+        LogResult.logStdOut("ldexp( decimal, int ) #4");
+        LogResult.assertFloatEqual1(-1695.75625, answer);
+    end
+
+    function testLdexp23(){@Test}
+        aFloat = 3.14;
+        anotherFloat = 4.234;
+        answer = MathLib.ldexp(aFloat, anotherFloat);
+        LogResult.logStdOut("ldexp( float, float ) #1");
+        LogResult.assertFloatEqual1(50.24, answer);
+    end
+
+    function testLdexp24(){@Test}
+        aFloat = -123.45;
+        anotherFloat = 6.00001;
+        answer = MathLib.ldexp(aFloat, anotherFloat);
+        LogResult.logStdOut("ldexp( float, float ) #2");
+        LogResult.assertFloatEqual1(-7900.8, answer);
+    end
+
+    function testLdexp25(){@Test}
+        aFloat = 1010.88;
+        anotherFloat = -3.9999;
+        answer = MathLib.ldexp(aFloat, anotherFloat);
+        LogResult.logStdOut("ldexp( float, float ) #3");
+        LogResult.assertFloatEqual1(126.36, answer);
+    end
+
+    function testLdexp26(){@Test}
+        aFloat = -54264.2;
+        anotherFloat = -5.555123456;
+        answer = MathLib.ldexp(aFloat, anotherFloat);
+        LogResult.logStdOut("ldexp( float, float ) #4");
+        LogResult.assertFloatEqual1(-1695.75625, answer);
+    end
+
+    //test Log
+    
+    function testLog1(){@Test}
+        aInt = 1;
+        answer = MathLib.log(aInt);
+        LogResult.logStdOut("log( int ) #1");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testLog2(){@Test}
+        aInt = 0;
+        LogResult.logStdOut("log( int ) #2 - throws exception");
+        try
+            answer = MathLib.log(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+
+        aInt = -1;
+        try
+            answer = MathLib.log(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    //    function testLog4(){@Test}
+    //        aFloat = 2.718282;
+    //        answer = MathLib.log(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log( float ) #1");
+    //        LogResult.assertDecimalEqual1(1.000000, truncated);
+    //    end
+    //
+    //    function testLog5(){@Test}
+    //        aFloat = 0.123;
+    //        answer = MathLib.log(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log( float ) #2");
+    //        LogResult.assertDecimalEqual1(-2.095571, truncated);
+    //    end
+    //
+    //    function testLog6(){@Test}
+    //        aFloat = 85583.786347;
+    //        answer = MathLib.log(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log( float ) #3");
+    //        LogResult.assertDecimalEqual1(11.357251, truncated);
+    //    end
+    //
+    //    function testLog8(){@Test}
+    //        aDecimal = 983771896.039;
+    //        answer = MathLib.log(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(20.706905, truncated);
+    //    end
+    
+    function testLog9(){@Test}
+        aDecimal = -12345.678900;
+        LogResult.logStdOut("log( decimal ) #2 - throws exception");
+        try
+            answer = MathLib.log(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    // test log 2
+    
+    function testLog102(){@Test}
+        aInt = 1;
+        answer = MathLib.log10(aInt);
+        LogResult.logStdOut("log10( int ) #1");
+        LogResult.assertFloatEqual1(0, answer);
+    end
+
+    function testLog103(){@Test}
+        aInt = 0;
+        LogResult.logStdOut("log10( int ) #2 - throws exception");
+        try
+            answer = MathLib.log10(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testLog104(){@Test}
+        aInt = 10;
+        LogResult.logStdOut("log10( int ) #3");
+        answer = MathLib.log10(aInt);
+        LogResult.assertBigIntEqual1(1, answer);
+    end
+
+    function testLog106(){@Test}
+        aFloat = -1.234;
+        LogResult.logStdOut("log10( float ) #1 - throws exception");
+        try
+            answer = MathLib.log10(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    //    function testLog107(){@Test}
+    //        aFloat = 0.2;
+    //        answer = MathLib.log10(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log10( float ) #2");
+    //        LogResult.assertDecimalEqual1(-0.698970, truncated);
+    //    end
+    //
+    //    function testLog109(){@Test}
+    //        aDecimal = 983771896.039;
+    //        answer = MathLib.log10(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log10( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(8.992894, truncated);
+    //    end
+    //
+    //    function testLog1010(){@Test}
+    //        aDecimal = 12345.678900;
+    //        answer = MathLib.log10(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("log10( decimal ) #2");
+    //        LogResult.assertDecimalEqual1(4.091515, truncated);
+    //    end
+    
+    //testMax
+    
+    function testMax1(){@Test}
+        aSmallint = 8;
+        anotherSmallint = -2;
+        ir = MathLib.max(aSmallint, anotherSmallint);
+        LogResult.logStdOut("max( smallint, smallint ) #1");
+        LogResult.assertBigIntEqual1(8, ir);
+    end
+
+    function testMax2(){@Test}
+        aSmallint = 3;
+        anotherSmallint = 247;
+        ir = MathLib.max(aSmallint, anotherSmallint);
+        LogResult.logStdOut("max( smallint, smallint ) #2");
+        LogResult.assertBigIntEqual1(247, ir);
+    end
+
+    function testMax5(){@Test}
+        aint = 777;
+        anotherint = 23;
+        ir = MathLib.max(aint, anotherint);
+        LogResult.logStdOut("max( int, int ) #1");
+        LogResult.assertBigIntEqual1(777, ir);
+    end
+
+    function testMax6(){@Test}
+        aint = -3645;
+        anotherint = 0;
+        ir = MathLib.max(aint, anotherint);
+        LogResult.logStdOut("max( int, int ) #2");
+        LogResult.assertBigIntEqual1(0, ir);
+    end
+
+    function testMax9(){@Test}
+        abigint = 509842549;
+        anotherBigInt = -234321439;
+        ir = MathLib.max(abigint, anotherBigInt);
+        LogResult.logStdOut("max( bigint, bigint ) #1");
+        LogResult.assertBigIntEqual1(509842549, ir);
+    end
+
+    function testMax10(){@Test}
+        abigint = 4204;
+        anotherbigint = 75098433244;
+        ir = MathLib.max(abigint, anotherbigint);
+        LogResult.logStdOut("max( bigint, bigint ) #2");
+        LogResult.assertBigIntEqual1(75098433244, ir);
+    end
+
+    function testMax111(){@Test}
+        afloat = 452.62435;
+        anotherfloat = -2.71828183;
+        fr = MathLib.max(afloat, anotherfloat);
+        LogResult.logStdOut("max( float, float ) #1");
+        LogResult.assertFloatEqual1(452.62435, fr);
+    end
+
+    function testMax112(){@Test}
+        afloat = 3.14159265;
+        anotherfloat = 87429.85;
+        fr = MathLib.max(afloat, anotherfloat);
+        LogResult.logStdOut("max( float, float ) #2");
+        LogResult.assertFloatEqual1(87429.85, fr);
+    end
+
+    function testMax114(){@Test}
+        adecimal = 445286544567.624305;
+        anotherdecimal = 40385765456.718;
+        dr = MathLib.max(adecimal, anotherdecimal);
+        LogResult.logStdOut("max( decimal, decimal ) #1");
+        LogResult.assertFloatEqual1(445286544567.624305, dr);
+    end
+
+    function testMax115(){@Test}
+        adecimal = -3542345345.141592;
+        anotherdecimal = 294330990000.85;
+        dr = MathLib.max(adecimal, anotherdecimal);
+        LogResult.logStdOut("max( decimal, decimal ) #2");
+        LogResult.assertFloatEqual1(294330990000.85, dr);
+    end
+
+    function testMax117(){@Test}
+        aFloat = 3.14159265;
+        aDecimal = 940385765456.718;
+        fr = MathLib.max(aFloat, adecimal);
+        LogResult.logStdOut("max( float, decimal )");
+        LogResult.assertFloatEqual1(940385765456.718, fr);
+    end
+
+    function testMax118(){@Test}
+        aFloat = 3.14159265;
+        aDecimal = -940385765456.718;
+        fr = MathLib.max(adecimal, aFloat);
+        LogResult.logStdOut("max( decimal, float )");
+        LogResult.assertFloatEqual1(3.14159265, fr);
+    end
+
+    //    function testMax17(){@Test}
+    //        aBigint = -2222222222;
+    //        aDecimal = 750493875333.949494;
+    //        dr = MathLib.max(aDecimal, aBigint);
+    //        LogResult.logStdOut("max( decimal, bigint )");
+    //        LogResult.assertDecimalEqual1(750493875333.949494, dr);
+    //    end
+    
+    function testMax13(){@Test}
+        aInt = 324;
+        aBigint = -432567655;
+        ir = MathLib.max(aInt, aBigint);
+        LogResult.logStdOut("max( int, bigint )");
+        LogResult.assertBigIntEqual1(324, ir);
+    end
+
+    function testMax14(){@Test}
+        aInt = 2;
+        aBigint = 5709432853;
+        ir = MathLib.max(aBigint, aInt);
+        LogResult.logStdOut("max( bigint, int )");
+        LogResult.assertBigIntEqual1(5709432853, ir);
+    end
+
+    function testMax16(){@Test}
+        aBigint = 7504293875;
+        aDecimal = 4254325.949494;
+        ir = MathLib.max(aBigint, aDecimal);
+        LogResult.logStdOut("max( bigint, decimal )");
+        LogResult.assertBigIntEqual1(7504293875, ir);
+    end
+
+    // test Min
+    
+    function testMin2(){@Test}
+        aSmallint = 8;
+        anotherSmallint = -2;
+        ir = MathLib.min(aSmallint, anotherSmallint);
+        LogResult.logStdOut("min( smallint, smallint ) #1");
+        LogResult.assertBigIntEqual1(-2, ir);
+    end
+
+    function testMin3(){@Test}
+        aSmallint = 3;
+        anotherSmallint = 247;
+        ir = MathLib.min(aSmallint, anotherSmallint);
+        LogResult.logStdOut("min( smallint, smallint ) #2");
+        LogResult.assertBigIntEqual1(3, ir);
+    end
+
+    function testMin6(){@Test}
+        aint = 777;
+        anotherint = 23;
+        ir = MathLib.min(aint, anotherint);
+        LogResult.logStdOut("min( int, int ) #1");
+        LogResult.assertBigIntEqual1(23, ir);
+    end
+
+    function testMin7(){@Test}
+        aint = -3645;
+        anotherint = 0;
+        ir = MathLib.min(aint, anotherint);
+        LogResult.logStdOut("min( int, int ) #2");
+        LogResult.assertBigIntEqual1(-3645, ir);
+    end
+
+    function testMin10(){@Test}
+        abigint = 509842549;
+        anotherbigint = -234321439;
+        ir = MathLib.min(abigint, anotherbigint);
+        LogResult.logStdOut("min( bigint, bigint ) #1");
+        LogResult.assertBigIntEqual1(-234321439, ir);
+    end
+
+    function testMin11(){@Test}
+        abigint = 4204;
+        anotherbigint = 75098433244;
+        ir = MathLib.min(abigint, anotherbigint);
+        LogResult.logStdOut("min( bigint, bigint ) #2");
+        LogResult.assertBigIntEqual1(4204, ir);
+    end
+
+    function testMin13(){@Test}
+        afloat = 452.62435;
+        anotherfloat = -2.71828183;
+        fr = MathLib.min(afloat, anotherfloat);
+        LogResult.logStdOut("min( float, float ) #1");
+        LogResult.assertFloatEqual1(-2.71828183, fr);
+    end
+
+    function testMin14(){@Test}
+        afloat = 3.14159265;
+        anotherfloat = 87429.85;
+        fr = MathLib.min(afloat, anotherfloat);
+        LogResult.logStdOut("min( float, float ) #2");
+        LogResult.assertFloatEqual1(3.14159265, fr);
+    end
+
+    //    function testMin17(){@Test}
+    //        adecimal = 445286544567.624305;
+    //        anotherdecimal = 20385765456.718;
+    //        dr = MathLib.min(adecimal, anotherdecimal);
+    //        LogResult.logStdOut("min( decimal, decimal ) #1");
+    //        LogResult.assertDecimalEqual1(20385765456.718, dr);
+    //    end
+    //
+    //    function testMin18(){@Test}
+    //        adecimal = -3542345345.141592;
+    //        anotherdecimal = 994330990000.85;
+    //        dr = MathLib.min(adecimal, anotherdecimal);
+    //        LogResult.logStdOut("min( decimal, decimal ) #2");
+    //        LogResult.assertDecimalEqual1(-3542345345.141592, dr);
+    //    end
+    
+    function testMin20(){@Test}
+        aFloat = 3.14159265;
+        aDecimal = 240385765456.718;
+        fr = MathLib.min(aFloat, adecimal);
+        LogResult.logStdOut("min( float, decimal )");
+        LogResult.assertFloatEqual1(3.14159265, fr);
+    end
+
+    function testMin21(){@Test}
+        aFloat = 3.14159265;
+        aDecimal = -240385765456.718;
+        fr = MathLib.min(adecimal, aFloat);
+        LogResult.logStdOut("min( decimal, float )");
+        LogResult.assertFloatEqual1(-240385765456.718, fr);
+    end
+
+    function testMin23(){@Test}
+        aInt = 324;
+        aBigint = -432567655;
+        ir = MathLib.min(aInt, aBigint);
+        LogResult.logStdOut("min( int, bigint )");
+        LogResult.assertBigIntEqual1(-432567655, ir);
+    end
+
+    function testMin24(){@Test}
+        aInt = 2;
+        aBigint = 5709432853;
+        ir = MathLib.min(aBigint, aInt);
+        LogResult.logStdOut("min( bigint, int )");
+        LogResult.assertBigIntEqual1(2, ir);
+    end
+
+    function testMin26(){@Test}
+        aBigint = 7504293875;
+        aDecimal = 4254325.949494;
+        ir = MathLib.min(aBigint, aDecimal);
+        LogResult.logStdOut("min( bigint, decimal )");
+        LogResult.assertBigIntEqual1(4254325.949494, ir);
+    end
+
+    function testMin27(){@Test}
+        aBigint = -2222222222;
+        aDecimal = 750493875333.949494;
+        ir = MathLib.min(aDecimal, aBigint);
+        LogResult.logStdOut("min( decimal, bigint )");
+        LogResult.assertBigIntEqual1(-2222222222, ir);
+    end
+
+    // test Modf  Bugs 364216
+    
+    function testModf1(){@Test}
+        aInt = 0;
+        answer = MathLib.modf(aInt, ir);
+        LogResult.logStdOut("modf( int, smallint ) #1");
+        LogResult.assertTrue1((answer == 0) &&(ir == 0));
+    end
+
+    function testModf2(){@Test}
+        aInt = 111;
+        answer = MathLib.modf(aInt, ir);
+        LogResult.logStdOut("modf( int, int ) #2");
+        LogResult.assertTrue1((answer == 0) &&(ir == 111));
+    end
+
+    function testModf3(){@Test}
+        aInt = -3456;
+        answer = MathLib.modf(aInt, ir);
+        LogResult.logStdOut("modf( int, bigint ) #3");
+        LogResult.assertTrue1((answer == 0) &&(ir == -3456));
+    end
+
+    function testModf5(){@Test}
+        afloat = 3.14159265;
+        answer = MathLib.modf(afloat, ir);
+//        LogResult.logStdOut("modf( float, smallint ) #1");
+//        LogResult.assertTrue1((answer == 0.14159265) &&(ir == 3));
+		LogResult.assertBigIntEqual("modf( float, smallint ) #1 integet", 3, ir);
+		LogResult.assertFloatEqual("modf( float, smallint ) #1 fractional", 0.14159265, answer);
+    end
+
+    function testModf6(){@Test}
+        afloat = 3245.435;
+        answer = MathLib.modf(afloat, ir);
+//        LogResult.logStdOut("modf( float, int ) #2");
+//       LogResult.assertTrue1((answer == 0.435) &&(ir == 3245));
+       	LogResult.assertBigIntEqual("modf( float, smallint ) #2 integet", 3245, ir);
+		LogResult.assertFloatEqual("modf( float, smallint ) #2 fractional", 0.435, answer);
+    end
+
+    function testModf7(){@Test}
+        afloat = -987654.32109;
+        answer = MathLib.modf(afloat, ir);
+//        LogResult.logStdOut("modf( float, bigint ) #3");
+//        LogResult.assertTrue1((answer == -0.32109) &&(ir == -987654));    
+       	LogResult.assertBigIntEqual("modf( float, smallint ) #3 integet", -987654, ir);
+		LogResult.assertFloatEqual("modf( float, smallint ) #3 fractional", -0.32109, answer);        
+    end
+
+    function testModf8(){@Test}
+
+        //decimal variations
+        adecimal = 3.141593;
+        answer = MathLib.modf(adecimal, ir);
+//        LogResult.logStdOut("modf( decimal, smallint ) #1");
+//        LogResult.assertTrue1((answer == 0.141593) &&(ir == 3));
+        LogResult.assertBigIntEqual("modf( decimal, smallint ) #1 integet", 3, ir);
+		LogResult.assertFloatEqual("modf( decimal, smallint ) #1 fractional", 0.141593, answer);
+    end
+
+    function testModf9(){@Test}
+        adecimal = 3245.435;
+        answer = MathLib.modf(adecimal, ir);
+//        LogResult.logStdOut("modf( decimal, int ) #2");
+//        LogResult.assertTrue1((answer == 0.435) &&(ir == 3245));
+        LogResult.assertBigIntEqual("modf( decimal, smallint ) #2 integet", 3245, ir);
+		LogResult.assertFloatEqual("modf( decimal, smallint ) #2 fractional", 0.435, answer);
+    end
+
+    function testModf10(){@Test}
+        adecimal = -987654.32109;
+        answer = MathLib.modf(adecimal, ir);
+//        LogResult.logStdOut("modf( decimal, bigint ) #3");
+//        LogResult.assertTrue1((answer == -0.32109) &&(ir == -987654));
+       	LogResult.assertBigIntEqual("modf( decimal, bigint ) #3 integet", -987654, ir);
+		LogResult.assertFloatEqual("modf( decimal, bigint ) #3 fractional", -0.32109, answer);  
+    end
+
+    //test Pow
+    
+    function testPow1(){@Test}
+        LogResult.logStdOut("pow( 0, 0 ) - throws exception");
+        try
+            answer = MathLib.pow(0, 0);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testPow2(){@Test}
+        LogResult.logStdOut("pow( 0, -1 ) - throws exception");
+        try
+            answer = MathLib.pow(0, -1);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testPow3(){@Test}
+        LogResult.logStdOut("pow( -1, 0.5 ) - throws exception");
+        try
+            answer = MathLib.pow(-1, 0.5);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testPow5(){@Test}
+        aInt = 15;
+        answer = MathLib.pow(aInt, 2);
+        LogResult.logStdOut("pow( int, int ) #1");
+        LogResult.assertBigIntEqual1(225, answer);
+    end
+
+    function testPow6(){@Test}
+        aInt = 2;
+        answer = MathLib.pow(aInt, -3);
+        LogResult.logStdOut("pow( int, int ) #2");
+        LogResult.assertBigIntEqual1(0.125, answer);
+    end
+
+    function testPow7(){@Test}
+        aInt = 0;
+        answer = MathLib.pow(aInt, 100);
+        LogResult.logStdOut("pow( int, int ) #3");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    function testPow8(){@Test}
+        aInt = 1;
+        answer = MathLib.pow(aInt, 1);
+        LogResult.logStdOut("pow( int, int ) #4");
+        LogResult.assertBigIntEqual1(1, answer);
+    end
+
+    function testPow9(){@Test}
+        aInt = 1;
+        answer = MathLib.pow(aInt, 0);
+        LogResult.logStdOut("pow( int, int ) #3");
+        LogResult.assertBigIntEqual1(1, answer);
+    end
+
+    function testPow11(){@Test}
+        afloat = 2.718;
+        answer = MathLib.pow(afloat, 1);
+        LogResult.logStdOut("pow( float, int )");
+        LogResult.assertBigIntEqual1(2.718, answer);
+    end
+
+    //    function testPow12(){@Test}
+    //        afloat = 3.14;
+    //        answer = MathLib.pow(afloat, 0.5);
+    //        truncated = answer;
+    //        LogResult.logStdOut("pow( float, float )");
+    //        LogResult.assertDecimalEqual1(1.772005, truncated);
+    //    end
+    
+    function testPow14(){@Test}
+        adecimal = 2.718;
+        answer = MathLib.pow(adecimal, 1);
+        LogResult.logStdOut("pow( decimal, int )");
+        LogResult.assertBigIntEqual1(2.718, answer);
+    end
+
+    //    function testPow15(){@Test}
+    //        adecimal = 771896.039;
+    //        answer = MathLib.pow(adecimal, -0.048003);
+    //        truncated = answer;
+    //        LogResult.logStdOut("pow( decimal, float )");
+    //        LogResult.assertDecimalEqual1(0.521650, answer);
+    //    end
+    //
+    //    function testPow16(){@Test}
+    //        adecimal = 771896.039;
+    //        answer = MathLib.pow(adecimal, -0.048003);
+    //        truncated = answer;
+    //        LogResult.logStdOut("pow( decimal, float )");
+    //        LogResult.assertDecimalEqual1(0.521650, answer);
+    //    end
+    //
+    //    function testPow17(){@Test}
+    //        adecimal = 771896.039;
+    //        anotherdecimal decimal(18, 6) = -0.048003;
+    //        answer = MathLib.pow(adecimal, anotherDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("pow( decimal, decimal )");
+    //        LogResult.assertDecimalEqual1(0.521650, answer);
+    //    end
+    
+    // test Round
+    
+    function testRound0(){@Test}
+
+        aInt = 123456;
+        answer = MathLib.round(aInt, 0);
+        LogResult.logStdOut("round( int, 0 )");
+        LogResult.assertBigIntEqual1(123456, answer);
+    end
+
+    function testRound1(){@Test}
+        aInt = 123456;
+        answer = MathLib.round(aInt, 1);
+        LogResult.logStdOut("round( int, 1 )");
+        LogResult.assertBigIntEqual1(123460, answer);
+    end
+
+    function testRound2(){@Test}
+        aInt = 123456;
+        answer = MathLib.round(aInt, 4);
+        LogResult.logStdOut("round( int, 4 )");
+        LogResult.assertBigIntEqual1(120000, answer);
+    end
+
+    function testRound3(){@Test}
+        aInt = 123456;
+        answer = MathLib.round(aInt, -2);
+        LogResult.logStdOut("round( int, -2 )");
+        LogResult.assertBigIntEqual1(123456.00, answer);
+    end
+
+    function testRound5(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, 0);
+        LogResult.logStdOut("round( float, 0 )");
+        LogResult.assertBigIntEqual1(5679, answer);
+    end
+
+    function testRound6(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, 1);
+        LogResult.logStdOut("round( float, 1 )");
+        LogResult.assertBigIntEqual1(5680, answer);
+    end
+
+    function testRound7(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, 4);
+        LogResult.logStdOut("round( float, 4 )");
+        LogResult.assertBigIntEqual1(10000, answer);
+    end
+
+    function testRound8(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, 5);
+        LogResult.logStdOut("round( float, 5 )");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    function testRound9(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, -2);
+        LogResult.logStdOut("round( float, -2 )");
+        LogResult.assertBigIntEqual1(5678.57, answer);
+    end
+
+    function testRound10(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, -4);
+        LogResult.logStdOut("round( float, -4 )");
+        LogResult.assertBigIntEqual1(5678.5678, answer);
+    end
+
+    function testRound11(){@Test}
+        afloat = 5678.5678;
+        answer = MathLib.round(afloat, -6);
+        LogResult.logStdOut("round( float, -6 )");
+        LogResult.assertBigIntEqual1(5678.567800, answer);
+    end
+
+    //    function testRound13(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, 0);
+    //        LogResult.logStdOut("round( decimal, 0 )");
+    //        LogResult.assertDecimalEqual1(987654321, truncated);
+    //    end
+    //
+    //    function testRound14(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, 1);
+    //        LogResult.logStdOut("round( decimal, 1 )");
+    //        LogResult.assertDecimalEqual1(987654320, truncated);
+    //    end
+    //
+    //    function testRound15(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, 4);
+    //        LogResult.logStdOut("round( decimal, 4 )");
+    //        LogResult.assertDecimalEqual1(987650000, truncated);
+    //    end
+    //
+    //    function testRound16(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, 7);
+    //        LogResult.logStdOut("round( decimal, 7 )");
+    //        LogResult.assertDecimalEqual1(990000000, truncated);
+    //    end
+    //
+    //    function testRound17(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, 9);
+    //        LogResult.logStdOut("round( decimal, 9 )");
+    //        LogResult.assertDecimalEqual1(1000000000, truncated);
+    //    end
+    //
+    //    function testRound18(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, -2);
+    //        LogResult.logStdOut("round( decimal, -2 )");
+    //        LogResult.assertDecimalEqual1(987654321.120000, truncated);
+    //    end
+    //
+    //    function testRound19(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, -4);
+    //        LogResult.logStdOut("round( decimal, -4 )");
+    //        LogResult.assertDecimalEqual1(987654321.123500, truncated);
+    //    end
+    //
+    //    function testRound20(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, -6);
+    //        LogResult.logStdOut("round( decimal, -6 )");
+    //        LogResult.assertDecimalEqual1(987654321.123456, truncated);
+    //    end
+    
+    //    function testRound21(){@Test}
+    //        adecimal = 987654321.123456;
+    //        truncated = MathLib.round(adecimal, -8);
+    //        LogResult.logStdOut("round( decimal, -8 )");
+    //        LogResult.assertDecimalEqual1(987654321.123456, truncated);
+    //    end
+    
+    //test sinh
+    
+    function testSin1(){@Test}
+        aInt = 0;
+        answer = MathLib.sin(aInt);
+        LogResult.logStdOut("sin( int ) #1");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    //    function testSin2(){@Test}
+    //        aInt = 1;
+    //        answer = MathLib.sin(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( int ) #2");
+    //        LogResult.assertDecimalEqual1(0.841471, truncated);
+    //    end
+    //
+    //    function testSin3(){@Test}
+    //        aInt = -1;
+    //        answer = MathLib.sin(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( int ) #3");
+    //        LogResult.assertDecimalEqual1(-0.841471, truncated);
+    //    end
+    //
+    //    function testSin5(){@Test}
+    //        aFloat = 3.141593;
+    //        answer = MathLib.sin(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( float ) #1");
+    //        LogResult.assertDecimalEqual1(0, truncated);
+    //    end
+    //
+    //    function testSin6(){@Test}
+    //        aFloat = -3.141593;
+    //        answer = MathLib.sin(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( float ) #2");
+    //        LogResult.assertDecimalEqual1(0, truncated);
+    //    end
+    //
+    //    function testSin7(){@Test}
+    //        aFloat = 1.570796;
+    //        answer = MathLib.sin(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( float ) #3");
+    //        LogResult.assertDecimalEqual1(1, truncated);
+    //    end
+    //
+    //    function testSin8(){@Test}
+    //        aFloat = -1.570796;
+    //        answer = MathLib.sin(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( float ) #4");
+    //        LogResult.assertDecimalEqual1(-1, truncated);
+    //    end
+    //
+    //    function testSin10(){@Test}
+    //        aDecimal = 983771896.039;
+    //        answer = MathLib.sin(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(0.726784, truncated);
+    //    end
+    //
+    //    function testSin11(){@Test}
+    //        aDecimal = -0.000001;
+    //        answer = MathLib.sin(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sin( decimal ) #2");
+    //        LogResult.assertDecimalEqual1(-0.000001, truncated);
+    //    end
+    //
+    //    //test Sqrt
+    //    
+    //    function testSqrt2(){@Test}
+    //        aInt = 1;
+    //        answer = MathLib.sqrt(aInt);
+    //        LogResult.logStdOut("sqrt( int ) #1");
+    //        LogResult.assertBigIntEqual1(1, answer);
+    //    end
+    
+    function testSqrt3(){@Test}
+        aInt = 0;
+        answer = MathLib.sqrt(aInt);
+        LogResult.logStdOut("sqrt( int ) #2");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    function testSqrt4(){@Test}
+        aInt = -4;
+        LogResult.logStdOut("sqrt( int ) #3 - throws exception");
+        try
+            answer = MathLib.sqrt(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testSqrt5(){@Test}
+        aInt = 25;
+        answer = MathLib.sqrt(aInt);
+        LogResult.logStdOut("sqrt( int ) #4");
+        LogResult.assertBigIntEqual1(5, answer);
+    end
+
+    function testSqrt7(){@Test}
+        aFloat = -98.765;
+        LogResult.logStdOut("sqrt( float ) #1 - throws exception");
+        try
+            answer = MathLib.sqrt(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+
+    end
+
+    function testSqrt8(){@Test}
+        aFloat = 0.49;
+        answer = MathLib.sqrt(aFloat);
+        LogResult.logStdOut("sqrt( float ) #2");
+        LogResult.assertBigIntEqual1(0.7, answer);
+    end
+
+    //    function testSqrt9(){@Test}
+    //        aFloat = 214.702732;
+    //        answer = MathLib.sqrt(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sqrt( float ) #3");
+    //        LogResult.assertDecimalEqual1(14.652738, truncated);
+    //    end
+    //
+    //    function testSqrt11(){@Test}
+    //        aDecimal = 29805427.904295;
+    //        answer = MathLib.sqrt(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("sqrt( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(5459.434761, truncated);
+    //    end
+    
+    function testSqrt12(){@Test}
+        aDecimal = -12345.678900;
+        LogResult.logStdOut("sqrt( decimal ) #2 - throws exception");
+        try
+            answer = MathLib.sqrt(aInt);
+            LogResult.assertTrue1(false);
+        onException(rte AnyException)
+            LogResult.logStdOut("<font style=\"color:blue;font-size:10\"> " :: rte.message :: " </font>");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    //test Tan
+    
+    function testTan2(){@Test}
+        aInt = 0;
+        answer = MathLib.tan(aInt);
+        LogResult.logStdOut("tan( int ) #1");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    //    function testTan3(){@Test}
+    //        aInt = 1;
+    //        answer = MathLib.tan(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( int ) #2");
+    //        LogResult.assertDecimalEqual1(1.557408, truncated);
+    //    end
+    //
+    //    function testTan4(){@Test}
+    //        aInt = -1;
+    //        answer = MathLib.tan(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( int ) #3");
+    //        LogResult.assertDecimalEqual1(-1.557408, truncated);
+    //    end
+    //
+    //    function testTan6(){@Test}
+    //        aFloat = 3.141593;
+    //        answer = MathLib.tan(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( float ) #1");
+    //        LogResult.assertDecimalEqual1(0, truncated);
+    //    end
+    //
+    //    function testTan7(){@Test}
+    //        aFloat = -3.141593;
+    //        answer = MathLib.tan(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( float ) #2");
+    //        LogResult.assertDecimalEqual1(0, truncated);
+    //    end
+    //
+    //    function testTan8(){@Test}
+    //        aFloat = 0.123;
+    //        answer = MathLib.tan(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( float ) #3");
+    //        LogResult.assertDecimalEqual1(0.123624, truncated);
+    //    end
+    //
+    //    function testTan10(){@Test}
+    //        aDecimal = 983771896.039;
+    //        answer = MathLib.tan(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(1.058117, truncated);
+    //    end
+    //
+    //    function testTan11(){@Test}
+    //        aDecimal = -1.570796;
+    //        answer = MathLib.tan(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tan( decimal ) #2");
+    //        LogResult.assertDecimalEqual1(-3060023.306953, truncated);
+    //    end
+    
+    // test of tanh
+    
+    function testTanh2(){@Test}
+        aInt = 0;
+        answer = MathLib.tanh(aInt);
+        LogResult.logStdOut("tanh( int ) #1");
+        LogResult.assertBigIntEqual1(0, answer);
+    end
+
+    //    function testTanh3(){@Test}
+    //        aInt = 1;
+    //        answer = MathLib.tanh(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( int ) #2");
+    //        LogResult.assertDecimalEqual1(0.761594, truncated);
+    //    end
+    //
+    //    function testTanh4(){@Test}
+    //        aInt = -1;
+    //        answer = MathLib.tanh(aInt);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( int ) #3");
+    //        LogResult.assertDecimalEqual1(-0.761594, truncated);
+    //    end
+    //
+    //    function testTanh6(){@Test}
+    //        aFloat = 0.2;
+    //        answer = MathLib.tanh(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( float ) #1");
+    //        LogResult.assertDecimalEqual1(0.197375, truncated);
+    //    end
+    
+    //    function testTanh7(){@Test}
+    //        aFloat = -0.2;
+    //        answer = MathLib.tanh(aFloat);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( float ) #2");
+    //        LogResult.assertDecimalEqual1(-0.197375, truncated);
+    //    end
+    //
+    //    function testTanh9(){@Test}
+    //        aDecimal = 1.987654;
+    //        answer = MathLib.tanh(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( decimal ) #1");
+    //        LogResult.assertDecimalEqual1(0.963145, truncated);
+    //    end
+    //
+    //    function testTanh10(){@Test}
+    //        aDecimal = 10;
+    //        answer = MathLib.tanh(aDecimal);
+    //        truncated = answer;
+    //        LogResult.logStdOut("tanh( decimal ) #2");
+    //        LogResult.assertDecimalEqual1(1.000000, truncated);
+    //    end
+    
+    // test String As Int
+    
+    function testStringAsInt0(){@Test}
+        //nullableBigint = MathLib.stringAsInt("123");
+        nullableBigint = "123";
+        LogResult.logStdOut("stringAsInt() #1");
+        LogResult.assertBigIntEqual1(123, nullableBigint);
+    end
+
+    function testStringAsInt1(){@Test}
+        //nullableBigint = MathLib.stringAsInt("999999999999999999");
+        nullableBigint = "999999999999999999";
+        LogResult.logStdOut("stringAsInt() #2");
+        LogResult.assertBigIntEqual1(999999999999999999, nullableBigint);
+    end
+
+    function testStringAsInt2(){@Test}
+        //nullableBigint = MathLib.stringAsInt("456.789");
+        nullableBigint = "456.789";
+        LogResult.logStdOut("stringAsInt() #3");
+        LogResult.assertBigIntEqual1(456, nullableBigint);
+    end
+
+    function testStringAsInt3(){@Test}
+        //nullableBigint = MathLib.stringAsInt("-876.44444444444444444444444444444");
+        nullableBigint = "-876.44444444444444444444444444444";
+        LogResult.logStdOut("stringAsInt() #4");
+        LogResult.assertBigIntEqual1(-876, nullableBigint);
+    end
+
+    function testStringAsInt4(){@Test}
+        //nullableBigint = MathLib.stringAsInt("not a number");
+        nullableBigint = "not a number";
+        LogResult.logStdOut("stringAsInt() #5");
+        //LogResult.assertBigIntEqual1(null, nullableBigint);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueExceptio");
+    end
+
+    function testStringAsInt5(){@Test}
+        // way too big
+        //nullableBigint = MathLib.stringAsInt("11111111111111111111111111111");
+        nullableBigint = "11111111111111111111111111111";
+        LogResult.logStdOut("stringAsInt() #6");
+        //LogResult.assertBigIntEqual1(null, nullableBigint);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueExceptio");
+    end
+
+    // String As Float
+    
+    function testStringAsFloat1(){@Test}
+        //nullableFloat = MathLib.stringAsFloat("123");
+        nullableFloat = "123";
+        LogResult.logStdOut("stringAsFloat() #1");
+        LogResult.assertFloatEqual1(123, nullableFloat);
+    end
+
+    function testStringAsFloat2(){@Test}
+        // float has limited precision - don't push it!
+        //nullableFloat = MathLib.stringAsFloat("9999999");
+        nullableFloat = "9999999";
+        LogResult.logStdOut("stringAsFloat() #2");
+        LogResult.assertFloatEqual1(9999999, nullableFloat);
+    end
+
+    function testStringAsFloat3(){@Test}
+        //nullableFloat = MathLib.stringAsFloat("456.789");
+        nullableFloat = "456.789";
+        LogResult.logStdOut("stringAsFloat() #3");
+        LogResult.assertFloatEqual1(456.789, nullableFloat);
+    end
+
+    function testStringAsFloat4(){@Test}
+        //nullableFloat = MathLib.stringAsFloat("-876.454");
+        nullableFloat = "-876.454";
+        LogResult.logStdOut("stringAsFloat() #4");
+        LogResult.assertFloatEqual1(-876.454, nullableFloat);
+    end
+
+    function testStringAsFloat5(){@Test}
+        //nullableFloat = MathLib.stringAsFloat("not a number");
+        nullableFloat = "not a number";
+        LogResult.logStdOut("stringAsFloat() #5");
+        //LogResult.assertFloatEqual1(null, nullableFloat);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueExceptio");
+    end
+
+    // String as Decimal
+    
+    //    function testStringAsDecimal0(){@Test}
+    //
+    //        bd = nullableDecimal;
+    //        nullableDecimal = MathLib.stringAsDecimal("123");
+    //        LogResult.logStdOut("stringAsDecimal() #1");
+    //        LogResult.assertDecimalEqual1(123, nullableDecimal);
+    //    end
+    //
+    //    function testStringAsDecimal1(){@Test}
+    //        nullableDecimal = MathLib.stringAsDecimal("999999999999999999");
+    //        LogResult.logStdOut("stringAsDecimal() #2");
+    //        LogResult.assertDecimalEqual1(999999999999999999, nullableDecimal);
+    //    end
+    //
+    //    function testStringAsDecimal2(){@Test}
+    //        nullableDecimal = MathLib.stringAsDecimal("456.789");
+    //        LogResult.logStdOut("stringAsDecimal() #3");
+    //        LogResult.assertDecimalEqual1(456.789, nullableDecimal);
+    //    end
+    //
+    //    function testStringAsDecimal3(){@Test}
+    //        nullableDecimal = MathLib.stringAsDecimal("-876.44444444444444444444444444444");
+    //        LogResult.logStdOut("stringAsDecimal() #4");
+    //        LogResult.assertDecimalEqual1(-876.44444, nullableDecimal);
+    //    end
+    //
+    //    function testStringAsDecimal4(){@Test}
+    //        nullableDecimal = MathLib.stringAsDecimal("not a number");
+    //        LogResult.logStdOut("stringAsDecimal() #5");
+    //        LogResult.assertDecimalEqual1(null, nullableDecimal);
+    //    end
+    //
+    //    function testStringAsDecimal5(){@Test}
+    //        // way too big
+    //        nullableDecimal = MathLib.stringAsDecimal("111111111111111111111111111111111111111111111");
+    //        LogResult.logStdOut("stringAsDecimal() #6");
+    //        LogResult.assertDecimalEqual1(null, nullableDecimal);
+    //    end
+    
+end // end of the library

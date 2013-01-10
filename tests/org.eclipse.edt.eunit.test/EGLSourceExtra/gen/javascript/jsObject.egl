@@ -1,0 +1,97 @@
+package gen.javascript;
+
+/* 
+* @name jsObject
+* @title An externalType of JavaScriptObject named jsObject
+* @keywords externalType
+* @author EDT team
+* @createDate 2011/08/10
+* @description 
+* This is a JavaScriptObject externalType, which includes lots of variables, functions, constructors, 
+* and delegate functions.
+* Instruction: These test cases could only be run in JavaScript mode. In order to run it in RBD, you need to change back the annotation from
+* 'Property' to 'JavaScriptProperty' in jsObject.egl. You might also copy the folder com.ibm.etools.egl.rui.tests/WebContent/FVT into
+* the EDT generated org.eclipse.edt.eck.test.eunit.javascript/WebContent. Open the generated RUI handler TestExternalTypeLib_rui.egl in 
+* org.eclipse.edt.eck.test.eunit.javascript with EGL RUI editor to run.
+*/
+
+externalType jsObject type JavaScriptObject{relativePath = "FVT/externalTypes", externalname = "jsObject"}
+
+    //variables
+    
+    name string{@Property};
+    id int{@Property};
+
+    int1 int;
+    int2 int{@Property};
+    int3 int{@Property{getMethod = "getInt3"}};
+    int4 int{@Property{setMethod = "setInt4"}};
+    int5 int{@Property{getMethod = "getInt5", setMethod = "setInt5"}};
+    int6 int{@Property{getMethod = "getWackyInt6", setMethod = "setWackyInt6"}};
+
+    float1 float;
+    float2 float{@Property};
+    float3 float{@Property{getMethod = "getFloat3"}};
+    float4 float{@Property{setMethod = "setFloat4"}};
+    float5 float{@Property{getMethod = "getFloat5", setMethod = "setFloat5"}};
+    float6 float{@Property{getMethod = "getWackyFloat6", setMethod = "setWackyFloat6"}};
+
+    string1 string;
+    string2 string{@Property};
+    string3 string{@Property{getMethod = "getString3"}};
+    string4 string{@Property{setMethod = "setString4"}};
+    string5 string{@Property{getMethod = "getString5", setMethod = "setString5"}};
+    string6 string{@Property{getMethod = "getWackyString6", setMethod = "setWackyString6"}};
+
+    boolean1 boolean;
+    boolean2 boolean{@Property};
+    boolean3 boolean{@Property{getMethod = "getBoolean3"}};
+    boolean4 boolean{@Property{setMethod = "setBoolean4"}};
+    boolean5 boolean{@Property{getMethod = "getBoolean5", setMethod = "setBoolean5"}};
+    boolean6 boolean{@Property{getMethod = "getWackyBoolean6", setMethod = "setWackyBoolean6"}};
+
+    timestamp1 timeStamp?;
+    timestamp2 timeStamp?{@Property};
+    timestamp3 timeStamp?{@Property{getMethod = "getTimestamp3"}};
+    timestamp4 timeStamp?{@Property{setMethod = "setTimestamp4"}};
+    timestamp5 timeStamp?{@Property{getMethod = "getTimestamp5", setMethod = "setTimestamp5"}};
+    timestamp6 timeStamp?{@Property{getMethod = "getWackyTimestamp6", setMethod = "setWackyTimestamp6"}};
+
+    //    delegate1 jsDelegate1{@Property{getMethod = "getDelegate1", setMethod = "setDelegate1"}};
+    //    delegate2 jsDelegate2{@Property{getMethod = "getDelegate2", setMethod = "setDelegate2"}};
+    delegate1 jsDelegate1?{@Property{getMethod = "getDelegate1", setMethod = "setDelegate1"}};
+    delegate2 jsDelegate2?{@Property{getMethod = "getDelegate2", setMethod = "setDelegate2"}};
+
+    //functions
+    
+    function f1();
+
+    function f2(str string in);
+
+    function f3() returns(boolean);
+
+    function f4(str string in) returns(boolean);
+
+    function f5(str string in, i int in) returns(boolean);
+
+    function throwError(msg string in, name string in);
+
+    function throwString(s string in);
+
+    function throwEGLEx(msg string in, name string in);
+
+    //constructors
+    
+    constructor();
+
+    constructor(objectName string in);
+
+    constructor(objectName string in, id int in);
+
+end
+
+delegate jsDelegate1()
+end
+
+delegate jsDelegate2(str string in) returns(boolean)
+end

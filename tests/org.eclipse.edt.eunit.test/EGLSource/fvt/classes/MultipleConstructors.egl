@@ -1,0 +1,17 @@
+package fvt.classes;
+
+class MultipleConstructors
+	invokedDefaultConstructor boolean?;
+	
+	constructor()
+		setInvokedDefaultConstructor(true);
+	end
+	
+	constructor(i int in)
+		setInvokedDefaultConstructor(false);
+	end
+	
+	private function setInvokedDefaultConstructor(value boolean in)
+		invokedDefaultConstructor = value;
+	end
+end

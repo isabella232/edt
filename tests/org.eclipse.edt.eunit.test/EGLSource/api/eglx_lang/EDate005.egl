@@ -1,0 +1,144 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate005
+  * @title EdtDate005 - runComparisonFunction
+  * @description testing date comparisons
+  * @testcases runComparisonFunction23 - runComparisonFunction44
+  * @sources EdtDate005.egl
+  * @keywords date, less than, greater than, equal, not equal, comparison
+ **/
+library EDate005 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+	febNonLeap date = "02-28-1999";
+	febLeap date = "02-29-2000";
+	marFirst date = "03-01-2000";
+	marFirst1999 date = "03-01-1999";
+	marFirst1998 date = "03-01-1998";
+	
+	// Variable Declarations
+	varDate date;
+	 	
+
+	
+	
+	function runComparisonFunction23(){@Test}
+		LogResult.assertTrue("< comparison - equal dates", !(marFirst < marFirst) );
+	end
+	
+	
+	function runComparisonFunction24(){@Test}
+		LogResult.assertTrue("< comparison - non-equal dates", marFirst1999 < marFirst );
+	end
+	
+	function runComparisonFunction25(){@Test}
+		LogResult.assertTrue("< comparison - non-equal dates 2", !(marFirst < marFirst1999) );
+	end
+	
+	
+	
+	function runComparisonFunction26(){@Test}
+		LogResult.assertTrue("<= comparison - equal dates", marFirst <=marFirst );
+	end
+	
+	
+	function runComparisonFunction27(){@Test}
+		LogResult.assertTrue("<= comparison - non-equal dates", marFirst1999 <= marFirst );
+	end
+	
+	function runComparisonFunction28(){@Test}
+		LogResult.assertTrue("<= comparison - non-equal dates 2", !(marFirst <= marFirst1999) );
+	end
+	
+	function runComparisonFunction29(){@Test}
+		LogResult.assertTrue("> comparison - equal dates", !(marFirst > marFirst) );
+	end
+	
+	
+	function runComparisonFunction30(){@Test}
+		LogResult.assertTrue("> comparison - non-equal dates", marFirst > marFirst1999 );
+	end
+	
+	function runComparisonFunction31(){@Test}
+		LogResult.assertTrue("> comparison - non-equal dates 2", !(marFirst1999 > marFirst) );
+	end
+	
+	
+	
+	function runComparisonFunction32(){@Test}
+		LogResult.assertTrue(">= comparison - equal dates", marFirst >=marFirst );
+	end
+	
+	
+	function runComparisonFunction33(){@Test}
+		LogResult.assertTrue(">= comparison - non-equal dates", marFirst >= marFirst1999 );
+	end
+	
+	function runComparisonFunction34(){@Test}
+		LogResult.assertTrue(">= comparison - non-equal dates 2", !(marFirst1999 >= marFirst) );
+	end
+	
+	function runComparisonFunction35(){@Test}
+		LogResult.assertTrue("== comparison - equal dates", marFirst == marFirst);
+	end
+	
+	
+	
+	function runComparisonFunction36(){@Test}
+		LogResult.assertTrue("== comparison - nonequal dates", !(marFirst1999 ==marFirst) );
+	end
+	
+	
+	function runComparisonFunction37(){@Test}
+		LogResult.assertTrue("!= comparison - equal dates", !(marFirst != marFirst));
+	end
+	
+	
+	
+	function runComparisonFunction38(){@Test}
+		LogResult.assertTrue("!= comparison - nonequal dates", marFirst1999 !=marFirst );
+	end
+	
+	function runComparisonFunction39(){@Test}
+		myDate1 date?=null;
+		myDate2 date?=null;
+		LogResult.assertTrue("== comparison - with null values", myDate1== myDate2 );
+	end
+	
+	function runComparisonFunction40(){@Test}
+		myDate1 date?=null;
+		myDate2 date?=null;
+		LogResult.assertTrue("!= comparison - with null values",!( myDate1 != myDate2) );
+	end
+	
+	function runComparisonFunction41(){@Test}
+		myDate1 date?=null;
+	
+		LogResult.assertTrue("== comparison - with left null value", !(myDate1== febLeap) );
+	end
+	
+	function runComparisonFunction42(){@Test}
+		myDate1 date?=null;
+		LogResult.assertTrue("!= comparison - with left null value",myDate1 != febLeap );
+	end
+	
+	function runComparisonFunction43(){@Test}
+		myDate1 date?=null;
+	
+		LogResult.assertTrue("== comparison - with right null value", !(febLeap== myDate1) );
+	end
+	
+	function runComparisonFunction44(){@Test}
+		myDate1 date?=null;
+		LogResult.assertTrue("!= comparison - with right null value",febLeap != myDate1 );
+	end
+	
+
+end

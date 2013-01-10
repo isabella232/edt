@@ -1,0 +1,209 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation03Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation03Lib
+    use returnvaluefunctions;
+
+    a int;
+    b decimal(4, 2);
+    c float;
+    success boolean;
+
+    function testInNumericExpressions1b(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 1b");
+        a = retInt() + retInt();
+        LogResult.assertBigIntEqual1(10, a);
+    end
+
+    function testInNumericExpressions2(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 2");
+        a = 5;
+        a = a + retBin() + 5;
+        LogResult.assertBigIntEqual1(15, a);
+    end
+
+    function testInNumericExpressions3(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 3");
+        b = 33.33;
+        b = b + retDecimal() + 5.00;
+        //TestUILib.displayMessage("b=" + b + " expected=42.88");
+        LogResult.assertDecimalEqual1(42.88, b);
+    end
+
+    function testInNumericExpressions4(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 4");
+        c = 5.0;
+        c = 10.5 + retFloat() + c;
+        success =(c == 24.6999);
+        LogResult.assertTrue1(success);
+        if(!success)
+        //LogResult.expect(c, 24.6999);
+        end
+    end
+
+    function testInNumericExpressions2a(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 2a");
+        a = retBin() + retBin();
+        LogResult.assertBigIntEqual1(10, a);
+    end
+
+    function testInNumericExpressions3a(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 3a");
+        b = retDecimal() + retDecimal();
+        LogResult.assertDecimalEqual1(9.1, b);
+    end
+
+    function testInNumericExpressions4a(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 4a");
+        c = retFloat() + retFloat();
+        success =(c == 18.3998);
+        LogResult.assertTrue1(success);
+        if(!success)
+        //LogResult.expect(c, 18.3998);
+        end
+    end
+
+    function testInNumericExpressions2b(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 2b");
+        a = retBin() +(retBin() - retBin());
+        LogResult.assertBigIntEqual1(retBin(), a);
+    end
+
+    function testInNumericExpressions3b(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 3b");
+        b = retDecimal() +(retDecimal() - retDecimal());
+        LogResult.assertDecimalEqual1(retDecimal(), b);
+    end
+
+    function testInNumericExpressions4b(){@Test}
+        LogResult.logStdOut("In numeric expressions mult - 4b");
+        c = retFloat() +(retFloat() - retFloat());
+        LogResult.assertTrue1(c == retFloat());
+    end
+
+    function testInFunctionArguments1(){@Test}
+        LogResult.logStdOut("In function arguments mult - 1");
+        LogResult.assertTrue1(ArgInt(retInt() +(retInt() - retInt())));
+    end
+
+    function testInFunctionArguments2(){@Test}
+        LogResult.logStdOut("In function arguments mult - 2");
+        LogResult.assertTrue1(ArgBin(retBin() +(retBin() - retBin())));
+    end
+
+    function testInFunctionArguments3(){@Test}
+        LogResult.logStdOut("In function arguments mult - 3");
+        LogResult.assertTrue1(ArgDecimal(retDecimal() +(retDecimal() - retDecimal())));
+    end
+
+    function testInFunctionArguments4(){@Test}
+        LogResult.logStdOut("In function arguments mult - 4");
+        LogResult.assertTrue1(argfloat(retFloat() +(retFloat() - retFloat())));
+    end
+
+    //    function testInFunctionArguments5(){@Test}
+    //        //		LogResult.logStdOut("In function arguments strlib length mult - 5";
+    //        //		ArgCharInt(strLib.strLen(retString())+ (strLib.strLen(retString()) - strLib.strLen(retString())));
+    //        //		ArgCharInt(strLib.strLen(retString()));		
+    //        //		ArgCharInt(strLib.strLen("EGL"));		
+    //        //		strLib.strLen("EGL");
+    //        //		i int = strLib.strLen("EGL");
+    //    end
+    
+    //    function testInFunctionArguments9(){@Test}
+    //        //		LogResult.logStdOut("In function arguments mult - 9";
+    //        //		ArgDBchar(retDBchar());
+    //    end
+    
+    //    function testInFunctionArguments10(){@Test}
+    //        //		LogResult.logStdOut("In function arguments mult - 10";
+    //        //		LogResult.assertTrue1( ArgXMbchar(retXMbchar()+ (retXMbchar()+ retXMbchar())) );
+    //    end
+    
+    function testInFunctionArguments11(){@Test}
+        LogResult.logStdOut("In function arguments mult - 11");
+        LogResult.assertTrue1(argXstring(retstring() +(retstring() + retstring())));
+    end
+
+    function testInConditionals1(){@Test}
+        LogResult.logStdOut("In conditionals mult - 1");
+        LogResult.assertTrue1(retInt() +(retInt() - retInt()) >= 5);
+    end
+
+    function testInConditionals3(){@Test}
+        LogResult.logStdOut("In conditionals mult- 3");
+        while(retDecimal() +(retDecimal() - retDecimal()) < 3.55)
+            //FIXME infinite loop
+            LogResult.assertTrue1(false);
+        end
+        LogResult.assertTrue1(true);
+    end
+
+    //    function testInConditionals4(){@Test}
+    //        LogResult.logStdOut("In conditionals mult - 4");
+    //        LogResult.assertTrue1(retString() matches "EGL*" &&(retFloat() +(retFloat() - retFloat())) != 10);
+    //    end
+    
+    function testInAssignmentSource1(){@Test}
+        LogResult.logStdOut("function return in assignment source mult- 1");
+        aa int;
+        aa = retInt() +(retInt() - retInt());
+        LogResult.assertTrue1(
+                // TODO correct? or datalib.compareInt?
+                (aa == 5));
+    end
+
+    function testInAssignmentSource3(){@Test}
+        LogResult.logStdOut("function return in assignment source mult- 3");
+        cc decimal(4, 2);
+        cc = retDecimal() +(retDecimal() - retDecimal());
+        LogResult.assertDecimalEqual1(retDecimal(), cc);
+    end
+
+    function testInAssignmentSource4(){@Test}
+        LogResult.logStdOut("function return in assignment source mult- 4");
+        dd string;
+        dd = retString() +(retString() + retString());
+        LogResult.assertStringEqual1("EGLTESTEGLTESTEGLTEST", dd);
+    end
+
+    function testInMoveSource1(){@Test}
+        LogResult.logStdOut("function return in move source mult- 1");
+        aaa int;
+        //move retInt()+ (retInt()-retInt()) to aaa;
+        aaa = retInt() +(retInt() - retInt());
+        LogResult.assertBigIntEqual1(5, aaa);
+    end
+
+    function testInMoveSource2(){@Test}
+        LogResult.logStdOut("function return in move source mult - 2");
+        bbb string;
+        //move retString()+(retString()+retString()) to bbb;
+        bbb = retString() +(retString() + retString());
+        LogResult.assertStringEqual1("EGLTESTEGLTESTEGLTEST", bbb);
+    end
+
+    //    function testClobFunctions1(){@Test}
+    //        LogResult.logStdOut("Clob Functions 1");
+    //        //		aClob Clob;
+    //        //		setClobFromString ( aClob, "This is the contents of a clob" ) ;
+    //        //		compareString (getStrFromClob(aClob), "This is the contents of a clob" ) ;
+    //    end
+    
+    //    function testClobFunctions2(){@Test}
+    //        //		LogResult.logStdOut("Clob Functions 2";
+    //        // 		compareInt(getClobLen(aClob), 30);
+    //    end
+end

@@ -1,0 +1,81 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime006
+  * @title EdtTime006 - convertFromTimestamp
+  * @description testing Time conversion from TimeStamp
+  * @testcases convertFromTimestamp01 - convertFromTimestamp08
+  * @sources EdtTime006.egl
+  * @keywords time, timestamp, assignment
+ **/
+library ETime006 {}
+
+	// Constant Declarations
+	const constTimeStamp1 TimeStamp("HHmmss")="15:01:55";
+	
+	function convertFromTimestamp01(){@Test}
+		myTime Time = constTimeStamp1;
+		LogResult.assertTrue("initialization",myTime=="15:01:55");
+	end
+	
+	function convertFromTimestamp02(){@Test}
+		myTime Time? = constTimeStamp1;
+		LogResult.assertTrue("initialization",myTime=="15:01:55");
+	end
+	
+	function convertFromTimestamp03(){@Test}
+		try
+			myTimeStamp TimeStamp("HHmm") = "15:01";
+			myTime Time = myTimeStamp;
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function convertFromTimestamp04(){@Test}
+		myTime Time? = "01:25:45";
+		myTimeStamp TimeStamp("HHmmss") = "01:25:46";
+		LogResult.assertTrue("initialization", myTime < myTimeStamp);
+	end
+	
+	function convertFromTimestamp05(){@Test}
+		myTime Time? = "01:25:45";
+		myTimeStamp TimeStamp("HHmmss") = "01:25:46";
+		LogResult.assertTrue("initialization", myTimeStamp > myTime);
+	end
+	
+	function convertFromTimestamp06(){@Test}
+		myTime Time? = "01:25:45";
+		myTimeStamp TimeStamp("HHmmss") = "01:25:46";
+		LogResult.assertTrue("initialization", myTime != myTimeStamp);
+	end
+	
+	function convertFromTimestamp07(){@Test}
+		myTime Time? = "01:25:45";
+		myTimeStamp TimeStamp("HHmmss") = "01:25:45";
+		LogResult.assertTrue("initialization", myTime == myTimeStamp);
+	end	
+	
+	function convertFromTimestamp08(){@Test}
+		myTime Time? = "01:25:45";
+
+		// The following two lines will set myTimeStamp to 01:25:45
+		// and the current year, month, and day.
+		tempTimeStamp TimeStamp("HHmmss") = "01:25:45";
+		myTimeStamp TimeStamp("yyyyMMddHHmmss") = tempTimeStamp;
+
+		if ( myTime == myTimeStamp )
+			LogResult.assertTrue("initialization", myTime == myTimeStamp);
+		else
+			LogResult.skipped("Bug 394003 - Make date/timestamp extension consistent across languages and expressions");
+		end
+	end	
+	
+end

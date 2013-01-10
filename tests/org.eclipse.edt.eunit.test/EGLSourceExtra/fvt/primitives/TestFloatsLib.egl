@@ -1,0 +1,224 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestFloatsLib
+* @title The function test program for float datatype in EDT for RichUI
+* @keywords float
+* @author EDT team
+* @createDate 2011/08/23
+* @description 
+* Test the initialization, value-assign, and comparison for float, also test overflow exception.
+*/
+
+library TestFloatsLib
+
+    f float;
+    fs smallFloat;
+    b boolean;
+
+    function testForFloat1(){@Test}
+        LogResult.logStdOut("Initial value of float");
+        LogResult.assertTrue1(f == 0);
+    end
+
+    function testForFloat2(){@Test}
+        LogResult.logStdOut("Assign to float #1");
+        f = 1;
+        LogResult.assertTrue1(f == 1);
+    end
+
+    function testForFloat3(){@Test}
+        LogResult.logStdOut("Assign to float #2");
+        f = -1;
+        LogResult.assertTrue1(f == -1);
+    end
+
+    function testForFloat4(){@Test}
+        LogResult.logStdOut("Assign to float #3");
+        f = 2147483647;
+        LogResult.assertTrue1(f == 2147483647);
+    end
+
+    function testForFloat5(){@Test}
+        LogResult.logStdOut("Assign to float #4");
+        f = -2147483648;
+        LogResult.assertTrue1(f == -2147483648);
+    end
+
+    function testForFloat6(){@Test}
+        LogResult.logStdOut("Assign to float #5");
+        f = 1.23456789;
+        LogResult.assertTrue1(f == 1.23456789);
+    end
+
+    function testForFloat7(){@Test}
+        LogResult.logStdOut("Assign to float #6");
+        f = 1.23456789e2;
+        LogResult.assertTrue1(f == 1.23456789e2);
+    end
+
+    function testForFloat8(){@Test}
+        LogResult.logStdOut("Assign to float #7");
+        f = 2.9999;
+        LogResult.assertTrue1(f == 2.9999);
+    end
+
+    function testForFloat9(){@Test}
+        LogResult.logStdOut("Assign to float #8");
+        f = 2.0001;
+        LogResult.assertTrue1(f == 2.0001);
+    end
+
+    function testForFloat10(){@Test}
+        LogResult.logStdOut("Assign to float #9");
+        f = -2.9999;
+        LogResult.assertTrue1(f == -2.9999);
+    end
+
+    function testForFloat11(){@Test}
+        LogResult.logStdOut("Assign to float #10");
+        f = -2.0001;
+        LogResult.assertTrue1(f == -2.0001);
+    end
+
+    function testForFloat12(){@Test}
+        LogResult.logStdOut("Assign to float #11");
+        f = 1.7976931348623157e308;
+        LogResult.assertTrue1(f == 1.7976931348623157e308);
+    end
+
+    function testForFloat13(){@Test}
+        LogResult.logStdOut("Assign to float #12");
+        f = 4.9e-324;
+        LogResult.assertTrue1(f == 4.9e-324);
+    end
+
+    function testForFloat14(){@Test}
+        LogResult.logStdOut("Assign to float #13");
+        f = 2.718281828459045;
+        LogResult.assertTrue1(f == 2.718281828459045);
+    end
+
+    function testForFloat15(){@Test}
+        LogResult.logStdOut("Assign to float #14");
+        f = 3.141592653589793;
+        LogResult.assertTrue1(f == 3.141592653589793);
+    end
+
+    function testForSmallfloat1(){@Test}
+        LogResult.logStdOut("Initial value of smallfloat");
+        LogResult.assertTrue1(fs == 0);
+    end
+
+    function testForSmallfloat2(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #1");
+        fs = 1;
+        LogResult.assertTrue1(fs == 1);
+    end
+
+    function testForSmallfloat3(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #2");
+        fs = -1;
+        LogResult.assertTrue1(fs == -1);
+    end
+
+    function testForSmallfloat4(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #3");
+        fs = 2.147e5;
+        LogResult.assertTrue1(fs == 2.147e5);
+    end
+
+    function testForSmallfloat5(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #4");
+        fs = -2147483648;
+        LogResult.assertTrue1(fs == -2147483648);
+    end
+
+    function testForSmallfloat6(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #5");
+        fs = 1.234567;
+        LogResult.assertTrue1(fs == 1.234567);
+    end
+
+    function testForSmallfloat7(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #6");
+        fs = 123.4567;
+        LogResult.assertTrue1(fs == 123.4567);
+    end
+
+    function testForSmallfloat8(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #7");
+        fs = 2.9999;
+        LogResult.assertTrue1(fs == 2.9999);
+    end
+
+    function testForSmallfloat9(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #8");
+        fs = 2.0001;
+        LogResult.assertTrue1(fs == 2.0001);
+    end
+
+    function testForSmallfloat10(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #9");
+        fs = -2.9999;
+        LogResult.assertTrue1(fs == -2.9999);
+    end
+
+    function testForSmallfloat11(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #10");
+        fs = -2.0001;
+        LogResult.assertTrue1(fs == -2.0001);
+    end
+
+    function testForSmallfloat12(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #11");
+        fs = 3.4028234663852886e38;
+        LogResult.assertTrue1(fs == 3.4028234663852886e38);
+    end
+
+    function testForSmallfloat13(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #12");
+        fs = 1.401298464324817e-45;
+        LogResult.assertTrue1(fs == 1.401298464324817e-45);
+    end
+
+    function testForSmallfloat14(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #13");
+        fs = 2.7182817;
+        LogResult.assertTrue1(fs == 2.7182817);
+    end
+
+    function testForSmallfloat15(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #14");
+        fs = 3.1415927;
+        LogResult.assertTrue1(fs == 3.1415927);
+    end
+
+    function testForSmallfloat16(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #15 (overflow)");
+        try
+            fs = 3.402826e38;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForSmallfloat17(){@Test}
+        LogResult.logStdOut("Assign to smallfloat #16 (overflow)");
+        b boolean;
+        fs smallFloat;
+        try
+            fs = 1.40129845e-45;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+end

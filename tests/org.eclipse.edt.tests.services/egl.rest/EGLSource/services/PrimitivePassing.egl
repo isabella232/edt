@@ -1,0 +1,206 @@
+package services;
+
+import interfaces.IPrimitivePassing;
+
+Service PrimitivePassing  
+
+  function int_inParm (p int in) returns (int)
+    return (p + 1);
+  end
+
+  function int_inoutParm (p int)
+    p = p + 1;
+  end
+
+  function int_outparm (p int out)
+    p = 1;
+  end
+
+  function int_all (p1 int out, p2 int in, p3 int) returns (int)
+    p1 = 1;
+    p3 = p3 + 1;
+    return (p2 + 1);
+  end
+
+  function bigint_inParm (p bigint in) returns (bigint)
+    return (p + 1);
+  end
+
+  function bigint_inoutParm (p bigint)
+    p = p + 1;
+  end
+
+  function bigint_outparm (p bigint out)
+    p = 1;
+  end
+
+  function bigint_all (p1 bigint out, p2 bigint in, p3 bigint) returns (bigint)
+    p1 = 1;
+    p3 = p3 + 1;
+    return (p2 + 1);
+  end
+
+  function smallint_inParm (p smallint in) returns (smallint)
+    return (p + 1);
+  end
+
+  function smallint_inoutParm (p smallint)
+    p = p + 1;
+  end
+
+  function smallint_outparm (p smallint out)
+    p = 1;
+  end
+
+  function smallint_all (p1 smallint out, p2 smallint in, p3 smallint) returns (smallint)
+	return (commonCodeLib.smallint_all(p1, p2, p3));
+  end
+
+  function smallfloat_inParm (p smallfloat in) returns (smallfloat)
+    return (p + 1.1);
+  end
+
+  function smallfloat_inoutParm (p smallfloat)
+    p = p + 1.1;
+  end
+
+  function smallfloat_outparm (p smallfloat out)
+    p = 1.1;
+  end
+
+  function smallfloat_all (p1 smallfloat out, p2 smallfloat in, p3 smallfloat) returns (smallfloat)
+  	return (commonCodeLib.smallfloat_all(p1, p2, p3));
+  end
+
+  function float_inParm (p float in) returns (float)
+    return (p + 1.1);
+  end
+
+  function float_inoutParm (p float)
+    p = p + 1.1;
+  end
+
+  function float_outparm (p float out)
+    p = 1.1;
+  end
+
+  function float_all (p1 float out, p2 float in, p3 float) returns (float)
+  	return (commonCodeLib.float_all(p1, p2, p3));
+  end
+
+  function decimal_inParm (p decimal(10,2) in) returns (decimal(10,2))
+    return (p + 1.1);
+  end
+
+  function decimal_inoutParm (p decimal(10,2))
+    p = p + 1.1;
+  end
+
+  function decimal_outparm (p decimal(10,2) out)
+    p = 1.1;
+  end
+
+  function decimal_all (p1 decimal(10,2) out, p2 decimal(10,2) in, p3 decimal(10,2)) returns (decimal(10,2))
+    return (commonCodeLib.decimal_all(p1, p2, p3));
+  end
+
+  function string_inParm (p string in) returns (string)
+    return ("Hi " + p);
+  end
+
+  function string_inoutParm (p string inout)
+    p = "Hi " + p;
+  end
+
+  function string_outparm (p string out)
+    p = "Hi";
+  end
+
+  function string_all (p1 string out, p2 string in, p3 string inout) returns (string)
+	return (commonCodeLib.string_all(p1, p2, p3));
+  end
+
+  function Lstring_inParm (p string(5) in) returns (string(5))
+    return ("Hi " + p);
+  end
+
+  function Lstring_inoutParm (p string(5) inout)
+    p = "Hi " + p;
+  end
+
+  function Lstring_outparm (p string(5) out)
+    p = "Hi";
+  end
+
+  function Lstring_all (p1 string(5) out, p2 string(5) in, p3 string(5) inout) returns (string(5))
+	return (commonCodeLib.lstring_all(p1, p2, p3));
+  end
+
+  function timestamp_inParm (p timestamp in) returns (timestamp)
+    return (p);
+  end
+
+  function timestamp_inoutparm (p timestamp("yyyyMMddHHmmss") inout)
+    p = "2005/02/15-12:35:11";
+  end
+  
+  function timestamp_outparm (p timestamp("yyyyMMddHHmmss") out)
+    p = "2005/02/15-12:35:11";
+    s String;      
+  end
+
+  function timestamp_all (p2 timestamp in, p3 timestamp("yyyyMMddHHmmss") inout) returns (timestamp)
+    return (commonCodeLib.timestamp_all(p2, p3));
+  end
+  
+  function time_inParm (p time in) returns (time)
+    return (p);
+  end
+
+  function time_inoutparm (p time inout)
+    p = "12:35:11";
+  end
+  
+  function time_outparm (p time out)
+    p = "12:35:11";
+  end
+
+  function time_all (p2 time in, p3 time inout) returns (time)
+    return (commonCodeLib.time_all(p2, p3));
+  end
+  
+  function date_inParam(p date in) returns (date)
+  	p = p.addDays(1);
+  	return (p);
+  end
+  
+  function date_inoutParam(p date)
+  	p = p.addDays(1);
+  end
+  
+  function date_outParam(p date out)
+  	p = "09/30/2008";
+  end
+  
+  function date_all(p1 date out, p2 date in, p3 date) returns(date)
+	return (commonCodeLib.date_all(p1, p2, p3));
+  end
+  
+
+  function boolean_inParm (p boolean in) returns (boolean)
+    return (!p);
+  end
+
+  function boolean_inoutParm (p boolean)
+    p = !p;
+  end
+
+  function boolean_outparm (p boolean out)
+    p = false;
+  end
+
+  function boolean_all (p1 boolean out, p2 boolean in, p3 boolean) returns (boolean)
+    return (commonCodeLib.boolean_all(p1, p2, p3));
+  end
+
+end

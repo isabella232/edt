@@ -1,0 +1,117 @@
+package server.test.exceptions;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.jtopen.IBMiConnection;
+import server.host.programs.ExceptionLib;
+
+// basic library
+library ExceptionTest
+	
+	function test1(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test number of parameters");
+  		  	call ExceptionLib.TestProc(IPARM) using Resources.getResource("binding:file:thirdparty_programs#conn1") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("MCH3601:Pointer not set for location referenced.") > 0);
+		end
+	end
+	
+	function test2(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test exception wrong library");
+  		  	call ExceptionLib.TestProc2(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#conn1") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("com.ibm.as400.access.ObjectDoesNotExistException") > 0);
+		end
+	end
+	
+	function test3(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test exception wrong function");
+  		  	call ExceptionLib.TestProc2(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#conn1") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("com.ibm.as400.access.ObjectDoesNotExistException") > 0);
+		end
+	end
+	function test4(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test exception wrong program name");
+  		  	call ExceptionLib.TestProc1(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#conn3") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("com.ibm.as400.access.ObjectDoesNotExistException") > 0);
+		end
+	end
+	
+	function test5(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test null connection");
+        	conn IBMiConnection?;
+  		  	call ExceptionLib.TestProc3(IPARM, i2) using conn; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("Host connection is null") > 0);
+		end
+	end
+	
+	function test6(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test bad resource name");
+  		  	call ExceptionLib.TestProc(IPARM) using Resources.getResource("binding:file:thirdparty_programs#conn6") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message.indexOf("No resource binding found for for binding name: conn6") > 0);
+		end
+	end
+	
+	function test7(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test bad resource file name");
+  		  	call ExceptionLib.TestProc(IPARM) using Resources.getResource("binding:file:thirdparty_programs#file#BadFile#conn6") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(exception.message == "Unable to processor the uri binding:file:thirdparty_programs#file#BadFile#conn6 into a resource.");
+		end
+	end
+	
+	function test9(){@Test {}}
+    	IPARM int = 7;
+    	i2 int = 0;
+		try
+        	LogResult.logStdOut("Test using resource is the wrong type");
+        	conn IBMiConnection?;
+  		  	call ExceptionLib.TestProc3(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#DerbyConnection") as IBMiConnection; 
+            LogResult.assertTrue("No exception throw.", true);
+ 		onException(exception AnyException)
+        	LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(!(exception.message.indexOf("type eglx.persistence.sql.SQLJNDIDataSource cannot be converted to the type eglx.jtopen.IBMiConnection") > 0));
+		end
+	end
+	
+	
+end

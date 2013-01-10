@@ -1,0 +1,18 @@
+package interfaces;
+import eglx.xml.binding.Annotation.XMLElement;
+import eglx.xml.binding.Annotation.XMLRootElement;
+
+// basic record
+//
+
+record GetParticipantsByLocationEnvelope{@XMLRootElement{namespace = "http://schemas.xmlsoap.org/soap/envelope/", name = "Envelope"}}
+
+    Body GetParticipantsByLocationBody{@XMLElement {namespace = "http://schemas.xmlsoap.org/soap/envelope/", name = "Body"}};
+
+end
+
+record GetParticipantsByLocationResponseEnvelope{@XMLRootElement{namespace = "http://schemas.xmlsoap.org/soap/envelope/", name = "Envelope"}}
+
+    Body GetParticipantsByLocationResponseBody{@XMLElement {namespace = "http://schemas.xmlsoap.org/soap/envelope/", name = "Body"}};
+
+end

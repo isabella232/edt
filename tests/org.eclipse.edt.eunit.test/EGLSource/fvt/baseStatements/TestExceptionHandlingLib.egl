@@ -1,0 +1,114 @@
+package fvt.baseStatements;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title The function test program for exception handling
+* @keywords Exception
+* @author EDT team
+* @createDate 2011/08/03
+* @description This test case test the statement execution for the exception handling for RUI. Including the
+* runtime exception provided by EGL, and the customer defined exception etc.
+*/
+
+library TestExceptionHandlingLib
+
+    use ExceptionLibrary;
+
+    function testLibraryFunctionCall(){@Test}
+
+        LogResult.logStdOut("Exceptions: exception thrown from library function, part 1");
+        exceptionCaught boolean = false;
+        try
+            ExceptionLibrary.throwsRuntimeException1();
+        onException(exception AnyException)
+            LogResult.logStdOut("Exceptions: exception thrown from library function, part 1");
+            exceptionCaught = true;
+        end
+
+        if(!exceptionCaught)
+            LogResult.failed("Failed to catch the exception.");
+        end
+
+        LogResult.logStdOut("Exceptions: exception thrown from library function, part 2");
+        exceptionCaught = false;
+
+        try
+            ExceptionLibrary.throwsRuntimeException2();
+        onException(exception AnyException)
+            LogResult.passed("Catch exception");
+            exceptionCaught = true;
+        end
+
+        if(!exceptionCaught)
+            LogResult.failed("Failed to catch the exception.");
+        end
+    end
+
+    function testAnyException(){@Test}
+        LogResult.logStdOut("EGL Build-In AnyException handling");
+        try
+            functionThatThrowsMyException();
+            LogResult.failed("Exception is thrown, should not run this statement.");
+        onException(ex AnyException)
+            LogResult.passed("Catch exception");
+        end
+    end
+
+    function testIndexOutOfBoundException(){@Test}
+        LogResult.logStdOut("EGL build-In IndexOutOfBoundException handling");
+        try
+            ary int[] = new int[5];
+            ary[-1] = 10;
+            LogResult.failed("EGL build-In IndexOutOfBoundException should be thrown");
+        onException(ex InvalidIndexException)
+            LogResult.passed("Catch exception");
+        end
+    end
+
+    function testTypeCastException(){@Test}
+        LogResult.logStdOut("Runtime TypeCastException handling");
+        try
+        	if ( true )
+            	throw new TypeCastException;
+            end
+            LogResult.failed("Exception is thrown, should not run this statement.");
+        onException(ex TypeCastException)
+        	LogResult.passed("Catch exception");
+        end
+    end
+
+    function testRuntimeException(){@Test}
+        LogResult.logStdOut("Test runtimeException");
+        try
+            runtimeException();
+            LogResult.failed("Runtime exception is thrown, should not run this statement");
+        onException(ex AnyException)
+            LogResult.assertTrue("Catch exception", ex.message == "RTMSG");
+        end
+    end
+
+    function runtimeException()
+        ex AnyException = new AnyException;
+        ex.message = "RTMSG";
+        throw ex;
+    end
+
+    function functionThatThrowsMyException()
+        myx MyException{};
+        myx.anIntItem = 108;
+        myx.anArrayInt =[4, 8, 15];
+        myx.aStringItem = "xxx";
+        throw myx;
+    end
+
+end
+
+record MyException type Exception
+    anIntItem int;
+    aStringItem string;
+    //anArrayInt int[3];
+    anArrayInt int[] = new int[3];
+end

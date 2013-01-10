@@ -1,0 +1,136 @@
+ /*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package client.handlers;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import common.interfaces.GeoNamesData;
+import common.interfaces.IGeoName;
+import eglx.http.IHttp;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+
+handler GeoName type RUIHandler { initialUI = [ ui ] }
+//	use PrettyXMLLib;
+	
+	serviceType Combo{values=["get geoname using REST GET"]};
+	invoke Button{text="invoke Service",onClick ::= invokeService};
+	
+	ui Box { columns=1,
+		background = "blue", width = 770, padding=11,
+		children = [inputSection, resultsBox] 
+	};
+	serviceTypes String[] = ["XML", "JSON"];
+	serviceTypeCombo Combo{ values = serviceTypes, width=100 };
+	
+	queryStringField TextField{ margin=3, style="width:225", text = "London"};
+	inputSection Box { columns = 1, children = [
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Service Type: ", margin = 3, marginTop=5 },serviceTypeCombo]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Query String: ", margin = 3, marginTop=5 },queryStringField]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Select the service call type:", margin = 3, marginTop=5 },serviceType]}, 
+		new Box { children = [invoke]}
+	]};
+	resultsHeader HTML{ margin=3, font = "Verdana", color = "white", text = "Results:"};
+	
+	resultList any[];
+	
+	resultsgrid DataGrid { 
+		marginLeft=20,
+// 		behaviors 		= [ 
+// 			DataGridBehaviors.alternatingColor, 
+// 			DataGridBehaviors.tightCells 		],
+// 		headerBehaviors = [ 
+// 			DataGridBehaviors.grayCells 		],
+ 		columns = [
+	 		new DataGridColumn{name="name", displayName="Name", width=100}, 
+	 		new DataGridColumn{name="countryName", displayName="countryName"}, 
+	 		new DataGridColumn{name="countryCode", displayName="countryCode"}, 
+	 		new DataGridColumn{name="geonameId", displayName="geonameId"}, 
+	 		new DataGridColumn{name="lat", displayName="Latitude"},
+	 		new DataGridColumn{name="lng", displayName="Longitude"},
+	 		new DataGridColumn{name="fcl", displayName="fcl"}, 
+	 		new DataGridColumn{name="fcode", displayName="fcode"} 
+ 		],
+ 		data = resultList as any[]
+ 	};
+ 	
+	resultsBox Box { columns=1, children = [
+		new Box { children = [resultsHeader, resultsGrid]}, 
+		originalXML
+	]};
+	originalXML TextField{ margin=2, text="", width = 700};
+	
+	private function Exceptionhandler( exception AnyException in)
+		handleException(exception, null);
+	end
+	private function handleException( exception AnyException in, srvc string? in)
+//		originalXML.text = serviceLib.getCurrentCallbackResponse().body;
+		resultsHeader.text = "<br>An exception has occurred<p>";
+		if( srvc != null )
+			resultsHeader.text += "<br>   in the " + srvc + " service<p>";
+		end
+		resultsBox.height = 350;
+		resultsHeader.text += "message:" + exception.message + "<p>";
+		if( exception isa ServiceInvocationException )
+			resultsHeader.text += "ServiceKind:" + serviceKind(exception as ServiceInvocationException) + "<p>";
+			resultsHeader.text += "detail1:" + (exception as ServiceInvocationException).detail1 + "<p>";
+			resultsHeader.text += "detail2:" + (exception as ServiceInvocationException).detail2 + "<p>";
+			resultsHeader.text += "detail3:" + (exception as ServiceInvocationException).detail3 + "<p>";
+		end
+		resultsBox.children = [ 
+			resultsHeader
+		];
+	end
+	private function serviceKind( sie ServiceInvocationException in)returns(string)
+		case(sie.source)
+			when(eglx.services.ServiceKind.WEB)
+				return("WEB");
+			when(eglx.services.ServiceKind.NATIVE)
+				return("NATIVE");
+			when(eglx.services.ServiceKind.EGL)
+				return("EGL");
+			when(eglx.services.ServiceKind.REST)
+				return("REST");
+			otherwise
+				return("unknown");
+		end
+	end
+    
+	function invokeService( e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				if (serviceTypeCombo.getSelection() == 1)
+					call IGeoName.search(queryStringField.text) using Resources.getResource("binding:srvcIGeoName") as IHTTP returning to handleReturn onexception Exceptionhandler;
+				else
+					call IGeoName.searchJSON(queryStringField.text) using Resources.getResource("binding:srvcIGeoName") as IHTTP returning to handleReturn onexception Exceptionhandler;
+				end
+		end
+	end
+
+	function handleReturn(resultRecord GeoNamesData in, http IHttp in)
+   		syslib.writeStdout("http.getResponse().body:" + http.getResponse().body);
+
+		resultList = [];		
+		i int = 0;
+		while (i<resultRecord.geoname.getSize())
+			i += 1;
+			resultList.appendElement(resultRecord.geoname[i]);
+		end
+		resultsgrid.data = resultList;
+	end
+
+end

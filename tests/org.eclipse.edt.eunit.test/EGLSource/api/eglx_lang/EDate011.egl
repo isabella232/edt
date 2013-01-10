@@ -1,0 +1,109 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate011
+  * @title EdtDate011 - runFormatFunction
+  * @description testing date formats
+  * @testcases runFormatFunction01 - runParameterFunction2
+  * @sources EdtDate011.egl
+  * @keywords date, functions, format, strlib.format
+ **/
+library EDate011 {}
+
+	// Constant Declarations
+	const febLeap date = "02-29-2000";
+	febLeapVar date = "02-29-2000";
+	febLeapReferenceVar date? = "02-29-2000";
+	
+	function runFormatFunction01(){@Test}
+
+        actual String = StringLib.format(febLeap, Constants.usaDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate USA", "02/29/2000", actual);
+
+	end
+	
+	function runFormatFunction02(){@Test}
+
+        actual String = StringLib.format(febLeap, Constants.isoDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate ISO", "2000-02-29", actual);
+
+	end
+	
+	function runFormatFunction03(){@Test}
+
+        actual String = StringLib.format(febLeap, Constants.eurDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate EUR", "29.02.2000", actual);
+
+	end
+	
+	function runFormatFunction04(){@Test}
+
+        actual String = StringLib.format(febLeap, Constants.jisDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate JIS", "2000-02-29", actual);
+
+	end
+	
+	
+		function runFormatFunction05(){@Test}
+
+        actual String = StringLib.format(febLeapVar, Constants.usaDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable USA", "02/29/2000", actual);
+
+	end
+	
+	function runFormatFunction06(){@Test}
+
+        actual String = StringLib.format(febLeapVar, Constants.isoDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable ISO", "2000-02-29", actual);
+
+	end
+	
+	function runFormatFunction07(){@Test}
+
+        actual String = StringLib.format(febLeapVar, Constants.eurDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable EUR", "29.02.2000", actual);
+
+	end
+	
+	function runFormatFunction08(){@Test}
+
+        actual String = StringLib.format(febLeapVar, Constants.jisDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable JIS", "2000-02-29", actual);
+
+	end
+	
+	
+	function runFormatFunction09(){@Test}
+
+        actual String = StringLib.format(febLeapReferenceVar, Constants.usaDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable USA", "02/29/2000", actual);
+
+	end
+	
+	function runFormatFunction10(){@Test}
+
+        actual String = StringLib.format(febLeapReferenceVar, Constants.isoDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable ISO", "2000-02-29", actual);
+
+	end
+	
+	function runFormatFunction11(){@Test}
+
+        actual String = StringLib.format(febLeapReferenceVar, Constants.eurDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable EUR", "29.02.2000", actual);
+
+	end
+	
+	function runFormatFunction12(){@Test}
+
+        actual String = StringLib.format(febLeapReferenceVar, Constants.jisDateFormat);   // 04/07/2015
+        LogResult.assertStringEqual("formatDate Variable JIS", "2000-02-29", actual);
+
+	end
+	
+	
+end

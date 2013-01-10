@@ -1,0 +1,210 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp005
+  * @title EdtTimestamp005 - runValueFunction
+  * @description testing timestamp function yearOf
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp005.egl
+  * @keywords timestamp, functions, yearOf
+ **/
+library ETimestamp005 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runYearOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant yearOf", 2011, constTimeStamp.yearOf());
+	end
+	 	
+	function runYearOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full yearOf", 2011, constTimeStampFull.yearOf());
+	end
+	 	
+	function runYearOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime yearOf", 2011, constTimeStampDateTime.yearOf());
+	end
+	 	
+	function runYearOfFunction04(){@Test}
+		LogResult.assertBigIntEqual("constant date yearOf", 2011, constTimeStampDate.yearOf());
+	end
+	 	
+	function runYearOfFunction05(){@Test}
+		LogResult.assertBigIntEqual("constant Ydate yearOf", 2012, constTimeStampYDate.yearOf());
+	end
+	 	
+	function runYearOfFunction06(){@Test}
+		LogResult.assertBigIntEqual("constant YMdate yearOf", 2011, constTimeStampYMDate.yearOf());
+	end
+	 	
+	function runYearOfFunction07(){@Test}
+		aYear int;
+		try
+		    aYear = constTimeStampMDDate.yearOf();
+			LogResult.failed("constant MDdate yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MDdate yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction08(){@Test}
+		aYear int;
+		try
+		    aYear = constTimeStampDHDate.yearOf();
+			LogResult.failed("constant DHdate yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction09(){@Test}
+		aYear int;
+		try
+		    aYear = constTimeStampTime.yearOf();
+			LogResult.failed("constant time yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant time yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction10(){@Test}
+		aYear int;
+		try
+		    aYear = constTimeStampHMTime.yearOf();
+			LogResult.failed("constant HMtime yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMtime yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction11(){@Test}
+		aYear int;
+		try
+		    aYear = constTimeStampMSTime.yearOf();
+			LogResult.failed("constant MStime yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MStime yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable yearOf", 2011, varTimeStamp.yearOf());
+	end
+	 	
+	function runYearOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full yearOf", 2011, varTimeStampFull.yearOf());
+	end
+	 	
+	function runYearOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime yearOf", 2011, varTimeStampDateTime.yearOf());
+	end
+	 	
+	function runYearOfFunction15(){@Test}
+		LogResult.assertBigIntEqual("variable date yearOf", 2011, varTimeStampDate.yearOf());
+	end
+	 	
+	function runYearOfFunction16(){@Test}
+		LogResult.assertBigIntEqual("variable Ydate yearOf", 2012, varTimeStampYDate.yearOf());
+	end
+	 	
+	function runYearOfFunction17(){@Test}
+		LogResult.assertBigIntEqual("variable YMdate yearOf", 2011, varTimeStampYMDate.yearOf());
+	end
+	 	
+	function runYearOfFunction18(){@Test}
+		aYear int;
+		try
+		    aYear = varTimeStampMDDate.yearOf();
+			LogResult.failed("variable MDdate yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MDdate yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction19(){@Test}
+		aYear int;
+		try
+		    aYear = varTimeStampDHDate.yearOf();
+			LogResult.failed("variable DHdate yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable DHdate yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction20(){@Test}
+		aYear int;
+		try
+		    aYear = varTimeStampTime.yearOf();
+			LogResult.failed("variable time yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable time yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction21(){@Test}
+		aYear int;
+		try
+		    aYear = varTimeStampHMTime.yearOf();
+			LogResult.failed("variable HMtime yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMtime yearOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runYearOfFunction22(){@Test}
+		aYear int;
+		try
+		    aYear = varTimeStampMSTime.yearOf();
+			LogResult.failed("variable MStime yearOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MStime yearOf: wrong exception thrown");
+		end
+	end
+	
+end

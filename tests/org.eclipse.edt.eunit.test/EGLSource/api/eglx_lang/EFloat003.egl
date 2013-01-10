@@ -1,0 +1,274 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EFloat003
+  * @title EFloat003 - runComparisonFunction
+  * @description testing float comparison operators
+  * @testcases runComparisonFunction01 - runComparisonFunction42
+  * @sources EFloat003.egl
+  * @keywords float, comparison
+ **/
+library EFloat003 {}
+		
+	float1 float;
+	float2 float;
+	float1n float? = null;
+	float2n float? = 2.539E7;
+	result boolean;
+		
+	// comparison test with float literals
+	function runComparisonFunction01(){@Test}
+		result = (1.3E2 < 2.539E7);
+		LogResult.assertTrue("literal comparison < true", result );
+	end
+	
+	function runComparisonFunction02(){@Test}
+		result = (2.539E7 < 1.3E2);
+		LogResult.assertTrue("literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction03(){@Test}
+		result = (1.3E2 < 1.3E2);
+		LogResult.assertTrue("equal literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction04(){@Test}	
+		result = (2.539E7 > 1.3E2);
+		LogResult.assertTrue("literal comparison > true", result );
+	end
+	
+	function runComparisonFunction05(){@Test}
+		result = (1.3E2 > 2.539E7);
+		LogResult.assertTrue("literal comparison > false", !result );
+	end	
+	
+	function runComparisonFunction06(){@Test}
+		result = (1.3E2 > 1.3E2);
+		LogResult.assertTrue("equal literal comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction07(){@Test}
+		result = (1.3E2 <= 2.539E7);
+		LogResult.assertTrue("literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction08(){@Test}
+		result = (2.539E7 <= 1.3E2);
+		LogResult.assertTrue("literal comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction09(){@Test}
+		result = (1.3E2 <= 1.3E2);
+		LogResult.assertTrue("equal literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction10(){@Test}
+		result = ("abc   " <= 1.3E2);
+		LogResult.assertTrue("equal literal comparison <= false", !result );
+	end
+	
+	function runComparisonFunction11(){@Test}
+		result = (1.3E2 >= 2.539E7);
+		LogResult.assertTrue("literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction12(){@Test}
+		result = (2.539E7 >= 1.3E2);
+		LogResult.assertTrue("literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction13(){@Test}
+		result = (1.3E2 >= 1.3E2);
+		LogResult.assertTrue("equal literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction14(){@Test}
+		result = (1.3E2 >= "abc   ");
+		LogResult.assertTrue("equal literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction15(){@Test}
+		result = (1.3E2 == 1.3E2);
+		LogResult.assertTrue("equal literal comparison == true", result );
+	end
+	
+	function runComparisonFunction16(){@Test}
+		result = (1.3E2 == "abc   ");
+		LogResult.assertTrue("equal literal comparison == false", !result );
+	end
+	
+	function runComparisonFunction17(){@Test}
+		result = (1.3E2 != "abc  ");
+		LogResult.assertTrue("equal literal comparison != true", result );
+	end
+	
+	function runComparisonFunction18(){@Test}
+		result = (1.3E2 != 1.3E2);
+		LogResult.assertTrue("equal literal comparison != false", !result );
+	end
+	
+	// comparison test with float variables
+	function runComparisonFunction19(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = ( float1 < float2);
+		LogResult.assertTrue("variable comparison < true", result );
+	end
+	
+	function runComparisonFunction20(){@Test}
+		float1 = 2.539E7;
+		float2 = 1.3E2;
+		result = (float1 < float2);
+		LogResult.assertTrue("variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction21(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 < float2);
+		LogResult.assertTrue("equal variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction22(){@Test}	
+		float1 = 2.539E7;
+		float2 = 1.3E2;
+		result = (float1 > float2);
+		LogResult.assertTrue("variable comparison > true", result );
+	end
+	
+	function runComparisonFunction23(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = (float1 > float2);
+		LogResult.assertTrue("variable comparison > false", !result );
+	end	
+	
+	function runComparisonFunction24(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 > float2);
+		LogResult.assertTrue("equal variable comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction25(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = (float1 <= float2);
+		LogResult.assertTrue("variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction26(){@Test}
+		float1 = 2.539E7;
+		float2 = 1.3E2;
+		result = (float1 <= float2);
+		LogResult.assertTrue("variable comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction27(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 <= float2);
+		LogResult.assertTrue("equal variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction28(){@Test}
+		float1 = 2.539E7;
+		float2 = 1.3E2;
+		result = (float1 <= float2);
+		LogResult.assertTrue("equal variable comparison <= false", !result );
+	end
+	
+	function runComparisonFunction29(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = (float1 >= float2);
+		LogResult.assertTrue("variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction30(){@Test}
+		float1 = 2.539E7;
+		float2 = 1.3E2;
+		result = (float1 >= float2);
+		LogResult.assertTrue("variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction31(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 >= float2);
+		LogResult.assertTrue("equal variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction32(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = (float1 >= float2);
+		LogResult.assertTrue("equal variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction33(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 == float2);
+		LogResult.assertTrue("equal variable comparison == true", result );
+	end
+	
+	function runComparisonFunction34(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = ( float1 == float2 );
+		LogResult.assertTrue("equal variable comparison == false", !result );
+	end
+	
+	function runComparisonFunction35(){@Test}
+		float1 = 1.3E2;
+		float2 = 2.539E7;
+		result = (float1 != float2);
+		LogResult.assertTrue("equal variable comparison != true", result );
+	end
+	
+	function runComparisonFunction36(){@Test}
+		float1 = 1.3E2;
+		float2 = 1.3E2;
+		result = (float1 != float2);
+		LogResult.assertTrue("equal variable comparison != false", !result );
+	end
+	
+	// comparison with nullable ints and null
+	function runComparisonFunction37(){@Test}
+		result = (float1n == null);
+		LogResult.assertTrue("null variable equals null keyword == true", result );
+	end
+	
+	function runComparisonFunction38(){@Test}
+		result = (float1n != null);
+		LogResult.assertTrue("null variable not equals null keyword != false", !result );
+	end
+	
+	function runComparisonFunction39(){@Test}
+		result = (float2n == null);
+		LogResult.assertTrue("variable equals null keyword == false", !result );
+	end
+	
+	function runComparisonFunction40(){@Test}
+		result = (float2n != null);
+		LogResult.assertTrue("variable not equals null keyword != true", result );
+	end
+	
+	function runComparisonFunction41(){@Test}
+		result = (float1n == float2n);
+		LogResult.assertTrue("null variable equals variable == false", !result );
+	end
+	
+	function runComparisonFunction42(){@Test}
+		float1n = 2.539E7;
+		result = (float1n != float2n);
+		float1n = null;
+		LogResult.assertTrue1(!result );
+	end
+	
+end  // EFloat003

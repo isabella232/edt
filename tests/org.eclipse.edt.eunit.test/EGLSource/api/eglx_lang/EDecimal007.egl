@@ -1,0 +1,449 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EDecimal007
+  * @title EDecimal007 - runConversionFunction
+  * @description testing conversion from decimal to/from other types
+  * @testcases runConversionFunction01 - runConversionFunctionn46
+  * @sources EDecimal007.egl
+  * @keywords decimal, 
+ **/
+library EDecimal007 {}
+
+	expectedDec decimal?;
+	actualDec decimal?;
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (expectedDec == actualDec);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + actualDec);
+	 		SysLib.writeStdOut(" expect " + expectedDec);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+ 	
+  	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		variation = "int implicit decimal conversion";
+		actual int = 7;
+		actualDec = actual;
+		expectedDec = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction02(){@Test}		
+		variation = "negative int implicit decimal conversion";
+		actual int = -7;
+		actualDec = actual;
+		expectedDec = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction03(){@Test}
+		variation = "int? implicit decimal conversion";
+		actual int? = 7;
+		actualDec = actual;
+		expectedDec = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction04(){@Test}
+		variation = "decimal implicit decimal conversion";
+		actual decimal(5,2) = 123.45;
+		actualDec = actual;
+		expectedDec = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction05(){@Test}
+		variation = "negative decimal implicit decimal conversion";
+		actual decimal(5,2) = -123.45;
+		actualDec = actual;
+		expectedDec = -123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction06(){@Test}
+		variation = "decimal() implicit decimal conversion";
+		actual decimal = 123.45;
+		actualDec = actual;
+		expectedDec = 123.45;
+		assertTrue();	
+	end
+	
+	function runConversionFunction07(){@Test}
+		variation = "decimal? implicit decimal conversion";
+		actual decimal(5,2)? = 123.45;
+		actualDec = actual;
+		expectedDec = 123.45;
+		assertTrue();	
+	end
+	
+	function runConversionFunction08(){@Test}
+		variation = "decimal()? implicit decimal conversion";
+		actual decimal? = 123.45;
+		actualDec = actual;
+		expectedDec = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction09(){@Test}
+		variation = "float implicit decimal conversion1";
+		actual float = 2.539E7;
+		actualDec = actual;
+		expectedDec = 25390000;
+		LogResult.assertDecimalEqual1(expectedDec, actualDec);
+		assertTrue();
+	end
+	
+	function runConversionFunction10(){@Test}
+		variation = "negative float implicit decimal conversion2";
+		actual float = -2.539e7;
+		actualDec = actual;
+		expectedDec = -25390000;
+		assertTrue();
+	end
+	
+	
+	
+	function runConversionFunction11(){@Test}
+		variation = "float? implicit decimal conversion1";
+		actual float? = 2.539E7;
+		actualDec = actual;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction12(){@Test}
+		variation = "smallFloat implicit decimal conversion1";
+		actual smallFloat = 2.539E7;
+		actualDec = actual;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction13(){@Test}
+		variation = "negative smallFloat implicit decimal conversion1";
+		actual smallFloat = 2.539E7;
+		actualDec = actual;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction14(){@Test}
+		variation = "smallFloat? implicit decimal conversion1";
+		actual smallFloat? = 2.539E7;
+		actualDec = actual;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction15(){@Test}
+		variation = "bigint implicit decimal conversion";
+		actual bigInt = 8928234898823I;
+		actualDec = actual;
+		expectedDec = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction16(){@Test}
+		variation = "negative bigint implicit decimal conversion";
+		actual bigInt = -8928234898823I;
+		actualDec = actual;
+		expectedDec = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction17(){@Test}
+		variation = "bigint? implicit decimal conversion";
+		actual bigInt? = 8928234898823I;
+		actualDec = actual;
+		expectedDec = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction18(){@Test}
+		variation = "bigInt explicit decimal conversion";
+		actual bigInt = 7;
+		actualDec = actual as bigInt;
+		expectedDec = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction19(){@Test}		
+		variation = "negative bigInt explicit decimal conversion";
+		actual bigInt = -7;
+		actualDec = actual as bigInt;
+		expectedDec = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction20(){@Test}
+		variation = "bigInt? explicit decimal conversion";
+		actual bigInt? = 7;
+		actualDec = actual as bigInt;
+		expectedDec = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction21(){@Test}
+		variation = "decimal explicit decimal conversion";
+		actual decimal(5,2) = 123.45;
+		actualDec = actual as bigInt;
+		expectedDec = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction22(){@Test}
+		variation = "negative decimal explicit decimal conversion";
+		actual decimal(5,2) = -123.45;
+		actualDec = actual as bigInt;
+		expectedDec = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction23(){@Test}
+		variation = "decimal() explicit decimal conversion";
+		actual decimal = 123.45;
+		actualDec = actual as bigInt;
+		expectedDec = 123;
+		assertTrue();
+	end
+	
+		function runConversionFunction24(){@Test}
+		variation = "decimal? explicit decimal conversion";
+		actual decimal(5,2)? = 123.45;
+		actualDec = actual as bigInt;
+		expectedDec = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction25(){@Test}
+		variation = "decimal()? explicit decimal conversion";
+		actual decimal? = 123.45;
+		actualDec = actual as bigInt;
+		expectedDec = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction26(){@Test}
+		variation = "float explicit decimal conversion1";
+		actual float = 2.539E7;
+		actualDec = actual as bigInt;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction27(){@Test}
+		variation = "negative float explicit decimal conversion2";
+		actual float = -2.539e7;
+		actualDec = actual as bigInt;
+		expectedDec = -25390000;
+		assertTrue();
+	end	
+	
+	function runConversionFunction28(){@Test}
+		variation = "float? explicit decimal conversion1";
+		actual float? = 2.539E7;
+		actualDec = actual as bigInt;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction29(){@Test}
+		variation = "smallFloat explicit decimal conversion1";
+		actual smallFloat = 2.539E7;
+		actualDec = actual as bigInt;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction30(){@Test}
+		variation = "negative smallFloat explicit decimal conversion1";
+		actual smallFloat = 2.539E7;
+		actualDec = actual as bigInt;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction31(){@Test}
+		variation = "smallFloat? explicit decimal conversion1";
+		actual smallFloat? = 2.539E7;
+		actualDec = actual as bigInt;
+		expectedDec = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction32(){@Test}
+		variation = "bigint explicit decimal conversion";
+		actual bigInt = 8928234898823I;
+		actualDec = actual as bigInt;
+		expectedDec = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction33(){@Test}
+		variation = "negative bigint explicit decimal conversion";
+		actual bigInt = -8928234898823I;
+		actualDec = actual as bigInt;
+		expectedDec = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction34(){@Test}
+		variation = "bigint? explicit decimal conversion";
+		actual bigInt? = 8928234898823I;
+		actualDec = actual as bigInt;
+		expectedDec = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction35() {@Test}
+		myF float = 2.1e0;
+		expected decimal(5,2) = 2.1;
+		actual decimal(5,2) = myF;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction36() {@Test}
+		expected decimal(5,2) = 2.1;
+		actual decimal(5,2) = 2.1e0;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction37() {@Test}
+		expected decimal(5,2) = 2.1;
+		actual decimal(5,2) = "2.1";
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+		
+	function runConversionFunction38() {@Test}
+		// failing
+		myF float = 2.1e0;
+		expected decimal = 2.1;
+		actual decimal = myF;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction39() {@Test}
+		// failing
+		expected decimal = 2.1;
+		actual decimal = 2.1e0;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction40() {@Test}
+		// failing
+		expected decimal = 2.1;
+		actual decimal = "2.1";
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction41() {@Test}
+		// failing
+		myF float = 2.1e0;
+		expected decimal(5,2) = 2.1;
+		actual decimal = myF;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction42() {@Test}
+		// failing
+		expected decimal(5,2) = 2.1;
+		actual decimal = 2.1e0;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction43() {@Test}
+		expected decimal(5,2) = 2.1;
+		actual decimal = "2.1";
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction44() {@Test}
+		// failing
+		myF float = 2.1e0;
+		expected decimal = 2.1;
+		actual decimal(5,2) = myF;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction45() {@Test}
+		expected decimal = 2.1;
+		actual decimal(5,2) = 2.1e0;
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+	
+	function runConversionFunction46() {@Test}
+		// failing
+		expected decimal = 2.1;
+		actual decimal(5,2) = "2.1";
+		LogResult.assertDecimalEqual1(expected, actual);
+	end
+
+	function runConversionFunction47(){@Test}
+		variation = "bytes(8) implicit decimal conversion";
+		expected decimal = 109264612639763.0;
+		actual bytes(8) = 0x109264612639763c;
+		actualDecimal decimal(15) = actual;
+		LogResult.assertDecimalEqual1(expected, actualDecimal);
+	end
+	
+	function runConversionFunction48(){@Test}
+		variation = "bytes implicit decimal conversion";
+		expected decimal = -987340123870621.0;
+		actual bytes = 0x987340123870621d;
+		actualDecimal decimal(15) = actual;
+		LogResult.assertDecimalEqual1(expected, actualDecimal);
+	end
+	
+	function runConversionFunction49(){@Test}
+		variation = "bytes(8)? implicit decimal conversion";
+		expected decimal = -992291610268623.0;
+		actual bytes(8)? = 0x992291610268623d;
+		actualDecimal decimal(15) = actual;
+		LogResult.assertDecimalEqual1(expected, actualDecimal);
+	end
+	
+	function runConversionFunction50(){@Test}
+		variation = "bytes? implicit decimal conversion";
+		expected decimal = 711329810410805.0;
+		actual bytes? = 0x711329810410805c;
+		actualDecimal decimal(15) = actual;
+		LogResult.assertDecimalEqual1(expected, actualDecimal);
+	end
+	
+	function runConversionFunction51() {@Test}
+		b bytes(4) = 0xFFFFFFFF;
+		ok boolean = false;
+		try
+			x decimal(7,5) = b;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid bytes 1 to decimal(7,5)", ok );
+	end
+	
+	function runConversionFunction52() {@Test}
+		b bytes(4) = 0x7028921a; // the sign nibble is invalid
+		ok boolean = false;
+		try
+			x decimal(7,5) = b;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid bytes 2 to decimal(7,5)", ok );
+	end
+	
+end // EDecimal007

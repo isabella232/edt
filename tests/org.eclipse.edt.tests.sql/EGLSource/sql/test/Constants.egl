@@ -1,0 +1,46 @@
+package sql.test;
+
+import eglx.java.JavaObject;
+
+library Constants
+	
+	connectJndi boolean = false;
+	dbURL string = resolveURL();
+	const binding string = "DerbyConnection";
+//	const binding string = "LocalDB2";
+	
+	private function resolveURL() returns(string)
+		result string;
+		if ( connectJndi )
+			result = "jdbc/" :: binding;
+		else
+			if (isBindingDerby())
+				result = "jdbc:derby:C:\\EDT\\derby\\SAMPLE;create=true";
+				os string? = System.getProperty("os.name");
+				if (os != null)
+					if (os.toLowerCase().indexOf("windows") < 1)
+						result = "jdbc:derby:/tmp/derby/SAMPLE;create=true";
+					end
+				end
+			else
+				result = "jdbc:db2://localhost:50000/SAMPLE:retrieveMessagesFromServerOnGetMessage=true;";
+			end
+		end
+		return(result);
+	end
+	
+	function isBindingDerby() returns(boolean)
+		return (binding == "DerbyConnection");
+	end
+	
+	// Derby doesn't required sign on ... DB2Express needs userid and password
+	function connectCredentials() returns(dictionary)
+		credentials Dictionary{user="Administator", password="rat10nal"};
+		return (credentials);
+	end
+	
+end
+
+externalType System type JavaObject {packageName = "java.lang"}
+	static function getProperty(propname string in) returns(string?);
+end

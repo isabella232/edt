@@ -1,0 +1,352 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBigInt007
+  * @title EBigInt007 - runConversionFunction
+  * @description testing conversion from bigInt to/from other types
+  * @testcases runConversionFunction01 - runConversionFunctionn34
+  * @sources EBigInt007.egl
+  * @keywords bigInt, 
+ **/
+library EBigInt007 {}
+
+	expectedInt bigInt?;
+	actualInt bigInt;
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (expectedInt == actualInt);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + actualInt);
+	 		SysLib.writeStdOut(" expect " + expectedInt);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		variation = "int implicit bigInt conversion";
+		actual int = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction02(){@Test}		
+		variation = "negative int implicit bigInt conversion";
+		actual int = -7;
+		actualInt = actual;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction03(){@Test}
+		variation = "int? implicit bigInt conversion";
+		actual int? = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction04(){@Test}
+		variation = "decimal implicit bigInt conversion";
+		actual decimal(5,2) = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction05(){@Test}
+		variation = "negative decimal implicit bigInt conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual;
+		expectedInt = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction06(){@Test}
+		variation = "decimal() implicit bigInt conversion";
+    	actual decimal = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();		
+	end
+	
+	function runConversionFunction07(){@Test}
+		variation = "decimal? implicit bigInt conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();	
+	end
+	
+	function runConversionFunction08(){@Test}
+		variation = "decimal()? implicit bigInt conversion";
+		actual decimal? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction09(){@Test}
+		variation = "float implicit bigInt conversion1";
+		actual float = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction10(){@Test}
+		variation = "negative float implicit bigInt conversion2";
+		actual float = -2.539e7;
+		actualInt = actual;
+		expectedInt = -25390000;
+		assertTrue();
+	end
+	
+	
+	
+	function runConversionFunction11(){@Test}
+		variation = "float? implicit bigInt conversion1";
+		actual float? = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction12(){@Test}
+		variation = "smallFloat implicit bigInt conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction13(){@Test}
+		variation = "negative smallFloat implicit bigInt conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction14(){@Test}
+		variation = "smallFloat? implicit bigInt conversion1";
+		actual smallFloat? = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction15(){@Test}
+		variation = "bigint implicit bigInt conversion";
+		actual bigInt = 8928234898823I;
+		actualInt = actual;
+		expectedInt = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction16(){@Test}
+		variation = "negative bigint implicit bigInt conversion";
+		actual bigInt = -8928234898823I;
+		actualInt = actual;
+		expectedInt = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction17(){@Test}
+		variation = "bigint? implicit bigInt conversion";
+		actual bigInt? = 8928234898823I;
+		actualInt = actual;
+		expectedInt = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction18(){@Test}
+		variation = "bigInt explicit bigInt conversion";
+		actual bigInt = 7;
+		actualInt = actual as bigInt;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction19(){@Test}		
+		variation = "negative bigInt explicit bigInt conversion";
+		actual bigInt = -7;
+		actualInt = actual as bigInt;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction20(){@Test}
+		variation = "bigInt? explicit bigInt conversion";
+		actual bigInt? = 7;
+		actualInt = actual as bigInt;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction21(){@Test}
+		variation = "decimal explicit bigInt conversion";
+    	actual decimal(5,2) = 123.45;
+		actualInt = actual as bigInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction22(){@Test}
+		variation = "negative decimal explicit bigInt conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual as bigInt;
+		expectedInt = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction23(){@Test}
+		variation = "decimal() explicit bigInt conversion";
+		actual decimal = 123.45;
+		actualInt = actual as bigInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+		function runConversionFunction24(){@Test}
+		variation = "decimal? explicit bigInt conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual as bigInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction25(){@Test}
+		variation = "decimal()? explicit bigInt conversion";
+    	actual decimal? = 123.45;
+		actualInt = actual as bigInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction26(){@Test}
+		variation = "float explicit bigInt conversion1";
+		actual float = 2.539E7;
+		actualInt = actual as bigInt;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction27(){@Test}
+		variation = "negative float explicit bigInt conversion2";
+		actual float = -2.539e7;
+		actualInt = actual as bigInt;
+		expectedInt = -25390000;
+		assertTrue();
+	end	
+	
+	function runConversionFunction28(){@Test}
+		variation = "float? explicit bigInt conversion1";
+		actual float? = 2.539E7;
+		actualInt = actual as bigInt;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction29(){@Test}
+		variation = "smallFloat explicit bigInt conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual as bigInt;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction30(){@Test}
+		variation = "negative smallFloat explicit bigInt conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual as bigInt;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction31(){@Test}
+		variation = "smallFloat? explicit bigInt conversion1";
+		actual smallFloat? = 2.539E7;
+		actualInt = actual as bigInt;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction32(){@Test}
+		variation = "bigint explicit bigInt conversion";
+		actual bigInt = 8928234898823I;
+		actualInt = actual as bigInt;
+		expectedInt = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction33(){@Test}
+		variation = "negative bigint explicit bigInt conversion";
+		actual bigInt = -8928234898823I;
+		actualInt = actual as bigInt;
+		expectedInt = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction34(){@Test}
+		variation = "bigint? explicit bigInt conversion";
+		actual bigInt? = 8928234898823I;
+		actualInt = actual as bigInt;
+		expectedInt = 8928234898823I;
+		assertTrue();
+	end
+
+	function runConversionFunction35(){@Test}
+		variation = "bytes(8) implicit bigInt conversion";
+		actual bytes(8) = 0x3434343410101010;
+		actualInt = actual;
+		expectedInt = 3761688986973638672I;
+		assertTrue();
+	end
+	
+	function runConversionFunction37(){@Test}
+		variation = "bytes implicit bigInt conversion";
+    	actual bytes = 0xF28159166A2117AE;
+		actualInt = actual;
+		expectedInt = -972398091730610258I;
+		assertTrue();		
+	end
+	
+	function runConversionFunction38(){@Test}
+		variation = "bytes(8)? implicit bigInt conversion";
+		actual bytes(8)? = 0x7116141770B00B00;
+		actualInt = actual;
+		expectedInt = 8148722666680879872I;
+		assertTrue();	
+	end
+	
+	function runConversionFunction39(){@Test}
+		variation = "bytes? implicit bigInt conversion";
+		actual bytes? = 0x37B8C9D0E1F20314;
+		actualInt = actual;
+		expectedInt = 4015180966781911828I;
+		assertTrue();
+	end
+	
+	function runConversionFunction40(){@Test}
+		variation = "bytes explicit bigInt conversion";
+    	actual bytes = 0xF28159166A2117AE;
+		actualInt = actual as bigInt;
+		expectedInt = -972398091730610258I;
+		assertTrue();
+	end
+	
+	function runConversionFunction41(){@Test}
+		variation = "bytes? explicit bigInt conversion";
+    	actual bytes? = 0xF28159166A2117AE;
+		actualInt = actual as bigInt;
+		expectedInt = -972398091730610258I;
+		assertTrue();
+	end
+end // EBigInt007

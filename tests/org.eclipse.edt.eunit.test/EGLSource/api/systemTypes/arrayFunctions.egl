@@ -1,0 +1,122 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library arrayFunctions
+
+    myIntArray int[][]{[1, 2],[3, 4, 5],[6, 7, 8, 9]};
+    myStringArray string[][] =[["Duke", "Carolina"],["Duke", "State",
+                            "Carolina"],["Duke", "Carolina", "Wake Forest", "State"]
+            ];
+    myNames string[] =["Carolina", "State", "Duke"];
+    newNames string[] =["Wake Forest", "East Carolina"];
+    element string = "Meredith";
+    myInt int;
+    myDec decimal(2);
+    myString string;
+    newList string[];
+
+    function concatenateAny(){@Test}
+        newList = myNames :: element;
+        LogResult.assertStringEqual1("Meredith", newList[4]);
+    end
+
+    function concatenateList(){@Test}
+        newList = element :: myNames;
+        LogResult.assertStringEqual1("Duke", newList[4]);
+    end
+
+    function concatenateLists(){@Test}
+        newList = newNames :: myNames;
+        LogResult.assertStringEqual1("Duke", newList[5]);
+    end
+    
+    function complexConcatenate(){@Test}
+        newList ::= element;
+        LogResult.assertStringEqual1("Meredith", newList[6]);
+    end  
+
+    function appendAll(){@Test}
+        myNames.appendAll(newNames);
+        LogResult.assertStringEqual1("Wake Forest", myNames[4]);
+    end
+
+    function appendElement(){@Test}
+        myNames.appendElement(element);
+        LogResult.assertStringEqual1("East Carolina", myNames[5]);
+    end
+
+    function getSize(){@Test}
+        myDec = myNames.getSize();
+        LogResult.assertDecimalEqual1(6, myDec);
+    end
+
+    function indexOfElement(){@Test}
+    myDec = myNames.indexOfElement("Duke");						
+        LogResult.assertDecimalEqual1(3, myDec);
+    end
+
+    function insertElement(){@Test}
+        element = "Wilmington";
+        myNames.insertElement(element, 4);
+        LogResult.assertStringEqual1("Meredith", myNames[7]);
+    end
+
+    function removeAll(){@Test}
+        myNames.removeAll();
+        myDec = myNames.getSize();
+        LogResult.assertDecimalEqual1(0, myDec);
+    end
+
+    function removeElement(){@Test}
+        myNames =["Carolina", "State", "Duke"];
+        myNames.removeElement(2);
+        myDec = myNames.indexOfElement("Duke");
+        LogResult.assertDecimalEqual1(2, myDec);
+    end
+
+    function resize(){@Test}
+        myNames =["Carolina", "State", "Duke", "Wake Forest"];
+        myNames.resize(3);
+        myDec = myNames.indexOfElement("Wake Forest");
+        LogResult.assertDecimalEqual1(0, myDec);
+    end
+
+    function testSetElement(){@Test}
+        myNames.setElement("Meredith", 1);
+        LogResult.assertStringEqual1("Meredith", myNames[1]);
+    end
+
+    function sort(){@Test}
+        myNames =["Carolina", "State", "Duke"];
+        myNames.Sort(myStringSortFunction);
+        LogResult.assertStringEqual1("Duke", myNames[2]);
+    end
+
+    function getString(){@Test}
+        myString = myStringArray[3][4];
+        LogResult.assertStringEqual1("State", myString);
+    end
+
+    function getInt(){@Test}
+        myInt = myIntArray[3][4];
+        LogResult.assertDecimalEqual1(9, myInt);
+    end
+
+    function myStringSortFunction(a any in, b any in) returns(int)
+        if(a as string > b as string)
+            return(1);
+        else
+	        if(a as string < b as string)
+                return(-1);
+            else
+                if(a as string == b as string)
+                    return(0);
+                end
+            end
+        end
+        return(0);
+    end
+
+end

@@ -1,0 +1,160 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library languageStatements
+
+    use myLibrary;
+    a decimal(4) = 6;
+    b decimal(4) = 2;
+    c decimal(4) = 23;
+    d int = 5;
+    e int = 3;
+    f int = 5;
+    myInt int;
+    x int = 5;
+    y int = 3;
+    //    myDecimal decimal(4);
+    str1 string = "North ";
+    str2 string = "Carolina ";
+    str3 string = "State ";
+    str4 string = "University ";
+    str5 string = "Wolfpack";
+    myDate date;
+    myUser string;
+    userRequest string;
+    myCustomer string;
+    interestRate decimal(2);
+    custNum string;
+    target string[];
+    source string[];
+    num1 number? = 10;
+    num2 number? = 12;
+    myAny any?;
+    ctr int;
+    myFloat float;
+    myDecimal decimal(12, 6);
+
+    // Just testing primitives
+    myBigInt bigInt;
+    myDecimaNoLength decimal?;
+    mySmallFloat smallFloat;
+    mySmallInt smallInt;
+    myBoolean boolean;
+
+    function testTruncate() {@Test}    
+        myFloat = 1.5663225538310885;
+        myDecimal = myFloat;
+        LogResult.assertDecimalEqual1(1.566322, myDecimal);
+    end
+
+    function operators(){@Test}
+        a = a + b;
+        a += b;
+        a = a - b;
+        a -= b;
+        a = a * b;
+        a *= b;
+        a = a / b;
+        a /= b;
+        a = a ** b;
+        a **= b;
+        a = a % c;
+        a %= 6;
+        LogResult.assertDecimalEqual("operators", 2, a);
+    end
+
+    function bitwise(){@Test}
+        d = d | e;
+        d |= e;
+        d = d & e;
+        d &= e;
+        d = d xor e;
+        d xor= e;
+        LogResult.assertDecimalEqual("bitwise", 3, d);
+    end
+
+    function addition(){@Test}
+        a = 6;
+        b = 2;
+        c = 23;
+        myDecimal = a + b + c;
+        LogResult.assertDecimalEqual("addition", 31, myDecimal);
+    end
+
+    function concatNoNull(){@Test}
+        str1 = str1 :: str2;
+        str1 ::= str3;
+        str1 = str1 ?: str4;
+        str1 ?:= str5;
+        LogResult.assertStringEqual("concatNoNull",
+                "North Carolina State University Wolfpack", str1);
+    end
+
+    function concatNull(){@Test}
+        result, var1, var2, var3 string?;
+        var1 = "Sun";
+        var3 = "day";
+        result = var1 ?: var2 ?: var3;
+        LogResult.assertTrue("concatNull", result == null);
+    end
+
+    function caseTest(){@Test}
+        case
+            when(x == 2)
+            when(y == 4)
+            otherwise
+                LogResult.passed("caseTest");
+        end
+    end
+
+    function forTest(){@Test}
+        for(myInt from 1 to 3 by 1)
+            if((myInt % 3) != 0)
+                continue;
+            end
+            ctr = ctr + 1;
+        end
+        LogResult.assertDecimalEqual("forTest", 1, ctr);
+    end
+
+    function whileTestJava(){@Test}
+        myInt = 5;
+    outerLoop:
+        while(f != 0)
+            if(myInt == 1)
+                exit outerLoop;
+            end
+            for(myInt from 1 to 100 by 1)
+                if(f == 5)
+                    exit for;
+                end
+            end
+        end
+        LogResult.assertDecimalEqual("whileTest", 1, myInt);
+    end
+
+    function functionCall(){@Test}
+        myInt = getCustomer();
+        LogResult.assertDecimalEqual("functionCall", 5, myInt);
+    end
+
+    function tryThrow(){@Test}
+        try
+            throw new customerException{customerNumber = custNum, message = "Illegal customer number"};
+        onException(myEx AnyException)
+            LogResult.passed("tryThrow");
+        end
+    end
+
+    function getCustomer() returns(int)
+        return(5);
+    end
+
+end
+
+record CustomerException type Exception
+    customerNumber int;
+end
+

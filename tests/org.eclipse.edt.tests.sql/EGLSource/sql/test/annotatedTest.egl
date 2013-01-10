@@ -1,0 +1,833 @@
+package sql.test;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.AnyException;
+import eglx.persistence.Id;
+import eglx.persistence.sql.Column;
+import eglx.persistence.sql.GeneratedValue;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+import eglx.persistence.sql.SQLResultSet;
+import eglx.persistence.sql.SQLResultSetConcurrency;
+import eglx.persistence.sql.SQLResultSetControl;
+import eglx.persistence.sql.Table;
+ 
+// basic library
+library annotatedTest
+
+	use commonFunctionLibrary ;
+	
+ 	ds SQLDataSource? ;
+ 	rs SQLResultSet? ;
+	row, aRow, bRow annotatedTblRec ;
+	rows annotatedTblRec[] {} ;
+	oops boolean = false ; 
+	variation string ;
+	lastPosition int = 10 ;
+	nextToLastPosition int = lastPosition - 1 ;
+	fetchSize int = 5 ;
+	
+	colIds dictionary ;
+
+	function basicConnect ( ) {@Test}
+		try  
+			setVariation ( "connect" ) ;
+			ds = Resources.getResource("binding:" + Constants.binding);
+			LogResult.logStdOut(Constants.binding);
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicSetSchema ( ) {@Test}
+		try  
+			setVariation ( "set schema" ) ;
+			createSchema ( ) ;
+			ds.setCurrentSchema("EUNIT"); 
+			success ( ) ; 
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function basicCreateTable ( ) {@Test}
+		try  
+			setVariation ( "drop table") ;
+			dropTable ( ) ;
+			setVariation ( "create table" ) ;
+			createTable ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicNoRecordFound ( ) {@Test}
+		try  
+			setVariation ( "get for non existent record" ) ;
+			checkDeletedRow ( 1000 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicAdd ( ) {@Test}
+		try  
+			setVariation ( "add row" ) ;
+			addRow ( 1 ) ;
+			setVariation ( "check inserted record id" ) ; 
+			checkColumnValue ( "id", 2, row.id ) ;
+			setVariation ( "retrieve generated id" ) ;
+			retrieveGeneratedID ( 1 ) ;
+			setVariation ( "check inserted record" ) ; 
+			verifyRow ( 1 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicGet ( ) {@Test}
+		try
+			setVariation ( "add row" ) ;
+			insertRowWithExecuteStatement( 2 ) ;
+			setVariation ( "retrieve generated id" ) ;
+			retrieveGeneratedID ( 2 ) ;
+			setVariation ( "get row" ) ; 
+			getRow ( 2 ) ;
+			setVariation ( "check contents ") ;
+			checkRow ( 2 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ;
+		end
+	end
+	
+	function basicReplace ( ) {@Test}
+		try  
+			setVariation ( "replace row" ) ;
+			replaceRow ( 1 ) ; 
+			setVariation ( "check replaced row " ) ;
+			verifyUpdatedRow ( 1 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicDelete ( ) {@Test}try  
+			setVariation ( "deleteRow" ) ;
+			deleteRow ( 1 ) ; 
+			deleteRow ( 2 ) ;
+			setVariation ( "checkDeletedRow" ) ;
+			checkDeletedRow ( 1 ) ;
+			checkDeletedRow ( 2 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicLoadTable ( ) {@Test}
+		id int ;
+		try  
+			setVariation ( "load table" ) ;
+			for ( id from 1 to lastPosition ) 
+				insertRowWithExecuteStatement ( id ) ;
+			end
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function basicForEach ( ) {@Test}
+		i int = 0 ;
+		try  
+			setEmpty ( ) ;
+			setVariation ( "open result set" ) ;
+			openResultSet ( -1 ) ;
+			setVariation ( "for each row" ) ;
+			foreach ( row from rs )
+				i += 1 ;
+				checkRow ( i ) ;				
+			end			
+			checkValue ( "Row count", lastPosition, i ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end 
+	
+	function basicGetArray ( ) {@Test}
+		i int = 0 ;
+		rows annotatedTblRec[] ;
+		try  
+			setEmpty ( ) ;
+			setVariation ( "get array of rows" ) ;
+			get rows from ds ;
+			for ( i from lastPosition to 1 by -1 )
+				row = rows[i] ;
+				checkRow ( i ) ;				
+			end
+			checkValue ( "Row count", lastPosition, rows.getSize() ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end 
+	
+	
+	function basicOpenResultSet ( ) {@Test}
+		try  
+			setVariation ( "open result set" ) ;
+			openResultSet ( -1 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicFetchFromResultSet ( ) {@Test}
+		i int ;
+		try  
+			setVariation ( "read all rows" ) ;
+			for ( i from 1 to 10 )
+				checkNextRow ( rs, i ) ;
+			end 
+			checkNextRow ( rs, 0 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicClose ( ) {@Test}
+		try  
+			setVariation ( "close result set" ) ;
+			closeResultSet ( rs ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end			
+	end	
+		
+	function basicOpenResultSetForUpdate ( ) { @Test }
+		rs SQLResultSet? { @SQLResultSetControl { concurrency = CONCUR_UPDATABLE } } ;
+		id int = 19 ;
+		try  
+			setVariation ( "add two records " ) ;
+			addRow ( 20 ) ;
+			addRow ( 21 ) ;
+			setVariation ( "open result set with SQL for update" ) ;
+			setEmpty ( ) ;
+			rs = openResultSetForUpdate ( 20 ) ;
+			setVariation ( "replace row in result set ") ;
+			checkNextRow ( rs, 20 ) ;
+			updateRowInRS ( rs ) ;
+			setVariation ( "delete row in result set" ) ;
+			checkNextRow ( rs, 21 ) ;
+			deleteRowInRS ( rs ) ;
+			setVariation ( "read to end of file" ) ;
+			checkNextRow ( rs, 0 ) ;
+			setVariation ( "close rs" ) ;
+			closeResultSet ( rs ) ;
+			setVariation ( "verify row updated ") ;
+			verifyUpdatedRow ( 20 ) ;
+			deleteRow ( 20 ) ;  
+			setVariation ( "verify row deleted" ) ;
+			checkDeletedRow ( 21 ) ; 
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function getRowFromDSVariations ( ) {@Test}
+		id int = 5 ;
+		try  
+			setVariation ( "default get row" ) ;
+			getRow ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row using id" ) ;
+			getRowInto ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get into list of variables" ) ;
+			setVariation ( "get row with default SQL statement saved in program" ) ;
+			getRowWithDefaultSQLStatement ( id ) ;
+			checkRow ( id ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+ 	function insertRowFromDSVariations ( ) {@Test}
+ 		try
+	 		setVariation ( "default add statement " ) ;
+	 		addRow ( 100 ) ;
+	 		verifyRow ( 100 ) ;
+	 		setVariation ( "CNTL-1 saved default add statement " ) ;
+	 		addRowWithDefaultSQLStatement ( 101 ) ;
+	 		verifyRow ( 101 ) ;
+	 		setVariation ( "execute insert sql statement " ) ;
+	 		insertRowWithExecuteStatement ( 102 ) ;
+	 		verifyRow ( 102 ) ;
+	 		success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+ 	function replaceRowFromDSVariations ( ) {@Test}
+ 		try
+	 		setVariation ( "default replace statement " ) ;
+	 		replaceRow ( 2 ) ;
+	 		verifyUpdatedRow ( 2 ) ;
+	 		setVariation ( "CNTL-1 default replace statement " ) ;
+	 		replaceRowWithDefaultSQLStatement ( 3 ) ;
+	 		verifyUpdatedRow ( 3 ) ;
+	 		setVariation ( "execute replace sql statement " ) ;
+	 		updateRowWithExecuteStatement ( 5 ) ;
+	 		verifyUpdatedRow ( 5 ) ;
+	 		// do this one last because it currently fails
+	 		setVariation ( "CNTL-1 replace statement plus using clause - known bug 371678" ) ;
+	 		replaceRowWithSQLStatementAndUsingClause( 4 ) ;
+	 		verifyUpdatedRow ( 4 ) ;
+	 		success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function deleteRowFromDSVariations ( ) {@Test}
+ 		try
+	 		setVariation ( "default delete statement " ) ;
+	 		deleteRow ( 100 ) ;
+	 		checkDeletedRow ( 100 ) ;
+	 		setVariation ( "execute delete sql statement " ) ;
+	 		deleteRowWithExecuteStatement ( 101 ) ;
+	 		checkDeletedRow ( 101 ) ;
+	 		setVariation ( "saved default delete statement " ) ;
+	 		deleteRowWithDefaultSQLStatement ( 103 ) ;
+	 		checkDeletedRow ( 103) ;
+	 		success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicDropTable ( ) {@Test}
+		try  
+			setVariation ( "drop table" ) ;
+			dropTable ( ) ;
+			success ( ) ;
+		onException ( ex sqlException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function disconnect() { @Test }
+		try  
+			setVariation ( "disconnect" ) ;
+			if ( ds != null && !ds.isClosed() )
+				close ds;
+			end
+			success ( ) ;
+		onException ( ex sqlException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	
+	private function createSchema()
+		try
+			execute from ds with #sql{
+				CREATE SCHEMA EUNIT 
+			};
+		onException (ex anyException )
+		end			
+	end
+	
+	
+	
+  	function checkId ( expectedId int )
+		if ( row.id != expectedId)
+			throw new anyException { message="actual row = " + row.id + ", expected row = " + expectedId } ;
+		end
+	end
+	
+	function checkNextRow ( rs SQLResultSet, expectedId int in)
+		if ( rs.setNext() )
+			getRowFromRSInto ( rs, expectedId ) ;
+			checkRow ( expectedId ) ;
+		else
+			if ( expectedId != 0)
+				throw new anyException { message="rs.setNext() for record " + expectedId + " returned false" } ;
+			end
+		end
+	end	
+	
+	function checkNextRecordAndPosition ( expectedId int )
+		checkNextRow ( rs, expectedId ) ;
+		checkPosition ( expectedId ) ;
+	end	
+	
+	function checkPosition ( expectedPosition int )
+		position int = expectedPosition ; // rs.getPosition ( ) ;
+		checkValue ( "result set position", expectedPosition, position) ;
+		if ( position == 1)
+			checkValue ( "isFirst", true, rs.isFirst ( ) ) ;
+		else			
+			checkValue ( "isFirst", false, rs.isFirst ( ) ) ;
+		end
+		
+		if ( position == lastPosition )
+			checkValue ( "isLast", true, rs.isLast ( ) ) ;
+		else			
+			checkValue ( "isLast", false, rs.isLast ( ) ) ;
+		end
+	end
+	
+	function positionAndcheckNextRecord ( expectedId int, recordFound boolean in )
+		checkNextRecordFound ( ( expectedId != 0 ), recordFound ) ;
+		checkNextRecordAndPosition ( expectedId ) ;
+	end
+	
+	function checkNextRecordFound ( expectedRecordFound boolean in, actualRecordFound boolean in )
+		if ( expectedRecordFound != actualRecordFound )
+			if ( expectedRecordFound )
+				throw new anyException { message="No record position set" } ;
+			else
+				throw new anyException { message="Record position set when not expected" } ;
+			end
+		end
+	end
+	
+	function checkNoRecordFound ( isSet boolean in )
+		if ( isSet )
+			throw new anyException { message="record found when not expected" } ;
+		end
+	end
+	
+	function checkColumnValue ( column string in, expectedValue string? in, actualValue string? in )
+		if ( actualValue != expectedValue )
+			throw new anyException { message="Column = " + column + ", expected value = '" + expectedValue + "', actual value = '" + actualValue + "'" } ;
+		end
+	end	
+	
+	function checkValue ( desc string in, expectedValue string? in, actualValue string? in )
+		if ( actualValue != expectedValue )
+			throw new anyException { message=desc + ", expected value = '" + expectedValue + "', actual value = '" + actualValue + "'" } ;
+		end
+	end
+	
+	function trim ( value string? in ) returns ( string? )
+		if ( value == null )
+			return ( value ) ;
+		else
+			return ( value.clip() ) ;
+		end
+	end			
+	
+	function openResultSet ( id int in )
+		key int = colId ( id ) ;
+		open rs from ds with #sql{ select
+			col_id, col_string, col_nullable, col_updateable, 
+			col_insertable, col_insertable + 1000, 0
+			from ANNOTATEDTBL
+			where col_id > ?
+			order by col_id asc
+		}
+		using key ;
+//		rs.setFetchSize( fetchSize ) ;
+	end	
+	
+	function openResultSetForUpdate ( id int in ) returns ( SQLResultSet? )
+		rs SQLResultSet? { @SQLResultSetControl { concurrency = CONCUR_UPDATABLE } } ;
+		key int = colId ( id ) ;
+		open rs from ds with #sql{ select
+				col_id, col_string, col_nullable, col_updateable, 
+				col_insertable, col_insertable + 1000, 0
+				from ANNOTATEDTBL
+				where col_id >= ?
+				for update of col_string, col_nullable, col_updateable  
+			}
+		using key ;
+		return ( rs ) ;
+//		rs.setFetchSize( fetchSize ) ;
+	end	
+	
+	
+	
+	function addRow ( id int in )
+		colID int ;
+		setRowForInsert ( row, id ) ;
+		add row to ds ;
+		colIDs["" + id] = row.id ;
+	end
+	
+	function retrieveGeneratedID ( id int in )
+		row.id = lastId ( ) ;
+		colIDs["" + id] = row.id ;
+//		log ( "Record id = " + id + ", generated id = " + row.id ) ;
+	end	
+	
+	function generatedId ( id int in) returns ( int )
+		return ( colIDs["" + id ] as int ) ;
+	end
+	
+	function insertRowWithExecuteStatement ( id int in )
+		initializeRow ( row, id ) ;
+		execute from ds with
+			#sql{
+				insert into ANNOTATEDTBL
+					( col_string, col_nullable, col_insertable ) 
+				values
+					( ?, ?, ? )
+			} 
+			using row.varCharCol, row.nullableCol, row.insertableCol  
+		;
+		retrieveGeneratedId ( id ) ;
+	end	
+		
+	function addRowWithDefaultSQLStatement ( id int in )
+		row.id = id ;
+		initializeRow ( row, id ) ;
+		add row to ds with
+			#sql{
+				insert into ANNOTATEDTBL
+					(col_string, col_nullable, col_insertable)
+				values
+					(?, ?, ?)
+			} ;
+		colIDs["" + id] = row.id ;
+	end	
+	
+	function addScalarsWithSQLStatement ( id int in )
+		row.id = id ;
+		initializeRow ( row, id ) ;
+		add row.varCharCol, row.nullableCol, row.insertableCol to ds with
+			#sql{
+				insert into ANNOTATEDTBL
+					(col_string, col_nullable, col_insertable)
+				values
+					(?, ?, ?)
+			} ;
+		retrieveGeneratedId ( id ) ;
+	end	
+		
+	function replaceRow ( id int in )
+		setRowForUpdate ( row, id ) ;
+		replace row to ds ;
+	end	
+	
+	function updateRowWithExecuteStatement ( id int in )
+		setRowForUpdate ( row, id ) ;
+		execute from ds with #sql{
+				update ANNOTATEDTBL
+				set
+					col_string = ?,
+					col_nullable = ?,
+					col_updateable = ?
+				where
+					col_id = ?
+			}  
+			using row.varCharCol, row.nullableCol, row.updateableCol, row.id 
+			;
+	end	
+	
+	function replaceRowWithDefaultSQLStatement ( id int in )
+		setRowForUpdate ( row, id ) ;
+		replace row to ds with
+			#sql{
+				update ANNOTATEDTBL
+				set
+					col_string = ?,
+					col_nullable = ?,
+					col_updateable = ?
+				where
+					col_id = ?
+			} ;
+	end		
+	
+	function replaceRowWithSQLStatementAndUsingClause ( id int in )
+		setRowForUpdate ( row, id ) ;
+		replace row to ds with
+			#sql{
+				update ANNOTATEDTBL
+				set
+					col_string = ?,
+					col_nullable = ?,
+					col_updateable = ?
+				where
+					col_id = ?
+			} 
+			using row.varCharCol, row.nullableCol, row.updateableCol, row.id 
+			;
+	end		
+	
+	function deleteRow ( id int in )
+		row.id = colId ( id )  ;  
+		delete row from ds ;
+	end	
+	
+	function deleteRowUsing ( id int in )
+		delete row from ds using id;
+	end	
+	
+	function deleteRowWithExecuteStatement ( id int in )
+		row.id = colID ( id ) ;
+		execute from ds  with
+			#sql{
+				delete from ANNOTATEDTBL
+				where
+					col_id = ?
+			}  
+			using row.id ;
+	end	
+	
+	function deleteRowWithDefaultSQLStatement ( id int in )
+		row.id = colID ( id ) ;
+		delete row from ds with
+			#sql{
+				delete from ANNOTATEDTBL
+				where
+					col_id = ?
+			} ;
+	end	
+	
+	function getRow ( id int in )
+		setEmpty ( ) ;
+		row.id = colID ( id ) ;
+		get row from ds ;
+	end
+		
+	function getRowInto ( id int in )
+		key int = colId ( id )  ;
+		setEmpty ( ) ;
+		get row.id, row.varCharCol, row.nullableCol, row.updateableCol, row.insertableCol, row.derivedCol, row.transientCol 
+			from ds with #sql{
+				select
+					col_id, col_string, col_nullable, col_updateable, 
+					col_insertable, col_insertable + 1000, 0
+				from ANNOTATEDTBL
+				where col_id = ?
+		} using key ; 
+	end
+	
+	
+	function getRowWithDefaultSQLStatement ( id int in )
+		setEmpty ( ) ;
+		row.id = colID ( id ) ;
+		get row from ds using(row.id) with
+			#sql{
+				select
+					col_id, rtrim(col_string), col_nullable, 
+					col_updateable, col_insertable, col_insertable + 1000, 0
+				from ANNOTATEDTBL
+				where
+					col_id = ?
+			} ;
+	end
+		
+	function getRowFromRS ( rs SQLResultSet, expectedId int )
+		setEmpty ( ) ;
+		get row from rs ;
+	end	
+		
+	function getRowFromRSInto ( rs SQLResultSet, expectedId int )
+		setEmpty ( ) ;
+		get row.id, row.varCharCol, row.nullableCol, row.updateableCol, row.insertableCol, row.derivedCol, row.transientCol 
+			from rs ;
+	end	
+	
+	function updateRowInRS ( rs SQLResultSet? )		
+		setRowForUpdate ( row, row.insertableCol ) ;
+		replace row to rs ;
+	end
+	
+	function deleteRowInRS ( rs SQLResultSet? )
+		rs.deleteRow ( ) ;
+	end
+	
+	function checkDeletedRow ( id int in )
+		setEmpty ( ) ;
+		try
+			get row from ds using id ;
+			if ( row.id == id )
+				throwException ( "Record " + id + " read, record should not be in table" ) ;
+			end
+		end
+	end
+	
+	function closeResultSet ( rs SQLResultSet )	
+		close rs ;
+		try
+			get row from rs ;
+		onException ( ex anyException ) 
+			expectedException ( ex ) ;
+			return ;
+		end		
+		throwException ( "No exception thrown on use of closed result set" ) ;
+	end		   
+
+	function initializeRow ( row annotatedTblRec, value int in )
+		row.id = 0 ;
+		row.varCharCol = "Some Char " + value ;
+		row.nullableCol = null ;
+		row.updateableCol = value ;
+		row.insertableCol = value ;
+		row.derivedCol = 20000 + row.insertableCol ;
+		row.transientCol = 20000  ;
+	end 
+	
+	function setRowForInsert ( row annotatedTblRec, id int in )
+		initializeRow ( row, id ) ;
+	end	
+	
+	function setRowForUpdate ( row annotatedTblRec, id int in )
+		initializeRow ( row, id + 100 ) ;
+		row.id = colId ( id )  ; 
+	end
+	
+	function setRowForCompare ( row annotatedTblRec, id int in )
+		initializeRow ( row, id ) ;
+		row.id = colId ( id )  ;
+		row.updateableCol = null ;  
+		row.derivedCol = id + 1000 ;
+		row.transientCol = 0 ;
+	end
+	
+	function setRowForUpdatedCompare ( row annotatedTblRec, id int in )
+		initializeRow ( row, id + 100 ) ;
+		row.id = colId ( id )  ;
+		row.insertableCol = id ;  
+		row.derivedCol = id + 1000 ;
+		row.transientCol = 0 ;
+	end	
+	
+	function verifyRowFromRS ( expectedId int in ) 
+		get row from rs ;
+		checkRow ( expectedId ) ;
+	end
+	
+	function verifyUpdatedRowFromRS ( expectedId int in )
+		get row from rs ;
+		checkUpdatedRow ( expectedId ) ;
+	end	
+	
+	function verifyRow ( expectedId int in )
+		getRowInto ( expectedId ) ;
+		checkRow ( expectedId ) ;
+	end	
+	
+	function verifyUpdatedRow ( expectedId int in )
+		getRowInto ( expectedId ) ;
+		checkUpdatedRow ( expectedId ) ;
+	end	
+	
+	function checkRowFound ( row annotatedTblRec, expectedId int in )  
+		if ( row.varCharCol == "" ) 
+			throwException ( "Record not found, id = " + expectedId + ", generated key = " + colId ( expectedId ) ) ;
+		end
+	end 
+	
+	function checkRow ( expectedId int in ) 
+		checkRowFound ( row, expectedId ) ;
+		setRowForCompare ( aRow, expectedId ) ;
+		compareRow ( aRow, row ) ;
+	end	
+	
+	function checkUpdatedRow ( expectedId int in )  
+		checkRowFound ( row, expectedId ) ;
+		setRowForUpdatedCompare ( aRow, expectedId ) ;
+		compareRow ( aRow, row ) ;
+	end
+	
+	function compareRow ( expectedRow annotatedTblRec, actualRow annotatedTblRec )
+		checkColumnValue ( "id", expectedRow.id, actualRow.id ) ;
+		checkColumnValue ( "varCharCol", expectedRow.varCharCol, actualRow.varCharCol ) ;
+		checkColumnValue ( "nullableCol", expectedRow.nullableCol, actualRow.nullableCol ) ;
+		checkColumnValue ( "updateableCol", expectedRow.updateableCol, actualRow.updateableCol ) ;
+		checkColumnValue ( "insertableCol", expectedRow.insertableCol, actualRow.insertableCol ) ;
+		checkColumnValue ( "derivedCol", expectedRow.derivedCol, actualRow.derivedCol ) ;
+		checkColumnValue ( "transientCol", expectedRow.transientCol, actualRow.transientCol ) ;
+	end
+	
+	function setEmpty ( )
+//FIXME 082CHANGE		set row empty ;
+		row = new annotatedTblRec;
+		row.nullableCol = 0 ;
+	end
+	
+	function colId ( id int ) returns ( int )
+		key string = "" + id ;
+		if ( colIDs.containsKey ( key ) )
+			return ( colIds [ key ] as int ) ;
+		else
+			return ( 0  ) ;
+		end
+	end
+	
+	private function lastId ( ) returns ( int )
+		id int ;
+		get row.id from ds with
+			#sql{
+				select IDENTITY_VAL_LOCAL() from ANNOTATEDTBL
+			} ;
+		return ( row.id ) ;
+	end		
+	
+	private function createTable()
+		execute from ds with #sql{
+			CREATE TABLE ANNOTATEDTBL 
+			   (
+			      COL_ID INTEGER NOT NULL GENERATED BY DEFAULT AS IDENTITY ( START WITH 2, INCREMENT BY 2 ),
+			      COL_STRING VARCHAR(20) NOT NULL,
+			      COL_NULLABLE int,
+			      COL_INSERTABLE int,
+			      COL_UPDATEABLE int
+			    ) ;	
+			
+			ALTER TABLE ANNOTATEDTBL
+			   ADD CONSTRAINT ANNOTATEDTBL_PK Primary Key (
+			      COL_ID );
+		};
+	end
+	
+	
+	private function dropTable()
+		try
+			execute with #sql{ drop table ANNOTATEDTBL } from ds;
+		onException ( ex sqlException)	
+			if ( ex.SQLState != "42Y55" )
+				unexpectedException ( ex ) ; 
+			end
+		end
+	end
+	
+end
+
+//record annotatedTblRec  { @Table {name="ANNOTATEDTBL"} } 
+//	id int {@Id, @Column { name="col_id" } };
+//	varCharCol string { @Column { name="col_string" } } ;
+//	nullableCol int? { @Column { name="col_nullable" } } ;	
+//	updateableCol int? { @Column { name="col_updateable" } };
+//	insertableCol int? { @Column { name="col_insertable" } };
+//	derivedCol int { @Column { name="col_id + 1000" } } ;
+//	transientCol int { @Column { name="0"  } } ;
+//end 
+
+record annotatedTblRec  { @Table {name="ANNOTATEDTBL"} } 
+	id int {@Id, @GeneratedValue, @Column { name="col_id" } };
+	varCharCol string { @Column { name="col_string" } } ;
+	nullableCol int? { @Column { name="col_nullable" } } ;	
+	updateableCol int? { @Column { name="col_updateable", insertable=false } };
+	insertableCol int? { @Column { name="col_insertable", updateable=false } };
+	derivedCol int { @Column { name="col_insertable + 1000" , insertable=false, updateable=false } } ;
+	transientCol int { @Column { name="0" , insertable=false, updateable=false } } ;
+end 

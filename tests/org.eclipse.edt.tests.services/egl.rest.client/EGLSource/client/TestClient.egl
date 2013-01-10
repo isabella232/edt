@@ -1,0 +1,82 @@
+package client;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import common.clientlocal;
+import common.utilities;
+import eglx.ui.rui.Event;
+import dojo.widgets.DojoComboBox;
+
+//
+//
+
+handler TestClient type RUIhandler{initialUI =[ui
+            ], onConstructionFunction = start, cssFile = "css/egl.rest.client.css", title = ""}
+
+    ui GridLayout{columns = 3, rows = 4, cellPadding = 4, children = [ modeComboBox, Button6, Button5, Button4, Button3, Button2, Button1, Button ]};
+    Button Button{ layoutData = new GridLayoutData{ row = 1, column = 2 }, text = "Test Arrays", onClick ::= Button_onClick };
+    Button1 Button{ layoutData = new GridLayoutData{ row = 1, column = 3 }, text = "Test ArraysMult", onClick ::= Button1_onClick };
+    Button2 Button{ layoutData = new GridLayoutData{ row = 2, column = 2 }, text = "Test Exception", onClick ::= Button2_onClick };
+    Button3 Button{ layoutData = new GridLayoutData{ row = 2, column = 3 }, text = "Test Handler" , onClick ::= Button3_onClick };
+    Button4 Button{ layoutData = new GridLayoutData{ row = 3, column = 2 }, text = "Test Nulls" , onClick ::= Button4_onClick };
+    Button5 Button{ layoutData = new GridLayoutData{ row = 3, column = 3 }, text = "Test Primitives" , onClick ::= Button5_onClick };
+    Button6 Button{ layoutData = new GridLayoutData{ row = 4, column = 2 }, text = "Test RecordsFlex" , onClick ::= Button6_onClick };
+
+	bindtype ServiceBindingType?;
+	modeComboBox DojoComboBox{ layoutData = new GridLayoutData{ row = 4, column = 3 }, values = ["Dedicated","Develop","Deploy",""], value = "", onChange ::= modeComboBox_onChange };
+
+    function start()
+    	setMode();
+    end
+    
+    function Button_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[1], bindtype);
+    end
+    
+    function Button1_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[2], bindtype);
+    end
+    
+    function Button2_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[3], bindtype);
+    end
+    
+    function Button3_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[4], bindtype);
+    end
+
+    function Button4_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[5], bindtype);
+    end
+
+    function Button5_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[6], bindtype);
+    end
+
+    function Button6_onClick(event Event in)
+    	clientlocal.testService(utilities.LibraryList[7], bindtype);
+    end
+    
+    function modeComboBox_onChange(event Event in)
+    	setMode();
+    end
+    
+    function setMode()
+    	if (modeComboBox.value == "")
+			// EGL statements
+			return;
+		end
+    	case (modeComboBox.value)
+			when ("Deploy")
+				bindtype = ServiceBindingType.DEPLOYED;
+			when ("Develop")
+				bindtype = ServiceBindingType.DEVELOP;
+			otherwise
+				bindtype = ServiceBindingType.DEDICATED;
+		end
+		syslib.writeStdout("Now we are calling the type of " + modeComboBox.value + " services !");
+    end
+end

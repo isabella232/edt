@@ -1,0 +1,210 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp012
+  * @title EdtTimestamp012 - runValueFunction
+  * @description testing timestamp function Minuteof
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp012.egl
+  * @keywords timestamp, functions, MinuteOf
+ **/
+library ETimestamp012 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runMinuteOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant MinuteOf", 17, constTimeStamp.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full MinuteOf", 55, constTimeStampFull.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime MinuteOf", 55, constTimeStampDateTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction04(){@Test}
+		aMinute int;
+		try
+		    aMinute = constTimeStampDate.MinuteOf();
+			LogResult.failed("constant date Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant date Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction05(){@Test}
+		aMinute int;
+		try
+		    aMinute = constTimeStampYDate.MinuteOf();
+			LogResult.failed("constant Ydate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction06(){@Test}
+		aMinute int;
+		try
+		    aMinute = constTimeStampYMDate.MinuteOf();
+			LogResult.failed("constant YMdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction07(){@Test}
+		aMinute int;
+		try
+		    aMinute = constTimeStampMDDate.MinuteOf();
+			LogResult.failed("constant MDdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MDdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction08(){@Test}
+		aMinute int;
+		try
+		    aMinute = constTimeStampDHDate.MinuteOf();
+			LogResult.failed("constant DHdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction09(){@Test}
+		LogResult.assertBigIntEqual("constant time MinuteOf", 31, constTimeStampTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction10(){@Test}
+		LogResult.assertBigIntEqual("constant HMTime MinuteOf", 18, constTimeStampHMTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction11(){@Test}
+		LogResult.assertBigIntEqual("constant MStime MinuteOf", 16, constTimeStampMSTime.MinuteOf());
+	end
+	
+	function runMinuteOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable MinuteOf", 17, varTimeStamp.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full MinuteOf", 55, varTimeStampFull.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime MinuteOf", 55, varTimeStampDateTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction15(){@Test}
+		aMinute int;
+		try
+		    aMinute = varTimeStampDate.MinuteOf();
+			LogResult.failed("variable date Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable date Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction16(){@Test}
+		aMinute int;
+		try
+		    aMinute = varTimeStampYDate.MinuteOf();
+			LogResult.failed("variable Ydate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable Ydate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction17(){@Test}
+		aMinute int;
+		try
+		    aMinute = varTimeStampYMDate.MinuteOf();
+			LogResult.failed("variable YMdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction18(){@Test}
+		aMinute int;
+		try
+		    aMinute = varTimeStampMDDate.MinuteOf();
+			LogResult.failed("variable MDdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MDdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction19(){@Test}
+		aMinute int;
+		try
+		    aMinute = varTimeStampDHDate.MinuteOf();
+			LogResult.failed("variable DHdate Minuteof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate Minuteof: wrong exception thrown");
+		end
+	end
+	 	
+	function runMinuteOfFunction20(){@Test}
+		LogResult.assertBigIntEqual("variable time MinuteOf", 31, varTimeStampTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction21(){@Test}
+		LogResult.assertBigIntEqual("variable HMTime MinuteOf", 18, varTimeStampHMTime.MinuteOf());
+	end
+	 	
+	function runMinuteOfFunction22(){@Test}
+		LogResult.assertBigIntEqual("variable MStime MinuteOf", 16, varTimeStampMSTime.MinuteOf());
+	end
+
+end

@@ -1,0 +1,53 @@
+package gen.javascript;
+
+
+
+Handler testRUIHandler Type RUIHandler {
+}
+	
+	//variables
+	int1 int;
+	int2 int { @EGLProperty };
+	int3 int { @EGLProperty { getMethod = getInt3 } };
+	int4 int { @EGLProperty { setMethod = setInt4 } };
+	int5 int { @EGLProperty { getMethod = getInt5, setMethod = setInt5 } };
+	int6 int { @EGLProperty { getMethod = getWackyInt6, setMethod = setWackyInt6 } };
+	
+	//functions
+	
+	function getint2()returns(int)
+		return(this.int2);
+	end
+	
+	function setint2(param1 int in)
+		this.int2 = param1;
+	end
+	
+	function getInt3()returns(int)
+		return(this.int3);
+	end
+	
+	function getint4()returns(int)
+		return(this.int4);
+	end
+	
+	function setInt4(param1 int in)
+		this.int4 = param1;
+	end
+	
+	function getInt5()returns(int)
+		return(this.int5);
+	end
+	
+	function setInt5(param1 int in)
+		this.int5 = param1;
+	end
+	
+	function getWackyInt6()returns(int)
+		return(this.int6);
+	end
+	
+	function setWackyInt6(param1 int in)
+		this.int6 = param1;
+	end
+end

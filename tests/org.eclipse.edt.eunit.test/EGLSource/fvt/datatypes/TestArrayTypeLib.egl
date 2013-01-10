@@ -1,0 +1,1408 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+  * @name TestArrayTypeLib
+  * @title TestArrayTypeLib 
+  * @description testing array type
+  * @sources TestArrayTypeLib.egl
+  * @keywords any type, functions
+ **/
+
+//dataitem MyDecimal decimal (4,2) end
+
+library TestArrayTypeLib
+
+    total int;  // Used to check for succesful result from testFor functions
+    expectedResult bigInt; // Derived from result of all functions
+    stdOutObj string;  // Object ref for System.out
+    message string;
+    //aString string[0]{maxSize = 10};
+    //bString string[3];
+    bString string[] = new string[3];
+    cString string;
+    anInt int;
+    //intArrayA, intArrayB int[0];
+    //intArrayA, intArrayB int[] = new int[0];
+    intArrayA int[] = new int[0];
+    intArrayB int[] = new int[0];
+    dimension int;
+    //aFlex, bFlex ArrayFlexRecord{initialized = yes};
+    //aFlex, bFlex ArrayFlexRecord{};
+    aFlex ArrayFlexRecord{};
+    bFlex ArrayFlexRecord{};
+    //    a1 int[4];
+    //    a2 string[3];
+    a1 int[] = new int[4];
+    a2 string[] = new string[3];
+    a3 string[]?;
+    //Mydec MyDecimal;
+    MyString string;
+    myrec MyRecord;
+    //Mydec2 MyDecimal;
+    MyString2 string;
+    myrec2 MyRecord;
+    //    sizes int[2];
+    //    MydecAEmpty MyDecimal[0];
+    //    MydecASpec MyDecimal[2];
+    //    MyStringAEmpty string[0];
+    //    MyStringASpec string[2];
+    //    myrecAEmpty MyRecord[0];
+    //    myrecASpec MyRecord[2];
+    //    MydecAEmptyDim MyDecimal[0][0];
+    //    MydecASpecDim MyDecimal[2][2];
+    //    MyStringAEmptyDim string[0][0];
+    //    MyStringASpecDim string[2][2];
+    //    myrecAEmptyDim MyRecord[0][0];
+    //    myrecASpecDim MyRecord[2][2];
+    //    s string[2];
+    //    multistrings string[2][2];
+    sizes int[] = new int[2];
+    MyStringAEmpty string[] = new string[0];
+    MyStringASpec string[] = new string[2];
+    myrecAEmpty MyRecord[] = new MyRecord[0];
+    myrecASpec MyRecord[] = new MyRecord[2];
+    MyStringAEmptyDim string[][] = new string[0][0];
+    MyStringASpecDim string[][] = new string[2][2];
+    myrecAEmptyDim MyRecord[][] = new MyRecord[0][0];
+    myrecASpecDim MyRecord[][] = new MyRecord[2][2];
+    s string[] = new string[2];
+    multistrings string[][] = new string[2][2];
+    i int;
+    //xx int[0]{maxSize = 2};
+    ws int;
+    //    ints int[1][1];
+    //    EMPTYMyRecordArray MyRecord[2];
+    //    EMPTYstringARRAY string[2];
+    //    EMPTYdecARRAY MyDecimal[2];
+    ints int[][] = new int[1][1];
+    EMPTYMyRecordArray MyRecord[] = new MyRecord[2];
+    EMPTYstringARRAY string[] = new string[2];
+    cc int;
+    //intsizes int[2];
+    intsizes int[] = new int[2];
+    level2 int;
+    level1 int;
+    level22 int;
+    er int;
+    //xxy int[2]{maxSize = 2};
+    tempStringArray string[];
+    sfs smallFloat[]?;
+    //zz1 int[0];
+    zz1 int[] = new int[0];
+
+    //    function arrayString1(){@Test}
+    //        LogResult.logStdOut("array String 1");
+    //        aString.appendElement("anElement");
+    //        anInt = aString.getSize();
+    //        LogResult.assertTrue1(1==anInt);
+    //    end
+    //
+    //    function arrayString2(){@Test}
+    //        LogResult.logStdOut("array String 1.3");
+    //        anInt = 10;
+    //        anInt = aString.getSize();
+    //        LogResult.assertTrue1(1==anInt);
+    //    end
+    //
+    //    function arrayString3(){@Test}
+    //        LogResult.logStdOut("array String 1.4 ");
+    //        anInt = 5;
+    //        anInt = aString.getMaxSize();
+    //        LogResult.assertTrue1(10==anInt);
+    //    end
+    //
+    //    function arrayString4(){@Test}
+    //        LogResult.logStdOut("array String 1.5 ");
+    //        anInt = 5;
+    //        anInt = aString.getMaxSize();
+    //        LogResult.assertTrue1(10==anInt);
+    //    end
+    //
+    //    function arrayString5(){@Test}
+    //        LogResult.logStdOut("array String 1.6");
+    //        aString.appendElement("anElement");
+    //        LogResult.assertStringEqual1("anElement", aString[1]);
+    //    end
+    //
+    //    function arrayString6(){@Test}
+    //        LogResult.logStdOut("array String 2");
+    //        aString.appendElement("anElement");
+    //        cString = "anotherElement";
+    //        aString.appendElement(cString);
+    //        LogResult.assertStringEqual1("anotherElement", aString[2]);
+    //    end
+    //
+    //    function arrayString7(){@Test}
+    //        LogResult.logStdOut("array String 3");
+    //        aString.appendElement("anElement");
+    //        aString[2] = "second element";
+    //        LogResult.assertStringEqual1("second element", aString[2]);
+    //    end
+    //
+    //    function arrayString8(){@Test}
+    //        LogResult.logStdOut("array String 4");
+    //        aString =["1", "2", "3"];
+    //        LogResult.assertStringEqual1("2", aString[2]);
+    //    end
+    
+    //    function arrayString9(){@Test}
+    //        LogResult.logStdOut("array String 5");
+    //        bString.appendElement("1");
+    //        bString.appendElement("2");
+    //    end
+    
+    function arrayString10(){@Test}
+        LogResult.logStdOut("array String 6");
+        bString.appendElement("1");
+        bString.appendElement("2");
+        anInt = 5;
+        LogResult.assertStringEqual1("2", bString[anInt]);
+    end
+
+    function arrayAssignments1(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        LogResult.logStdOut("Array Assignment 1 ");
+        dimension = intArrayA.getSize();
+        LogResult.assertTrue1(5 == dimension);
+    end
+
+    function arrayAssignments2(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        LogResult.logStdOut("Array Assignment 2");
+        LogResult.assertTrue1(4 == intArrayA[4]);
+    end
+
+    function arrayAssignments3(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        intArrayB = intArrayA;
+        LogResult.logStdOut("Array Assignment 3 ");
+        dimension = intArrayB.getSize();
+        LogResult.assertTrue1(5 == dimension);
+    end
+
+    function arrayAssignments4(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        intArrayB = intArrayA;
+        LogResult.logStdOut("Array Assignment 4");
+        LogResult.assertTrue1(4 == intArrayB[4]);
+    end
+
+    function arrayAssignments5(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        intArrayB = intArrayA;
+        intArrayA =[6, 7, 8];
+        LogResult.logStdOut("Array Assignment 5 ");
+        dimension = intArrayA.getSize();
+        LogResult.assertTrue1(3 == dimension);
+    end
+
+    function arrayAssignments6(){@Test}
+        intArrayA =[1, 2, 3, 4, 5];
+        intArrayB = intArrayA;
+        intArrayA =[6, 7, 8];
+        LogResult.logStdOut("Array Assignment 6");
+        LogResult.assertTrue1(7 == intArrayA[2]);
+    end
+
+    function arrayParameters1(){@Test}
+        aStringArray string[] =["A", "B", "C"];
+        LogResult.logStdOut("Array Parameters 1");
+        tempStringArray = arrayParameterFunction(aStringArray);
+        LogResult.assertStringArrayEqual1(aStringArray, tempStringArray);
+    end
+
+    function arrayParameters2(){@Test}
+        aStringArray string[] =["A", "B", "C"];
+        LogResult.logStdOut("Array Parameters 2");
+        tempStringArray = arrayParameterFunction(["A", "B", "C"]);
+        LogResult.assertStringArrayEqual1(aStringArray, tempStringArray);
+    end
+
+    function arraySimpleMoveByName1(){@Test}
+        aFlex.aChar = "value";
+        aFlex.aMoney = 1;
+        bFlex = aFlex;
+        LogResult.logStdOut("Simple move 2");
+        LogResult.assertStringEqual1("value", bFlex.aChar);
+    end
+
+    function arraySimpleMoveByName2(){@Test}
+        aFlex.aChar = "value";
+        aFlex.aMoney = 1;
+        bFlex = aFlex;
+        LogResult.logStdOut("Simple move 3");
+        LogResult.assertTrue1(1 == bFlex.aMoney);
+    end
+
+    function arrayVariables1(){@Test}
+        LogResult.logStdOut("Initialize int array from literal");
+        a1 =[1, 2, 3, 4];
+        LogResult.assertTrue1(a1 != null && a1.getSize() == 4 && a1[1] == 1 && a1[2] == 2 && a1[3] == 3 && a1[4] == 4);
+    end
+
+    function arrayVariables2(){@Test}
+        LogResult.logStdOut("Assign to int array from literal #1");
+        a1 =[-10, -9, -8];
+        LogResult.assertTrue1(a1 != null && a1.getSize() == 3 && a1[1] == -10 && a1[2] == -9 && a1[3] == -8);
+    end
+
+    function arrayVariables3(){@Test}
+        LogResult.logStdOut("Assign to int array from literal #2");
+        a1 =[54.3, 3.9, 90, 34e0, a1.getSize() - 3];
+        LogResult.assertTrue1(a1 != null && a1.getSize() == 5 && a1[1] == 54 && a1[2] == 3 && a1[3] == 90 && a1[4] == 34 && a1[5] == 0);
+    end
+
+    function arrayVariables4(){@Test}
+        LogResult.logStdOut("Initialize string array from literal");
+        a2 =["zim", "zip", "zot"];
+        LogResult.assertTrue1(a2 != null && a2.getSize() == 3 && a2[1] == "zim" && a2[2] == "zip" && a2[3] == "zot");
+    end
+
+    function arrayVariables5(){@Test}
+        LogResult.logStdOut("Assign to string array from literal #1");
+        a2 =["bim", "bip"];
+        LogResult.assertTrue1(a2 != null && a2.getSize() == 2 && a2[1] == "bim" && a2[2] == "bip");
+    end
+
+    function arrayVariables6(){@Test}
+        LogResult.logStdOut("Assign to string array from literal #2");
+        a2 =[15, a1.getSize(), "hello"];
+        LogResult.assertTrue1(a2 != null && a2.getSize() == 3 && a2[1] == "15" && a2[2] == "5" && a2[3] == "hello");
+    end
+
+    function arrayVariables7(){@Test}
+        LogResult.logStdOut("Initial value of arrays");
+        LogResult.assertTrue1(a3 == null);
+    end
+
+    function arrayVariables8(){@Test}
+        LogResult.logStdOut("Assign arrays");
+        a3 = a2;
+        LogResult.assertTrue1(a2 == a3);
+    end
+
+    function arrayVariables9(){@Test}
+        LogResult.logStdOut("Assign array element");
+        a3 = a2;
+        a3[1] = "first";
+        LogResult.assertTrue1(a3[1] == "first" && a2[1] == "first");
+    end
+
+    function arrayVariables10(){@Test}
+        LogResult.logStdOut("Invalid array index");
+        try
+            a3[100] = "first";
+            LogResult.assertTrue1(false);
+        onException(ex InvalidIndexException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function arrayVariables12(){@Test}
+        LogResult.logStdOut("quick get size test");
+        //s string[2];
+        s string[] = new string[2];
+        //multistrings string[2][2];
+        multistrings string[][] = new string[2][2];
+        multistrings[1] = s;
+        i int = multistrings[1].GetSize();
+        LogResult.assertTrue1(i == 2);
+    end
+
+    function arrayVariables13(){@Test}
+        LogResult.logStdOut("appendelement to spec array");
+        //a int[5];
+        a int[] = new int[5];
+        a.appendElement(7);
+        LogResult.assertTrue1(a[6] == 7);
+    end
+
+    //    function arrayVariables15(){@Test}
+    //        LogResult.logStdOut("array[x] = decimal default val");
+    //        MydecAEmpty.appendElement(Mydec);
+    //        MydecAEmpty.appendElement(Mydec);
+    //        LogResult.assertTrue1(MydecAEmpty[1] == MydecAEmpty[2]);
+    //    end
+    //
+    //    function arrayVariables16(){@Test}
+    //        LogResult.logStdOut("array[x] = decimal ");
+    //        MydecASpec[1] = Mydec;
+    //        MydecASpec[2] = Mydec;
+    //        LogResult.assertTrue1(MydecASpec[1] == MydecASpec[2]);
+    //    end
+    
+    function arrayVariables17(){@Test}
+        LogResult.logStdOut("array[x] = smallfloat     case 01 ");
+        LogResult.assertTrue1(sfs == null);
+    end
+
+    function arrayVariables18(){@Test}
+        sfs = new smallFloat[2];
+        LogResult.logStdOut("array[x] = smallfloat     case 02 ");
+        LogResult.assertTrue1(sfs[1] == 0 && sfs[1] == sfs[2]);
+    end
+
+    function arrayVariables19(){@Test}
+        LogResult.logStdOut("array[x] = smallfloat     case 03 ");
+        try
+            sfs[1] = 123456789123.12;
+            LogResult.assertTrue1(true);
+        onException(ex anyexception)
+            LogResult.assertTrue1(false);
+            LogResult.logStdOut(" sfs[1] = " + sfs[1]);
+        end
+    end
+
+    function arrayVariables20(){@Test}
+        sfs = new smallFloat[2];
+        sfs[1] = 0.0;
+        LogResult.logStdOut("array[x] = smallfloat     case 04 ");
+        LogResult.assertTrue1(sfs[1] == 0);
+    end
+
+    function arrayVariables21(){@Test}
+        sfs = new smallFloat[2];
+        sfs[1] = 123.45;
+        sfs[2] = 123.54;
+        LogResult.logStdOut("array[x] = smallfloat     case 05 ");
+        LogResult.assertTrue1(sfs[1] < sfs[2]);
+    end
+
+    function arrayVariables22(){@Test}
+        sfs = new smallFloat[2];
+        sfs[1] = 123456789.123;
+        sfs[2] = 123456789.123;
+        LogResult.logStdOut("array[x] = smallfloat     case 06 ");
+        LogResult.assertTrue1(sfs[1] == sfs[2]);
+    end
+
+    function arrayVariables23(){@Test}
+        sfs = new smallFloat[2];
+        sfs[1] = 123456789.123;
+        sfs[2] = 123456789.123;
+        sfs.appendElement(123.45);
+        sfs.appendElement(123.45);
+        LogResult.logStdOut("array[x] = smallfloat     case 07 ");
+        LogResult.assertTrue1(sfs[3] == sfs[4] && sfs.getSize() == 4);
+    end
+
+    function arrayVariables24(){@Test}
+        sfs = new smallFloat[2];
+        sfs[1] = 123456789.123;
+        sfs[2] = 123456789.123;
+        sfs.appendElement(123.45);
+        sfs.appendElement(123.45);
+        sfs.removeElement(3);
+        LogResult.logStdOut("array[x] = smallfloat     case 08 ");
+        LogResult.assertTrue1(sfs[3] == 123.45 && sfs.getSize() == 3);
+    end
+
+    function arrayVariables24_2(){@Test}
+    	LogResult.logStdOut("array[x] = decimal        case 01 ");
+    	pass boolean = false;
+        try
+        	dc decimal(10, 2)[] = [123456789123.12, 112333.89];
+        onException(ex anyexception)
+        	pass = true;
+        end
+        LogResult.assertTrue1(pass);
+    end
+
+    function arrayVariables25(){@Test}
+        LogResult.logStdOut("array[x] = string default val");
+        LogResult.assertTrue1(MyStringASpec[1] == MyStringASpec[2]);
+    end
+
+    function arrayVariables26(){@Test}
+        LogResult.logStdOut("array[] = string ");
+        MyString = "MyString";
+        MyStringAEmpty.appendElement(MyString);
+        MyStringAEmpty.appendElement(MyString);
+        LogResult.assertTrue1(MyStringAEmpty[1] == MyStringAEmpty[2]);
+    end
+
+    function arrayVariables27(){@Test}
+        LogResult.logStdOut("array[x] = string ");
+        MyString = "MyString";
+        MyStringASpec[1] = MyString;
+        MyStringASpec[2] = MyString;
+        LogResult.assertTrue1(MyStringASpec[1] == MyStringASpec[2]);
+    end
+
+    function arrayVariables28(){@Test}
+        LogResult.logStdOut("array[x] = record def value");
+        LogResult.assertTrue1(myrecASpec[1].aString == myrecASpec[2].aString);
+    end
+
+    function arrayVariables29(){@Test}
+        LogResult.logStdOut("array[] = record ");
+        myrec.aString = "Hello World";
+        myrecAEmpty.appendElement(myrec);
+        myrecAEmpty.appendElement(myrec);
+        LogResult.assertTrue1(myrecAEmpty[1].aString == myrecAEmpty[2].aString);
+    end
+
+    function arrayVariables30(){@Test}
+        LogResult.logStdOut("array[x] = record");
+        myrec.aString = "Hello World";
+        myrecASpec[1] = myrec;
+        myrecASpec[2] = myrec;
+        LogResult.assertTrue1(myrecASpec[1].aString == myrecASpec[2].aString);
+    end
+    //
+    //    function arrayVariables31(){@Test}
+    //        LogResult.logStdOut("array[][] = decimal ");
+    //        EMPTYdecARRAY MyDecimal[2];
+    //        Mydec = 34.55;
+    //        MydecAEmptyDim.appendElement(EMPTYdecARRAY);
+    //        MydecAEmptyDim[1][1] = Mydec;
+    //        MydecAEmptyDim[1][2] = Mydec;
+    //        LogResult.assertTrue1(MydecAEmptyDim[1][1] == MydecAEmptyDim[1][2]);
+    //    end
+    //
+    //    function arrayVariables32(){@Test}
+    //        LogResult.logStdOut("array[x][x] = decimal ");
+    //        MydecASpecDim[1][1] = Mydec;
+    //        MydecASpecDim[1][2] = Mydec;
+    //        LogResult.assertTrue1(MydecASpecDim[1][1] == MydecASpecDim[1][2]);
+    //    end
+    
+    function arrayVariables33(){@Test}
+        LogResult.logStdOut("array[][] = string ");
+        //EMPTYstringARRAY string[2];
+        EMPTYstringARRAY string[] = new string[2];
+        MyString = "MyString";
+        MyStringAEmptyDim.appendElement(EMPTYstringARRAY);
+        MyStringAEmptyDim[1][1] = MyString;
+        MyStringAEmptyDim[1][2] = MyString;
+        LogResult.assertTrue1(MyStringAEmptyDim[1][1] == MyStringAEmptyDim[1][2]);
+    end
+
+    function arrayVariables34(){@Test}
+        LogResult.logStdOut("array[x][x] = string ");
+        MyString = "MyString";
+        MyStringASpecDim[1][1] = MyString;
+        MyStringASpecDim[1][2] = MyString;
+        LogResult.assertTrue1(MyStringASpecDim[1][1] == MyStringASpecDim[1][2]);
+    end
+
+    function arrayVariables35(){@Test}
+        LogResult.logStdOut("array[][] = record");
+        myrec.aString = "Hello World";
+        myrecAEmptyDim.appendElement(EMPTYMyRecordArray);
+        myrecAEmptyDim[1][1] = myrec;
+        myrecAEmptyDim[1][2] = myrec;
+        LogResult.assertTrue1(myrecAEmptyDim[1][1].aString == myrecAEmptyDim[1][2].aString);
+    end
+
+    function arrayVariables36(){@Test}
+        LogResult.logStdOut("array[x][x] = record");
+        myrec.aString = "Hello World";
+        myrecASpecDim[1][1] = myrec;
+        myrecASpecDim[1][2] = myrec;
+        LogResult.assertTrue1(myrecASpecDim[1][1].aString == myrecASpecDim[1][2].aString);
+    end
+
+    //    function arrayVariables37(){@Test}
+    //        LogResult.logStdOut("decimal = array[] ");
+    //        Mydec2 = MydecAEmpty[1];
+    //        LogResult.assertTrue1(Mydec2 == MydecAEmpty[1]);
+    //    end
+    //
+    //    function arrayVariables38(){@Test}
+    //        LogResult.logStdOut("decimal = array[x]");
+    //        Mydec2 = MydecASpec[1];
+    //        LogResult.assertTrue1(Mydec2 == MydecASpec[1]);
+    //    end
+    
+    function arrayVariables39(){@Test}
+        LogResult.logStdOut("string = array[]");
+        MyString2 = MyStringAEmpty[1];
+        LogResult.assertTrue1(MyString2 == MyStringAEmpty[1]);
+    end
+
+    function arrayVariables40(){@Test}
+        LogResult.logStdOut("string = array[x]");
+        MyString2 = MyStringASpec[1];
+        LogResult.assertTrue1(MyString2 == MyStringASpec[1]);
+    end
+
+    function arrayVariables41(){@Test}
+        LogResult.logStdOut("record = array[]");
+        myrec2 = myrecAEmpty[1];
+        LogResult.assertTrue1(myrec2.aString == myrecAEmpty[1].aString);
+    end
+
+    function arrayVariables42(){@Test}
+        LogResult.logStdOut("record= array[x]");
+        myrec2 = myrecASpec[1];
+        LogResult.assertTrue1(myrec2.aString == myrecASpec[1].aString);
+    end
+
+    //    function arrayVariables43(){@Test}
+    //        LogResult.logStdOut("decimalA[] resize");
+    //        MydecAEmpty.resize(3);
+    //        LogResult.assertTrue1(MydecAEmpty.getSize() == 3);
+    //    end
+    //
+    //    function arrayVariables44(){@Test}
+    //        LogResult.logStdOut("decimalA[] = array[] ");
+    //        MydecAEmpty.resize(3);
+    //        MydecAEmpty[3] = MydecAEmpty[1];
+    //        LogResult.assertTrue1(MydecAEmpty[3] == MydecAEmpty[1]);
+    //    end
+    //
+    //    function arrayVariables45(){@Test}
+    //        LogResult.logStdOut("decimalA[x] resize");
+    //        MydecASpec.resize(3);
+    //        LogResult.assertTrue1(MydecASpec.getSize() == 3);
+    //    end
+    //
+    //    function arrayVariables46(){@Test}
+    //        LogResult.logStdOut("decimalA[x] = array[x]");
+    //        MydecASpec.resize(3);
+    //        MydecASpec[3] = MydecASpec[1];
+    //        LogResult.assertTrue1(MydecASpec[3] == MydecASpec[1]);
+    //    end
+    //
+    //    function arrayVariables47(){@Test}
+    //        LogResult.logStdOut("decimalA[x] = array[]");
+    //        MydecASpec.resize(3);
+    //        MydecASpec[3] = MydecAEmpty[1];
+    //        LogResult.assertTrue1(MydecASpec[3] == MydecAEmpty[1]);
+    //    end
+    //
+    //    function arrayVariables48(){@Test}
+    //        LogResult.logStdOut("decimalA[] = array[x]");
+    //        MydecAEmpty.resize(3);
+    //        MydecAEmpty[3] = MydecASpec[1];
+    //        LogResult.assertTrue1(MydecAEmpty[3] == MydecASpec[1]);
+    //    end
+    
+    function arrayVariables49(){@Test}
+    	LogResult.logStdOut("stringA[] resize");
+        MyStringAEmpty.resize(3);
+        LogResult.assertTrue1(MyStringAEmpty.getSize() == 3);
+    end
+
+    function arrayVariables50(){@Test}
+    	LogResult.logStdOut("stringA[] = array[]");
+        MyStringAEmpty.resize(3);
+        MyStringAEmpty[3] = MyStringAEmpty[1];
+        LogResult.assertTrue1(MyStringAEmpty[3] == MyStringAEmpty[1]);
+    end
+
+    function arrayVariables51(){@Test}
+   		LogResult.logStdOut("stringA[x] resize");
+        MyStringASpec.resize(3);
+        LogResult.assertTrue1(MyStringASpec.getSize() == 3);
+    end
+
+    function arrayVariables52(){@Test}
+    	LogResult.logStdOut("stringA[x] = array[x]");
+        MyStringASpec.resize(3);
+        MyStringASpec[3] = MyStringASpec[1];
+        LogResult.assertTrue1(MyStringASpec[3] == MyStringASpec[1]);
+    end
+
+    function arrayVariables53(){@Test}
+    	LogResult.logStdOut("stringA[x] = array[]");
+        MyStringASpec.resize(3);
+        MyStringASpec[3] = MyStringAEmpty[1];
+        LogResult.assertTrue1(MyStringASpec[3] == MyStringAEmpty[1]);
+    end
+
+    function arrayVariables54(){@Test}
+    	LogResult.logStdOut("stringA[] = array[x]");
+        MyStringAEmpty.resize(3);
+        MyStringAEmpty[3] = MyStringASpec[1];
+        LogResult.assertTrue1(MyStringAEmpty[3] == MyStringASpec[1]);
+    end
+
+    function arrayVariables55(){@Test}
+ 		LogResult.logStdOut("recordA[] resize");
+    	myrecAEmpty.resize(3);
+    	LogResult.assertTrue1(myrecAEmpty.getSize() == 3);
+    end
+
+    function arrayVariables56(){@Test}
+  		LogResult.logStdOut("recordA[] = array[]");
+   		myrecAEmpty.resize(3);
+   		myrecAEmpty[3] = myrecAEmpty[1];
+   		LogResult.assertTrue1(myrecAEmpty[3].aString == myrecAEmpty[1].aString);
+    end
+
+    function arrayVariables57(){@Test}
+    	LogResult.logStdOut("recordA[x] resize");
+        myrecASpec.resize(3);
+        LogResult.assertTrue1(myrecASpec.getSize() == 3);
+    end
+
+    function arrayVariables58(){@Test}
+    	LogResult.logStdOut("recordA[x] = array[x]");
+      	myrecASpec.resize(3);
+       	myrecASpec[3] = myrecASpec[1];
+       	LogResult.assertTrue1(myrecASpec[3].aString == myrecASpec[1].aString);
+    end
+
+    function arrayVariables59(){@Test}
+    	LogResult.logStdOut("recordA[x] = array[]");
+        myrecASpec.resize(3);
+        myrecASpec[3] = myrecAEmpty[1];
+        LogResult.assertTrue1(myrecASpec[3].aString == myrecAEmpty[1].aString);
+    end
+
+    function arrayVariables60(){@Test}
+		LogResult.logStdOut("recordA[] = array[x]");
+	    myrecAEmpty.resize(3);
+	    myrecAEmpty[3] = myrecASpec[1];
+	    LogResult.assertTrue1(myrecAEmpty[3].aString == myrecASpec[1].aString);
+    end
+
+//        function arrayVariables61(){@Test}
+//            LogResult.logStdOut("decimalA[][] = array[][] ");
+//            Mydec = 34.55;
+//            MydecAEmptyDim[1][1] = Mydec;
+//            MydecAEmptyDim[1][2] = Mydec;
+//            MydecAEmptyDim.appendElement(MydecAEmptyDim[1]);
+//            LogResult.assertTrue1((MydecAEmptyDim[2][1] == MydecAEmptyDim[1][1]) &&
+//                            (MydecAEmptyDim[2][2] == MydecAEmptyDim[1][2]));
+//        end
+    //
+    //    function arrayVariables62(){@Test}
+    //        LogResult.logStdOut("decimalA[x][x] = array[x][x]");
+    //        Mydec = 34.55;
+    //        MydecAEmptyDim[1][1] = Mydec;
+    //        MydecAEmptyDim[1][2] = Mydec;
+    //        MydecAEmptyDim.appendElement(MydecAEmptyDim[1]);
+    //        MydecASpecDim[2] = MydecASpecDim[1];
+    //        LogResult.assertTrue1((MydecASpecDim[2][1] == MydecASpecDim[1][1]) &&(
+    //                        MydecASpecDim[2][2] == MydecASpecDim[1][2]));
+    //    end
+    
+    //    function arrayVariables63(){@Test}
+    //        //ints int[1][1];
+    //        ints int[][] = new int[1][1];
+    //        cc int = ints[1].getSize();
+    //        //intsizes int[2];
+    //        intsizes int[] = new int[2];
+    //        intsizes[1] = 2;
+    //        intsizes[2] = 2;
+    //        ints.resizeAll(intsizes);
+    //        level1 int;
+    //        level1 = ints.getSize();
+    //        level2 int;
+    //        level2 = ints[1].getSize();
+    //        LogResult.logStdOut("resize all on ints ");
+    //        LogResult.assertTrue1((level1 == 2) &&(level2 == 2));
+    //    end
+    
+    //    function arrayVariables64(){@Test}
+    //        LogResult.logStdOut("dec[][] resizeall");
+    //        sizes[1] = 3;
+    //        sizes[2] = 3;
+    //        level1 int;
+    //        MydecAEmptyDim.resizeAll(sizes);
+    //        level1 = MydecAEmptyDim.getSize();
+    //        level22 int;
+    //        level22 = MydecAEmptyDim[1].getSize();
+    //        LogResult.assertTrue1((level1 == 3) &&(level22 == 3));
+    //    end
+    
+    //    function arrayVariables65(){@Test}
+    //        LogResult.logStdOut("Declare max size property no spec");
+    //        ws = xx.getMaxSize();
+    //        LogResult.assertTrue1(ws == 2);
+    //    end
+    //
+    //    function arrayVariables67(){@Test}
+    //        LogResult.logStdOut("set max size to -1");
+    //        xx.appendElement(1);
+    //        xx.appendElement(2);
+    //        xx.setMaxSize(3);
+    //        er = xx.getMaxSize();
+    //        LogResult.assertTrue1(er == 3);
+    //    end
+    //
+    //    function arrayVariables68(){@Test}
+    //        LogResult.logStdOut("test max size by appendelement");
+    //        xx.setMaxSize(3);
+    //        xx.appendElement(1);
+    //        xx.appendElement(2);
+    //        xx.appendElement(3);
+    //        LogResult.assertTrue1(xx[3] == 3);
+    //    end
+    //
+    //    function arrayVariables69(){@Test}
+    //        LogResult.logStdOut("Declare max size property bounded");
+    //        LogResult.assertTrue1(xxy.getMaxSize() == 2);
+    //    end
+    
+    function arrayVariables70(){@Test}
+        LogResult.logStdOut("appendall test");
+        //zz int[0];
+        zz int[] = new int[0];
+        zz.appendElement(1);
+        zz.appendElement(2);
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        zz.appendAll(zz1);
+        LogResult.assertTrue1(zz[1] == 1 && zz[2] == 2 && zz[3] == 3 && zz[4] == 4);
+    end
+
+    function arrayVariables71(){@Test}
+        LogResult.logStdOut("insert and remove test");
+        //zz int[0];
+        zz int[] = new int[0];
+        zz.appendElement(1);
+        zz.appendElement(2);
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        zz.appendAll(zz1);
+        zz.insertElement(zz[4], 1);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 2);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 3);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 4);
+        zz.removeElement(5);
+        zzint int;
+        zzint = zz.getSize();
+        LogResult.assertTrue1(zzint == 4 && zz[1] == 4 && zz[2] == 3 && zz[3] == 2 && zz[4] == 1);
+    end
+
+    function arrayVariables72(){@Test}
+        LogResult.logStdOut("appendall with incompatible types");
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        //zzq int[0];
+        zzq int[] = new int[0];
+        zzq.appendElement(1);
+        zzq.appendElement(2);
+        zzq.appendAll(zz1);
+        LogResult.assertTrue1(4 == zzq.getSize() && 1 == zzq[1] && 2 == zzq[2] && 3 == zzq[3] && 4 == zzq[4]);
+    end
+
+    function arrayVariables73(){@Test}
+        LogResult.logStdOut("declaring array of dbchar");
+        LogResult.logStdOut("literal init of arrays spec");
+        //ff int[2] =[1, 2];
+        ff int[] =[1, 2];
+        LogResult.assertTrue1(ff[1] == 1 && ff[2] == 2);
+    end
+
+    function arrayVariables74(){@Test}
+        LogResult.logStdOut("literal init of arrays empty");
+        //ff2 int[0] =[1, 2];
+        ff2 int[] =[1, 2];
+        LogResult.assertTrue1(ff2[1] == 1 && ff2[2] == 2);
+    end
+
+    function arrayVariables75(){@Test}
+        LogResult.logStdOut("literal init of arrays spec multi ");
+        //ff3 int[3][2] =[[1, 2],[3, 4],[5, 6]];
+        ff3 int[][] =[[1, 2],[3, 4],[5, 6]];
+        LogResult.assertTrue1(ff3[1][1] == 1 && ff3[1][2] == 2 && ff3[2][1] == 3 && ff3[2][2] == 4 && ff3[3][1] == 5 && ff3[3][2] == 6);
+    end
+
+    function arrayVariables76(){@Test}
+        LogResult.logStdOut("literal init of arrays mixed multi ");
+        //ff5 int[3][0] =[[1, 2],[3, 4],[5, 6]];
+        ff5 int[][] =[[1, 2],[3, 4],[5, 6]];
+        LogResult.assertTrue1(ff5[1][1] == 1 && ff5[1][2] == 2 && ff5[2][1] == 3 && ff5[2][2] == 4 && ff5[3][1] == 5 && ff5[3][2] == 6);
+    end
+
+    function arrayVariables77(){@Test}
+        LogResult.logStdOut("literal init of arrays multi empty");
+        //ff4 int[0][0] =[[1, 2],[3, 4],[5, 6]];
+        ff4 int[][] =[[1, 2],[3, 4],[5, 6]];
+        LogResult.assertTrue1(ff4[1][1] == 1 && ff4[1][2] == 2 && ff4[2][1] == 3 && ff4[2][2] == 4 && ff4[3][1] == 5 && ff4[3][2] == 6);
+    end
+
+    function arrayVariables78(){@Test}
+        LogResult.logStdOut("literal init of arrays spec any");
+        //ffa any[2] =[1, "2"];
+        ffa any[] =[1, "2"];
+        LogResult.assertTrue1(ffa[1] as int == 1 && ffa[2] as string == "2");
+    end
+
+    function arrayVariables79(){@Test}
+        LogResult.logStdOut("literal init of arrays empty any");
+        //ff2a any[0] =[1, "2"];
+        ff2a any[] =[1, "2"];
+        LogResult.assertTrue1(ff2a[1] as int == 1 && ff2a[2] as string == "2");
+    end
+
+    function arrayVariables80(){@Test}
+        LogResult.logStdOut("literal init of arrays mixed multi any");
+        //ff5a any[3][0] =[[1, 2],[3, 4],[5, 6]];
+       	ff5a any[][] =[[1, 2],[3, 4],[5, 6]];
+        LogResult.assertTrue1(ff5a[1][1] as int == 1 && ff5a[1][2] as int == 2 && ff5a[2][1] as int == 3 && ff5a[2][2] as int == 4 &&
+                       ff5a[3][1] as int == 5 && ff5a[3][2] as int == 6);
+    end
+
+    function arrayVariables81(){@Test}
+       LogResult.logStdOut("literal init of arrays multi empty any");
+       //ff4a any[0][0] =[[1, 2],[3, 4],[5, 6]];
+       ff4a any[][] =[[1, 2],[3, 4],[5, 6]];
+       LogResult.assertTrue1(ff4a[1][1] as int == 1 && ff4a[1][2] as int == 2 && ff4a[2][1] as int == 3 && ff4a[2][2] as int == 4 &&
+                      ff4a[3][1] as int == 5 && ff4a[3][2] as int == 6);                      
+    end
+
+    //    function arrayVariables82(){@Test}
+    //        LogResult.logStdOut("Declare max size property no spec multidim");
+    //        EMPTYintARRAY int[2];
+    //        xx1 int[0][0]{maxSize = 3};
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        ws1 int;
+    //        ws1 = xx1.getMaxSize();
+    //        LogResult.assertTrue1(3==ws1);
+    //    end
+    //
+    //    function arrayVariables83(){@Test}
+    //        ws1 int;
+    //        EMPTYintARRAY int[2];
+    //        xx1 int[0][0]{maxSize = 3};
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        LogResult.logStdOut("Maxsize for multidimensional array");
+    //        ws1 = xx1[1].getMaxSize();
+    //        LogResult.assertTrue1(2147483647==ws1);
+    //    end
+    //
+    //    function arrayVariables84(){@Test}
+    //        LogResult.logStdOut("set max size to 100 multidim");
+    //        EMPTYintARRAY int[2];
+    //        xx1 int[0][0]{maxSize = 3};
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        sizes[1] = 100;
+    //        sizes[2] = 200;
+    //        xx1.setMaxSizes(sizes);
+    //        LogResult.assertTrue1(100==xx1.getMaxSize());
+    //    end
+    //
+    //    function arrayVariables85(){@Test}
+    //        LogResult.logStdOut("set max size to 200 multidim");
+    //        EMPTYintARRAY int[2];
+    //        xx1 int[0][0]{maxSize = 3};
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        xx1.appendElement(EMPTYintARRAY);
+    //        sizes[1] = 100;
+    //        sizes[2] = 200;
+    //        xx1.setMaxSizes(sizes);
+    //        LogResult.assertTrue1(200==xx1[1].getMaxSize());
+    //    end
+    //
+    //    function TestArrayFunctions1(){@Test}
+    //        LogResult.logStdOut("test max size with appendelement - uncomment code to test");
+    //        EMPTYintARRAY int[2];
+    //        xx int[0]{maxSize = 2};
+    //        xx.appendElement(1);
+    //        xx.appendElement(2);
+    //        LogResult.logStdOut("test max size with appendelement - check size");
+    //        LogResult.assertTrue1(2==xx.getSize());
+    //        LogResult.logStdOut("test max size with appendelement - check maxsize");
+    //        LogResult.assertTrue1(2==xx.getMaxSize());
+    //        LogResult.logStdOut("test max size by appendelement");
+    //        try
+    //            xx.appendElement(3);
+    //            LogResult.assertTrue1(false);
+    //        onException(exception AnyException)
+    //            LogResult.assertTrue1(true);
+    //        end
+    //    end
+    //
+    //    function TestArrayFunctions2(){@Test}
+    //        sizes int[2];
+    //        sizes[1] = -1;
+    //        sizes[2] = -1;
+    //        LogResult.logStdOut("set max size to -1");
+    //        try
+    //            sizes.setMaxSize(-1);
+    //            LogResult.assertTrue1(false);
+    //        onException(exception AnyException)
+    //            LogResult.assertTrue1(true);
+    //        end
+    //    end
+    //
+    //    function TestArrayFunctions3(){@Test}
+    //        LogResult.logStdOut("Declare max size property bounded");
+    //        xxy int[2]{maxSize = 2};
+    //        LogResult.assertTrue1(xxy.getMaxSize() == 2);
+    //    end
+    
+    function TestArrayFunctions4(){@Test}
+        //zz int[0];
+        zz int[] = new int[0];
+        zz.appendElement(1);
+        zz.appendElement(2);
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        zz.appendAll(zz1);
+        LogResult.logStdOut("appendall test");
+        LogResult.assertTrue1(1 == zz[1] && 2 == zz[2] && 3 == zz[3] && 4 == zz[4]);
+    end
+
+    function TestArrayFunctions5(){@Test}
+        LogResult.logStdOut("insert and remove test");
+        //zz int[0];
+        zz int[] = new int[0];
+        zz.appendElement(1);
+        zz.appendElement(2);
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        zz.appendAll(zz1);
+        zz.insertElement(zz[4], 1);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 2);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 3);
+        zz.removeElement(5);
+        zz.insertElement(zz[4], 4);
+        zz.removeElement(5);
+        LogResult.assertTrue1(4 == zz.getSize() && 4 == zz[1] && 3 == zz[2] && 2 == zz[3] && 1 == zz[4]);
+    end
+
+    function TestArrayFunctions6(){@Test}
+        //zz1 int[0];
+        zz1 int[] = new int[0];
+        zz1.appendElement(3);
+        zz1.appendElement(4);
+        //zzq int[0];
+        zzq int[] = new int[0];
+        zzq.appendElement(1);
+        zzq.appendElement(2);
+        zzq.appendAll(zz1);
+        LogResult.logStdOut("appendall with incompatible types");
+        LogResult.assertTrue1(4 == zzq.getSize() && 1 == zzq[1] && 2 == zzq[2] && 3 == zzq[3] && 4 == zzq[4]);
+    end
+
+    //    function TestArrayFunctions7(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        bString string[0];
+    //        anInt int;
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        LogResult.logStdOut("Test appendAll(appendArray array in)");
+    //        LogResult.assertTrue1(2==anInt);
+    //    end
+    //
+    //    function TestArrayFunctions8(){@Test}
+    //        LogResult.logStdOut("Test appendElement(content arrayElement in)");
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        LogResult.assertStringEqual1("anElement", aString[3]);
+    //    end
+    //
+    //    function TestArrayFunctions9(){@Test}
+    //        LogResult.logStdOut("Test getMaxSize() function");
+    //        aString string[0]{maxSize = 10};
+    //        anInt = aString.getMaxSize();
+    //        LogResult.assertTrue1(10==anInt);
+    //    end
+    //
+    //    function TestArrayFunctions10(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        anInt = aString.getSize();
+    //        LogResult.logStdOut("Test appendAll(appendArray array in)");
+    //        LogResult.logStdOut("Test getSize() function");
+    //        LogResult.assertTrue1(4==anInt);
+    //    end
+    //
+    //    function TestArrayFunctions11(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        aString.insertElement("insertedElement", 1);
+    //        LogResult.logStdOut("Test insertElement(content arrayElement in , index int in)");
+    //        LogResult.assertStringEqual1("insertedElement", aString[1]);
+    //    end
+    //
+    //    function TestArrayFunctions12(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        aString.removeAll();
+    //        anInt = aString.getSize();
+    //        LogResult.logStdOut("Test removeAll() function");
+    //        LogResult.assertTrue1(0==anInt);
+    //    end
+    //
+    //    function TestArrayFunctions13(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        bString.removeElement(1);
+    //        LogResult.logStdOut("Test removeElement(index int in)");
+    //        LogResult.assertStringEqual1("secondElement", bString[1]);
+    //    end
+    //
+    //    function TestArrayFunctions14(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        bString.insertElement("firstElement", 1);
+    //        bString.resize(1);
+    //        anInt = bString.getSize();
+    //        LogResult.logStdOut("Test resize(size int in)");
+    //        LogResult.assertTrue1(1==anInt);
+    //    end
+    //
+    //    function TestArrayFunctions15(){@Test}
+    //        aString.appendElement("firstElement");
+    //        aString.appendElement("secondElement");
+    //        aString.appendElement("anElement");
+    //        bString.appendAll(aString);
+    //        anInt = bString.getSize();
+    //        aString.appendElement("anotherElement");
+    //        bString.insertElement("firstElement", 1);
+    //        bString.resize(1);
+    //        anInt = bString.getSize();
+    //        bString.setMaxSize(15);
+    //        anInt = bString.getMaxSize();
+    //        LogResult.logStdOut("Test setMaxSize(size int in)");
+    //        LogResult.assertTrue1(15==anInt);
+    //    end
+
+    function TestNewArray01(){@Test}
+    	a int[] = new int[ 3 ];
+    	LogResult.assertBigintEqual( "new int[3] size", 3, a.getSize() );
+    end    
+    
+    function TestNewArray02(){@Test}
+    	a int?[] = new int?[ 3 ];
+    	LogResult.assertBigintEqual( "new int?[3] size", 3, a.getSize() );
+    end    
+
+    function TestNewArray03(){@Test}
+    	a myEmptyRecord[] = new myEmptyRecord[ 3 ];
+    	LogResult.assertBigintEqual( "new myEmptyRecord[3] size", 3, a.getSize() );
+    end    
+
+    function TestNewArray04(){@Test}
+    	a myEmptyRecord?[] = new myEmptyRecord?[ 3 ];
+    	LogResult.assertBigintEqual( "new myEmptyRecord?[3] size", 3, a.getSize() );
+    end    
+
+    function TestNewArray05(){@Test}
+    	anInt = 4;
+    	bigsize int = 2 + anInt * anInt + anInt * 12 - (anInt / 2);
+    	a int[] = new int[ bigsize ];
+    	LogResult.assertBigintEqual( "new int[expression] size", 64, a.getSize() );
+    end    
+
+    function TestArrayAs01(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj int[] = ii as int[];
+    	LogResult.assertBigintEqual( "int[] as int[] - check size", 4, jj.getSize() );
+    end    
+
+    function TestArrayAs02(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj int[] = ii as int[];
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as int[] - check element values", ok );
+    end    
+
+    function TestArrayAs03(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj int[] = ii as int[];
+    	ok boolean = true;
+    	for ( i int to jj.getSize() )
+    		if ( !(jj[ i ] isa int) )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as int[] - check element types", ok );
+    end    
+
+    function TestArrayAs04(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj int[] = ii as int[];
+    	for ( i int to ii.getSize() )
+    		ii[ i ] += 1;
+    	end
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] + 1 )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as int[] - check AS makes a copy", ok );
+    end    
+
+    function TestArrayAs05(){@Test}
+    	ii decimal(4,1)[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	LogResult.assertBigintEqual( "decimal(4,1)[] as decimal(4,1)[] - check size", 4, jj.getSize() );
+    end    
+
+    function TestArrayAs06(){@Test}
+    	ii decimal(4,1)[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "decimal(4,1)[] as decimal(4,1)[] - check element values", ok );
+    end    
+
+    function TestArrayAs07(){@Test}
+    	ii decimal(4,1)[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to jj.getSize() )
+    		if ( !(jj[ i ] isa decimal(4,1)) )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "decimal(4,1)[] as decimal(4,1)[] - check element types", ok );
+    end    
+    
+    function TestArrayAs08(){@Test}
+    	ii decimal(4,1)[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	for ( i int to ii.getSize() )
+    		ii[ i ] += 1;
+    	end
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] + 1 )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "decimal(4,1)[] as decimal(4,1)[] - check AS makes a copy", ok );
+    end    
+
+    function TestArrayAs09(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	LogResult.assertBigintEqual( "int[] as decimal(4,1)[] - check size", 4, jj.getSize() );
+    end    
+
+    function TestArrayAs10(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as decimal(4,1)[] - check element values", ok );
+    end    
+
+    function TestArrayAs11(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to jj.getSize() )
+    		if ( !(jj[ i ] isa decimal(4,1)) )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as decimal(4,1)[] - check element types", ok );
+    end    
+    
+    function TestArrayAs12(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	for ( i int to ii.getSize() )
+    		ii[ i ] += 1;
+    	end
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] + 1 )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as decimal(4,1)[] - check AS makes a copy", ok );
+    end    
+
+    function TestArrayAs13(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj any[] = ii as any[];
+    	LogResult.assertBigintEqual( "int[] as any[] - check size", 4, jj.getSize() );
+    end    
+
+    function TestArrayAs14(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj any[] = ii as any[];
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as any[] - check element values", ok );
+    end    
+
+    function TestArrayAs15(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj any[] = ii as any[];
+    	ok boolean = true;
+    	for ( i int to jj.getSize() )
+    		if ( !(jj[ i ] isa any) )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as any[] - check element types", ok );
+    end    
+    
+    function TestArrayAs16(){@Test}
+    	ii int[] = [ 4, 3, 2, 1 ];
+    	jj any[] = ii as any[];
+    	for ( i int to ii.getSize() )
+    		ii[ i ] += 1;
+    	end
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != (jj[ i ] as int) + 1 )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "int[] as any[] - check AS makes a copy", ok );
+    end    
+    
+    function TestArrayAs17(){@Test}
+    	ii any[] = [ 004.0, 003.0, 002.0, 001.0 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	LogResult.assertBigintEqual( "any[] as decimal(4,1)[] - check size", 4, jj.getSize() );
+    end    
+
+    function TestArrayAs18(){@Test}
+    	ii any[] = [ 004.0, 003.0, 002.0, 001.0 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "any[] as decimal(4,1)[] - check element values", ok );
+    end    
+
+    function TestArrayAs19(){@Test}
+    	ii any[] = [ 004.0, 003.0, 002.0, 001.0 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	ok boolean = true;
+    	for ( i int to jj.getSize() )
+    		if ( !(jj[ i ] isa decimal(4,1)) )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "any[] as decimal(4,1)[] - check element types", ok );
+    end    
+    
+    function TestArrayAs20(){@Test}
+    	ii any[] = [ 004.0, 003.0, 002.0, 001.0 ];
+    	jj decimal(4,1)[] = ii as decimal(4,1)[];
+    	for ( i int to ii.getSize() )
+    		ii[ i ] = (ii[ i ] as decimal(4,1)) + 1;
+    	end
+    	ok boolean = true;
+    	for ( i int to MathLib.min( ii.getSize(), jj.getSize() ) )
+    		if ( ii[ i ] != jj[ i ] + 1 )
+    			ok = false;
+    			exit for;
+    		end
+    	end
+    	LogResult.assertTrue( "any[] as decimal(4,1)[] - check AS makes a copy", ok );
+    end    
+
+    function TestArrayAs21(){@Test}
+    	talkers Talk[] = [ SayHello, SayGoodbye ];
+    	a any[] = talkers as any[];
+    	chatter string;
+    	for ( i int to a.getSize() )
+    		chatter ::= (a[i] as Talk)( "EGL User" );
+    	end
+    	LogResult.assertStringEqual( "any[] of delegates", chatter, "Hello EGL UserGoodbye EGL User" );
+    end    
+
+    function TestArrayAs22(){@Test}
+    	talkers Talk[] = [ SayHello, SayGoodbye ];
+    	a any[] = talkers as any[];
+    	talkers[ 1 ] = SayGoodbye;
+    	chatter string;
+    	for ( i int to a.getSize() )
+    		chatter ::= (a[i] as Talk)( "EGL User" );
+    	end
+    	LogResult.assertStringEqual( "any[] of delegates (check that a copy is made)", chatter, "Hello EGL UserGoodbye EGL User" );
+    end    
+
+    function arrayParameterFunction(parameter string[]) returns(string[])
+        return(parameter);
+    end
+
+    function ReturnString() returns(string)
+        s string[] = new string[0];
+        s[1] = "World";
+        return(s[1]);
+    end
+    
+    function SayHello( name string in ) returns( string )
+    	return "Hello " :: name;
+    end
+    
+    function SayGoodbye( name string in ) returns( string )
+    	return "Goodbye " :: name;
+    end
+end
+
+delegate Talk( name string in ) returns( string );

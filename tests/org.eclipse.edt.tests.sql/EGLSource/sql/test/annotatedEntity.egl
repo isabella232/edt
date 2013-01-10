@@ -1,0 +1,35 @@
+package sql.test;
+
+import eglx.persistence.Id;
+import eglx.persistence.Transient;
+import eglx.persistence.sql.Column;
+import eglx.persistence.sql.GeneratedValue;
+import eglx.persistence.sql.Table;
+
+// basic handler
+
+handler annotatedEntity { @Table {name="ANNOTATEDTBL"} } 
+
+	id int {@Id, @GeneratedValue, @Column { name="col_id" } };
+	varCharCol string { @Column { name="col_string" } } ;
+	nullableCol int? { @Column { name="col_nullable" } } ;	
+	updateableCol int? { @Column { name="col_updateable", insertable=false } };
+	insertableCol int? { @Column { name="col_insertable", updateable=false } };
+	derivedCol int { @Column { name="col_insertable + 1000" , insertable=false, updateable=false } } ;
+	transientCol int { @Column { name="0" , insertable=false, updateable=false } } ;
+	
+	transientColAlso int { @Transient } ;
+	
+	function setEmpty ( )
+		id = 0 ;
+		varCharCol = "" ;
+		nullableCol = null ;
+		updateableCol = 0 ;
+		insertableCol = 0 ;
+		transientCol = 0 ;
+		transientColAlso = 0 ;
+		nullableCol = 0 ;
+	end
+	
+end 
+ 

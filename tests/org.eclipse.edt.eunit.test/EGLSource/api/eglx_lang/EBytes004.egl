@@ -1,0 +1,139 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes004
+  * @title EBytes004 - runParameterFunction
+  * @description testing use of bytes as a parameter
+  * @testcases runParameterFunction01 - runParameterFunction12
+  * @sources EBytes004.egl
+  * @keywords bytes, functions, parameter
+ **/
+library EBytes004
+	B1 bytes;
+	B1Nullable bytes?;
+	const B2 bytes = 0x9aa0d2;
+	const B3 bytes = 0x9273b5;
+	B4 bytes;
+	
+	function runParameterFunction01(){@Test}
+		B1 = B2;
+		passValueAsIn(B1);
+		LogResult.assertTrue("Bytes passed as in parameter", B2 == B1);
+	end
+	
+	function runParameterFunction02(){@Test}
+		B1 = B2;
+		passValueAsInOut(B1);
+		LogResult.assertTrue("Bytes passed as inout parameter", B3 == B1);
+	end
+	
+	function runParameterFunction03(){@Test}
+		B1 = B2;
+		passValueAsOut(B1);
+		LogResult.assertTrue("Bytes returned as out parameter", B3 == B1);
+	end
+	
+	function runParameterFunction04(){@Test}
+		B1 = B2;
+		B1 = returnABytesValue();
+		LogResult.assertTrue("Bytes returned", B3 == B1);
+	end
+	
+	function runParameterFunction05(){@Test}
+		B1Nullable = B2;
+		passNullableValueAsIn(B1Nullable);
+		LogResult.assertTrue("Nullable Bytes passed as in parameter", B2 == B1Nullable);
+	end
+	
+	function runParameterFunction06(){@Test}
+		B1Nullable = B2;
+		passNullableValueAsInOut(B1Nullable);
+		LogResult.assertTrue("Nullable Bytes passed as inout parameter", B3 == B1Nullable);
+	end
+	
+	function runParameterFunction07(){@Test}
+		B1Nullable = B2;
+		passNullableValueAsOut(B1Nullable);
+		LogResult.assertTrue("Nullable Bytes returned as out parameter", B3 == B1Nullable);
+	end
+	
+	function runParameterFunction08(){@Test}
+		B1Nullable = B2;
+		B1Nullable = returnANullableBytesValue();
+		LogResult.assertTrue("Nullable Bytes returned", B3 == B1Nullable);
+	end
+	
+	function passValueAsIn(inBytes bytes in)
+		inBytes = B3;
+	end
+	
+	function passValueAsInOut(inBytes bytes inout)
+		inBytes = B3;
+	end
+	
+	function passValueAsOut(outBytes bytes out)
+		outBytes = B3;
+	end
+	
+	function returnABytesValue() returns (bytes)
+		return (B3);
+	end
+	
+	function passNullableValueAsIn(inBytes bytes? in)
+		inBytes = B3;
+	end
+	
+	function passNullableValueAsInOut(inBytes bytes? inout)
+		inBytes = B3;
+	end
+	
+	function passNullableValueAsOut(outBytes bytes? out)
+		outBytes = B3;
+	end
+	
+	function returnANullableBytesValue() returns (bytes?)
+		return (B3);
+	end
+	
+	function runParameterFunction09(){@Test}
+		B1 = 0x123456;
+		LogResult.assertTrue("Bytes passed as in parameter, value within function", checkInValue(B1));
+	end
+	
+	function runParameterFunction10(){@Test}
+		B1 = 0x123456;
+		LogResult.assertTrue("Bytes passed as inout parameter, value within function", checkInOutValue(B1));
+	end
+	
+	function runParameterFunction11(){@Test}
+		B1 = 0x123456;
+		LogResult.assertTrue("Bytes passed as out parameter, value within function", checkOutValue(B1));
+	end
+	
+	function checkInValue( x bytes in ) returns( boolean )
+		return( x == 0x123456 );
+	end
+	
+	function checkInOutValue( x bytes inout ) returns( boolean )
+		return( x == 0x123456 );
+	end
+	
+	function checkOutValue( x bytes out ) returns( boolean )
+		return( x == new bytes );
+	end
+	
+	function runParameterFunction12(){@Test}
+		B1 = 0x123456;
+		B4 = 0x000000;
+		changeGlobalValue(B1);
+		LogResult.assertTrue("Bytes passed as inout parameter, change global variable", B4 == 0x123456 );
+	end
+	
+	function changeGlobalValue( x bytes inout )
+		B4 = x;
+	end
+end

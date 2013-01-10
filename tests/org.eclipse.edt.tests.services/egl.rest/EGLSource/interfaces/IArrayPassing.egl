@@ -1,0 +1,70 @@
+package interfaces;
+
+import data.ArrayContainingRecord;
+import data.SimpleRecord;
+import eglx.rest.EglService;
+
+library IArrayPassing
+
+	function singleIn(_array string[] in) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function singleInout(_array string[] inOut)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function singleOut(_array string[] out)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function singleAll(_array1 string[] in, _array2 string[] inOut, _array3 string[] out) returns (string[])
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function simpleRecordArrayIn(recArray SimpleRecord[] in) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function simpleRecordArrayInout(recArray SimpleRecord[] inOut)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function simpleRecordArrayOut(recArray SimpleRecord[] out)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function simpleRecordArrayAll(recArray1 SimpleRecord[] in, recArray2 SimpleRecord[] inOut, recArray3 SimpleRecord[] out) returns (SimpleRecord[])
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function arrayContainingRecordArrayIn(recArray ArrayContainingRecord[] in) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function arrayContainingRecordArrayInout(recArray ArrayContainingRecord[] inOut)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function arrayContainingRecordArrayOut(recArray ArrayContainingRecord[] out)
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+	function arrayContainingRecordArrayAll(recArray1 ArrayContainingRecord[] in, recArray2 ArrayContainingRecord[] inOut, recArray3 ArrayContainingRecord[] out) returns (ArrayContainingRecord[])
+		{
+			@EglService {serviceName = "services.ArrayPassing"}
+		}
+	end
+end
+

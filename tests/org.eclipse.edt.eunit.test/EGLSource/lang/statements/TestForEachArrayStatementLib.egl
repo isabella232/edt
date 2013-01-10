@@ -1,0 +1,167 @@
+package lang.statements;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+// This is the function test program for valid FOR in EGLV7 for RichUI
+//
+// The testFor function tests use of each data type valid as an integer, as well as numeric literals and
+// expressions for the controls of the for statement. In addition, the data items used as
+// controls may come from a standalone data item, an item of a record, a dynamic item array, 
+// an item of a fixed array of a record, an item of a library, an item of a record within
+// a library, or a dynamic item array element.
+
+Library TestForEachArrayStatementLib
+ 
+	Function testForEachStatement1(){@Test}
+		  
+		LogResult.logStdOut("Test looping through literal array");		
+		
+		total int = 0;
+		foreach (i int from [1,2,3,4,5,6,7,8,9,10])
+			total = total + i;
+		end
+		
+		LogResult.assertTrue1(total == 1+2+3+4+5+6+7+8+9+10);
+				
+	end	
+	
+	Function testForEachStatement2(){@Test}
+		
+		LogResult.logStdOut("Test looping through a list of strings");		
+		
+		buffer String;
+		list String[] = getListOfValues();
+		foreach (s string from list)
+			buffer = concat(buffer, s);
+		end
+		
+		LogResult.assertStringEqual1(buffer, "1313 Mockingbird Lane Mayberry NC 28603");
+				
+	end
+
+	Function testForEachStatement3(){@Test}
+		
+		LogResult.logStdOut("Test looping through a list from a function invocation");		
+		
+		buffer String;
+		foreach (s string from getListOfValues())
+			buffer = concat(buffer, s);
+		end
+		
+		LogResult.assertStringEqual1(buffer, "1313 Mockingbird Lane Mayberry NC 28603");
+				
+	end
+
+	Function testForEachStatement4(){@Test}
+		
+		LogResult.logStdOut("Test NVE");		
+		
+		foundException boolean;
+		
+		list int[]? = null;
+		try			
+			foreach (i int from list)
+			end
+		onexception (exception NullValueException)
+			foundException = true;
+		onexception (exception AnyException)
+		end
+		
+		LogResult.assertTrue("Failed to throw NVE", foundException);
+				
+	end
+	
+	Function testForEachStatement5(){@Test}
+		
+		LogResult.logStdOut("Test looping through list of records");		
+		
+		list rec1[] = new rec1[10];
+		counter int;
+		foreach (r rec1 from list)
+			counter = counter + 1;
+			r.field1 = counter;
+		end
+		
+		LogResult.assertTrue1(counter == 10);
+				
+	end
+
+	Function testForEachStatement6(){@Test}
+		
+		LogResult.logStdOut("Test looping through new expressions");		
+				
+		counter int;
+		foreach (r rec1 from new rec1[10])
+			counter = counter + 1;
+			r.field1 = counter;
+		end
+		
+		LogResult.assertTrue1(counter == 10);
+				
+	end
+	
+	Function testForEachStatement7(){@Test}
+		  
+		LogResult.logStdOut("Test looping through int?[] with int");	
+		
+		correctException boolean = false;
+		list int?[] = [1,2,3,4,5,6,7,8,9,10];
+		try			
+			list[5] = null;
+			total int = 0;
+			foreach (i int from list)
+				total = total + i;
+			end
+		onexception (exception NullValueException)
+			correctException = true;
+		onexception (exception AnyException)
+			LogResult.logStdOut("Other exception " + exception.message);
+		end
+		
+		LogResult.assertTrue("Failed to throw NVE", correctException);
+			
+	end	
+	
+	Function testForEachStatement8(){@Test}
+		  
+		LogResult.logStdOut("Test looping through int?[] with int?");	
+		foundException boolean;
+		list int?[] = [1,2,3,4,5,6,7,8,9,10];		
+		list[5] = null;
+		total int = 0;
+		foreach (i int? from list)
+			if (i != null)
+				total = total + i;
+			end
+		end
+		LogResult.assertTrue1(total == 1+2+3+4+6+7+8+9+10);
+	end	
+	
+	
+	private function concat(str1 String, str2 String) returns (String) 
+		if (str1 == "")
+			return str2;
+		end
+		if (str2 == "")
+			return str1;
+		end
+		
+		return (str1 + " " + str2);
+	end
+	
+	private function getListOfValues() returns (String[])
+		list String[] = new String[5];
+		list[1] = "1313";
+		list[2] = "Mockingbird Lane";
+		list[3] = "Mayberry";
+		list[4] = "NC";
+		list[5] = "28603";
+		return list;
+	end
+	
+end
+
+record rec1
+	field1 int;
+end

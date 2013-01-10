@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource name="Fedwire">
+	<storedValue key="DefaultBuildDescriptorJavaDebugName" value="Fedwire_Java"/>
+	<storedValue key="EGLProjectFeatureMask" value="4"/>
+	<storedValue key="DefaultBuildDescriptorJavaTargetPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptDebugName" value="Fedwire_JavaScript"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptTargetName" value="Fedwire_JavaScript"/>
+	<storedValue key="EGLProjectMigrationVersion" value="7.5.0"/>
+	<storedValue key="DefaultBuildDescriptorJavaDebugPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+	<storedValue key="DefaultBuildDescriptorJavaTargetName" value="Fedwire_Java"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptDebugPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+	<storedValue key="DefaultBuildDescriptorJavaScriptTargetPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+	<resource name="EGLSource">
+		<resource name="services">
+			<storedValue key="DefaultBuildDescriptorJavaTargetPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+			<storedValue key="DefaultBuildDescriptorJavaTargetName" value="Fedwire_Java"/>
+		</resource>
+		<resource name="handlers">
+			<storedValue key="DefaultBuildDescriptorJavaScriptTargetName" value="Fedwire_JavaScript"/>
+			<storedValue key="DefaultBuildDescriptorJavaScriptTargetPath" value="Fedwire/EGLSource/Fedwire.eglbld"/>
+		</resource>
+	</resource>
+</resource>

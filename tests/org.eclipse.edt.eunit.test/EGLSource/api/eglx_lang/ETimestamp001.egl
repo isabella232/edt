@@ -1,0 +1,407 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp001
+  * @title EdtTimestamp001 - runAssignmentFunction
+  * @description testing timestamp assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction65
+  * @sources EdtTimestamp001.egl
+  * @keywords timestamp, functions, assignemnt
+ **/
+library ETimestamp001 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff");
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss");
+	varTimeStampDate timeStamp("yyyyMMdd");
+	varTimeStampYDate timeStamp("yyyy");
+	varTimeStampYMDate timeStamp("yyyyMM");
+	varTimeStampMDDate timeStamp("MMdd");
+	varTimeStampDHDate timeStamp("ddHH");
+	varTimeStampTime timeStamp("HHmmss");
+	varTimeStampHMTime timeStamp("HHmm");
+	varTimeStampMSTime timeStamp("mmss");
+	variation string;
+	 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTimestampEqual("constant initialization", "2011-10-07 12:17:59", constTimeStamp);
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		LogResult.assertTrue("constant full initialization", (constTimeStampFull == "2011-12-31 10:55:30.987000") );
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		LogResult.assertTimestampEqual("constant datetime initialization", "2011-12-31 10:55:30", constTimeStampDateTime);
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		LogResult.assertTrue("constant date initialization", (constTimeStampDate == "2011-12-31") );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		LogResult.assertTrue("constant Ydate initialization", (constTimeStampYDate == "2012") );
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		LogResult.assertTrue("constant YMdate initialization", (constTimeStampYMDate == "2011-06") );
+	end
+	
+	function runAssignmentFunction07(){@Test}
+		LogResult.assertTrue("constant MDdate initialization", (constTimeStampMDDate == "06-15") );
+	end
+	
+	function runAssignmentFunction08(){@Test}
+		LogResult.assertTrue("constant DHdate initialization", (constTimeStampDHDate == "24 09") );
+	end
+	
+	function runAssignmentFunction09(){@Test}
+		LogResult.assertTrue("constant time initialization", (constTimeStampTime == "11:31:00") );
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		LogResult.assertTrue("constant HMtime initialization", (constTimeStampHMTime == "15:18") );
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		LogResult.assertTrue("constant MStime initialization", (constTimeStampMSTime == "16:15") );
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		LogResult.assertTrue("variable full initialization", (varTimeStampFull != "") );
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		LogResult.assertTrue("variable datetime initialization", (varTimeStampDateTime != "") );
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		LogResult.assertTrue("variable date initialization", (varTimeStampDate != "") );
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		LogResult.assertTrue("variable Ydate initialization", (varTimeStampYDate != "") );
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		LogResult.assertTrue("variable YMdate initialization", (varTimeStampYMDate != "") );
+	end
+	
+	function runAssignmentFunction17(){@Test}
+		LogResult.assertTrue("variable MDdate initialization", (varTimeStampMDDate != "") );
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		LogResult.assertTrue("variable DHdate initialization", (varTimeStampDHDate != "") );
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		LogResult.assertTrue("variable time initialization", (varTimeStampTime != "") );
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		LogResult.assertTrue("variable HMtime initialization", (varTimeStampHMTime != "") );
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		LogResult.assertTrue("variable MStime initialization", (varTimeStampMSTime != "") );
+	end
+	
+	function runAssignmentFunction22(){@Test}
+		mytimeStamp timeStamp?;
+		LogResult.assertTrue("nullable isNull", (mytimeStamp == null));
+	end
+	
+	function runAssignmentFunction23(){@Test}
+		mytimeStampFull timeStamp("yyyyMMddHHmmssffffff")?;
+		LogResult.assertTrue("nullable full isNull", (mytimeStampFull == null));
+	end
+	
+	function runAssignmentFunction24(){@Test}
+		mytimeStampDateTime timeStamp("yyyyMMddHHmmss")?;
+		LogResult.assertTrue("nullable datetime isNull", (mytimeStampDateTime == null));
+	end
+	
+	function runAssignmentFunction25(){@Test}
+		mytimeStampDate timeStamp("yyyyMMdd")?;
+		LogResult.assertTrue("nullable date isNull", (mytimeStampDate == null));
+	end
+	
+	function runAssignmentFunction26(){@Test}
+		mytimeStampYDate timeStamp("yyyy")?;
+		LogResult.assertTrue("nullable Ydate isNull", (mytimeStampYDate == null));
+	end
+	
+	function runAssignmentFunction27(){@Test}
+		mytimeStampYMDate timeStamp("yyyyMM")?;
+		LogResult.assertTrue("nullable YMdate isNull", (mytimeStampYMDate == null));
+	end
+	
+	function runAssignmentFunction28(){@Test}
+		mytimeStampMDDate timeStamp("MMdd")?;
+		LogResult.assertTrue("nullable MDdate isNull", (mytimeStampMDDate == null));
+	end
+	
+	function runAssignmentFunction29(){@Test}
+		mytimeStampDHDate timeStamp("ddHH")?;
+		LogResult.assertTrue("nullable DHdate isNull", (mytimeStampDHDate == null));
+	end
+	
+	function runAssignmentFunction30(){@Test}
+		mytimeStampTime timeStamp("HHmmss")?;
+		LogResult.assertTrue("nullable time isNull", (mytimeStampTime == null));
+	end
+	
+	function runAssignmentFunction31(){@Test}
+		mytimeStampHMDate timeStamp("HHmm")?;
+		LogResult.assertTrue("nullable HMdate isNull", (mytimeStampHMDate == null));
+	end
+	
+	function runAssignmentFunction32(){@Test}
+		mytimeStampMSTime timeStamp("mmss")?;
+		LogResult.assertTrue("nullable mstime isNull", (mytimeStampMSTime == null));
+	end
+	
+	function runAssignmentFunction33(){@Test}
+		mytimeStamp timeStamp?;
+		mytimeStamp = constTimeStamp;
+		LogResult.assertTrue("nullable not Null", (mytimeStamp != null ));
+	end
+	
+	function runAssignmentFunction34(){@Test}
+		mytimeStampFull timeStamp("yyyyMMddHHmmssffffff")?;
+		mytimeStampFull = constTimeStampFull;
+		LogResult.assertTrue("nullable full not Null", (mytimeStampFull != null ));
+	end
+	
+	function runAssignmentFunction35(){@Test}
+		mytimeStampDateTime timeStamp("yyyyMMddHHmmss")?;
+		mytimeStampDateTime = constTimeStampDateTime;
+		LogResult.assertTrue("nullable datetime not Null", (mytimeStampDateTime != null ));
+	end
+	
+	function runAssignmentFunction36(){@Test}
+		mytimeStampDate timeStamp("yyyyMMdd")?;
+		mytimeStampDate = constTimeStampDate;
+		LogResult.assertTrue("nullable date not Null", (mytimeStampDate != null ));
+	end
+	
+	function runAssignmentFunction37(){@Test}
+		mytimeStampYDate timeStamp("yyyy")?;
+		mytimeStampYDate = constTimeStampYDate;
+		LogResult.assertTrue("nullable Ydate not Null", (mytimeStampYDate != null ));
+	end
+	
+	function runAssignmentFunction38(){@Test}
+		mytimeStampYMDate timeStamp("yyyyMM")?;
+		mytimeStampYMDate = constTimeStampYMDate;
+		LogResult.assertTrue("nullable YMdate not Null", (mytimeStampYMDate != null ));
+	end
+	
+	function runAssignmentFunction39(){@Test}
+		mytimeStampMDDate timeStamp("MMdd")?;
+		mytimeStampMDDate = constTimeStampMDDate;
+		LogResult.assertTrue("nullable MDdate not Null", (mytimeStampMDDate != null ));
+	end
+	
+	function runAssignmentFunction40(){@Test}
+		mytimeStampDHDate timeStamp("ddHH")?;
+		mytimeStampDHDate = constTimeStampDHDate;
+		LogResult.assertTrue("nullable DHdate not Null", (mytimeStampDHDate != null ));
+	end
+
+	function runAssignmentFunction41(){@Test}
+		mytimeStampTime timeStamp("HHmmss")?;
+		mytimeStampTime = constTimeStampTime;
+		LogResult.assertTrue("nullable time not Null", (mytimeStampTime != null ));
+	end
+	
+	function runAssignmentFunction42(){@Test}
+		mytimeStampHMTime timeStamp("HHmm")?;
+		mytimeStampHMTime = constTimeStampHMTime;
+		LogResult.assertTrue("nullable HMdate not Null", (mytimeStampHMTime != null ));
+	end
+	
+	function runAssignmentFunction43(){@Test}
+		mytimeStampMSTime timeStamp("mmss")?;
+		mytimeStampMSTime = constTimeStampMSTime;
+		LogResult.assertTrue("nullable mstime not Null", (mytimeStampMSTime != null ));
+	end
+	
+	function runAssignmentFunction44(){@Test}
+		mytimeStamp timeStamp?;
+		mytimeStamp = constTimeStamp;
+		mytimeStamp = null;
+		LogResult.assertTrue("nullable reset to Null", (mytimeStamp == null ));
+	end
+	
+	function runAssignmentFunction45(){@Test}
+		mytimeStampFull timeStamp("yyyyMMddHHmmssffffff")?;
+		mytimeStampFull = constTimeStampFull;
+		mytimeStampFull = null;
+		LogResult.assertTrue("nullable full reset to Null", (mytimeStampFull == null ));
+	end
+	
+	function runAssignmentFunction46(){@Test}
+		mytimeStampDateTime timeStamp("yyyyMMddHHmmss")?;
+		mytimeStampDateTime = constTimeStampDateTime;
+		mytimeStampDateTime = null;
+		LogResult.assertTrue("nullable datetime reset to Null", (mytimeStampDateTime == null ));
+	end
+	
+	function runAssignmentFunction47(){@Test}
+		mytimeStampDate timeStamp("yyyyMMdd")?;
+		mytimeStampDate = constTimeStampDate;
+		mytimeStampDate = null;
+		LogResult.assertTrue("nullable date reset to Null", (mytimeStampDate == null ));
+	end
+	
+	function runAssignmentFunction48(){@Test}
+		mytimeStampYDate timeStamp("yyyy")?;
+		mytimeStampYDate = constTimeStampYMDate;
+		mytimeStampYDate = null;
+		LogResult.assertTrue("nullable Ydate reset to Null", (mytimeStampYDate == null ));
+	end
+	
+	function runAssignmentFunction49(){@Test}
+		mytimeStampYMDate timeStamp("yyyyMM")?;
+		mytimeStampYMDate = constTimeStampYMDate;
+		mytimeStampYMDate = null;
+		LogResult.assertTrue("nullable YMdate reset to Null", (mytimeStampYMDate == null ));
+	end
+	
+	function runAssignmentFunction50(){@Test}
+		mytimeStampMDDate timeStamp("MMdd")?;
+		mytimeStampMDDate = constTimeStampMDDate;
+		mytimeStampMDDate = null;
+		LogResult.assertTrue("nullable MDdate reset to Null", (mytimeStampMDDate == null ));
+	end
+	
+	function runAssignmentFunction51(){@Test}
+		mytimeStampDHDate timeStamp("ddHH")?;
+		mytimeStampDHDate = constTimeStampDHDate;
+		mytimeStampDHDate = null;
+		LogResult.assertTrue("nullable DHdate reset to Null", (mytimeStampDHDate == null ));
+	end
+	
+	function runAssignmentFunction52(){@Test}
+		mytimeStampTime timeStamp("HHmmss")?;
+		mytimeStampTime = constTimeStampTime;
+		mytimeStampTime = null;
+		LogResult.assertTrue("nullable time reset to Null", (mytimeStampTime == null ));
+	end
+	
+	function runAssignmentFunction53(){@Test}
+		mytimeStampHMTime timeStamp("HHmm")?;
+		mytimeStampHMTime = constTimeStampHMTime;
+		mytimeStampHMTime = null;
+		LogResult.assertTrue("nullable HMtime reset to Null", (mytimeStampHMTime == null ));
+	end
+	
+	function runAssignmentFunction54(){@Test}
+		mytimeStampMSTime timeStamp("mmss")?;
+		mytimeStampMSTime = constTimeStampMSTime;
+		mytimeStampMsTime = null;
+		LogResult.assertTrue("nullable MStime reset to Null", (mytimeStampMSTime == null ));
+	end
+	
+	function runAssignmentFunction55(){@Test}
+		mytimeStamp, another timeStamp?;
+		mytimeStamp = constTimeStamp;
+		mytimeStamp = another;
+		LogResult.assertTrue("nullable indirectly set to null", (mytimeStamp == null ));
+	end
+	
+	function runAssignmentFunction56(){@Test}
+		mytimeStampFull, another timeStamp("yyyyMMddHHmmssffffff")?;
+		mytimeStampFull = constTimeStampFull;
+		mytimeStampFull = another;
+		LogResult.assertTrue("nullable full indirectly set to null", (mytimeStampFull == null ));
+	end
+	
+	function runAssignmentFunction57(){@Test}
+		mytimeStampDateTime, another timeStamp("yyyyMMddHHmmss")?;
+		mytimeStampDateTime = constTimeStampDateTime;
+		mytimeStampDateTime = another;
+		LogResult.assertTrue("nullable datetime indirectly set to null", (mytimeStampDateTime == null ));
+	end
+	
+	function runAssignmentFunction58(){@Test}
+		mytimeStampDate, another timeStamp("yyyyMMdd")?;
+		mytimeStampDate = constTimeStampDate;
+		mytimeStampDate = another;
+		LogResult.assertTrue("nullable date indirectly set to null", (mytimeStampDate == null ));
+	end
+	
+	function runAssignmentFunction59(){@Test}
+		mytimeStampYDate, another timeStamp("yyyy")?;
+		mytimeStampYDate = constTimeStampYDate;
+		mytimeStampYDate = another;
+		LogResult.assertTrue("nullable Ydate indirectly set to null", (mytimeStampYDate == null ));
+	end
+	
+	function runAssignmentFunction60(){@Test}
+		mytimeStampYMDate, another timeStamp("yyyyMM")?;
+		mytimeStampYMDate = constTimeStampYMDate;
+		mytimeStampYMDate = another;
+		LogResult.assertTrue("nullable YMdate indirectly set to null", (mytimeStampYMDate == null ));
+	end
+	
+	function runAssignmentFunction61(){@Test}
+		mytimeStampMDDate, another timeStamp("MMdd")?;
+		mytimeStampMDDate = constTimeStampMDDate;
+		mytimeStampMDDate = another;
+		LogResult.assertTrue("nullable MDdate indirectly set to null", (mytimeStampMDDate == null ));
+	end
+	
+	function runAssignmentFunction62(){@Test}
+		mytimeStampDHDate, another timeStamp("ddHH")?;
+		mytimeStampDHDate = constTimeStampDHDate;
+		mytimeStampDHDate = another;
+		LogResult.assertTrue("nullable DHdate indirectly set to null", (mytimeStampDHDate == null ));
+	end
+	
+	function runAssignmentFunction63(){@Test}
+		mytimeStampTime, another timeStamp("HHmmss")?;
+		mytimeStampTime = constTimeStampTime;
+		mytimeStampTime = another;
+		LogResult.assertTrue("nullable time indirectly set to null", (mytimeStampTime == null ));
+	end
+	
+	function runAssignmentFunction64(){@Test}
+		mytimeStampHMTime, another timeStamp("HHmm")?;
+		mytimeStampHMTime = constTimeStampHMTime;
+		mytimeStampHMTime = another;
+		LogResult.assertTrue("nullable HMtime indirectly set to null", (mytimeStampHMTime == null ));
+	end
+	
+	function runAssignmentFunction65(){@Test}
+		mytimeStampMSTime, another timeStamp("mmss")?;
+		mytimeStampMSTime = constTimeStampMSTime;
+		mytimeStampMSTime = another;
+		LogResult.assertTrue("nullable MStime indirectly set to null", (mytimeStampMSTime == null ));
+	end
+
+end

@@ -1,0 +1,272 @@
+package fvt.datatypes;
+
+//DataItem TextLine string end
+//DataItem Char10 char(10) { value = "initial" } end
+
+//Record ReportLine 
+//	text TextLine ;
+//end
+//
+//Record ReptLine 
+//	text TextLine ;
+//end
+
+record ReportFile
+    text string;
+    // 	newLineControl char(1) ;
+    newLineControl string;
+end
+
+record TotalsFile
+//	embed ReportFile ;
+    text string;
+    // 	newLineControl char(1) ;
+    newLineControl string;
+end
+
+record ResetFile
+//	embed ReportFile ;
+    text string;
+    // 	newLineControl char(1) ;
+    newLineControl string;
+end
+
+record ResetTotalsFile
+//	embed ReportFile ;
+    text string;
+    // 	newLineControl char(1) ;
+    newLineControl string;
+end
+
+record longDetails
+//	detail unicode(1000) ;
+//	subDetail unicode(100)[10]  ;
+    detail string;
+    //subDetail string[10]  ;
+    subDetail string[] = new string[10];
+end
+
+record mediumRecord
+//	firstItem char(10);
+//	secondItem char(10);
+    firstItem string;
+    secondItem string;
+end
+
+record longRecord
+//	firstItem char(10);
+//	secondItem char(10);
+//	thirdItem char(10);
+    firstItem string;
+    secondItem string;
+    thirdItem string;
+end
+
+//Record ReportQueueFile type serialRecord { fileName = "REPORTQ" }
+//	text FixedTextLine ;
+//end
+//
+//Record DetailsQueueFile  type serialRecord { fileName = "TESTMSQ" }
+//	text FixedTextLine ;
+//end
+//
+//Record TotalsQueueFile type serialRecord { fileName = "TOTSMSQ" }
+//	text FixedTextLine ;
+//end
+
+//record AnSqlRecord 
+//	sqlItem1 char(10) ;
+//	sqlItem2 char(10) ;
+//	sqlItem3 char(10) ;
+//	sqlItem4 char(10) ;
+//end
+
+//Record Char10Rec type basicRecord
+//	char10 Char10 ;
+//end
+//DataItem IntAsChar char(10) end
+//DataItem IntAsNum  num(10) end
+//Record NumAsCharRec  
+//	intAsChar intAsChar ;
+//	intAsNum intAsNum ;
+//end
+
+//Record LongDetail
+//	detail unicode(1000) ;
+//	subDetail unicode(100)[10] ;
+//end
+
+record TotalState
+    stateDbm string;
+    stateDriver string;
+    stateTest string;
+    defect string;
+    reportQueue string;
+    totalsQueue string;
+    reportTDQueue string;
+    totalsTDQueue string;
+    successTestCount smallInt;
+    totalTestCount smallInt;
+    stateTestCount smallInt;
+    accumulateTotals smallInt;
+    junitTest smallInt;
+    trace smallInt;
+    variationCount int;
+    successCount int;
+    failureCount int;
+    knownFailureCount int;
+    newFailureCount int;
+    fixedFailureCount int;
+    totalVariationCount int;
+    totalSuccessCount int;
+    totalFailureCount int;
+    totalKnownFailureCount int;
+    totalNewFailureCount int;
+    totalFixedFailureCount int;
+    selectedTestCount int;
+    selectedTestCountSize int;
+    //selectedTestIndices int[200] ;
+    selectedTestIndices int[] = new int[200];
+end
+
+record AnyFlexRecord
+    aString string;
+    //	aUnicode Unicode(20) ;
+    aDate date;
+    //aThing Any ;
+    aThing any?;
+end
+
+record arrayFlexArrayRecord
+//    aChar string [20] ;
+//    aMoney int [20] ;
+    aChar string[] = new string[20];
+    aMoney int[] = new int[20];
+end
+
+record arrayFlexRecord
+    aChar string;
+    aMoney int;
+end
+
+record FlexRecord
+    aString string;
+    //aUnicode Unicode(20) ; 
+end
+
+//DataItem LongInterval interval ( "ddddddhhmmssffffff" ) end
+
+record DynRecordTest
+    aString string;
+    aDec decimal(4, 2);
+    aTS timeStamp?;
+    //aInterval LongInterval;
+    //	aStringThing any;
+    //	aDecThing any;
+    //	aTSThing any;
+    //	aIntervalThing any;
+    //	aRecordThing any;
+    aStringThing any?;
+    aDecThing any?;
+    aTSThing any?;
+    aIntervalThing any?;
+    aRecordThing any?;
+end
+
+record SubDynRecordTest
+    aString string;
+    //aDec MyDecimal;
+    aTS timeStamp?;
+    //aInterval LongInterval;
+    aString2 string;
+    //aDec2 MyDecimal;
+    aTS2 timeStamp?;
+    //aInterval2 LongInterval;	
+end
+
+record MyRecord
+    aString string;
+    //	aUnicode Unicode(20) ;
+    aDate date;
+    //	aThing Any ;
+end
+
+record MyFlexRecordTest
+    aString string;
+    aUnicode string; //Unicode(20) ;
+    aDate date;
+    aInt int;
+end
+
+record FlxFlexRecord
+    aString string;
+    //	aChar Char(20) ;
+    anInt int;
+    //	aStringArray String[3] ;
+    //	bStringArray String[0] ;
+    //	aFixRec FlxFixedChild ;
+    //	aFixRecArray FlxFixedChild[3] ;
+    //	bFixRecArray FlxFixedChild[0] ;
+    aFlexRec FlxFlexChild;
+    //	aFlexRecArray FlxFlexChild[3] ;
+    //	bFlexRecArray FlxFlexChild[0] ;
+    sf smallFloat;
+end
+
+record FlxFlexChild
+    aString string;
+    //	aUnicode Unicode(20) ;
+    //aMoney Money(16,2) ;  
+end
+
+
+	
+
+// -- CURRENTLY NO FIXED RECORD SUPPORT --	
+//Record AnyFixedRecord type basicRecord
+//	10 aHex hex(8) ;
+//		15 aBin bin(9, 4) ;
+//	10 aSmallFloat smallFloat ;
+//	10 aTime Time ;
+//end
+//
+//
+//Record ArrayFixedRecord
+//	20 aChar char(10) ;
+//	20 aMoney money ;
+//	20 aNum num (16,2) ;
+//	20 aUnicode unicode(10) ;
+//end 
+//
+//Record ArrayFixedArrayRecord
+////  10 * [20] ;
+//	10 filler [20] ;
+//		20 aChar char(10) ;
+//		20 aMoney money ;
+//		20 aNum num (16,2) ;
+//		20 aUnicode unicode(10) ;
+//end 
+//
+//Record FixedRecord type basicRecord
+//	10 aHex hex(24) ;
+//		15 aBin bin(9, 4) ;
+//		15 aChar8 char(8) ;
+//	10 aSmallFloat smallFloat ;
+//	10 aTime Time ;
+//end
+//
+//Record FlxFixedChild type basicRecord
+//	10 aChar char(10) ;
+//		15 aHex hex(20) ;
+//	10 aFloat float ;
+//end
+//
+//Record clnFixedRecord type basicRecord
+//	10 aHex hex(60) ;
+//		15 aChar char(30) ;
+//end
+//
+//record shortRecord
+//	10 firstItem char(10);
+//end
+

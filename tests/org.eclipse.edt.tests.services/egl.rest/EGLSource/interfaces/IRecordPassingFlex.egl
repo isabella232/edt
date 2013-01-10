@@ -1,0 +1,145 @@
+package interfaces;
+
+import data.StringRec;
+import eglx.rest.EglService;
+
+
+library IRecordPassingFlex
+
+	function outerFlexibleRecordIn(flex data.OuterFlexibleRecord in) returns (string)
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function outerFlexibleRecordInout(flex data.OuterFlexibleRecord inOut)
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function outerFlexibleRecordOut(flex data.OuterFlexibleRecord out)
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function outerFlexibleRecordAll(flex1 data.OuterFlexibleRecord in, flex2 data.OuterFlexibleRecord inOut, flex3 data.OuterFlexibleRecord out) returns (string)
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function bigIntFlexAll(flex1 data.bigIntFlexRecord in, flex2 data.bigIntFlexRecord inOut, flex3 data.bigIntFlexRecord out) returns (bigInt[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function bigIntArrayFlexAll(flexArray1 data.bigIntArrayFlexRecord in, flexArray2 data.bigIntArrayFlexRecord inOut, flexArray3 data.bigIntArrayFlexRecord out) returns (bigInt[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function intFlexAll(flex1 data.intFlexRecord in, flex2 data.intFlexRecord inOut, flex3 data.intFlexRecord out) returns (int[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function intArrayFlexAll(flexArray1 data.intArrayFlexRecord in, flexArray2 data.intArrayFlexRecord inOut, flexArray3 data.intArrayFlexRecord out) returns (int[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function smallIntFlexAll(flex1 data.smallIntFlexRecord in, flex2 data.smallIntFlexRecord inOut, flex3 data.smallIntFlexRecord out) returns (smallInt[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function smallIntArrayFlexAll(flexArray1 data.smallIntArrayFlexRecord in, flexArray2 data.smallIntArrayFlexRecord inOut, flexArray3 data.smallIntArrayFlexRecord out) returns (smallInt[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function smallFloatFlexAll(flex1 data.smallFloatFlexRecord in, flex2 data.smallFloatFlexRecord inOut, flex3 data.smallFloatFlexRecord out) returns (smallFloat[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function smallFloatArrayFlexAll(flexArray1 data.smallFloatArrayFlexRecord in, flexArray2 data.smallFloatArrayFlexRecord inOut, flexArray3 data.smallFloatArrayFlexRecord out) returns (smallFloat[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function floatFlexAll(flex1 data.floatFlexRecord in, flex2 data.floatFlexRecord inOut, flex3 data.floatFlexRecord out) returns (float[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function floatArrayFlexAll(flexArray1 data.floatArrayFlexRecord in, flexArray2 data.floatArrayFlexRecord inOut, flexArray3 data.floatArrayFlexRecord out) returns (float[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function decimalFlexAll(flex1 data.decimalFlexRecord in, flex2 data.decimalFlexRecord inOut, flex3 data.decimalFlexRecord out) returns (decimal(10,2)[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function deciamlArrayFlexAll(flexArray1 data.decimalArrayFlexRecord in, flexArray2 data.decimalArrayFlexRecord inOut, flexArray3 data.decimalArrayFlexRecord out) returns (decimal(10,2)[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function stringFlexAll(flex1 data.stringFlexRecord in, flex2 data.stringFlexRecord , flex3 data.stringFlexRecord out) returns (string[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function stringArrayFlexAll(flexArray1 data.stringArrayFlexRecord in, flexArray2 data.stringArrayFlexRecord , flexArray3 data.stringArrayFlexRecord out) returns (string[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function LstringFlexAll(flex1 data.LstringFlexRecord in, flex2 data.LstringFlexRecord , flex3 data.LstringFlexRecord out) returns (string(7)[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function LstringArrayFlexAll(flexArray1 data.LstringArrayFlexRecord in, flexArray2 data.LstringArrayFlexRecord , flexArray3 data.LstringArrayFlexRecord out) returns (string(5)[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function timeStampFlexAll(flex1 data.timestampFlexRecord in, flex2 data.timestampFlexRecord ) returns (timeStamp[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function timeStampArrayFlexAll(flexArray1 data.timeStampArrayFlexRecord in, flexArray2 data.timeStampArrayFlexRecord , flexArray3 data.timeStampArrayFlexRecord out) returns (timeStamp("yyyyMMddHHmmss")[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function timeFlexAll(flex1 data.timeFlexRecord in, flex2 data.timeFlexRecord ) returns (time[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function timeArrayFlexAll(flexArray1 data.timeArrayFlexRecord in, flexArray2 data.timeArrayFlexRecord , flexArray3 data.timeArrayFlexRecord out) returns (time[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function booleanFlexAll(flex1 data.booleanFlexRecord in, flex2 data.booleanFlexRecord inOut, flex3 data.booleanFlexRecord out) returns (boolean[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function booleanArrayFlexAll(flexArray1 data.booleanArrayFlexRecord in, flexArray2 data.booleanArrayFlexRecord , flexArray3 data.booleanArrayFlexRecord out) returns (boolean[])
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+	function ratlc01399882StringRec(param1 StringRec in, param2 StringRec out, param3 StringRec inOut) returns (StringRec)
+		{
+			@EglService {serviceName = "services.RecordPassingFlex"}
+		}
+	end
+end
+

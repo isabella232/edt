@@ -1,0 +1,478 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestNullableBooleanLib
+* @title TestNullableBooleanLib - RunNullableBooleanFunctions
+* @description test case for NullableBoolean data type behavior
+* @sources TestNullableBooleanLib.egl
+* @keywords NullableBooleanRecords, functions
+**/
+
+library TestNullableBooleanLib
+
+    aFlexRec FlxFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    nBool boolean?;
+    nBool2 boolean?;
+    aBool boolean;
+
+    function runTestNullableBoolDefs1(){@Test}
+        LogResult.logStdOut("Local BOOLEAN? definition - 1");
+        LogResult.assertTrue(" (nBool==null)",(nBool == null));
+    end
+
+    function runTestNullableBoolDefs2(){@Test}
+        nBool = true;
+        LogResult.logStdOut("Local BOOLEAN? definition - 2");
+        LogResult.assertTrue(" (nBool!=null)",(nBool != null));
+    end
+
+    function runTestNullableBoolDefs3(){@Test}
+        nBool = false;
+        LogResult.logStdOut("Local BOOLEAN? definition - 3");
+        //LogResult.assertTrue(" (nBool!=null)",(nBool != null));
+        LogResult.assertTrue1(nBool == false);
+    end
+
+    function runTestNullableBoolDefs4(){@Test}
+    	// EDT unlike RBD will not create an instance if you declare an annotation
+        nB boolean?{};
+        LogResult.logStdOut("Local BOOLEAN?{} definition - 4");
+        LogResult.assertTrue(" (nB!=null)",(nB == null));
+    end
+
+    function runTestNullableBoolAssignmentToBool1(){@Test}
+        aBool boolean = false;
+        aBool = nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in assignment to BOOLEAN");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool2(){@Test}
+        aBool = !nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool3(){@Test}
+        aBool = true || nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN - 1");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool4(){@Test}
+        aBool = nBool || true;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN - 2");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool5(){@Test}
+        aBool = false || nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN - 3");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool6(){@Test}
+        aBool = nBool || false;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN - 4");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool7(){@Test}
+        aBool = true && nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN - 1");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool8(){@Test}
+        aBool = nBool && true;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN - 2");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool9(){@Test}
+        aBool = false && nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN - 3");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool10(){@Test}
+        aBool = nBool && false;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN - 4");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool11(){@Test}
+    	localBoolean boolean?;
+        localBoolean = localTestBool(true);
+        LogResult.logStdOut("Function returning null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", localBoolean == null);
+    end
+
+    function runTestNullableBoolAssignmentToBool12(){@Test}
+        aBool = true || localTestBool(false);
+        LogResult.logStdOut("Function returning null BOOLEAN? used in || expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool13(){@Test}
+        aBool = localTestBool(false) && false;
+        LogResult.logStdOut("Function returning null BOOLEAN? used in && expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool14(){@Test}
+        nBool = true;
+        aBool = nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in assignment to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool15(){@Test}
+        nBool = true;
+        aBool = !nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool16(){@Test}
+        nBool = true;
+        aBool = true || nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN - 1");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool17(){@Test}
+        nBool = true;
+        aBool = nBool || true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN - 2");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool18(){@Test}
+        nBool = true;
+        aBool = false || nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN - 3");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool19(){@Test}
+        nBool = true;
+        aBool = nBool || false;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN - 4");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool20(){@Test}
+        nBool = true;
+        aBool = true && nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN - 1");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool21(){@Test}
+        nBool = true;
+        aBool = nBool && true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN - 2");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool22(){@Test}
+        nBool = true;
+        aBool = false && nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN - 3");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool23(){@Test}
+        nBool = true;
+        aBool = nBool && false;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN - 4");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool24(){@Test}
+        nBool = true;
+        aBool = !localTestBool(false);
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,false)", aBool == false);
+    end
+
+    function runTestNullableBoolAssignmentToBool25(){@Test}
+        nBool = true;
+        aBool = true || localTestBool(false);
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in || expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToBool26(){@Test}
+        nBool = true;
+        aBool = localTestBool(false) && true;
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in && expression to BOOLEAN");
+        LogResult.assertTrue(" aBool,true)", aBool == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool1(){@Test}
+    	nBool = null;
+        nBool2 = nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in assignment to BOOLEAN?");
+        LogResult.assertTrue("(nBool==null)",(nBool == null));
+        LogResult.assertTrue(" nBool2,false)", nBool2 == null);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool2(){@Test}
+    	nBool = false;
+        nBool2 = !nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in ! unary expression to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool3(){@Test}
+        nBool2 = true || nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN? - 1");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool4(){@Test}
+        nBool2 = nBool || true;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN? - 2");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool5(){@Test}
+        nBool2 = false || nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN? - 3");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool6(){@Test}
+        nBool2 = nBool || false;
+        LogResult.logStdOut("Null BOOLEAN? used in || expression to BOOLEAN? - 4");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool7(){@Test}
+        nBool2 = true && nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN? - 1");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool8(){@Test}
+        nBool2 = nBool && true;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN? - 2");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool9(){@Test}
+        nBool2 = false && nBool;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN? - 3");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool10(){@Test}
+        nBool2 = nBool && false;
+        LogResult.logStdOut("Null BOOLEAN? used in && expression to BOOLEAN? - 4");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool11(){@Test}
+        nBool2 = localTestBool(false);
+        LogResult.logStdOut("Function returning null BOOLEAN? used in ! unary expression to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool12(){@Test}
+        nBool2 = true || localTestBool(false);
+        LogResult.logStdOut("Function returning null BOOLEAN? used in || expression to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool13(){@Test}
+        nBool2 = localTestBool(false) && false;
+        LogResult.logStdOut("Function returning null BOOLEAN? used in && expression to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool14(){@Test}
+        nBool = true;
+        nBool2 = nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in assignment to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool15(){@Test}
+        nBool = true;
+        nBool2 = !nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in ! unary expression to BOOLEAN?");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool16(){@Test}
+        nBool = true;
+        nBool2 = true || nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN? - 1");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool17(){@Test}
+        nBool = true;
+        nBool2 = nBool || true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN? - 2");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool18(){@Test}
+        nBool = true;
+        nBool2 = false || nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN? - 3");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool19(){@Test}
+        nBool = true;
+        nBool2 = nBool || false;
+        LogResult.logStdOut("Non-null BOOLEAN? used in || expression to BOOLEAN? - 4");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool20(){@Test}
+        nBool = true;
+        nBool2 = true && nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN? - 1");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool21(){@Test}
+        nBool = true;
+        nBool2 = nBool && true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN? - 2");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool22(){@Test}
+        nBool = true;
+        nBool2 = false && nBool;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN? - 3");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool23(){@Test}
+        nBool = true;
+        nBool2 = nBool && false;
+        LogResult.logStdOut("Non-null BOOLEAN? used in && expression to BOOLEAN? - 4");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool24(){@Test}
+        nBool = true;
+        nBool2 = !localTestBool(false);
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" nBool2,false)", nBool2 == false);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool25(){@Test}
+        nBool = true;
+        nBool2 = true || localTestBool(false);
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in || expression to BOOLEAN");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+
+    function runTestNullableBoolAssignmentToNullableBool26(){@Test}
+        nBool = true;
+        nBool2 = localTestBool(false) && true;
+        LogResult.logStdOut("Function returning non-null BOOLEAN? used in && expression to BOOLEAN");
+        LogResult.assertTrue(" nBool2,true)", nBool2 == true);
+    end
+    
+    function runTestNullableBoolAssignmentToNullableBool27(){@Test}
+    	try
+    		nonNull boolean;
+    		LogResult.logStdOut("Function returning null BOOLEAN? used in ! unary expression to BOOLEAN? expecting exception");
+        	nonNull = !localTestBool(true);	
+        	LogResult.failed("Expecting NullValueException");
+        onException (nullValue NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runtestNullableBoolComparisons1(){@Test}
+        nBool = null;
+        LogResult.logStdOut("Null BOOLEAN? used in == expression - 1");
+        LogResult.assertTrue(" (nBool==true),false)",(nBool == true) == false);
+    end
+
+    function runtestNullableBoolComparisons2(){@Test}
+        nBool = true;
+        LogResult.logStdOut("Null BOOLEAN? used in == expression - 2");
+        LogResult.assertTrue(" ((nBool != false) == true),false)",(nBool != false) );
+        nBool = null;
+    end
+
+    function runtestNullableBoolComparisons3(){@Test}
+        nBool = false;
+        aBool = true;
+        LogResult.logStdOut("Null BOOLEAN? used in == expression - 3");
+        LogResult.assertTrue(" (nBool == aBool),false)",(nBool == aBool) == false);
+        nBool = null;
+    end
+
+    function runtestNullableBoolComparisons4(){@Test}
+        nBool = true;
+        aBool = true;
+        LogResult.logStdOut("Null BOOLEAN? used in != expression");
+        LogResult.assertTrue(" (nBool != aBool),false)",(nBool != aBool) == false);
+    end
+
+    function runtestNullableBoolComparisons9(){@Test}
+        nBool = null;
+        aBool = true;
+        LogResult.logStdOut("Function returning null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" (!localTestBool(true)==false),false)",(localTestBool(false) == false) == false);
+    end
+
+    function runtestNullableBoolComparisons10(){@Test}
+        nBool = true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in == expression - 1");
+        LogResult.assertTrue(" (nBool==true),true)",(nBool == true) == true);
+    end
+
+    function runtestNullableBoolComparisons11(){@Test}
+        nBool = true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in == expression - 2");
+        LogResult.assertTrue(" ((nBool != false) == true),true)",((nBool != false) == true) == true);
+    end
+
+    function runtestNullableBoolComparisons12(){@Test}
+        aBool = true;
+        nBool = true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in == expression - 3");
+        LogResult.assertTrue(" (nBool == aBool),true)",(nBool == aBool) == true);
+    end
+
+    function runtestNullableBoolComparisons13(){@Test}
+        aBool = true;
+        nBool = true;
+        LogResult.logStdOut("Non-null BOOLEAN? used in != expression");
+        LogResult.assertTrue(" (nBool != aBool),false)",(nBool != aBool) == false);
+    end
+
+    function runtestNullableBoolComparisons18(){@Test}
+        aBool = true;
+        nBool = true;
+        LogResult.logStdOut("Function returning null BOOLEAN? used in ! unary expression to BOOLEAN");
+        LogResult.assertTrue(" (!localTestBool(false)==false),true)",(!localTestBool(false) == false) == true);
+    end
+    
+    function localTestBool(bRetNull boolean in) returns(boolean?)
+        if(bRetNull)
+            return(null);
+        else
+            return(true);
+        end
+    end
+
+end

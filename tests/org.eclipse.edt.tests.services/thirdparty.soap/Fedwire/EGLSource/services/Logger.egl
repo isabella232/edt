@@ -1,0 +1,9 @@
+package services;
+
+// service
+service Logger
+	
+	function log(str string in)
+		syslib.writeStdout(str);
+	end
+end

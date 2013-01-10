@@ -1,0 +1,48 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.jtopen.annotations.StructDate;
+import eglx.jtopen.annotations.StructText;
+import eglx.services.Encoding;
+
+
+// basic library
+library EDTOver
+	
+	function PE037(char20 string inout){
+		@IBMiProgram {programName = "EDTOVERSRV",
+						isServiceProgram = true,			
+						parameterAnnotations = [
+							@StructText{length = 20, encoding = "CP037"}						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#Defaults"}
+	}
+	end
+	function PEUTF(unicode20 string inout){
+		@IBMiProgram {programName = "EDTOVERSRV",
+						isServiceProgram = true,			
+						parameterAnnotations = [
+							@StructText{length = 20}
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#Defaults"}
+	}
+	end
+	function PDTUSA(date1 date inout){
+		@IBMiProgram {programName = "EDTOVERSRV",
+						isServiceProgram = true,			
+						parameterAnnotations = [
+							@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA}
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#Defaults"}
+	}
+	end
+	function PDTEUR(date1 date inout){
+		@IBMiProgram {programName = "EDTOVERSRV",
+						isServiceProgram = true			
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#Defaults"}
+	}
+	end
+end

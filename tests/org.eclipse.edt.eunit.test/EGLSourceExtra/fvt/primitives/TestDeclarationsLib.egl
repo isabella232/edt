@@ -1,0 +1,298 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestDeclarationsLib
+* @title The function test program for datatype declarations in EDT for RichUI
+* @keywords datatype declarations
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* Test the functionality for data types's declarations in EDT, including const 
+* and non-const datatype for int, bigint, smallint, string and etc.
+*/
+
+library TestDeclarationsLib
+
+    function testConsts1(){@Test}
+        LogResult.logStdOut("Const int");
+        const a int = -1;
+        LogResult.assertTrue1(a == -1);
+    end
+
+    function testConsts2(){@Test}
+        LogResult.logStdOut("Const bigint");
+        const b bigInt = 113213;
+        LogResult.assertTrue1(b == 113213);
+    end
+
+    function testConsts3(){@Test}
+        LogResult.logStdOut("Const smallint");
+        const c smallInt = 1213;
+        LogResult.assertTrue1(c == 1213);
+    end
+
+    function testConsts4(){@Test}
+        LogResult.logStdOut("Const boolean");
+        const d boolean = true;
+        LogResult.assertTrue1(d);
+    end
+
+    function testConsts5(){@Test}
+        LogResult.logStdOut("Const string");
+        const e string = "Hello Cleveland!";
+        LogResult.assertTrue1(e == "Hello Cleveland!");
+    end
+
+    function testConsts6(){@Test}
+        LogResult.logStdOut("Const float");
+        const g float = 113213.324e14;
+        LogResult.assertTrue1(g == 113213.324e14);
+    end
+
+    function testConsts7(){@Test}
+        LogResult.logStdOut("Const smallfloat");
+        const h smallFloat = 1.1e2;
+        LogResult.assertTrue1(h == 1.1e2);
+    end
+
+    function testConsts8(){@Test}
+        LogResult.logStdOut("Const decimal(4)");
+        const i decimal(4) = 3031;
+        LogResult.assertTrue1(i == 3031);
+    end
+
+    function testConsts9(){@Test}
+        LogResult.logStdOut("Const decimal(4,2)");
+        const j decimal(4, 2) = 30.31;
+        LogResult.assertTrue1(j == 30.31);
+    end
+
+    //	Function testConsts10 () {@Test}
+    //		LogResult.logStdOut("Const money(4,0)");
+    //		const k money(4,0) = 3031;
+    //		LogResult.assertTrue1( k == 3031 );
+    //	End
+    //
+    //	Function testConsts11 () {@Test}
+    //		LogResult.logStdOut("Const money(4,2)");
+    //		const l money(4,2) = 30.31;
+    //		LogResult.assertTrue1( l == 30.31 );
+    //	End
+    
+    function testConsts12(){@Test}
+        LogResult.logStdOut("Const any #1");
+        const p any = 1521321;
+        LogResult.assertTrue1(p as int == 1521321);
+    end
+
+    function testConsts13(){@Test}
+        LogResult.logStdOut("Const any #2");
+        const q any = "hiua";
+        LogResult.assertTrue1(q as string == "hiua");
+    end
+
+    function testConsts14(){@Test}
+        LogResult.logStdOut("Const date");
+        const r date = "12/25/1492";
+        LogResult.assertTrue1(r == "12/25/1492");
+    end
+
+    //	Function testConsts15 () {@Test}
+    //		LogResult.logStdOut("Const time");
+    //		const s time = "10:06:37";
+    //		LogResult.assertTrue1( s == "10:06:37" );
+    //	End
+    
+    function testConsts16(){@Test}
+        LogResult.logStdOut("Const timestamp");
+        const t timeStamp("yyyyMMddHH") = "1987 03/18 10";
+        LogResult.assertTrue1(t == "1987 03/18 10");
+    end
+
+    function testConsts17(){@Test}
+        LogResult.logStdOut("Const int array");
+        //const a1 int[4] = [ 1, 2, 3, 4 ];
+        const a1 int[] =[1, 2, 3, 4];
+        LogResult.assertTrue1(a1 != null && a1.getSize() == 4 && a1[1] == 1 && a1[2] == 2 && a1[3] == 3 && a1[4] == 4);
+    end
+
+    function testConsts18(){@Test}
+        LogResult.logStdOut("Const string array");
+        //const a2 string[3] = [ "zim", "zip", "zot" ];
+        const a2 string[] =["zim", "zip", "zot"];
+        LogResult.assertTrue1(a2 != null && a2.getSize() == 3 && a2[1] == "zim" && a2[2] == "zip" && a2[3] == "zot");
+    end
+
+    function testInitializers1(){@Test}
+        LogResult.logStdOut("Initialize int");
+        a int = -1;
+        LogResult.assertTrue1(a == -1);
+    end
+
+    function testInitializers2(){@Test}
+        LogResult.logStdOut("Initialize bigint");
+        b bigInt = 113213;
+        LogResult.assertTrue1(b == 113213);
+    end
+
+    function testInitializers3(){@Test}
+        LogResult.logStdOut("Initialize smallint");
+        c smallInt = 1213;
+        LogResult.assertTrue1(c == 1213);
+    end
+
+    function testInitializers4(){@Test}
+        LogResult.logStdOut("Initialize boolean");
+        d boolean = true;
+        LogResult.assertTrue1(d);
+    end
+
+    function testInitializers5(){@Test}
+        LogResult.logStdOut("Initialize string");
+        e string = "Hello Cleveland!";
+        LogResult.assertTrue1(e == "Hello Cleveland!");
+    end
+
+    function testInitializers6(){@Test}
+        LogResult.logStdOut("Initialize float");
+        g float = 113213.324e14;
+        LogResult.assertTrue1(g == 113213.324e14);
+    end
+
+    function testInitializers7(){@Test}
+        LogResult.logStdOut("Initialize smallfloat");
+        h smallFloat = 1.1e2;
+        LogResult.assertTrue1(h == 1.1e2);
+    end
+
+    function testInitializers8(){@Test}
+        LogResult.logStdOut("Initialize decimal(4)");
+        i decimal(4) = 3031;
+        LogResult.assertTrue1(i == 3031);
+    end
+
+    function testInitializers9(){@Test}
+        LogResult.logStdOut("Initialize decimal(4,2)");
+        j decimal(4, 2) = 30.31;
+        LogResult.assertTrue1(j == 30.31);
+    end
+
+    //	Function testInitializers10 () {@Test}
+    //		LogResult.logStdOut("Initialize money(4,0)");
+    //		k money(4,0) = 3031;
+    //		LogResult.assertTrue1( k == 3031 );
+    //	End
+    
+    //	Function testInitializers11 () {@Test}
+    //		LogResult.logStdOut("Initialize money(4,2)");
+    //		l money(4,2) = 30.31;
+    //		LogResult.assertTrue1( l == 30.31 );
+    //	End
+    
+    function testInitializers12(){@Test}
+        LogResult.logStdOut("Initialize any #1");
+        p any = 1521321;
+        LogResult.assertTrue1(p as int == 1521321);
+    end
+
+    function testInitializers13(){@Test}
+        LogResult.logStdOut("Initialize any #2");
+        q any = "hiua";
+        LogResult.assertTrue1(q as string == "hiua");
+    end
+
+    function testInitializers14(){@Test}
+        LogResult.logStdOut("Initialize date");
+        r date = "12/25/1492";
+        LogResult.assertTrue1(r == "12/25/1492");
+    end
+
+    //	Function testInitializers15 () {@Test}
+    //		LogResult.logStdOut("Initialize time");
+    //		s time = "10:06:37";
+    //		LogResult.assertTrue1( s == "10:06:37" );
+    //	End
+    
+    function testInitializers16(){@Test}
+        LogResult.logStdOut("Initialize timestamp");
+        t timeStamp("yyyyMMddHH") = "1987 03/18 10";
+        LogResult.assertTrue1(t == "1987 03/18 10");
+    end
+
+    function testInitializers17(){@Test}
+        LogResult.logStdOut("Initialize int array #1");
+        //a1 int[4] = [ 1, 2, 3, 4 ];
+        a1 int[] =[1, 2, 3, 4];
+        LogResult.assertTrue1(a1 != null && a1.getSize() == 4 && a1[1] == 1 && a1[2] == 2 && a1[3] == 3 && a1[4] == 4);
+    end
+
+    function testInitializers18(){@Test}
+        LogResult.logStdOut("Initialize string array #1");
+        //a2 string[3] = [ "zim", "zip", "zot" ];
+        a2 string[] =["zim", "zip", "zot"];
+        LogResult.assertTrue1(a2 != null && a2.getSize() == 3 && a2[1] == "zim" && a2[2] == "zip" && a2[3] == "zot");
+    end
+
+    function testInitializers19(){@Test}
+        LogResult.logStdOut("Initialize int array #2");
+        //a3 int[4] { 1, 2, 3, 4 };
+        a3 int[]{1, 2, 3, 4};
+        LogResult.assertTrue1(a3 != null && a3.getSize() == 4 && a3[1] == 1 && a3[2] == 2 && a3[3] == 3 && a3[4] == 4);
+    end
+
+    function testInitializers20(){@Test}
+        LogResult.logStdOut("Initialize string array #2");
+        //a4 string[3] { "zim", "zip", "zot" };
+        a4 string[]{"zim", "zip", "zot"};
+        LogResult.assertTrue1(a4 != null && a4.getSize() == 3 && a4[1] == "zim" && a4[2] == "zip" && a4[3] == "zot");
+    end
+
+    function testInitializers21(){@Test}
+        LogResult.logStdOut("Initialize dictionary #1");
+        d1 dictionary;
+        LogResult.assertTrue1(d1 == null);
+    end
+
+    function testInitializers22(){@Test}
+        LogResult.logStdOut("Initialize dictionary #2");
+        d2 dictionary{};
+        LogResult.assertTrue1(d2 != null);
+    end
+
+    function testInitializers23(){@Test}
+        LogResult.logStdOut("Initialize dictionary #3");
+        d3 dictionary{a = 1, b = 2, c = 3};
+        LogResult.assertTrue1(d3 != null && d3.size() == 3 && d3.a as int == 1 && d3.b as int == 2 && d3.c as int == 3);
+    end
+
+    function testInitializers24(){@Test}
+        LogResult.logStdOut("Initialize record #1");
+        r1 initRec;
+        LogResult.assertTrue1(r1.i1 == 0 && r1.i2 == 99 && r1.s1 == "" && r1.s2 == "asd" && r1.b1 == false && r1.b2 == true);
+    end
+
+    function testInitializers25(){@Test}
+        LogResult.logStdOut("Initialize record #2");
+        r2 initRec{i1 = 100, s1 = "initme", b1 = true};
+        LogResult.assertTrue1(r2.i1 == 100 && r2.i2 == 99 && r2.s1 == "initme" && r2.s2 == "asd" && r2.b1 == true && r2.b2 == true);
+    end
+
+    function testInitializers26(){@Test}
+        LogResult.logStdOut("Initialize record #3");
+        r3 initRec{i1 = 100, s1 = "initme", b1 = true, i2 = 87, s2 = "shh", b2 = false};
+        LogResult.assertTrue1(r3.i1 == 100 && r3.i2 == 87 && r3.s1 == "initme" && r3.s2 == "shh" && r3.b1 == true && r3.b2 == false);
+    end
+
+end
+
+record initRec
+    i1 int;
+    s1 string;
+    b1 boolean;
+    i2 int = 99;
+    s2 string = "asd";
+    b2 boolean = true;
+end

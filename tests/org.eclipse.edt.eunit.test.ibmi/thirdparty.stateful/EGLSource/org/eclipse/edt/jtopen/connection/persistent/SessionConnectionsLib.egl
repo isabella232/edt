@@ -1,0 +1,88 @@
+package org.eclipse.edt.jtopen.connection.persistent;
+
+import com.ibm.as400.access.as400;
+import eglx.http.ServletContext;
+import eglx.jtopen.IBMiConnection;
+import eglx.jtopen.JTOpenConnection;
+import javax.servlet.http.HttpSession;
+
+// basic library
+library SessionConnectionsLib
+	
+	trace boolean = true; 
+	
+	function getSessionConnection(system string in, userid string in, password string in)returns(IBMiConnection?)
+		key string = createKey(system, userid);
+		connections dictionary = getConnections(getSessionId());
+		connection IBMiConnection?;
+		if(!connections.containsKey(key))
+			try
+				as400 AS400 = new AS400(system, userid, password);
+				as400.setGuiAvailable(false);
+				as400.validateSignon();
+				connection = new JTOpenConnection(as400);
+			onException(exception AnyException)
+				throw exception;
+			end
+		else
+			connection = connections[key];
+			connections.removeElement(key);
+		end
+		return(connection);
+	end	
+	
+	function returnConnectionToPool(conn IBMiConnection in)
+		connections dictionary = getConnections(getSessionId());
+		connections[createKey(conn.getAs400().getSystemName(), conn.getAs400().getUserId())] = conn;
+	end	
+	
+	private function getConnections(sessionId string in)returns(dictionary)
+		sessionConnections dictionary?;
+		if(!getSessionConnections().sessionConnections.containsKey(sessionId))
+			sessionConnections = new dictionary;
+			getSessionConnections().sessionConnections[sessionId] = sessionConnections;
+		else
+			sessionConnections = getSessionConnections().sessionConnections[sessionId];
+		end
+		return(sessionConnections);
+	end
+	
+	function getConnections()returns(dictionary)
+		return(getSessionConnections().sessionConnections);
+	end
+	
+	private function getSessionConnections()returns(SessionConnections)
+		sessionConnections SessionConnections = SessionConnectionPool.getSessionConnectionPool();
+		return(sessionConnections as SessionConnections);
+	end
+
+	private function getSessionId()returns(string)
+		sessionid string;
+		request  javax.servlet.http.HttpServletRequest? = ServletContext.getHttpServletRequest();
+		if(request != null)
+			session HttpSession = request.getSession();
+			if(session != null)
+				sessionid = session.getId();
+			end
+		end
+		if(trace)
+			SysLib.writestdout("SessionConnectionsLib.getSessionId:" + sessionid);
+		end
+		return(sessionid);
+	end
+	function getSession()returns(HttpSession?)
+		session HttpSession?;
+		request  javax.servlet.http.HttpServletRequest? = ServletContext.getHttpServletRequest();
+		if(request != null)
+			session = request.getSession();
+		end
+		return(session);
+	end
+	private function createKey(system string in, userid string in)returns(string)
+		key string = userid + "@" + system;
+		if(trace)
+			SysLib.writestdout("SessionConnectionsLib.createKey:" + key);
+		end
+		return(key);
+	end
+end

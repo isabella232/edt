@@ -1,0 +1,100 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+
+/* 
+* @name 
+* @title Field intialization of ANYs based on default constructor rules Enhancement 372125
+* @keywords default constructor any
+* @author EDT team
+* @createDate 2012/03/09
+* @description 
+*  Field intialization of ANYs based on default constructor rules Enhancement 372125
+*/
+library defaultConstructorAny
+	
+	function testAny() 
+		// invalid syntax since any doesn't have default constructor
+		// a1 any;
+	end
+	
+	function testNullableAny() {@Test}
+		a2 any?;
+		
+		LogResult.assertTrue1(a2 == null);
+	end
+	
+	function testAnyArray() {@Test}
+		a3 any[];
+		
+		LogResult.assertTrue1(a3 isa any[] && a3.getSize() == 0);
+	end
+	
+	function testNullableAnyArray() {@Test}
+		a4 any?[];
+		
+		LogResult.assertTrue1(a4 isa any?[] && a4.getSize() == 0);
+	end
+	
+	function testAnyArrayWithNew() {@Test}
+		a5 any[] = new any[];
+		
+		LogResult.assertTrue1(a5 isa any[] && a5.getSize() == 0);
+	end
+	
+	function testAnyArrayWithNewParameter() 
+		// validation error: type any not instantiable
+		// a6 any[] = new any[4];
+	end
+	
+	function testNullableAnyArrayWithNew() {@Test}
+		a7 any?[] = new any?[];
+		
+		LogResult.assertTrue1(a7 isa any?[] && a7.getSize() == 0);
+	end
+	
+	function testNullableAnyArrayWithNewParameter() {@Test}
+		a8 any?[] = new any?[4];
+		
+		LogResult.assertTrue1(a8 isa any?[] && a8.getSize() == 4 && a8[1] == null);
+	end
+	
+	function testAnyNullableArray() {@Test}
+		a9 any[]?;
+
+		LogResult.assertTrue1(a9 == null);
+	end
+	
+	function testAnyNullableArrayWithNew() {@Test}
+		a10 any[]? = new any[];
+
+		LogResult.assertTrue1(a10 isa any[] && a10.getSize() == 0);
+	end
+	
+	function testAnyNullableArrayWithNewParameter() 
+		// validation error: type any not instantiable
+		// a11 any[]? = new any[4];
+	end
+	
+	function testNullableAnyNullableArray() {@Test}
+		a13 any?[]?;
+
+		LogResult.assertTrue1(a13 == null);
+	end
+	
+	function testNullableAnyNullableArrayWithNew() {@Test}
+		a14 any?[]? = new any?[];
+
+		LogResult.assertTrue1(a14 isa any?[] && a14.getSize() == 0);
+	end
+	
+	function testNullableAnyNullableArrayWithNewParameter() {@Test}
+		a15 any?[]? = new any?[4];
+
+		LogResult.assertTrue1(a15 isa any?[] && a15.getSize() == 4 && a15[1] == null);
+	end
+end
+
+	

@@ -1,0 +1,104 @@
+package data;
+
+Record InnerFlexibleRecord
+	item1 string[];
+	item2 string;
+	item3 int;
+end
+
+Record bigIntFlexRecord
+	item1 bigint;
+end
+
+Record bigIntArrayFlexRecord
+	item1 bigint[];
+end
+Record IntFlexRecord
+	item1 int;
+end
+
+Record IntArrayFlexRecord
+	item1 int[];
+end
+
+Record smallIntFlexRecord
+	item1 smallint;
+end
+
+Record smallIntArrayFlexRecord
+	item1 smallint[];
+end
+
+Record smallFloatFlexRecord
+	item1 smallFloat;
+end
+
+Record smallFloatArrayFlexRecord
+	item1 smallFloat[];
+end
+
+Record floatFlexRecord
+	item1 float;
+end
+
+Record floatArrayFlexRecord
+	item1 float[];
+end
+
+Record decimalFlexRecord
+	item1 decimal(10,2);
+end
+
+Record decimalArrayFlexRecord
+	item1 decimal(10,2)[];
+end
+
+Record StringFlexRecord
+	item1 string;
+end
+
+Record StringArrayFlexRecord
+	item1 string[];
+end
+
+Record lStringFlexRecord
+	item1 string(7);
+end
+
+Record lStringArrayFlexRecord
+	item1 string(5)[];
+end
+
+Record dateFlexRecord
+	item1 date;
+end
+
+Record dateArrayFlexRecord
+	item1 date[];
+end
+
+Record timestampFlexRecord
+	item1 timeStamp("yyyyMMddHHmmss");
+end
+
+Record timeStampArrayFlexRecord
+	item1 timeStamp("yyyyMMddHHmmss")[];
+end
+
+Record timeFlexRecord
+	item1 time;
+end
+
+Record timeArrayFlexRecord
+	item1 time[];
+end
+
+Record booleanFlexRecord
+	item1 boolean;
+end
+
+Record booleanArrayFlexRecord
+	item1 boolean[];
+end
+
+

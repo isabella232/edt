@@ -1,0 +1,329 @@
+package fvt.operators;
+
+import FVT.operators.playWithNewRec;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestNewLib
+* @title The function test program for the EGL NEW operator
+* @keywords NEW
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL NEW operator
+*/
+
+library TestNewLib
+
+    d dictionary;
+    r playWithNewRec;
+    r2 playWithNewRec{x1 = true, x2 = "goodbye", x3 = 123123, x4 = "08:12:10"};
+    r3 playWithNewRec;
+    //arr playWithNewRec[2];
+    arr playWithNewRec[] = new playWithNewRec[2];
+
+    function testForNewBoolean(){@Test}
+        x1 boolean;
+        x1 = true;
+        x1 = new boolean;
+        LogResult.logStdOut("New boolean");
+        LogResult.assertTrue1(x1 != null &&(x1 == false));
+    end
+
+    function testForNewString(){@Test}
+        x2 string;
+        x2 = "hello";
+        x2 = new string;
+        LogResult.logStdOut("New string");
+        LogResult.assertTrue1(x2 != null &&(x2 == ""));
+    end
+
+    function testForNewInt(){@Test}
+        x3 int;
+        x3 = -99;
+        x3 = new int;
+        LogResult.logStdOut("New int");
+        LogResult.assertTrue1(x3 != null &&(x3 == 0));
+    end
+
+    //    function testForNewTimestamp(){@Test}
+    //        x4 timeStamp("HHmmss");
+    //        x4 = "12:10:08";
+    //        x4 = new timeStamp("HHmmss");
+    //        LogResult.logStdOut("New timestamp");
+    //        LogResult.assertTimestampEqual1(currentTime(), x4 as time);
+    //    end
+    
+    function testForNewDictionary1(){@Test}
+        x5 dictionary{};
+        //x5 = null;
+        x5 = new dictionary;
+        LogResult.logStdOut("New dictionary #1");
+        LogResult.assertTrue1(x5 != null);
+    end
+
+    function testForNewDictionary2(){@Test}
+        x5 dictionary{};
+        //x5 = null;
+        x5 = new dictionary{key1 = 1, key2 = 2};
+        LogResult.logStdOut("New dictionary #2");
+        LogResult.assertTrue1(x5 != null &&(x5.size() == 2) &&(x5.key1 as int == 1) &&(x5.key2 as int == 2));
+    end
+
+    function testForNewDictionary3(){@Test}
+        //peculiar...
+        x5 dictionary{};
+        //x5 = null;
+        x5 = new dictionary{key1 = 1, key2 = 2};
+        LogResult.logStdOut("New dictionary #3");
+        LogResult.assertTrue1(x5 != null && x5.size() == 2 && x5.key1 as int == 1 && x5.key2 as int == 2);
+    end
+
+    function testForNewToFuncs(){@Test}
+        fbool(new boolean);
+        fstring(new string);
+        fint(new int);
+        //fstamp(new timeStamp("HHmmss"));
+        fdict(new dictionary);
+        fdict2(new dictionary{key1 = 1, key2 = 2});
+    end
+
+    function fbool(x1 boolean in)
+        LogResult.logStdOut("Pass new boolean");
+        LogResult.assertTrue1(x1 != null &&(x1 == false));
+    end
+
+    function fstring(x2 string in)
+        LogResult.logStdOut("Pass new string");
+        LogResult.assertTrue1(x2 != null &&(x2 == ""));
+    end
+
+    function fint(x3 int in)
+        LogResult.logStdOut("Pass new int");
+        LogResult.assertTrue1(x3 != null &&(x3 == 0));
+    end
+
+    //    function fstamp(x4 timeStamp("HHmmss") in)
+    //        LogResult.logStdOut("Pass new timestamp");
+    //        LogResult.assertTimestampEqual1(currentTime(), x4 as time);
+    //    end
+    
+    function fdict(x5 dictionary in)
+        LogResult.logStdOut("Pass new dictionary");
+        LogResult.assertTrue1(x5 != null);
+    end
+
+    function fdict2(x5 dictionary in)
+        LogResult.logStdOut("Pass new dictionary");
+        LogResult.assertTrue1(x5 != null &&(x5.size() == 2) &&(x5.key1 as int == 1) &&(x5.key2 as int == 2));
+    end
+
+    function testForNewInRecBoolean(){@Test}
+        r.x1 = true;
+        r.x1 = new boolean;
+        LogResult.logStdOut("New rec.boolean");
+        LogResult.assertTrue1(r.x1 != null &&(r.x1 == false));
+    end
+
+    function testForNewInRecString(){@Test}
+        r.x2 = "hello";
+        r.x2 = new string;
+        LogResult.logStdOut("New rec.string");
+        LogResult.assertTrue1(r.x2 != null &&(r.x2 == ""));
+    end
+
+    function testForNewInRecInt(){@Test}
+        r.x3 = -99;
+        r.x3 = new int;
+        LogResult.logStdOut("New rec.int");
+        LogResult.assertTrue1(r.x3 != null &&(r.x3 == 0));
+    end
+
+    //    function testForNewInRecTimestamp(){@Test}
+    //        r.x4 = "12:10:08";
+    //        r.x4 = new timeStamp("HHmmss");
+    //        LogResult.logStdOut("New rec.timestamp");
+    //        LogResult.assertTimestampEqual1(currentTime(), r.x4 as time);
+    //    end
+    
+    function testForNewInRec1(){@Test}
+        r.x1 = true;
+        r.x2 = "hello";
+        r.x3 = -99;
+        r.x4 = "12:10:08";
+        r = new playWithNewRec;
+        LogResult.logStdOut("New rec #1");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testForNewInRec2(){@Test}
+        LogResult.logStdOut("New rec #2");
+        LogResult.assertTrue1(r.x1 != null &&(r.x1 == false));
+    end
+
+    function testForNewInRec3(){@Test}
+        LogResult.logStdOut("New rec #3");
+        LogResult.assertTrue1(r.x2 != null &&(r.x2 == ""));
+    end
+
+    function testForNewInRec4(){@Test}
+        LogResult.logStdOut("New rec #4");
+        LogResult.assertTrue1(r.x3 != null &&(r.x3 == 0));
+    end
+
+    //    function testForNewInRec5(){@Test}
+    //        LogResult.logStdOut("New rec #5");
+    //        LogResult.assertTimestampEqual1(currentTime(), r.x4 as time);
+    //    end
+    
+    //    function testForSettersDictionary0(){@Test}
+    //        d = null;
+    //        LogResult.logStdOut("dictionary with settings #0");
+    //        LogResult.assertTrue1(d == null);
+    //    end
+    
+    function testForSettersDictionary1(){@Test}
+        d{};
+        LogResult.logStdOut("dictionary with settings #1");
+        LogResult.assertTrue1(d != null &&(d.size() == 0));
+    end
+
+    //    function testForSettersDictionary2(){@Test}
+    //        d = null;
+    //        d{foo = 3};
+    //        LogResult.logStdOut("dictionary with settings #2");
+    //        LogResult.assertTrue1(d != null &&(d.size() == 1) &&(d.foo as int == 3));
+    //    end
+    
+    function testForSettersNewRec1(){@Test}
+        r.x1 = false;
+        r.x2 = "hello";
+        r.x3 = -99;
+        r.x4 = "12:10:08";
+        r = new playWithNewRec{x1 = true, x2 = "goodbye", x3 = 123123, x4 = "08:12:10"};
+        LogResult.logStdOut("New rec with settings #1");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testForSettersNewRec2(){@Test}
+        LogResult.logStdOut("New rec with settings #2");
+        LogResult.assertTrue1(r.x1 != null &&(r.x1 == true));
+    end
+
+    function testForSettersNewRec3(){@Test}
+        LogResult.logStdOut("New rec with settings #3");
+        LogResult.assertTrue1(r.x2 != null &&(r.x2 == "goodbye"));
+    end
+
+    function testForSettersNewRec4(){@Test}
+        LogResult.logStdOut("New rec with settings #4");
+        LogResult.assertTrue1(r.x3 != null &&(r.x3 == 123123));
+    end
+
+    //    function testForSettersNewRec5(){@Test}
+    //        LogResult.logStdOut("New rec with settings #5");
+    //        LogResult.assertTrue1(r.x4 != null &&(r.x4 as time == "08:12:10"));
+    //    end
+    
+    function testForSettersRec1(){@Test}
+        LogResult.logStdOut("Rec with settings #1");
+        LogResult.assertTrue1(r2 != null);
+    end
+
+    function testForSettersRec2(){@Test}
+        LogResult.logStdOut("Rec with settings #2");
+        LogResult.assertTrue1((r2.x1));
+    end
+
+    function testForSettersRec3(){@Test}
+        LogResult.logStdOut("Rec with settings #3");
+        LogResult.assertStringEqual1("goodbye", r2.x2);
+    end
+
+    function testForSettersRec4(){@Test}
+        LogResult.logStdOut("Rec with settings #4");
+        LogResult.assertBigIntEqual1(123123, r2.x3);
+    end
+
+    //    function testForSettersRec5(){@Test}
+    //        LogResult.logStdOut("Rec with settings #5");
+    //        LogResult.assertTimestampEqual1("08:12:10" as time, r2.x4 as time);
+    //    end
+    
+    function testForSettersAssignRec1(){@Test}
+        r3 = r2{x2 = "in a setter"};
+        LogResult.logStdOut("Assign from rec with settings #1");
+        LogResult.assertStringEqual1("in a setter", r2.x2);
+    end
+
+    function testForSettersAssignRec2(){@Test}
+        LogResult.logStdOut("Assign from rec with settings #2");
+        LogResult.assertTrue1((r3.x1));
+    end
+
+    function testForSettersAssignRec3(){@Test}
+        LogResult.logStdOut("Assign from rec with settings #3");
+        LogResult.assertStringEqual1("in a setter", r3.x2);
+    end
+
+    function testForSettersAssignRec4(){@Test}
+        LogResult.logStdOut("Assign from rec with settings #4");
+        LogResult.assertBigIntEqual1(123123, r3.x3);
+    end
+
+    //    function testForSettersAssignRec5(){@Test}
+    //        LogResult.logStdOut("Assign from rec with settings #5");
+    //        LogResult.assertTimestampEqual1("08:12:10" as time, r3.x4 as time);
+    //    end
+    
+    function testForSettersRecArray1(){@Test}
+        arr =[new playWithNewRec{x1 = true, x2 = "goodbye", x3 = 123123, x4 = "08:12:10"},
+                new playWithNewRec{x1 = false, x2 = "hello", x3 = -99, x4 = "12:10:08"}];
+        LogResult.logStdOut("Rec array with settings #1");
+        LogResult.assertTrue1((arr[1].x1));
+    end
+
+    function testForSettersRecArray2(){@Test}
+        LogResult.logStdOut("Rec array with settings #2");
+        LogResult.assertStringEqual1("goodbye", arr[1].x2);
+    end
+
+    function testForSettersRecArray3(){@Test}
+        LogResult.logStdOut("Rec array with settings #3");
+        LogResult.assertBigIntEqual1(123123, arr[1].x3);
+    end
+
+    //    function testForSettersRecArray4(){@Test}
+    //        LogResult.logStdOut("Rec array with settings #4");
+    //        LogResult.assertTimestampEqual1("08:12:10" as time, arr[1].x4);
+    //    end
+    
+    function testForSettersRecArray5(){@Test}
+        LogResult.logStdOut("Rec array with settings #5");
+        LogResult.assertTrue1((arr[2].x1 == false));
+    end
+
+    function testForSettersRecArray6(){@Test}
+        LogResult.logStdOut("Rec array with settings #6");
+        LogResult.assertStringEqual1("hello", arr[2].x2);
+    end
+
+    function testForSettersRecArray7(){@Test}
+        LogResult.logStdOut("Rec array with settings #7");
+        LogResult.assertBigIntEqual1(-99, arr[2].x3);
+    end
+
+    //    function testForSettersRecArray8(){@Test}
+    //        LogResult.logStdOut("Rec array with settings #8");
+    //        LogResult.assertTimestampEqual1("12:10:08" as time, arr[2].x4 as time);
+    //    end
+    
+end
+
+record playWithNewRec
+    x1 boolean;
+    x2 string;
+    x3 int;
+    x4 timeStamp("HHmmss");
+end

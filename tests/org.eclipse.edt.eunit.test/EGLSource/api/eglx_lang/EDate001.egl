@@ -1,0 +1,90 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate001
+  * @title EdtDate001 - runAssignmentFunction
+  * @description testing Date assignment and initialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction09
+  * @sources EdtDate001.egl
+  * @keywords date, functions, assignemnt
+ **/
+library EDate001 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+	const febNonLeap date = "02-28-1999";
+	const febLeap date = "02-29-2000";
+	const marFirst date = "03-01-2000";
+	const marFirst1999 date = "03-01-1999";
+	
+	// Variable Declarations
+	varDate date;
+	
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTrue("initialization",febNonLeap=="02/28/1999");
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		myDate date?;
+		LogResult.assertTrue("nullable initialization", myDate != "");
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		myDate date?;
+		LogResult.assertTrue("nullable isNull", (myDate == null));
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		myDate date?;
+		myDate = febLeap;
+		LogResult.assertTrue("nullable not Null", (myDate != null ));
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		myDate date?;
+		
+		myDate = febLeap;
+		myDate = null;
+		LogResult.assertTrue("nullable reset to Null", (myDate == null ));
+
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		myDate, another date?;
+		myDate = febLeap;
+		myDate = another;
+		LogResult.assertTrue("nullable indirectly set to null", (myDate == null ));
+	end
+
+	function runAssignmentFunction07(){@Test}		
+		varDate2 date;
+		LogResult.assertDateEqual("consistent variable initialisation", varDate2, varDate);
+	end
+	
+		function runAssignmentFunction08(){@Test}
+		LogResult.assertStringEqual("", "02/28/1999", febNonLeap);		
+	end	
+	
+	function runAssignmentFunction09(){@Test}
+		LogResult.assertDateEqual("", "02-28-1999", febNonLeap);		
+	end	
+	
+	function runAssignmentFunction10(){@Test}
+		LogResult.assertBigintEqual( "yearOf", 1999, febNonLeap.yearOf() );
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		LogResult.assertBigintEqual( "monthOf", 2, febNonLeap.monthOf() );
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		LogResult.assertBigintEqual( "dayOf", 28, febNonLeap.dayOf() );
+	end
+	
+end

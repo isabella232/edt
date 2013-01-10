@@ -1,0 +1,237 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation01Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation01Lib
+
+    use returnvaluefunctions;
+    a int;
+    b decimal(4, 2);
+    c float;
+
+    function testInNumericExpressions1(){@Test}
+        LogResult.logStdOut("In numeric expressions - 1");
+        a = 6 + returnvaluefunctions.retInt();
+        LogResult.assertBigIntEqual1(11, a);
+    end
+
+    function testInNumericExpressions2(){@Test}
+        LogResult.logStdOut("In numeric expressions - 2");
+        a = 5;
+        a = a + retBin();
+        LogResult.assertBigIntEqual1(10, a);
+    end
+
+    function testInNumericExpressions3(){@Test}
+        LogResult.logStdOut("In numeric expressions - 3");
+        b = 33.33;
+        b = b + retDecimal();
+        LogResult.assertDecimalEqual1(37.88, b);
+    end
+
+    function testInNumericExpressions4(){@Test}
+        LogResult.logStdOut("In numeric expressions - 4");
+        c = 10.5 + retFloat();
+        LogResult.assertFloatEqual1(19.6999, c);
+    end
+
+    function testInFunctionArguments1(){@Test}
+        LogResult.logStdOut("In function arguments - 1");
+        LogResult.assertTrue1(ArgInt(retInt()));
+    end
+
+    //    function testInFunctionArguments2(){@Test}
+    //        LogResult.logStdOut("In function arguments - 2");
+    //        //		LogResult.assertTrue1(ArgBin(retBin()) );
+    //    end
+    
+    //    function testInFunctionArguments3(){@Test}
+    //        LogResult.logStdOut("In function arguments - 3");
+    //        //LogResult.assertTrue1(ArgDecimal(retDecimal()) );
+    //        //TestUILib.reportAndTally(jsLib.getFile(), jsLib.getLine(), /*NOT RUN*/ 2 );
+    //    end
+    
+    function testInFunctionArguments4(){@Test}
+        LogResult.logStdOut("In function arguments - 4");
+        LogResult.assertTrue1(argfloat(retFloat()));
+    end
+
+    //    function testInFunctionArguments5(){@Test}
+    //        LogResult.logStdOut("In function arguments - 5");
+    //        //LogResult.assertTrue1(ArgChar(retchar()) );
+    //    end
+    
+    //    function testInFunctionArguments6(){@Test}
+    //        LogResult.logStdOut("In function arguments - 6");
+    //        //		LogResult.assertTrue1(argDate(retDate() ));
+    //    end
+    
+    //    function testInFunctionArguments7(){@Test}
+    //        LogResult.logStdOut("In function arguments - 7");
+    //        //		LogResult.assertTrue1(argTime(retTime() ));
+    //    end
+    
+    //    function testInFunctionArguments8(){@Test}
+    //        LogResult.logStdOut("In function arguments - 8");
+    //        //		LogResult.assertTrue1(argTimeStamp(retTimeStamp() ));
+    //    end
+    
+    //    function testInFunctionArguments9(){@Test}
+    //        //		LogResult.logStdOut("In function arguments - 9";
+    //        //		ArgDBchar(retDBchar());
+    //    end
+    
+    //    function testInFunctionArguments10(){@Test}
+    //        LogResult.logStdOut("In function arguments - 10");
+    //        //		LogResult.assertTrue1(ArgMbchar(retMbchar() ));
+    //    end
+    
+    function testInFunctionArguments11(){@Test}
+        LogResult.logStdOut("In function arguments - 11");
+        LogResult.assertTrue1(argstring(retstring()));
+    end
+
+    //    function testInTextExpressions1(){@Test}
+    //        LogResult.logStdOut("In text expressions - 1");
+    //        d string; //char(6);
+    //        //d ="IBM" + retchar();
+    //        //LogResult.assertTrue1(d=="IBMEGL");
+    //    end
+    
+    //    function testInTextExpressions2(){@Test}
+    //        //		LogResult.logStdOut("In text expressions - 2";
+    //        //		e hex(4);
+    //        //		e = "AB" + retHex();
+    //        //		LogResult.assertTrue1(e=="ABE1");
+    //    end
+    
+    //    function testInTextExpressions3(){@Test}
+    //        //	LogResult.logStdOut("In text expressions - 3";	
+    //        //	f date;
+    //        //	f = retDate()+1;
+    //        //	datalib.compareDate(f, dateTimeLib.dateValue("20040102"));
+    //    end
+    
+    //    function testInTextExpressions4(){@Test}
+    //        //	LogResult.logStdOut("In text expressions - 4";
+    //        //	g time;
+    //        //	g = retTime();
+    //        //	dataLib.compareTime(g, dateTimeLib.timeValue("080000"));
+    //    end
+    
+    //    function testInTextExpressions5(){@Test}
+    //        //	LogResult.logStdOut("In text expressions - 5";
+    //        //	h timestamp;
+    //        //	h = retTimeStamp();
+    //        //	dataLib.compareTimeStamp(h,dateTimeLib.timestampValue("20040101080000"));
+    //    end
+    
+    //    function testInTextExpressions6(){@Test}
+    //        //	LogResult.logStdOut("In text expressions - 6";
+    //        //	i dbchar(4);
+    //        //	i = retDBchar() + "??";
+    //        //	LogResult.assertTrue1(i=="????");
+    //    end
+    
+    //    function testInTextExpressions7(){@Test}
+    //        //	LogResult.logStdOut("In text expressions - 7";
+    //        //	j mbchar(10);
+    //        //	j = retDBchar() + "??1";
+    //        //	LogResult.assertTrue1(j=="ABC???1");
+    //    end
+    
+    function testInTextExpressions8(){@Test}
+        LogResult.logStdOut("In text expressions - 8");
+        k string;
+        k = retString() + "pass";
+        LogResult.assertTrue1(k == "EGLTESTpass");
+    end
+
+    //    function testInTextExpressions9(){@Test}
+    //        LogResult.logStdOut("In text expressions - 9");
+    //        //ln string; //unicode(7);
+    //        //ln = retUnicode() + "34";
+    //        //LogResult.assertTrue1(ln=="EGL1234");
+    //    end
+    
+    function testInConditionals1(){@Test}
+        LogResult.logStdOut("In conditionals - 1");
+        LogResult.assertTrue1(retInt() >= 5);
+    end
+
+    //    function testInConditionals2(){@Test}
+    //        LogResult.logStdOut("In conditionals - 2");
+    //        //LogResult.assertTrue1(retchar() like "EGL");
+    //    end
+    
+    function testInConditionals3(){@Test}
+        LogResult.logStdOut("In conditionals - 3");
+        result boolean = true;
+        while(retDecimal() < 3.55)
+            result = false;
+            exit while; // prevent infinite looping
+        end
+        LogResult.assertTrue1(result);
+    end
+
+    //    function testInConditionals4(){@Test}
+    //        LogResult.logStdOut("In conditionals - 4");
+    //        LogResult.assertTrue1(retString() matches "EGL*" && retFloat() != 10);
+    //    end
+    
+    function testInAssignmentSource1(){@Test}
+        LogResult.logStdOut("function return in assignment source - 1");
+        aa int;
+        aa = retInt();
+        LogResult.assertBigIntEqual1(5, aa);
+    end
+
+    //    function testInAssignmentSource2(){@Test}
+    //        //		LogResult.logStdOut("function return in assignment source - 2";
+    //        //		bb char(4);
+    //        //		bb = retchar();
+    //        //		LogResult.assertTrue1(compareChar4(bb,"EGL "));
+    //    end
+    
+    function testInAssignmentSource3(){@Test}
+        LogResult.logStdOut("function return in assignment source - 3");
+        cc decimal(4, 2);
+        cc = retDecimal();
+        LogResult.assertDecimalEqual1(retDecimal(), cc);
+    end
+
+    function testInAssignmentSource4(){@Test}
+        LogResult.logStdOut("function return in assignment source - 4");
+        dd string;
+        dd = retString();
+        LogResult.assertStringEqual1(retString(), dd);
+    end
+
+    function testInMoveSource1(){@Test}
+        LogResult.logStdOut("function return in move source - 1");
+        aaa int;
+        //move retInt() to aaa;
+        aaa = retInt();
+        LogResult.assertBigIntEqual1(5, aaa);
+    end
+
+    function testInMoveSource2(){@Test}
+        LogResult.logStdOut("function return in move source - 2");
+        bbb string;
+        //move retString() to bbb;
+        bbb = retString();
+        LogResult.assertStringEqual1("EGLTEST", bbb);
+    end
+
+end

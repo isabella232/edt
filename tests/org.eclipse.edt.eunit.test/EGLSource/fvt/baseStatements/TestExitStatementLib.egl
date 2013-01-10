@@ -1,0 +1,111 @@
+package fvt.baseStatements;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title The function test program for valid EXIT in EDT for RichUI
+* @keywords EXIT
+* @author EDT team
+* @createDate 2011/08/03
+* @description The testExit function tests that the exit statement works without a modifier in
+* a for loop. The function tests that if an exit statement with a for modifier
+* is used in a nested while statement, execution is continued after the termination processing
+* of the exit statement. When the forEach statement is ready, a test needs to be added for it.
+*/
+
+library TestExitStatementLib
+
+    total int;  // Used to check for succesful result from testFor functions
+    counter smallInt;
+    start smallInt;
+    delta int;
+    stop bigInt;
+
+    // Test the exit statement
+    // Exit default | for | foreach
+    
+    function testExitNested1(){@Test}
+
+        LogResult.logStdOut("Exit with FOR modifier in nested WHILE statement");
+        total = 0;
+        delta = 1;
+        stop = 10;
+
+        // Test exit from outer FOR loop
+        for(counter to stop by delta)
+            while(counter <= 4)
+                total = total + counter;
+
+                if(counter >= 4)
+                    exit for;
+                end
+
+                counter = counter + 1;
+            end
+        end
+
+        LogResult.assertTrue1(total == 10);
+    end
+    
+ 	function testExitNested2(){@Test}
+        LogResult.logStdOut("Exit without modifier in FOR statement");
+
+        // Test default exit within FOR loop
+        for(counter from 5 to stop by 1)
+            total = total + counter;
+            exit;
+        end
+
+        LogResult.assertTrue1(total == 15);
+    end
+    
+ 	function testExitNested3(){@Test}
+
+        LogResult.logStdOut("Exit without modifier in IF statement");
+        LogResult.skipped("BUG 358951: It is not going to be fixed in EDT 0.7");
+        //        // Test default exit within IF block
+        //        counter = 1;
+        //        if(true)
+        //            exit;
+        //            counter = 0;
+        //        end
+        //
+        //		LogResult.assertTrue1(counter == 1);
+    end
+    
+ 	function testExitNested4(){@Test}
+        
+        LogResult.logStdOut("Exit without modifier in WHILE loop");
+
+        // Test default exit within WHILE loop
+        counter = 10;
+        while(counter > 0)
+            counter -= 1;
+            if(counter == 4)
+                exit;
+            end
+        end
+        LogResult.assertTrue1(counter == 0);
+    end
+    
+ 	function testExitNested5(){@Test}
+
+        LogResult.logStdOut("Exit WHILE in WHILE loop");
+        // Test exit WHILE within WHILE loop
+        counter = 10;
+        total = 10;
+        while(counter > 0)
+            counter -= 1;
+            if(counter == 4)
+            	if ( true )
+                	exit while;
+                end
+                total = 0;
+            end
+        end
+
+        LogResult.assertTrue1(counter == 4 && total != 0);
+    end
+end

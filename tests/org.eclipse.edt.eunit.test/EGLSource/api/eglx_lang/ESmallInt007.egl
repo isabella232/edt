@@ -1,0 +1,426 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.NumericOverflowException;
+
+/** @test
+  * @name ESmallInt007
+  * @title ESmallInt007 - runConversionFunction
+  * @description testing conversion from smallInt to/from other types
+  * @testcases runConversionFunction01 - runConversionFunctionn34
+  * @sources ESmallInt007.egl
+  * @keywords smallInt, 
+ **/
+library ESmallInt007 {}
+
+	expectedInt smallInt?;
+	actualInt smallInt;
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (expectedInt == actualInt);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + actualInt);
+	 		SysLib.writeStdOut(" expect " + expectedInt);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		variation = "int implicit smallInt conversion";
+		actual int = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction02(){@Test}		
+		variation = "negative int implicit smallInt conversion";
+		actual int = -7;
+		actualInt = actual;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction03(){@Test}
+		variation = "int? implicit smallInt conversion";
+		actual int? = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction04(){@Test}
+		variation = "decimal implicit smallInt conversion";
+		actual decimal(5,2) = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction05(){@Test}
+		variation = "negative decimal implicit smallInt conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual;
+		expectedInt = -123;
+		assertTrue();	
+	end
+	
+	function runConversionFunction06(){@Test}
+		variation = "decimal() implicit smallInt conversion";
+		actual decimal = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction07(){@Test}
+		variation = "decimal? implicit smallInt conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction08(){@Test}
+		variation = "decimal()? implicit smallInt conversion";
+		actual decimal? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction09(){@Test}
+		try
+			variation = "float implicit smallInt conversion1";
+			actual float = 2.539E7;
+			actualInt = actual;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction10(){@Test}
+		try 
+			variation = "negative float implicit smallInt conversion2";
+			actual float = -2.539e7;
+			actualInt = actual;
+			expectedInt = -25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	
+	
+	function runConversionFunction11(){@Test}
+		try 
+			variation = "float? implicit smallInt conversion1";
+			actual float? = 2.539E7;
+			actualInt = actual;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+
+	function runConversionFunction12(){@Test}
+	 	try
+			variation = "smallFloat implicit smallInt conversion1";
+			actual smallFloat = 2.539E7;
+			actualInt = actual;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction13(){@Test}
+		try
+			variation = "negative smallFloat implicit smallInt conversion1";
+			actual smallFloat = 2.539E7;
+			actualInt = actual;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction14(){@Test}
+		try
+			variation = "smallFloat? implicit smallInt conversion1";
+			actual smallFloat? = 2.539E7;
+			actualInt = actual;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction15(){@Test}
+		try
+			variation = "bigint implicit smallInt conversion";
+			actual bigInt = 8928234898823I;
+			actualInt = actual;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction16(){@Test}
+		try
+			variation = "negative bigint implicit smallInt conversion";
+			actual bigInt = -8928234898823I;
+			actualInt = actual;
+			expectedInt = -8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction17(){@Test}
+		try
+			variation = "bigint? implicit smallInt conversion";
+			actual bigInt? = 8928234898823I;
+			actualInt = actual;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction18(){@Test}
+		variation = "smallInt explicit smallInt conversion";
+		actual smallint = 7;
+		actualInt = actual as smallInt;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction19(){@Test}		
+		variation = "negative smallInt explicit smallInt conversion";
+		actual smallint = -7;
+		actualInt = actual as smallInt;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction20(){@Test}
+		variation = "smallInt? explicit smallInt conversion";
+		actual smallint? = 7;
+		actualInt = actual as smallInt;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction21(){@Test}
+		variation = "decimal explicit smallInt conversion";
+		actual decimal(5,2) = 123.45;
+		actualInt = actual as smallInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction22(){@Test}
+		variation = "negative decimal explicit smallInt conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual as smallInt;
+		expectedInt = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction23(){@Test}
+		variation = "decimal() explicit smallInt conversion";
+		actual decimal = 123.45;
+		actualInt = actual as smallInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+		function runConversionFunction24(){@Test}
+		variation = "decimal? explicit smallInt conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual as smallInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction25(){@Test}
+		variation = "decimal()? explicit smallInt conversion";
+		actual decimal? = 123.45;
+		actualInt = actual as smallInt;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction26(){@Test}
+		try 
+			variation = "float explicit smallInt conversion1";
+			actual float = 2.539E7;
+			actualInt = actual as smallInt;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction27(){@Test}
+		try
+			variation = "negative float explicit smallInt conversion2";
+			actual float = -2.539e7;
+			actualInt = actual as smallInt;
+			expectedInt = -25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end	
+	
+	function runConversionFunction28(){@Test}
+		try
+			variation = "float? explicit smallInt conversion1";
+			actual float? = 2.539E7;
+			actualInt = actual as smallInt;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+
+	function runConversionFunction29(){@Test}
+		try
+			variation = "smallFloat explicit smallInt conversion1";
+			actual smallFloat = 2.539E7;
+			actualInt = actual as smallInt;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction30(){@Test}
+		try
+			variation = "negative smallFloat explicit smallInt conversion1";
+			actual smallFloat = 2.539E7;
+			actualInt = actual as smallInt;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction31(){@Test}
+		try
+			variation = "smallFloat? explicit smallInt conversion1";
+			actual smallFloat? = 2.539E7;
+			actualInt = actual as smallInt;
+			expectedInt = 25390000;
+			assertTrue();
+		onException (ex NumericOverflowException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction32(){@Test}
+		try
+			variation = "bigint explicit smallInt conversion";
+			actual bigInt = 8928234898823I;
+			actualInt = actual as smallInt;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction33(){@Test}
+		try
+			variation = "negative bigint explicit smallInt conversion";
+			actual bigInt = -8928234898823I;
+			actualInt = actual as smallInt;
+			expectedInt = -8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+	
+	function runConversionFunction34(){@Test}
+		try
+			variation = "bigint? explicit smallInt conversion";
+			actual bigInt? = 8928234898823I;
+			actualInt = actual as smallInt;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(oops AnyException)
+			LogResult.skipped("JS ONLY 356228 overflow exception");
+		end
+	end
+
+	function runConversionFunction35(){@Test}
+		variation = "bytes(2) implicit smallInt conversion";
+		actual bytes(2) = 0x7FF1;
+		actualInt = actual;
+		expectedInt = 32753;
+		assertTrue();
+	end
+	
+	function runConversionFunction37(){@Test}
+		variation = "bytes implicit smallInt conversion";
+    	actual bytes = 0x4F3D;
+		actualInt = actual;
+		expectedInt = 20285;
+		assertTrue();		
+	end
+	
+	function runConversionFunction38(){@Test}
+		variation = "bytes(2)? implicit smallInt conversion";
+		actual bytes(2)? = 0xFB2E;
+		actualInt = actual;
+		expectedInt = -1234;
+		assertTrue();	
+	end
+	
+	function runConversionFunction39(){@Test}
+		variation = "bytes? implicit smallInt conversion";
+		actual bytes? = 0x4F3D;
+		actualInt = actual;
+		expectedInt = 20285;
+		assertTrue();
+	end
+	
+	function runConversionFunction40(){@Test}
+		variation = "bytes explicit smallInt conversion";
+    	actual bytes = 0xFB2E;
+		actualInt = actual as smallInt;
+		expectedInt = -1234;
+		assertTrue();
+	end
+	
+	function runConversionFunction41(){@Test}
+		variation = "bytes? explicit smallInt conversion";
+    	actual bytes? = 0x7FF1;
+		actualInt = actual as smallInt;
+		expectedInt = 32753;
+		assertTrue();
+	end
+
+end // ESmallInt007

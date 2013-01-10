@@ -1,0 +1,19 @@
+package common.interfaces;
+
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+//Put EGL Source File Contents Here
+
+Record CurrencyConvertorData
+	fromCurrency string;
+	toCurrency string;
+end
+
+//the namespace value is case sensitive
+Record double{@xmlRootElement {name = "double", namespace = "http://www.webserviceX.NET/"}, @XMLValue {kind = xmlStructureKind.simpleContent}}
+//	double String{@XMLElement{namespace = "http://www.webservicex.net"}};
+//	double String;
+	value String?;
+end

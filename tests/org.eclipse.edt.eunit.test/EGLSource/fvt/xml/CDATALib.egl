@@ -1,0 +1,46 @@
+package fvt.xml;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.xml.XmlLib;
+
+/* 
+* @name CDATALib
+* @title The function test program for CDATA Library
+* @keywords CDATA
+* @author EDT team
+* @createDate 2011/08/22
+* @description 
+* Verify CDATA library for XML conversions
+*/
+
+library CDATALib
+
+    function testXMLConversion1(){@Test}
+        p parent = new parent{};
+        xmlstr string = "<parent><childA>hello</childA><childB><![CDATA[Hello W]]></childB></parent>";
+        xmlLib.convertFromXML(xmlstr, p);
+        LogResult.logStdOut(xmlstr);
+        LogResult.logStdOut("ChildA check");
+        LogResult.assertStringEqual("Fail in ChildA check", "hello", p.childA);
+        LogResult.logStdOut("ChildB check");
+        LogResult.assertStringEqual("Fail in ChildB check", "Hello W", p.childB);
+    end
+
+    function testXMLConversion2(){@Test}
+        p parent = new parent{};
+        xmlstr string = "<parent><childA>hello</childA><childB>Say <![CDATA[Hello W]]>!</childB></parent>";
+        xmlLib.convertFromXML(xmlstr, p);
+        LogResult.logStdOut(xmlstr);
+        LogResult.logStdOut("ChildA check");
+        LogResult.assertStringEqual("Fail in ChildA check", "hello", p.childA);
+        LogResult.logStdOut("ChildB check");
+        LogResult.assertStringEqual("Fail in ChildB check", "Say Hello W!", p.childB);
+    end
+    
+end
+
+record parent
+    childA string;
+    childB string;
+end

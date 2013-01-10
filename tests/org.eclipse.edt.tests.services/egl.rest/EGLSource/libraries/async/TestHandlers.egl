@@ -1,0 +1,588 @@
+package libraries.async;
+
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.StringRec;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import handlers.BooleanArrayHandler;
+import handlers.BooleanHandler;
+import handlers.DateArrayHandler;
+import handlers.DateHandler;
+import handlers.DecimalArrayHandler;
+import handlers.DecimalHandler;
+import handlers.FloatArrayHandler;
+import handlers.FloatHandler;
+import handlers.IntArrayHandler;
+import handlers.IntHandler;
+import handlers.OuterHandler;
+import handlers.SmallIntArrayHandler;
+import handlers.SmallfloatArrayHandler;
+import handlers.SmallfloatHandler;
+import handlers.SmallintHandler;
+import handlers.StringArrayHandler;
+import handlers.StringHandler;
+import handlers.TimestampArrayHandler;
+import handlers.TimestampHandler;
+import handlers.bigIntArrayHandler;
+import handlers.bigIntHandler;
+import interfaces.IHandlerPassing;
+import services.HandlerPassing;
+import utilities.CommonUtilities;
+
+// basic library
+library TestHandlers 
+
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end					
+		
+	function testBigint_all() {@Test}
+        bigInt1 bigIntHandler{item1 = 1};
+        bigInt2 bigIntHandler{item1 = 2};
+        bigInt3 bigIntHandler{item1 = 3};
+		call HandlerPassing.bigIntAll(bigInt1, bigInt2, bigInt3) using CommonUtilities.getResource("handlers") returning to verify_bigIntAll onException handleServiceException;
+	end
+	
+	function testBigintArray_all() {@Test}
+		bigIntArray1 bigIntArrayHandler{item1=[2, 5]};
+		bigIntArray2 bigIntArrayHandler{item1=[3]};
+		bigIntArray3 bigIntArrayHandler{item1=[4, 6]};
+		call HandlerPassing.bigIntArrayAll(bigIntArray1, bigIntArray2, bigIntArray3) using CommonUtilities.getResource("handlers") returning to verify_bigIntArrayAll onException handleServiceException;	
+	end
+
+	function testInt_all() {@Test}
+        Int1 IntHandler{item1 = 1};
+        int2 intHandler{item1 = 2};
+        int3 intHandler{item1 = 3};	
+        call HandlerPassing.intAll(int1, int2, int3) using CommonUtilities.getResource("handlers") returning to verifyInt_all onException handleServiceException;
+	end
+	
+	function testIntArray_all() {@Test}
+		intArray1 intArrayHandler{item1=[2, 5]};
+		intArray2 intArrayHandler{item1=[3]};
+		intArray3 intArrayHandler{item1=[4, 6]};
+		call IHandlerPassing.intArrayAll(intArray1, intArray2, intArray3) using CommonUtilities.getResource("handlers") returning to verifyIntArray_all onException handleServiceException;
+	end
+
+	function testSmallint_all() {@Test}
+		sInt1 smallIntHandler{item1 = 9};
+		sInt2 smallIntHandler{item1 = 4};
+		sInt3 smallIntHandler{item1 = 7};	
+		call IHandlerPassing.smallIntAll(sInt1, sInt2, sInt3) using CommonUtilities.getResource("handlers") returning to verifySmallint_all onException handleServiceException;			
+	end
+	
+	function testSmallintArray_all() {@Test}
+		sIntArray1 smallIntArrayHandler{item1=[7,4]};
+		sIntArray2 smallIntArrayHandler{item1=[2]};
+		sIntArray3 smallIntArrayHandler{item1=[3, 6, 8]};	
+		call IHandlerPassing.smallIntArrayAll(sIntArray1, sIntArray2, sIntArray3) using CommonUtilities.getResource("handlers") returning to verifySmallintArray_all onException handleServiceException;
+	end
+	
+	function testSmallfloat_all() {@Test}
+		sFloat1 smallFloatHandler{item1 = 1.7};
+		sFloat2 smallFloatHandler{item1 = 4.1};			
+		sFloat3 smallFloatHandler{item1 = 1.3};
+		call IHandlerPassing.smallFloatAll(sFloat1, sFloat2, sFloat3) using CommonUtilities.getResource("handlers") returning to verifySmallfloat_all onException handleServiceException;
+	end
+
+	function testSmallfloatArray_all() {@Test}
+		sFloatArray1 smallFloatArrayHandler{item1=[1.7, 2.1]};
+		sFloatArray2 smallFloatArrayHandler{item1=[2.4]};
+		sFloatArray3 smallFloatArrayHandler{item1=[2.4, 3.5]};
+		call IHandlerPassing.smallFloatArrayAll(sFloatArray1, sFloatArray2, sFloatArray3) using CommonUtilities.getResource("handlers") returning to verifySmallfloatArray_all onException handleServiceException;	
+	end
+	
+	function testFloat_all() {@Test}
+		float1 floatHandler{item1 = 1.7};
+		float2 floatHandler{item1 = 4.1};			
+		float3 floatHandler{item1 = 1.3};
+		call IHandlerPassing.floatAll(float1, float2, float3) using CommonUtilities.getResource("handlers") returning to verifyFloat_all onException handleServiceException;
+	
+	end
+	
+	function testFloatArray_all() {@Test}
+		floatArray1 floatArrayHandler{item1=[1.7, 2.1]};
+		floatArray2 floatArrayHandler{item1=[2.4]};
+		floatArray3 floatArrayHandler{item1=[2.4, 3.5]};
+		
+		call IHandlerPassing.floatArrayAll(floatArray1, floatArray2, floatArray3) using CommonUtilities.getResource("handlers") returning to verifyFloatArray_all onException handleServiceException;		
+	end
+	
+	function testDecimal_all() {@Test}
+		decimal1 decimalHandler{item1 = 1.7};
+		decimal2 decimalHandler{item1 = 4.1};			
+		decimal3 decimalHandler{item1 = 1.3};
+		call IHandlerPassing.decimalAll(decimal1, decimal2, decimal3) using CommonUtilities.getResource("handlers") returning to verifyDecimal_all onException handleServiceException;
+	
+	end
+	
+	function testDecimalArray_all() {@Test}
+		decimalArray1 decimalArrayHandler{item1=[1.7, 2.1]};
+		decimalArray2 decimalArrayHandler{item1=[2.4]};
+		decimalArray3 decimalArrayHandler{item1=[2.4, 3.5]};
+		call IHandlerPassing.deciamlArrayAll(decimalArray1, decimalArray2, decimalArray3) using CommonUtilities.getResource("handlers") returning to verifyDecimalArray_all onException handleServiceException;
+		
+	end
+	
+	function testString_all() {@Test}
+		string1 stringHandler{item1 = "a"};
+		string2 stringHandler{item1 = "b"};			
+		string3 stringHandler{item1 = "c"};
+		call IHandlerPassing.stringAll(string1, string2, string3) using CommonUtilities.getResource("handlers") returning to verifyString_all onException handleServiceException;		
+	end
+	
+	function testStringArray_all() {@Test}
+		stringArray1 stringArrayHandler{item1=["a", "b"]};
+		stringArray2 stringArrayHandler{item1=["c"]};
+		stringArray3 stringArrayHandler{item1=["d", "e"]};
+		call IHandlerPassing.stringArrayAll(stringArray1, stringArray2, stringArray3) using CommonUtilities.getResource("handlers") returning to verifyStringArray_all onException handleServiceException;		
+	end
+
+	function testTimestamp_all() {@Test}
+		timeStamp1 timeStampHandler{item1 = "2006/05/24-12:05:45"};
+		timeStamp2 timeStampHandler{item1 = "2003/02/17-14:48:52"};			
+		call IHandlerPassing.timeStampAll(timeStamp1, timeStamp2) using CommonUtilities.getResource("handlers") returning to verifyTimestamp_all onException handleServiceException;                
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();			
+	end
+	
+	function testTimestampArray_all() {@Test}
+		timeStampArray1 timeStampArrayHandler{item1=["2005/12/05-01:15:41" as timestamp, "1996/07/14-04:27:54" as timestamp]};
+		timeStampArray2 timeStampArrayHandler{item1=["2002/09/18-03:58:35" as timestamp]};
+		timeStampArray3 timeStampArrayHandler{item1=["2000/12/04-10:16:21" as timestamp, "2006/03/28-23:47:46" as timestamp]};
+		call IHandlerPassing.timeStampArrayAll(timeStampArray1, timeStampArray2, timeStampArray3) using CommonUtilities.getResource("handlers") returning to verifyTimestampArray_all onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();					
+	end
+
+	function testBoolean_all() {@Test}
+		boolean1 booleanHandler{item1 = true};
+		boolean2 booleanHandler{item1 = false};			
+		boolean3 booleanHandler{item1 = false};
+
+		call IHandlerPassing.booleanAll(boolean1, boolean2, boolean3) using CommonUtilities.getResource("handlers") returning to verifyBoolean_all onException handleServiceException;	
+	end
+	
+	function testBooleanArray_all() {@Test}
+		booleanArray1 booleanArrayHandler{item1=[true, false]};
+		booleanArray2 booleanArrayHandler{item1=[true]};
+		booleanArray3 booleanArrayHandler{item1=[false, true]};
+		call IHandlerPassing.booleanArrayAll(booleanArray1, booleanArray2, booleanArray3) using CommonUtilities.getResource("handlers") returning to verifyBooleanArray_all onException handleServiceException;
+			
+	end
+	
+	function testDate_all() {@Test}
+		date1 dateHandler{item1 = "03/02/2010"};
+		date2 dateHandler{item1 = "04/06/2009"};
+		date3 dateHandler{item1 = "09/30/2007"};
+
+		call IHandlerPassing.dateAll(date1, date2, date3) using CommonUtilities.getResource("handlers") returning to verifyDate_all onException handleServiceException;	
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();	
+	end
+	
+	function testDateArray_all() {@Test}
+		dateArray1 dateArrayHandler{item1=["12/05/2005" as date, "07/14/1996" as date]};
+		dateArray2 dateArrayHandler{item1=["09/18/2002" as date]};
+		dateArray3 dateArrayHandler{item1=["12/04/2000" as date, "03/28/2006" as date]};	
+		call IHandlerPassing.dateArrayAll(dateArray1, dateArray2, dateArray3) using CommonUtilities.getResource("handlers") returning to verifyDateArray_all onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();	
+	end
+	
+	function testOuterHandler_inParm() {@Test}
+		data1 OuterHandler;
+		CommonUtilities.initOuterHandler(data1);
+		call IHandlerPassing.outerHandlerIn(data1) using CommonUtilities.getResource("handlers") returning to verifyOuterHandler_inParm onException handleServiceException;
+	end
+	
+	function testOuterHandler_inoutParm() {@Test}
+		data1 OuterHandler;
+        CommonUtilities.initOuterHandler(data1);
+		call IHandlerPassing.outerHandlerInout(data1) using CommonUtilities.getResource("handlers") returning to verifyOuterHandler_inoutParm onException handleServiceException;		
+	end
+
+	function testOuterHandler_outParm() {@Test}
+		data1 OuterHandler;
+        CommonUtilities.initOuterHandler(data1);
+        call IHandlerPassing.outerHandlerOut(data1) using CommonUtilities.getResource("handlers") returning to verifyOuterHandler_outParm onException handleServiceException;        
+	end
+	
+	function testOuterHandler_allParm() {@Test}
+		data1, data2, data3 OuterHandler;
+        CommonUtilities.initOuterHandler(data1);
+        CommonUtilities.initOuterHandler(data2);
+		call IHandlerPassing.outerHandlerAll(data1, data2, data3) using CommonUtilities.getResource("handlers") returning to verifyOuterHandler_allParm onException handleServiceException;		
+	end	
+	
+	function verify_bigIntAll(data2 bigIntHandler in, data3 bigIntHandler in, retResult bigInt[] in)
+		try
+			LogResult.assertBigIntEqual(":data2", 3, data2.item1);
+			LogResult.assertBigIntEqual(":data3", 100, data3.item1);
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 3, retResult[2]);
+			LogResult.assertBigIntEqual(":ret[3]", 100, retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verify_bigIntArrayAll(dataArray2 bigIntArrayHandler in, dataArray3 bigIntArrayHandler in, retResult bigInt[] in)
+		try
+			LogResult.assertBigIntEqual(":retResult[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":retResult[2]", 5, retResult[2]);
+			LogResult.assertBigIntEqual(":dataArray2.item1[1]", 3, dataArray2.item1[1]);
+			LogResult.assertBigIntEqual(":dataArray2.item1[2]", 1, dataArray2.item1[2]);
+			LogResult.assertBigIntEqual(":dataArray3.item1[1]", 100, dataArray3.item1[1]);
+			LogResult.assertBigIntEqual(":dataArray3.item1.size", 1, dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyInt_all(data2 intHandler in, data3 intHandler in, retResult int[] in)
+		try
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 3, retResult[2]);
+			LogResult.assertBigIntEqual(":ret[3]", 100, retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyIntArray_all(dataArray2 intArrayHandler in, dataArray3 intArrayHandler in, retResult int[] in)
+		try
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 5, retResult[2]);
+			LogResult.assertBigIntEqual(":data2.item1[1]", 3, dataArray2.item1[1]);
+			LogResult.assertBigIntEqual(":data2.item1[2]", 1, dataArray2.item1[2]);
+			LogResult.assertBigIntEqual(":data3.item1[1]", 100, dataArray3.item1[1]);
+			LogResult.assertBigIntEqual(":data3.item1.size", 1, dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallint_all(data2 smallIntHandler in, data3 smallIntHandler in, retResult smallInt[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", 1==retResult[1]);
+			LogResult.assertTrue(":retResult[2]", 4==retResult[2]);
+			Logresult.assertTrue(":retResult[3]", 8==retResult[3]);
+			Logresult.assertBigIntEqual(":retResult[4]", 5, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallintArray_all(dataArray2 smallIntArrayHandler in, dataArray3 smallIntArrayHandler in, retResult smallInt[] in)
+		try
+			LogResult.assertTrue("retResult[1]", 7==retResult[1]);
+			LogResult.assertTrue("retResult[2]", 4==retResult[2]);
+			Logresult.assertTrue("dataArray2.item1[1]", 2==dataArray2.item1[1]);
+			LogResult.assertTrue("dataArray2.item1[2]", 1==dataArray2.item1[2]);
+			LogResult.assertTrue("dataArray3.item1[1]", 10==dataArray3.item1[1]);
+			LogResult.assertTrue("dataArray3.item1.getSize()", 1==dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloat_all(data2 smallFloatHandler in, data3 smallFloatHandler in, retResult smallFloat[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertFloatEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertFloatEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloatArray_all(dataArray2 smallFloatArrayHandler in, dataArray3 smallFloatArrayHandler in, retResult smallFloat[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertFloatEqual(":dataArray2.item1[1]", 2.4, dataArray2.item1[1]);
+			LogResult.assertFloatEqual(":dataArray2.item1[2]", 2.7, dataArray2.item1[2]);
+			LogResult.assertFloatEqual(":dataArray3.item1[1]", 9.4, dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1 == dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyFloat_all(data2 floatHandler in, data3 floatHandler in, retResult float[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertFloatEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertFloatEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyFloatArray_all(dataArray2 floatArrayHandler in, dataArray3 floatArrayHandler in, retResult float[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertFloatEqual(":dataArray2.item1[1]", 2.4, dataArray2.item1[1]);
+			LogResult.assertFloatEqual(":dataArray2.item1[2]", 23.2, dataArray2.item1[2]);
+			LogResult.assertFloatEqual(":dataArray3.item1[1]", 7.3, dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getsize()", 1==dataArray3.item1.getsize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyDecimal_all(data2 decimalHandler in, data3 decimalHandler in, retResult decimal(10,2)[] in)
+		try
+			LogResult.assertDecimalEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertDecimalEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertDecimalEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertDecimalEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();						
+	end
+	
+	function verifyDecimalArray_all(dataArray2 decimalArrayHandler in, dataArray3 decimalArrayHandler in, retResult decimal(10,2)[] in)
+		try
+			LogResult.assertDecimalEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertDecimalEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertDecimalEqual(":dataArray2.item1[1]", 2.4, dataArray2.item1[1]);
+			LogResult.assertDecimalEqual(":dataArray2.item1[2]", 3.4, dataArray2.item1[2]);
+			LogResult.assertDecimalEqual(":dataArray3.item1[1]", 7.3, dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1 == dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();									
+	end
+	
+	function verifyString_all(data2 stringHandler in, data3 stringHandler in, retResult string[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "Hi", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":retResult[3]", "Hi c", retResult[3]);
+			LogResult.assertStringEqual(":retResult[4]", "Hi b", retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyStringArray_all(dataArray2 stringArrayHandler in, dataArray3 stringArrayHandler in, retResult string[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "a", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":dataArray2.item1[1]", "c", dataArray2.item1[1]);
+			LogResult.assertStringEqual(":dataArray2.item1[2]", "Yahoo", dataArray2.item1[2]);
+			LogResult.assertStringEqual(":dataArray3.item1[1]", "HiHi", dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1==dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimestamp_all(data2 timestampHandler in, retResult timeStamp[] in)
+		try
+			retExpected timestamp = "2006/05/24 12:05:45";
+			LogResult.assertTimestampEqual(":retResult[1]", retExpected, retResult[1]);
+			LogResult.assertTimestampEqual(":retResult[2]", "2003/02/17 14:48:52", retResult[2]);
+			LogResult.assertTimestampEqual(":retResult[3]", "2006/05/24 12:05:45", retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimestampArray_all(dataArray2 timeStampArrayHandler in, dataArray3 timeStampArrayHandler in, retResult timeStamp("yyyyMMddHHmmss")[] in)
+		try
+			LogResult.assertTimestampEqual(":retResult[1]", "2005/12/05 01:15:41", retResult[1]);
+			LogResult.assertTimestampEqual(":retResult[2]", "1996/07/14 04:27:54", retResult[2]);
+			LogResult.assertTimestampEqual(":dataArray2.item1[1]", "2002/09/18 03:58:35", dataArray2.item1[1]);
+			LogResult.assertTimestampEqual(":dataArray2.item1[2]", "2006/07/13 18:30:23", dataArray2.item1[2]);
+			LogResult.assertTimestampEqual(":dataArray3.item1[1]", "2006/07/12 20:23:54", dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1 == dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBoolean_all(data2 booleanHandler in, data3 booleanHandler in, retResult boolean[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", false == retResult[1]);
+			LogResult.assertTrue(":retResult[2]", false == retResult[2]);
+			LogResult.assertTrue(":retResult[3]", true == retResult[3]);
+			LogResult.assertTrue(":retResult[4]", true == retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBooleanArray_all(dataArray2 booleanArrayHandler in, dataArray3 booleanArrayHandler in, retResult boolean[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", true == retResult[1]);
+			LogResult.assertTrue(":retResult[2]", false == retResult[2]);
+			LogResult.assertTrue(":dataArray2.item1[1]", true == dataArray2.item1[1]);
+			LogResult.assertTrue(":dataArray2.item1[2]", true == dataArray2.item1[2]);
+			LogResult.assertTrue(":dataArray3.item1[1]", false == dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1 == dataArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();				
+	end
+	
+	function verifyDate_all(data2 dateHandler in, data3 dateHandler in, retResult date[] in)
+		try
+			LogResult.assertDateEqual(":retResult[1]", "04/24/2007", retResult[1]);
+			LogResult.assertDateEqual(":retResult[2]", "04/06/2009", retResult[2]);
+			LogResult.assertDateEqual(":retResult[3]", "10/01/2007", retResult[3]);
+			LogResult.assertDateEqual(":retResult[4]", "04/07/2009", retResult[4]);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyDateArray_all(dataArray2 dateArrayHandler in, dataArray3 dateArrayHandler in, retResult date[] in)
+		try			
+			LogResult.assertDateEqual(":retResult[1]", "12/05/2005", retResult[1]);
+			LogResult.assertDateEqual(":retResult[2]", "07/14/1996", retResult[2]);
+			LogResult.assertDateEqual(":dataArray2.item1[1]", "09/18/2002", dataArray2.item1[1]);
+			LogResult.assertDateEqual(":dataArray2.item1[2]", "07/13/2006", dataArray2.item1[2]);
+			LogResult.assertDateEqual(":dataArray3.item1[1]", "07/12/2006", dataArray3.item1[1]);
+			LogResult.assertTrue(":dataArray3.item1.getSize()", 1 == dataArray3.item1.getSize());			
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyOuterHandler_inParm(retResult string in)
+		try
+		LogResult.assertStringEqual("", "data.item4.item1[1] = data.item4.item1[1]", retResult);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyOuterHandler_inoutParm(data OuterHandler in)
+		expected OuterHandler;
+		CommonUtilities.initOuterHandler(expected);
+		try
+			compareOuterHandler(expected, data);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyOuterHandler_outParm(data OuterHandler in)
+		expected OuterHandler;
+		CommonUtilities.initOuterHandler(expected);
+		try
+			compareOuterHandler(expected, data);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();
+	end
+	
+	//caller needs to catch AssertionFailedException
+	private function compareOuterHandler(expected OuterHandler in, actual OuterHandler in)
+		LogResult.assertStringEqual(":data.item1", expected.item1, actual.item1);
+		LogResult.assertStringArrayEqual(":data.item2", expected.item2, actual.item2);
+		LogResult.assertStringEqual(":data.item4.item2", expected.item4.item2, actual.item4.item2);
+		LogResult.assertBigIntEqual(":data.item4.item3", expected.item4.item3, actual.item4.item3);		
+	end
+	
+	function verifyOuterHandler_allParm(data2 OuterHandler in, data3 OuterHandler in, retResult string in)
+		expected OuterHandler;
+		CommonUtilities.initOuterHandler(expected);
+		try
+			compareOuterHandler(expected, data2);
+			compareOuterHandler(expected, data3);
+			LogResult.assertStringEqual(":retResult", expected.item4.item1[1], retResult);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	//caller needs to catch AssertionFailedException
+	private function compareStringRec(expected StringRec in, actual StringRec in)
+		LogResult.assertStringEqual(":field1", expected.field1, actual.field1);
+		LogResult.assertStringEqual(":field4[1]", expected.field4[1], actual.field4[1]);
+		LogResult.assertStringEqual(":field4[2]", expected.field4[2], actual.field4[2]);
+	end	
+	
+end
+

@@ -1,0 +1,20 @@
+package common.interfaces;
+
+import eglx.json.JsonName;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+record GeoNamesData{@XMLRootElement {name="geonames"}}
+	totalResultsCount int;
+	geoname GeoNameData[]{@JsonName {value = "geonames"}};
+end
+
+record GeoNameData
+	name string;
+	lat string;
+	lng string;
+	geonameId string;
+	countryCode string;
+	countryName string;
+	fcl string;
+	fcode string;
+end

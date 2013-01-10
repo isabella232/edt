@@ -1,0 +1,211 @@
+package fvt.xml;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+import eglx.xml.XmlLib;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+/* 
+* @name NamespaceLib
+* @title The function test program for XML conversion with namespace
+* @keywords namespace
+* @author EDT team
+* @createDate 2011/08/26
+* @description 
+* Test Flexible Records, test XML conversion with namespace
+*/
+
+library NamespaceLib
+
+    top TopLevel{name = "topLevel", status = "working", array =["abc", "cde"], nextLevel{name = "secondLevel", status = "same", arrayNS =["123", "456"], nextLevel{name = "3rdLevel", status = "complete", nextLevel = "null"}}};
+    top2 TopLevel{};
+
+    function testXMLConversionNS(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"http://my.namespace.com\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "http://my.namespace.com") != 0);
+    end
+
+    function testXMLConversionStatus(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"http://my.status.com\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "http://my.status.com") != 0);
+    end
+
+    function testXMLConversionArray(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"http://my.array.com\" check");
+        LogResult.assertTrue1(strlib.indexOf(xml, "http://my.array.com") != 0);
+    end
+
+    function testXMLConversionTopLev(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"nsx:topLevel\" check");
+        LogResult.assertStringEqual("the namspaces are not the same", "http://my.namespace.com", getNameSpace(xml, "topLevel"));
+    end
+
+    function testXMLConversionSecLev(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"nsx:SecondLevel\" check");
+        LogResult.assertStringEqual("the namspaces are not the same", "http://my.namespace.com", getNameSpace(xml, "nextLevel"));
+    end
+
+    function testXMLConversionThdLev(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"nsx:ThirdLevel\" check");
+        LogResult.assertStringEqual("the namspaces are not the same", "http://my.namespace.com", getNameSpace(xml, "nextLevel"));
+    end
+
+    function testXMLConversionNs2Status(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"nsx:status\" check");
+        LogResult.assertStringEqual("the namspaces are not the same", "http://my.status.com", getNameSpace(xml, "status"));
+    end
+
+    function testXMLConversionArrNS(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        LogResult.logStdOut("\"nsx:arrayNS\" check");
+         LogResult.assertStringEqual("the namspaces are not the same", "http://my.array.com", getNameSpace(xml, "arrayNS"));
+    end
+
+    function testXMLConversionTLName(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.name ");
+        LogResult.assertStringEqual1(top.name, top2.name);
+    end
+
+    function testXMLConversionTLStatus(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.status ");
+        LogResult.assertStringEqual1(top.status, top2.status);
+    end
+
+    function testXMLConversionTLArrSize(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.array.getSize() ");
+        LogResult.assertBigIntEqual1(top.array.getSize(), top2.array.getSize());
+    end
+
+    function testXMLConversionTLArr(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        i int = 0;
+        while(i < top.array.getSize())
+            i += 1;
+            LogResult.logStdOut("TopLevel.array[" + i + "] ");
+            LogResult.assertStringEqual("Fail in TopLevel.array[" + i + "] ", top.array[i], top2.array[i]);
+        end
+    end
+
+    function testXMLConversionNLName(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.name ");
+        LogResult.assertStringEqual1(top.nextLevel.name, top2.nextLevel.name);
+    end
+
+    function testXMLConversionNLStatus(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.status ");
+        LogResult.assertStringEqual1(top.nextLevel.status, top2.nextLevel.status);
+    end
+
+    function testXMLConversionNLArrSize(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.arrayNS.getSize() ");
+        LogResult.assertBigIntEqual1(top.nextLevel.arrayNS.getSize(), top2.nextLevel.arrayNS.getSize());
+    end
+
+    function testXMLConversionNLArr(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        i int = 0;
+        while(i < top.nextLevel.arrayNS.getSize())
+            i += 1;
+            LogResult.logStdOut("TopLevel.nextLevel.arrayNS[" + i + "] ");
+            LogResult.assertStringEqual("Fail in TopLevel.nextLevel.arrayNS[" + i + "] ", top.nextLevel.arrayNS[i], top2.nextLevel.arrayNS[i]);
+        end
+    end
+
+    function testXMLConversionNLNLName(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.nextLevel.name ");
+        LogResult.assertStringEqual1(top.nextLevel.nextLevel.name, top2.nextLevel.nextLevel.name);
+    end
+
+    function testXMLConversionNLNLStatus(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.nextLevel.status ");
+        LogResult.assertStringEqual1(top.nextLevel.nextLevel.status, top2.nextLevel.nextLevel.status);
+    end
+
+    function testXMLConversionNLNLNL(){@Test}
+        xml string = XMLLib.convertToXML(top, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+        XMLLib.convertFromXML(xml, top2);
+        LogResult.logStdOut("TopLevel.nextLevel.nextLevel.nextLevel ");
+        LogResult.assertStringEqual1(top.nextLevel.nextLevel.nextLevel, top2.nextLevel.nextLevel.nextLevel);
+    end
+
+	private function getNameSpace(xml String in, element String in)returns(string)
+        idx int = xml.indexOf(":" + element);
+        LogResult.assertTrue("did not find :" + element, idx != 0);
+        idx -= 3;//back the index to the namespace decl
+		ns string = xml[idx:idx + 2]; 
+		ns = "xmlns:" + ns + "=\"";
+        idx = xml.indexOf(ns);
+        LogResult.assertTrue("did not find " + ns + " for :" + element, idx != 0);
+        idx += ns.length();
+        
+       	endIdx int = xml.indexOf("\"", idx);
+        LogResult.assertTrue("did not find the end \" for " + ns, endIdx != 0);
+        return xml[idx : endIdx - 1];
+	end
+end
+
+record TopLevel{@XMLRootElement{namespace = "http://my.namespace.com"}}
+    name string; 
+    status string{@XMLElement{namespace = "http://my.status.com"}};
+    array string[];
+    nextLevel SecondLevel{@XMLElement{namespace = "http://my.namespace.com"}};
+end
+
+record SecondLevel{@XMLRootElement{namespace = "http://my.namespace.com"}}
+    name string; 
+    status string{@XMLElement{namespace = "http://my.status.com"}};
+    arrayNS string[]{@XMLElement{namespace = "http://my.array.com"}};
+    nextLevel ThirdLevel{@XMLElement{namespace = "http://my.namespace.com"}};
+end
+
+record ThirdLevel{@XMLRootElement{namespace = "http://my.namespace.com"}}
+    name string; 
+    status string{@XMLElement{namespace = "http://my.status.com"}};
+    nextLevel string;
+end

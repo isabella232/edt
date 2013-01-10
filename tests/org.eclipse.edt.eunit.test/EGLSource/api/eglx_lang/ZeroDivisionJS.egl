@@ -1,0 +1,704 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Numeric division by zero
+* @keywords AnytException
+* @author EDT team
+* @createDate 2011/10/12
+* @description 
+*  Verify that all the numeric types handle division by zero the same 
+*  Bug 360690 - Expecting all numeric types to throw same exception when dividing by zero
+*  This test case is coded specifically for JavaScript generation
+*/
+library ZeroDivisionJS
+
+	function runArithmeticFunction11_ESmallInt004() {@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallInt operation / with 0 and literals";
+		failDetails string;
+		try
+			intActual smallInt = 75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallInt004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallInt operation / with 0 and negative variables";
+		failDetails string;
+		try
+			intActual smallInt = -75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_ESmallInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string  = "SmallInt operation / with 0 and variables";
+		failDetails string;
+		int1 smallInt = 75;
+		zero smallInt = 0;
+		intActual smallInt;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string  = "operation / with 0 and negative variables";
+		failDetails string;
+		int2 smallInt = -75;
+		zero smallInt = 0;
+		intActual smallInt;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_ESmallInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallInt operation / with 0 and variables?";
+		failDetails string;
+		int1 smallInt = 75;
+		zero smallInt = 0;
+		intActual smallInt;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallInt operation / with 0 and negative variables?";
+		failDetails string;
+		int2 smallInt = -75;
+		zero smallInt = 0;
+		intActual smallInt;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+
+	function runArithmeticFunction11_EInt004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "INT operation / with 0 and literals";
+		failDetails string;
+		try
+			intActual int = 75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EInt004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "INT operation / with 0 and negative literals";
+		failDetails string;
+		try
+			intActual int = -75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "INT operation / with 0 and variables";
+		failDetails string;
+		int1 int = 75;
+		zero int = 0;
+		intActual int;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "INT operation / with 0 and negative variables";
+		failDetails string;
+		int2 int = -75;
+		zero int = 0;
+		intActual int;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	
+	function runArithmeticFunction11_EInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string  = "INT operation / with 0 and variables?";
+		failDetails string;
+		int1 int? = 75;
+		zero int? = 0;
+		intActual int;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "INT operation / with 0 and negative variables?";
+		failDetails string;
+		int2 int? = -75;
+		zero int? = 0;
+		intActual int;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EBigInt004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BIGINT operation / with 0 and literals";
+		failDetails string;
+		try
+			intActual bigInt = 75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EBigInt004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BIGINT operation / with 0 and negative literals";
+		failDetails string;
+		try
+			intActual bigInt = -75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EBigInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BIGINT operation / with 0 and variables";
+		int1 bigInt = 75;
+		zero bigInt = 0;
+		failDetails string;
+		try
+			intActual bigInt = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EBigInt005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BigInt operation / with 0 and negative variables";
+		int2 bigInt = -75;
+		zero bigInt = 0;
+		failDetails string;
+		try
+			intActual bigInt= int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EBigInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BigInt operation / with 0 and variables?";
+		failDetails string;
+		int1 bigInt? = 75;
+		zero bigInt? = 0;
+		intActual bigInt;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EBigInt006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "BigInt operation / with 0 and negative variables?";
+		failDetails string;
+		int2 bigInt? = -75;
+		zero bigInt? = 0;
+		intActual bigInt;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EDecimal004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "Decimal operation / with 0 and literals";
+		intActual decimal(5,2);
+		failDetails string;
+		try
+			intActual = 375.75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.skipped(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EDecimal004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "Decimal operation / with 0 and negative variables";
+		intActual decimal(5,2);
+		failDetails string;
+		try
+			intActual = -375.75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.skipped(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EDecimal005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "decimal operation / with 0 and variables";
+		int1 decimal(5,2) = 375.75;
+		zero decimal(5,2)  = 0;
+		intActual decimal(5,2) ;
+		failDetails string;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EDecimal005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "decimal operation / with 0 and negative variables";
+		failDetails string;
+		int2 decimal(5,2) = -375.75;
+		zero decimal(5,2)  = 0;
+		intActual decimal(5,2) ;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EDecimal006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "Decimal operation / with 0 and variables?";
+		failDetails string;
+		int1 decimal(5,2)? = 375.75;
+		zero decimal(5,2)?  = 0;
+		intActual decimal(5,2) ;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EDecimal006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "Decimal operation / with 0 and negative variables?";
+		failDetails string;
+		int2 decimal(5,2)? = -375.75;
+		zero decimal(5,2)?  = 0;
+		intActual decimal(5,2) ;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_ESmallFloat004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallFloat operation / with 0 and literals";
+		failDetails string;
+		try
+			floatActual smallFloat = 2.539E7 / 0;
+			failDetails = variation + " no exception " + floatActual;
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallFloat004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallFloat operation / with 0 and negative literals";
+		failDetails string;
+		try
+			floatActual smallFloat = -2.539E7 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_ESmallFloat005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallFloat operation / with 0 and variables";
+		failDetails string;
+		smallFloat1 smallFloat = 2.539E7;
+		zero smallFloat = 0;
+		floatActual smallFloat;
+		try
+			floatActual = smallFloat1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallFloat005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SamlllFloat operation / with 0 and negative variables";
+		failDetails string;
+		smallFloat2 smallFloat = -2.539E7;
+		zero smallFloat = 0;
+		floatActual smallFloat;
+		try
+			floatActual = smallFloat2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_ESmallFloat006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallFloat operation / with 0 and variables";
+		failDetails string;
+		smallFloat1 smallFloat? = 2.539E7;
+		zero smallFloat? = 0;
+		floatActual smallFloat;
+		try
+			floatActual = smallFloat1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_ESmallFloat006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "SmallFloat operation / with 0 and negative variables";
+		failDetails string;
+		smallFloat2 smallFloat? = -2.539E7;
+		zero smallFloat? = 0;
+		floatActual smallFloat;
+		try
+			floatActual = smallFloat2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EFloat004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string  = "FLOAT operation / with 0 and literals";
+		failDetails string;
+		try
+			floatActual float = 2.539E7 / 0;
+			failDetails = variation + " no exception " + floatActual;
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EFloat004(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "FLOAT operation / with 0 and negative literals";
+		failDetails string;
+		try
+			floatActual float = -2.539E7 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EFloat005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "FLOAT operation / with 0 and variables";
+		failDetails string;
+		float1 float = 2.539E7;
+		floatActual float;
+		zero float = 0;
+		try
+			floatActual = float1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EFloat005(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "FLOAT operation / with 0 and negative variables";
+		failDetails string;
+		float2 float = -2.539E7;
+		floatActual float;
+		zero float = 0;
+		try
+			floatActual = float2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction11_EFloat006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string  = "FLOAT operation / with 0 and variables?";
+		failDetails string;
+		float1 float? = 2.539E7;
+		floatActual float;
+		zero float? = 0;
+		try
+			floatActual = float1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+	function runArithmeticFunction12_EFloat006(){@Test {targetLang = [JAVASCRIPT]}}	
+		variation string = "FLOAT operation / with 0 and negative variables?";
+		failDetails string;
+		float2 float? = -2.539E7;
+		floatActual float;
+		zero float? = 0;
+		try
+			floatActual = float2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (wrong AnyException)
+			failDetails = variation + " wrong Message " + wrong.message;
+			if (wrong.messageID == "CRRUI2037E")
+				LogResult.passed("OK");
+			else
+				LogResult.failed(failDetails);
+			end
+		end
+	end
+	
+end

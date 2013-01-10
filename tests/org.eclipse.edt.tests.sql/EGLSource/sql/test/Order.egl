@@ -1,0 +1,37 @@
+package sql.test;
+
+import eglx.lang.DateTimeLib;
+import eglx.persistence.Id;
+import eglx.persistence.Transient;
+import eglx.persistence.sql.Column;
+import eglx.persistence.sql.Table;
+
+handler Order { @Table { name="ORDER_TABLE" } }
+
+	use dataSourceLibrary ;
+
+	Order_id int { @Id, @Column { name="ORDER_ID" } } ;
+	Order_mod int ;
+	Order_ship_date date { @Column { name="ORDER_SHIP_DATE" } };
+	Cust_id int { @Column { name="CUST_ID" } } ;
+	
+	customer Customer? { @Transient } ;
+
+    function createTable ( )
+   	end
+   	
+   	function initializeOrder ( id int, cust_id int )
+   		shipYear int = 2000 + id ;
+   		ORDER_id = id ;
+   		ORDER_mod = 0 ;
+   		ORDER_ship_date = dateTimeLib.mdy (10, 1, shipYear ) ;
+   		this.CUST_ID = cust_id ;
+   	end
+   	
+   	function modifyOrder ( mod int )
+   		shipYear int = 2000 + order_id + mod ;
+   		ORDER_mod = mod ;
+   		ORDER_ship_date = dateTimeLib.mdy (10, 1, shipYear ) ;
+   	end
+
+end

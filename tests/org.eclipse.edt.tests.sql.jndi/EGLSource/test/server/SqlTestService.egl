@@ -1,0 +1,8 @@
+package test.server;
+
+service SqlTestService
+	
+	function runTest()
+	end
+
+end

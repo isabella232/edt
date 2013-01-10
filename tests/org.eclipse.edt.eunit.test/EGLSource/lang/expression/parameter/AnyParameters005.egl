@@ -1,0 +1,292 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Function paramater declarations of type ANY all valid modifiers passing variables of type DECIMAL(m.n)
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/10/03
+* @description 
+*  Function paramater declarations of type ANY all valid modifiers passing variables of type DECIMAL(m,n)
+*  358651 InOut shouldn't accept a literal 
+*/
+library AnyParameters005
+	toggleValue int;
+	const updated decimal(5,2) = 543.21;
+	
+	function testFunctionParameterIn1() {@Test}
+		toggleValue = 1;
+		localDec decimal(5,2) = 111.11;
+        switchOnInParameter(localDec);
+    end	
+    
+  	function testFunctionParameterIn2() {@Test}
+  		toggleValue = 2;
+  		localDec decimal(5,2) = 222.22;
+		switchOnInParameter(localDec);
+    end	
+    
+    function testFunctionParameterIn3() {@Test}
+    	toggleValue = 3;
+    	localDec decimal(5,2) = 333.33;
+        switchOnInParameter(localDec);
+    end	
+
+    function testFunctionParameterInWithUpdate() {@Test}
+    	toggleValue = 3;
+    	localDec decimal(5,2) = 333.33;
+        updateInParameter(localDec);
+        LogResult.assertTrue1(localDec == 333.33);
+    end	
+
+    function testFunctionParameterInOut1()  
+//    	IWN.VAL.6716.e - The argument localDec cannot be passed to the inOut or Out parameter localLen of the function switchOnInOutParameter. 
+//    	The types decimal(5,2) and any are not reference compatible.
+//    	toggleValue = 1;
+//    	localDec decimal(5,2) = 111.11;
+//      switchOnInOutParameter(localDec);
+    end
+   
+    function testFunctionParameterInOut2() 
+//    	IWN.VAL.6716.e - The argument localDec cannot be passed to the inOut or Out parameter localLen of the function switchOnInOutParameter. 
+//    	The types decimal(5,2) and any are not reference compatible. 
+//    	toggleValue = 2;
+//    	localDec decimal(5,2) = 222.22;
+//    	switchOnInOutParameter(localDec);
+    end
+           
+    function testFunctionParameterInOut3() 
+//    	IWN.VAL.6716.e - The argument localDec cannot be passed to the inOut or Out parameter localLen of the function switchOnInOutParameter. 
+//    	The types decimal(5,2) and any are not reference compatible.          
+//    	toggleValue = 3;
+//    	localDec decimal(5,2) = 333.33;
+//    	switchOnInOutParameter(localDec);
+    end
+    
+    function testFunctionParameterInOutWithUpdate() 
+//    	IWN.VAL.6716.e - The argument localDec cannot be passed to the inOut or Out parameter localLen of the function switchOnInOutParameter. 
+//    	The types decimal(5,2) and any are not reference compatible.
+//    	localDec decimal(5,2) = 333.33;
+//    	updateInOutParameter(localDec);
+//      	LogResult.assertTrue1(localDec == localDec);
+    end	
+    
+    function testFunctionParameterOutWithUpdate()  
+//    	IWN.VAL.6716.e - The argument localDec cannot be passed to the inOut or Out parameter localLen of the function switchOnInOutParameter. 
+//    	The types decimal(5,2) and any are not reference compatible.
+//    	localDec decimal(5,2) = 333.33;
+//	 	updateOutParameter(localDec);
+//	 	LogResult.assertTrue1(localDec == localDec);
+    end	      
+
+	function testFunctionParameterDefault1() {@Test}
+		toggleValue = 1;
+		localDec decimal(5,2) = 111.11;
+        switchOnDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterDefault2() {@Test}
+   		toggleValue = 2;
+   		localDec decimal(5,2) = 222.22;
+        switchOnDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterDefault3() {@Test}  
+    	toggleValue = 3;         
+    	localDec decimal(5,2) = 333.33;                                   
+        switchOnDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterDefaultWithUpdate() {@Test}
+    	// references default modifier is IN
+    	localDec decimal(5,2) = 333.33;
+    	updateDefaultParameter(localDec);
+       	LogResult.assertTrue1(localDec == 333.33);
+    end	
+    
+   	function testFunctionParameterConstIn1() {@Test}
+		toggleValue = 1;
+		localDec decimal(5,2) = 111.11;
+        switchOnConstInParameter(localDec);
+    end
+    
+    function testFunctionParameterConstIn2() {@Test}
+   		toggleValue = 2;
+   		localDec decimal(5,2) = 222.22;
+      	switchOnConstInParameter(localDec);
+    end
+    
+    function testFunctionParameterConstIn3() {@Test}  
+    	toggleValue = 3;          
+    	localDec decimal(5,2) = 333.33;                                  
+      	switchOnConstInParameter(localDec);
+    end
+    
+    function testFunctionParameterConstInWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstInParameter(localLen any const in)
+    		localLen = 89;
+   		end
+*/
+    end
+    
+   	function testFunctionParameterConstInOut1() {@Test}
+		toggleValue = 1;
+		localDec decimal(5,2) = 111.11;
+        switchOnConstInOutParameter(localDec );
+    end
+    
+    function testFunctionParameterConstInOut2() {@Test}
+   		toggleValue = 2;
+   		localDec decimal(5,2) = 222.22;
+        switchOnConstInOutParameter(localDec);  
+    end
+    
+    function testFunctionParameterConstInOut3() {@Test}  
+    	toggleValue = 3;         
+    	localDec decimal(5,2) = 333.33;                                   
+        switchOnConstInOutParameter(localDec);
+    end
+
+    function testFunctionParameterConstInOutWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstInOutParameter(localLen any const inout)
+    		localLen = 89;
+   		end
+*/
+    end
+    
+   	function testFunctionParameterConstDefault1() {@Test}
+		toggleValue = 1;
+		localDec decimal(5,2) = 111.11;
+        switchOnConstDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterConstDefault2() {@Test}
+   		toggleValue = 2;
+   		localDec decimal(5,2) = 222.22;
+     	switchOnConstDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterConstDefault3() {@Test}  
+    	toggleValue = 3;             
+    	localDec decimal(5,2) = 333.33;                               
+        switchOnConstDefaultParameter(localDec);
+    end
+    
+    function testFunctionParameterConstDefaultWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstDefaultParameter(localLen any const)
+    		localLen = 89;
+   		end
+*/
+    end
+    
+    function switchOnInParameter(localLen any in)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnInOutParameter(localLen any inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnDefaultParameter(localLen any)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+   function switchOnConstDefaultParameter(localLen any const)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+   
+    function switchOnConstInParameter(localLen any const in)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+
+    function switchOnConstInOutParameter(localLen decimal(5,2) const inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function updateInParameter(localLen any in)
+    	localLen = 543.21;
+    end
+    
+    function updateInOutParameter(localLen any inOut)
+    	localLen = 543.21;
+    end
+
+    function updateOutParameter(localLen any out)
+    	localLen = 543.21;
+    end
+        
+    function updateDefaultParameter(localLen any )
+    	localLen = 543.21;
+    end
+
+end

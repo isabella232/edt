@@ -1,0 +1,122 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes005
+  * @title EBytes005 - runConcatenationFunction
+  * @description testing bytes concatenation functions
+  * @testcases runConcatenationFunction01 - runConcatenationFunction18
+  * @sources EBytes005.egl
+  * @keywords bytes, concatenation
+ **/
+library EBytes005
+	const constBytes1 bytes(4) = 0x8b7d3e2f;
+	const constBytes2 bytes(3) = 0x78a401;
+	
+	varFlexBytes string;
+	
+	nullFlexBytes bytes?;
+	nullFixedBytes bytes(4)?;
+	
+	concatResult bytes?;
+	desired bytes?;
+
+	function check(variation string)
+		LogResult.assertTrue(variation, desired == concatResult);
+	end
+	
+	// Simple concatenation with + operator
+	function runConcatenationFunction01(){@Test}
+		desired = 0x78a4018b7d3e2f;
+		concatResult = constBytes2 + constBytes1;
+		check("constant concat +");
+	end
+	
+	function runConcatenationFunction02(){@Test}
+		desired = constBytes1;
+		concatResult = nullFlexBytes + constBytes1;
+		check("null concat +");
+	end
+	
+	function runConcatenationFunction03(){@Test}
+		desired = constBytes1;
+		concatResult = constBytes1 + nullFlexBytes;
+		check("null concat +");
+	end
+	
+	function runConcatenationFunction05(){@Test}
+		desired = constBytes1;
+		concatResult = nullFlexBytes + constBytes1;
+		check("null concat +");
+	end
+	
+	function runConcatenationFunction06(){@Test}
+		desired = constBytes1;
+		concatResult = constBytes1 + nullFlexBytes;
+		check("null concat +");
+	end
+
+	// Simple concatenation with :: operator
+	function runConcatenationFunction07(){@Test}
+		desired = 0x78a4018b7d3e2f;
+		concatResult = constBytes2 :: constBytes1;
+		check("const concat ::");
+	end
+	
+	function runConcatenationFunction08(){@Test}
+		desired = constBytes1;
+		concatResult = nullFlexBytes :: constBytes1;
+		check("null concat ::");
+	end
+	
+	function runConcatenationFunction09(){@Test}
+		desired = constBytes1;
+		concatResult = constBytes1 :: nullFlexBytes;
+		check("null concat ::");
+	end
+	
+	function runConcatenationFunction11(){@Test}
+		desired = constBytes1;
+		concatResult = nullFlexBytes :: constBytes1;
+		check("null concat ::");
+	end
+	
+	function runConcatenationFunction12(){@Test}
+		desired = constBytes1;
+		concatResult = constBytes1 :: nullFlexBytes;
+		check("null concat ::");
+	end
+	
+	// Simple concatenation with ?: operator
+	function runConcatenationFunction13(){@Test}
+		desired = 0x78a4018b7d3e2f;
+		concatResult = constBytes2 ?: constBytes1;
+		check("const concat ?:");
+	end
+	
+	function runConcatenationFunction14(){@Test}
+		desired = null;
+		concatResult = nullFlexBytes ?: constBytes1;
+		check("null concat ?:");
+	end
+	
+	function runConcatenationFunction15(){@Test}
+		desired = null;
+		concatResult = constBytes1 ?: nullFlexBytes;
+		check("null concat ?:");
+	end
+	
+	function runConcatenationFunction17(){@Test}
+		desired = null;
+		concatResult = nullFlexBytes ?: constBytes1;
+		check("null concat ?:");
+	end
+	
+	function runConcatenationFunction18(){@Test}
+		desired = null;
+		concatResult = constBytes1 ?: nullFlexBytes;
+		check("null concat ?:");
+	end
+end

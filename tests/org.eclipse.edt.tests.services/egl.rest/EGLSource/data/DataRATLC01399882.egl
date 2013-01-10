@@ -1,0 +1,11 @@
+package data;
+
+
+record StringRec
+	field1 string;
+//	field2 string(254);
+//	field3 string(257);
+	field4 string[] = new String[2];
+//	field5 string(254)[3];
+//	field6 string(257)[4];
+end

@@ -1,0 +1,299 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Function paramater declarations of type String all valid modifiers passing any variables
+* @keywords FOR
+* @author EDT team
+* @createDate 2012/03/08
+* @description 
+*  Function paramater declarations of type String all valid modifiers passing any variables
+*  Added for Enhancement 372275 Make string a reference type
+*/
+library StringParameters003
+	toggleValue int;
+	CONST updated string = "modified";
+	
+	function testFunctionParameterIn1() {@Test}
+		toggleValue = 1;
+		localStr string = "aaa.aa";
+		localAny any = localStr;
+        switchOnInParameter(localAny);
+    end	
+    
+  	function testFunctionParameterIn2() {@Test}
+  		toggleValue = 2;
+  		localStr string = "bbb.bb";
+        localAny any = localStr;
+        switchOnInParameter(localAny);
+    end	
+    
+    function testFunctionParameterIn3() {@Test}
+    	toggleValue = 3;
+    	localStr string = "ccc.cc";
+        localAny any = localStr;
+        switchOnInParameter(localAny);
+    end	
+
+    function testFunctionParameterInWithUpdate() {@Test}
+    	toggleValue = 3;
+    	localStr string = "ccc.cc";
+        localAny any = localStr;
+        updateInParameter(localAny);
+        LogResult.assertTrue1(localAny == "ccc.cc");
+    end	
+    
+    function testFunctionParameterInOut1() {@Test}
+    	toggleValue = 1;
+    	localStr string = "aaa.aa";
+     	localAny any = localStr;
+        switchOnInOutParameter(localAny);
+    end
+    
+    function testFunctionParameterInOut2() {@Test}
+    	toggleValue = 2;
+    	localStr string = "bbb.bb";
+    	localAny any = localStr;
+        switchOnInOutParameter(localAny);
+    end
+           
+    function testFunctionParameterInOut3() {@Test}       
+    	toggleValue = 3;
+    	localStr string = "ccc.cc";
+	   	localAny any = localStr;
+        switchOnInOutParameter(localAny);
+    end
+    
+    function testFunctionParameterInOutWithUpdate() {@Test}
+		localStr string = "ccc.cc";
+		localAny any = localStr;
+        updateInOutParameter(localAny);
+        LogResult.assertTrue1(localAny == updated);
+    end	
+    
+    function testFunctionParameterOutWithUpdate() {@Test}
+	  localStr string = "ccc.cc";
+	  localAny any = localStr;
+      updateOutParameter(localAny);    
+      LogResult.assertTrue1(localAny == updated);
+    end	
+        
+	function testFunctionParameterDefault1() {@Test}
+	    toggleValue = 1;
+	    localStr string = "aaa.aa";
+        localAny any = localStr;
+        switchOnDefaultParameter(localAny);
+    end
+    
+    function testFunctionParameterDefault2() {@Test}
+   	    toggleValue = 2;
+   	    localStr string = "bbb.bb";
+        localAny any = localStr;
+        switchOnDefaultParameter(localAny);  
+    end
+    
+    function testFunctionParameterDefault3() {@Test}
+        toggleValue = 3;  
+	    localStr string = "ccc.cc";                                         
+        localAny any = localStr;
+        switchOnDefaultParameter(localAny);
+    end
+    
+    function testFunctionParameterDefaultWithUpdate() {@Test}
+        localStr string = "ccc.cc";
+        localAny any = localStr;
+        updateDefaultParameter(localAny);
+        LogResult.assertTrue1(localAny == "ccc.cc");
+    end	
+    
+   	function testFunctionParameterConstIn1() {@Test}
+		toggleValue = 1;
+		localStr string = "aaa.aa";
+        localAny any = localStr;
+        switchOnConstInParameter(localAny);
+    end
+    
+    function testFunctionParameterConstIn2() {@Test}
+   		toggleValue = 2;
+   		localStr string = "bbb.bb";
+        localAny any = localStr;
+        switchOnConstInParameter(localAny);  
+    end
+    
+    function testFunctionParameterConstIn3() {@Test}  
+    	toggleValue = 3;       
+    	localStr string = "ccc.cc";                                     
+        localAny any = localStr;
+        switchOnConstInParameter(localAny);
+    end
+    
+    function testFunctionParameterConstInWithUpdate()                                            
+        // called function always results in a validation error
+    end
+      
+   	function testFunctionParameterConstInOut1() {@Test}
+		toggleValue = 1;
+		localStr string = "aaa.aa";
+        localAny any = localStr;
+        switchOnConstInOutParameter(localAny);
+    end
+    
+    function testFunctionParameterConstInOut2() {@Test}
+   	    toggleValue = 2;
+   	    localStr string = "bbb.bb";
+        localAny any = localStr;
+        switchOnConstInOutParameter(localAny);  
+    end
+    
+    function testFunctionParameterConstInOut3() {@Test}
+        toggleValue = 3;
+        localStr string = "ccc.cc";                                            
+        localAny any = localStr;
+        switchOnConstInOutParameter(localAny);
+    end
+
+    function testFunctionParameterConstInOutWithUpdate()                                            
+        // called function always results in a validation error
+    end
+    
+   	function testFunctionParameterConstDefault1() {@Test}
+		toggleValue = 1;
+		localStr string = "aaa.aa";
+        localAny any = localStr;
+        switchOnConstDefaultParameter(localAny);
+    end
+    
+    function testFunctionParameterConstDefault2() {@Test}
+   	    toggleValue = 2;
+   	    localStr string = "bbb.bb";
+        localAny any = localStr;
+        switchOnConstDefaultParameter(localAny);  
+    end
+    
+    function testFunctionParameterConstDefault3() {@Test}
+        toggleValue = 3;  
+        localStr string = "ccc.cc";                                       
+        localAny any = localStr;
+        switchOnConstDefaultParameter(localAny);
+    end
+    
+    function testFunctionParameterConstDefaultWithUpdate()                                            
+        // called function always results in a validation error
+    end
+   
+    function switchOnInParameter(paramStr string in)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnInOutParameter(paramStr string inOut)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnDefaultParameter(paramStr string)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+   function switchOnConstDefaultParameter(paramStr string const)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+ 
+    function switchOnConstInParameter(paramStr string const in)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+ 
+    function switchOnConstInOutParameter(paramStr string const inOut)
+    	resolved int = -1;
+        case(paramStr)
+            when("aaa.aa")
+                resolved = 1;
+            when("bbb.bb")
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+ 
+    function updateInParameter(paramStr string in)
+    	paramStr = updated;
+    end
+    
+    function updateInOutParameter(paramStr string inOut)
+    	paramStr = updated;
+    end
+
+    function updateOutParameter(paramStr string out)
+    	paramStr = updated;
+    end
+        
+    function updateDefaultParameter(paramStr string )
+    	paramStr = updated;
+    end
+/*  
+   function updateConstInParameter(paramStr string const in)
+   		paramStr = updated;
+   end
+   		
+	function updateConstInOutParameter(paramStr string const inout)
+		paramStr = updated;
+	end
+   		
+	function updateConstDefaultParameter(paramStr string const)
+		paramStr = updated;
+	end
+*/	
+end

@@ -1,0 +1,278 @@
+package common;
+
+import libraries.async.TestArrays;
+import libraries.async.TestArraysMultiDim;
+import libraries.async.TestExceptionProducer;
+import libraries.async.TestHandlers;
+import libraries.async.TestNulls;
+import libraries.async.TestPrimitives;
+import libraries.async.TestRecordsFlex;
+
+// basic library
+library utilities
+	
+	LibraryList string[]
+	{
+		"Array",
+		"ArraysMultiDim",
+		"ExceptionProducer",
+		"Handlers",
+		"Nulls",
+		"Primitives",
+		"RecordsFlex"
+	};
+
+	ArrayCase string[]
+	{
+		"testSingleIn",
+		"testSingleInout",
+		"testSingleOut",
+		"testSingleAll",
+		"testSingleIntIn",
+		"testSingleIntInout",
+		"testSingleIntOut",
+		"testSingleIntAll",
+		"testSingleBigintIn",
+		"testSingleBigintInout",
+		"testSingleBigintOut",
+		"testSingleBigintAll",
+		"testSingleDecimalIn",
+		"testSingleDecimalInout",
+		"testSingleDecimalOut",
+		"testSingleDecimalAll",
+		"testSingleDateIn",
+		"testSingleDateInout",
+		"testSingleDateOut",
+		"testSingleDateAll",
+		"testSingleTimestampIn",
+		"testSingleTimestampInout",
+		"testSingleTimestampOut",
+		"testSingleTimestampAll",
+		"testSimpleRecordArrayIn",
+		"testSimpleRecordArrayInout",
+		"testSimpleRecordArrayOut",
+		"testSimpleRecordArrayAll",
+		"testArrayContainingRecordArrayIn",
+		"testArrayContainingRecordArrayInout",
+		"testArrayContainingRecordArrayAll"
+	};
+	
+	runTestArray runTestMethod[]
+	{
+		TestArrays.testSingleIn,
+		TestArrays.testSingleInout,
+		TestArrays.testSingleOut,
+		TestArrays.testSingleAll,
+		TestArrays.testSingleIntIn,
+		TestArrays.testSingleIntOut,
+		TestArrays.testSingleInout,
+		TestArrays.testSingleIntAll,
+		TestArrays.testSingleBigintIn,
+		TestArrays.testSingleBigintInout,
+		TestArrays.testSingleBigintOut,
+		TestArrays.testSingleBigintAll,
+		TestArrays.testSingleDecimalIn,
+		TestArrays.testSingleDecimalInout,
+		TestArrays.testSingleDecimalOut,
+		TestArrays.testSingleDecimalAll,
+		TestArrays.testSingleDateIn,
+		TestArrays.testSingleDateInout,
+		TestArrays.testSingleDateOut,
+		TestArrays.testSingleDateAll,
+		TestArrays.testSingleTimestampIn,
+		TestArrays.testSingleTimestampInout,
+		TestArrays.testSingleTimestampOut,
+		TestArrays.testSingleTimestampAll,
+		TestArrays.testSimpleRecordArrayIn,
+		TestArrays.testSimpleRecordArrayInout,
+		TestArrays.testSimpleRecordArrayOut,
+		TestArrays.testSimpleRecordArrayAll,
+		TestArrays.testArrayContainingRecordArrayIn,
+		TestArrays.testArrayContainingRecordArrayInout,
+		TestArrays.testArrayContainingRecordArrayAll
+	};
+	
+	ArrayMul string[]
+	{
+		"testDoubleIn", "testDoubleInout", "testDoubleOut", "testDoubleAll", "testOuterFlexRecordMultiDimIn", "testOuterFlexRecordMultiDimInout", "testOuterFlexRecordMultiDimOut", "testOuterFlexRecordMultiDimAll"
+	};
+	
+	runTestArrayMul runTestMethod[]
+	{
+		TestArraysMultiDim.testDoubleIn,
+		TestArraysMultiDim.testDoubleInout,
+		TestArraysMultiDim.testDoubleOut,
+		TestArraysMultiDim.testDoubleAll,
+		TestArraysMultiDim.testOuterFlexRecordMultiDimIn,
+		TestArraysMultiDim.testOuterFlexRecordMultiDimInout,
+		TestArraysMultiDim.testOuterFlexRecordMultiDimOut,
+		TestArraysMultiDim.testOuterFlexRecordMultiDimAll
+	};
+	
+	Exp string[]
+	{
+		"testExcpetionProducer"
+	};
+	
+	runTestExp runTestMethod[]
+	{
+		TestExceptionProducer.testExcpetionProducer
+	};
+	
+	hdl	string[]
+	{
+		"testBigint_all", "testBigintArray_all", "testInt_all", "testIntArray_all", "testSmallint_all", "testSmallintArray_all", "testSmallfloat_all", "testSmallfloatArray_all", "testFloat_all", "testFloatArray_all", "testDecimal_all", "testDecimalArray_all", "testString_all", "testStringArray_all", "testTimestamp_all", "testTimestampArray_all", "testBoolean_all", "testBooleanArray_all", "testDate_all", "testDateArray_all", "testOuterHandler_inParm", "testOuterHandler_inoutParm", "testOuterHandler_outParm", "testOuterHandler_allParm"
+	};
+	
+	runTesthdl runTestMethod[]
+	{
+		TestHandlers.testBigint_all,
+		TestHandlers.testBigintArray_all,
+		TestHandlers.testInt_all,
+		TestHandlers.testIntArray_all,
+		TestHandlers.testSmallint_all,
+		TestHandlers.testSmallintArray_all,
+		TestHandlers.testSmallfloat_all,
+		TestHandlers.testSmallfloatArray_all,
+		TestHandlers.testFloat_all,
+		TestHandlers.testFloatArray_all,
+		TestHandlers.testDecimal_all,
+		TestHandlers.testDecimalArray_all,
+		TestHandlers.testString_all,
+		TestHandlers.testStringArray_all,
+		TestHandlers.testTimestamp_all,
+		TestHandlers.testTimestampArray_all,
+		TestHandlers.testBoolean_all,
+		TestHandlers.testBooleanArray_all,
+		TestHandlers.testDate_all,
+		TestHandlers.testDateArray_all,
+		TestHandlers.testOuterHandler_inParm,
+		TestHandlers.testOuterHandler_inoutParm,
+		TestHandlers.testOuterHandler_outParm,
+		TestHandlers.testOuterHandler_allParm
+	};
+	
+	nul	string[]
+	{
+		"testNullStringIn", "testNullStringInNull", "testNullStringInout", "testNullStringOut", "testNullStringAll", "testNullIntIn", "testNullIntInNull", "testNullIntInout", "testNullIntOut", "testNullIntAll", "testNullStringArrayIn", "testNullStringArrayInNull", "testNullStringArrayInout", "testNullStringArrayOut", "testNullStringArrayAll", "testNullRecordItemIn", "testNullRecordItemInNull", "testNullRecordItemInout", "testNullRecordItemOut1", "testNullRecordItemAll", "testNullRecordIn", "testNullRecordInNull", "testNullRecordInout", "testNullRecordOut", "tsetNullRecordAll"
+	};
+	
+	runTestnull runTestMethod[]
+	{
+		TestNulls.testNullStringIn,
+		TestNulls.testNullStringInNull,
+		TestNulls.testNullStringInout,
+		TestNulls.testNullStringOut,
+		TestNulls.testNullStringAll,
+		TestNulls.testNullIntIn,
+		TestNulls.testNullIntInNull,
+		TestNulls.testNullIntInout,
+		TestNulls.testNullIntOut,
+		TestNulls.testNullIntAll,
+		TestNulls.testNullStringArrayIn,
+		TestNulls.testNullStringArrayInNull,
+		TestNulls.testNullStringArrayInout,
+		TestNulls.testNullStringArrayOut,
+		TestNulls.testNullStringArrayAll,
+		TestNulls.testNullRecordItemIn,
+		TestNulls.testNullRecordItemInNull,
+		TestNulls.testNullRecordItemInout,
+		TestNulls.testNullRecordItemOut1,
+		TestNulls.testNullRecordItemAll,
+		TestNulls.testNullRecordIn,
+		TestNulls.testNullRecordInNull,
+		TestNulls.testNullRecordInout,
+		TestNulls.testNullRecordOut,
+		TestNulls.tsetNullRecordAll
+	};
+	
+	pri	string[]
+	{
+		"testInt_in", "testInt_inoutParm", "testInt_outParm", "testInt_allParm", "testBigint_inParm", "testBigint_inoutParm", "testBigint_outParm", "testBigint_allParm", "testSmallint_inParm", "testSmallint_inoutParm", "testSmallint_outParm", "testSmallint_allParm", "testSmallfloat_inParm", "testSmallfloat_inoutParm", "testSmallfloat_outParm", "testSmallfloat_allParm", "testFloat_inParm", "testFloat_inoutParm", "testFloat_outParm", "testFloat_allParm", "testDecimal_inParm", "testDecimal_inoutParm", "testDecimal_outParm", "testDecimal_allParm", "testString_inParm", "testString_inoutParm", "testString_outParm", "testString_allParm", "testTimestamp_inParm", "testTimestamp_inoutParm", "testTimestamp_outParm", "testTimestamp_allParm","testTime_inParm", "testTime_inoutParm", "testTime_outParm", "testTime_allParm", "testBoolean_inParm", "testBoolean_inoutParm", "testBoolean_outParm", "testBoolean_allParm", "testDate_inParm", "testDate_inoutParm", "testDate_outParm", "testDate_allParm"
+	};
+	
+	runTestpri runTestMethod[]
+	{
+		TestPrimitives.testInt_in,
+		TestPrimitives.testInt_inoutParm,
+		TestPrimitives.testInt_outParm,
+		TestPrimitives.testInt_allParm,
+		TestPrimitives.testBigint_inParm,
+		TestPrimitives.testBigint_inoutParm,
+		TestPrimitives.testBigint_outParm,
+		TestPrimitives.testBigint_allParm,
+		TestPrimitives.testSmallint_inParm,
+		TestPrimitives.testSmallint_inoutParm,
+		TestPrimitives.testSmallint_outParm,
+		TestPrimitives.testSmallint_allParm,
+		TestPrimitives.testSmallfloat_inParm,
+		TestPrimitives.testSmallfloat_inoutParm,
+		TestPrimitives.testSmallfloat_outParm,
+		TestPrimitives.testSmallfloat_allParm,
+		TestPrimitives.testFloat_inParm,
+		TestPrimitives.testFloat_inoutParm,
+		TestPrimitives.testFloat_outParm,
+		TestPrimitives.testFloat_allParm,
+		TestPrimitives.testDecimal_inParm,
+		TestPrimitives.testDecimal_inoutParm,
+		TestPrimitives.testDecimal_outParm,
+		TestPrimitives.testDecimal_allParm,
+		TestPrimitives.testString_inParm,
+		TestPrimitives.testString_inoutParm,
+		TestPrimitives.testString_outParm,
+		TestPrimitives.testString_allParm,
+		TestPrimitives.testTimestamp_inParm,
+		TestPrimitives.testTimestamp_inoutParm,
+		TestPrimitives.testTimestamp_outParm,
+		TestPrimitives.testTimestamp_allParm,
+		TestPrimitives.testTime_inParm,
+		TestPrimitives.testTime_inoutParm,
+		TestPrimitives.testTime_outParm,
+		TestPrimitives.testTime_allParm,
+		TestPrimitives.testBoolean_inParm,
+		TestPrimitives.testBoolean_inoutParm,
+		TestPrimitives.testBoolean_outParm,
+		TestPrimitives.testBoolean_allParm,
+		TestPrimitives.testDate_inParm,
+		TestPrimitives.testDate_inoutParm,
+		TestPrimitives.testDate_outParm,
+		TestPrimitives.testDate_allParm
+	};
+	
+	rcd	string[]
+	{
+		"testBigintFlex_all", "testBigintArrayFlex_all", "testIntFlex_all", "testIntArrayFlex_all", "testSmallintFlex_all", "testSmallintArrayFlex_all", "testSmallfloatFlex_all", "testSmallfloatArrayFlex_all", "testFloatFlex_all", "testFloatArrayFlex_all", "testDecimalFlex_all", "testDecimalArrayFlex_all", "testStringFlex_all", "testStringArrayFlex_all", "testTimestampFlex_all", "testTimestampArrayFlex_all","testTimeFlex_all", "testTimeArrayFlex_all", "testBooleanFlex_all", "testBooleanArrayFlex_all", "testDateFlex_all", "testDateArrayFlex_all", "testOuterFlexRecord_inParm", "testOuterFlexRecord_inoutParm", "testOuterFlexRecord_outParm", "testOuterFlexRecord_allParm", "testRatlc01399882StringRec"
+	};
+	
+	runTestrcd	runTestMethod[]
+	{
+		TestRecordsFlex.testBigintFlex_all,
+		TestRecordsFlex.testBigintArrayFlex_all,
+		TestRecordsFlex.testIntFlex_all,
+		TestRecordsFlex.testIntArrayFlex_all,
+		TestRecordsFlex.testSmallintFlex_all,
+		TestRecordsFlex.testSmallintArrayFlex_all,
+		TestRecordsFlex.testSmallfloatFlex_all,
+		TestRecordsFlex.testSmallfloatArrayFlex_all,
+		TestRecordsFlex.testFloatFlex_all,
+		TestRecordsFlex.testFloatArrayFlex_all,
+		TestRecordsFlex.testDecimalFlex_all,
+		TestRecordsFlex.testDecimalArrayFlex_all,
+		TestRecordsFlex.testStringFlex_all,
+		TestRecordsFlex.testStringArrayFlex_all,
+		TestRecordsFlex.testTimestampFlex_all,
+		TestRecordsFlex.testTimestampArrayFlex_all,
+		TestRecordsFlex.testTimeFlex_all,
+		TestRecordsFlex.testTimeArrayFlex_all,
+		TestRecordsFlex.testBooleanFlex_all,
+		TestRecordsFlex.testBooleanArrayFlex_all,
+		TestRecordsFlex.testDateFlex_all,
+		TestRecordsFlex.testDateArrayFlex_all,
+		TestRecordsFlex.testOuterFlexRecord_inParm,
+		TestRecordsFlex.testOuterFlexRecord_inoutParm,
+		TestRecordsFlex.testOuterFlexRecord_outParm,
+		TestRecordsFlex.testOuterFlexRecord_allParm,
+		TestRecordsFlex.testRatlc01399882StringRec
+		
+	};
+end

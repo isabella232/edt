@@ -1,0 +1,10 @@
+package common;
+
+// basic library
+library Constants
+	
+	as400System string = "AS4069.rtp.raleigh.ibm.com";
+	userid string = "";
+	password string = "";
+	
+end

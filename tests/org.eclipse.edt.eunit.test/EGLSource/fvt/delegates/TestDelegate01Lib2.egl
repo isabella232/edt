@@ -1,0 +1,62 @@
+package fvt.delegates;
+
+/* 
+* @name TestDelegate01Lib2
+* @title The function test program for delegate in EDT
+* @keywords delegate
+* @author EDT team
+* @createDate 2011/08/10
+* @description
+*/
+
+library TestDelegate01Lib2{}
+
+    thevar int;
+
+    function lfunc(i int) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function lfunci(i int in) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function lfunco(i int out) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function lfuncio(i int inOut) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function invokerIN(anInvoker invoker in) returns(string)
+        return(anInvoker("IN:"));
+    end
+
+    function invokerOUT(anInvoker invoker out) returns(string)
+        anInvoker = privateFunc;
+        return(anInvoker("OUT:"));
+    end
+
+    function invokerINOUT(anInvoker invoker? inOut) returns(string)
+        s string = anInvoker("INOUT:");
+        anInvoker = privateFunc2;
+        return(s);
+    end
+
+    private function privateFunc(s string in) returns(string)
+        return("privateFunc:" :: s);
+    end
+
+    private function privateFunc2(s string in) returns(string)
+        return("privateFunc2:" :: s);
+    end
+end

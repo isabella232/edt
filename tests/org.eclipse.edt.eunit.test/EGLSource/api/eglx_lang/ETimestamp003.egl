@@ -1,0 +1,210 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp003
+  * @title EdtTimestamp003 - runValueFunction
+  * @description testing timestamp function dayof
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp003.egl
+  * @keywords timestamp, functions, dayOf
+ **/
+library ETimestamp003 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runDayOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant dayOf", 7, constTimeStamp.dayOf());
+	end
+	 	
+	function runDayOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full dayOf", 31, constTimeStampFull.dayOf());
+	end
+	 	
+	function runDayOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime dayOf", 31, constTimeStampDateTime.dayOf());
+	end
+	 	
+	function runDayOfFunction04(){@Test}
+		LogResult.assertBigIntEqual("constant date dayOf", 31, constTimeStampDate.dayOf());
+	end
+	 	
+	function runDayOfFunction05(){@Test}
+		aDay int;
+		try
+		    aDay = constTimeStampYDate.dayOf();
+			LogResult.failed("constant Ydate dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction06(){@Test}
+		aDay int;
+		try
+		    aDay = constTimeStampYMDate.dayOf();
+			LogResult.failed("constant YMdate dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction07(){@Test}
+		LogResult.assertBigIntEqual("constant MDdate dayOf", 15, constTimeStampMDDate.dayOf());
+	end
+	 	
+	function runDayOfFunction08(){@Test}
+		LogResult.assertBigIntEqual("constant DHdate dayOf", 24, constTimeStampDHDate.dayOf());
+	end
+	 	
+	function runDayOfFunction09(){@Test}
+		aDay int;
+		try
+		    aDay = constTimeStampTime.dayOf();
+			LogResult.failed("constant time dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant time dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction10(){@Test}
+		aDay int;
+		try
+		    aDay = constTimeStampHMTime.dayOf();
+			LogResult.failed("constant HMTime dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMTime dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction11(){@Test}
+		aDay int;
+		try
+		    aDay = constTimeStampMSTime.dayOf();
+			LogResult.failed("constant MStime dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MSTime dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable dayOf", 7, varTimeStamp.dayOf());
+	end
+	 	
+	function runDayOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full dayOf", 31, varTimeStampFull.dayOf());
+	end
+	 	
+	function runDayOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime dayOf", 31, varTimeStampDateTime.dayOf());
+	end
+	 	
+	function runDayOfFunction15(){@Test}
+		LogResult.assertBigIntEqual("variable date dayOf", 31, varTimeStampDate.dayOf());
+	end
+	 	
+	function runDayOfFunction16(){@Test}
+		aDay int;
+		try
+		    aDay = varTimeStampYDate.dayOf();
+		    LogResult.failed("variable YDate dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YDate dayof: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction17(){@Test}
+		aDay int;
+		try
+		    aDay = varTimeStampYMDate.dayOf();
+		    LogResult.failed("variable YMdate dayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate dayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction18(){@Test}
+		LogResult.assertBigIntEqual("variable MDdate dayOf", 15, varTimeStampMDDate.dayOf());
+	end
+	 	
+	function runDayOfFunction19(){@Test}
+		LogResult.assertBigIntEqual("variable DHdate dayOf", 24, varTimeStampDHDate.dayOf());
+	end
+	 	
+	function runDayOfFunction20(){@Test}
+		aDay int;
+		try
+		    aDay = varTimeStampTime.dayOf();
+			LogResult.failed("variable time dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable time dayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction21(){@Test}
+		aDay int;
+		try
+		    aDay = varTimeStampHMTime.dayOf();
+			LogResult.failed("variable HMtime dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMTime dayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runDayOfFunction22(){@Test}
+		aDay int;
+		try
+		    aDay = varTimeStampMSTime.dayOf();
+			LogResult.failed("variable MStime dayof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MSTime dayOf: wrong exception thrown");
+		end
+	end
+	
+end

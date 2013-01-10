@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler BooleanHandler
+	item1 boolean;
+end

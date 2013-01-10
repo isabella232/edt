@@ -1,0 +1,209 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name ESmallFloat001
+  * @title ESmallFloat001 - runAssignmentFunction
+  * @description testing smallFloat assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction27
+  * @sources ESmallFloat001.egl
+  * @keywords smallFloat, assignment, initialization
+ **/
+library ESmallFloat001 {}
+
+	// Constant Declarations
+	const constFloat smallFloat = 8.723e4;
+	
+	// Variable Declarations
+	smallFloat1 smallFloat;
+	smallFloat2 smallFloat = 2.539E7;
+	smallFloat1n smallFloat?;
+	smallFloat2n smallFloat? = -34.892934e4;
+	variation string;
+	 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTrue("constant initialization", (constFloat == 8.723e4) );
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		LogResult.assertTrue("variable default initialization", (smallFloat1 == 0) );
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		LogResult.assertTrue("variable initialization", (smallFloat2 == 2.539E7) );
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		LogResult.assertTrue("nullable variable default initialization", (smallFloat1n == null) );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		variation = "nullable variable initialization";
+		LogResult.assertTrue1(smallFloat2n == (-34.892934e4 as Smallfloat));
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		myInt smallFloat?;
+		myInt = smallFloat2;
+		myInt = null;
+		LogResult.assertTrue("nullable reset to null", (myInt == null ));
+	end
+		
+	function runAssignmentFunction07(){@Test}
+		localInt, another smallFloat?;
+		localInt = smallFloat2;
+		localInt = another;
+		LogResult.assertTrue("nullable indirectly set to null", (localInt == null ));
+	end
+	
+	function runAssignmentFunction08(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt += 1.3E2;
+		LogResult.assertTrue("assignment w/ addition", (localInt == 2.539013E7 ));
+	end
+	
+	function runAssignmentFunction09(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt -= 1.3E2;
+		LogResult.assertTrue("assignment w/ subtraction", (localInt == 2.538987E7 ));
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt -= -1.3E2;
+		LogResult.assertTrue("assignment w/ negative subtraction", (localInt == 2.539013E7 ));
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt *= -1;
+		LogResult.assertTrue("assignment w/ negative multiplication", (localInt == -2.539E7 ));
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt /= 1.3E2;
+		LogResult.assertTrue("assignment w/ division", (localInt == 195307.6923076923 ));
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		localInt smallFloat = smallFloat2;
+		localInt %= 14;
+		LogResult.assertTrue("assignment w/ modulous", (localInt == 6 ));
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		localInt smallFloat = 3;
+		localInt **= 3;
+		LogResult.assertTrue("assignment w/ power", (localInt == 27 ));
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = 1.3E2;
+		localInt += operand;
+		LogResult.assertTrue("assignment w/ addition var", (localInt == 2.539013E7 ));
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = 1.3E2;
+		localInt -= operand;
+		LogResult.assertTrue("assignment w/ subtraction var", (localInt == 2.538987E7 ));
+	end
+	
+	function runAssignmentFunction17(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = -1.3E2;
+		localInt -= operand;
+		LogResult.assertTrue("assignment w/ negative subtraction var", (localInt == 2.539013E7 ));
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = -1;
+		localInt *= operand;
+		LogResult.assertTrue("assignment w/ negative multiplication var", (localInt == -2.539E7 ));
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = 1.3E2;
+		localInt /= operand;
+		LogResult.assertTrue("assignment w/ division var", (localInt == 195307.6923076923 ));
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		localInt smallFloat = smallFloat2;
+		operand smallFloat = 14;
+		localInt %= operand;
+		LogResult.assertTrue("assignment w/ modulous var", (localInt == 6 ));
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		localInt smallFloat = 3;
+		operand smallFloat = 3;
+		localInt **= operand;
+		LogResult.assertTrue("assignment w/ power var", (localInt == 27 ));
+	end
+	
+	function runAssignmentFunction22(){@Test}
+		localInt smallFloat = +23.539E7;
+		LogResult.assertTrue("assignment w/ uninary +", (localInt == 23.539E7 ));
+	end
+	
+	function runAssignmentFunction23(){@Test}
+		localInt smallFloat = -23.539E7;
+		LogResult.assertTrue("assignment w/ uninary -", (localInt == -23.539E7 ));
+	end
+		
+	function runAssignmentFunction24(){@Test}
+		localInt smallFloat = +0;
+		LogResult.assertTrue("assignment w/ uninary + zero", (localInt == 0));
+	end
+	
+	function runAssignmentFunction25(){@Test}
+		localInt smallFloat = -0;
+		LogResult.assertTrue("assignment w/ uninary - zero", (localInt == 0));
+	end
+	
+	function runAssignmentFunction26() {@Test}
+	 	variation string = "assigment overflow";
+		try
+			overflow smallFloat = 9223372036854775810.;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed(variation);
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+ 
+	
+	function runAssignmentFunction27() {@Test}
+	 	variation string = "operation into overflow";
+		try
+			overflow smallFloat = 9223372036854775700.;
+			overflow += 23423;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+//		onException (expect nullvalueexception)
+//			LogResult.passed(variation);
+		onException (wrong AnyException)
+			LogResult.logStdOut("Investigation required. What exception should occur?");
+			LogResult.failed(variation);
+		end
+	end
+
+end  // ESmallFloat001 library

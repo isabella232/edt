@@ -1,0 +1,1367 @@
+package sql.test;
+
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.AnyException;
+import eglx.persistence.Id;
+import eglx.persistence.sql.Column;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+import eglx.persistence.sql.SQLResultSet;
+import eglx.persistence.sql.SQLResultSetConcurrency;
+import eglx.persistence.sql.SQLResultSetControl;
+import eglx.persistence.sql.SQLResultSetScrollablity;
+import eglx.persistence.sql.SQLStatement;
+import eglx.persistence.sql.Table;
+import eglx.rbd.StrLib;
+
+// basic library
+library compositeKeyTest
+
+	use commonFunctionLibrary ;
+		
+ 	ds SQLDataSource? ;
+ 	rs SQLResultSet? ;
+	row, aRow, bRow MiniTblRecTwoKeys ;
+	oops boolean = false ; 
+	variation string ;
+	lastPosition int = 10 ;
+	nextToLastPosition int = lastPosition - 1 ;
+	fetchSize int = 5 ;
+
+	function basicConnect ( ) {@Test}
+		try  
+			setVariation ( "connect" ) ;
+			ds = Resources.getResource("binding:" + Constants.binding);
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicSetSchema ( ) {@Test}
+		try  
+			setVariation ( "set schema" ) ;
+			createSchema ( ) ;
+			ds.setCurrentSchema("EUNIT"); 
+			success ( ) ; 
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function basicCreateTable ( ) {@Test}
+		try  
+			setVariation ( "drop table") ;
+			dropTable ( ) ;
+			setVariation ( "create table" ) ;
+			createTable ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicNoRecordFound ( ) {@Test}
+		try  
+			setVariation ( "get for non existent record" ) ;
+			checkDeletedRow ( 1000 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicAdd ( ) {@Test}
+		try  
+			setVariation ( "addRecord" ) ;
+			addRow ( 1 ) ;
+			setVariation ( "checkAddedRecord" ) ; 
+			verifyRow ( 1 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicGet ( ) {@Test}
+		try
+			setVariation ( "add row" ) ;
+			insertRowWithExecuteStatement( 2 ) ;
+			setVariation ( "get row" ) ; 
+			getRow ( 2 ) ;
+			setVariation ( "check contents ") ;
+			checkRow ( 2 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ;
+		end
+	end
+	
+	function basicReplace ( ) {@Test}
+		try  
+			setVariation ( "replace row" ) ;
+			replaceRow ( 1 ) ; 
+			setVariation ( "check replaced row " ) ;
+			verifyUpdatedRow( 1 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicDelete ( ) {@Test}try  
+			setVariation ( "deleteRow" ) ;
+			deleteRow ( 1 ) ; 
+			deleteRow ( 2 ) ;
+			setVariation ( "checkDeletedRow" ) ;
+			checkDeletedRow ( 1 ) ;
+			checkDeletedRow ( 2 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicLoadTable ( ) {@Test}
+		id int = lastPosition ; 
+		j int ;
+		try  
+			setVariation ( "load table" ) ;
+			for ( j from 1 to lastPosition )  
+				insertRowWithExecuteStatement ( id ) ;
+				id -= 1 ;
+			end
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function basicForEach ( ) {@Test}
+		i int = lastPosition ;
+		rowCount int = 0 ;
+		try  
+			setVariation ( "open result set with sql statement" ) ;
+			rs = openResultSet ( rs ) ;  // no key used in default open so no sort
+			setVariation ( "for each row" ) ;
+			foreach ( row from rs )
+				checkRow ( i ) ;	
+				i -= 1 ;	
+				rowCount += 1 ;		
+			end
+			checkValue ( "Row count", lastPosition, rowCount ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end 
+	
+	function basicGetArray ( ) { @Test }
+		j int = lastPosition ;
+		i int ;
+		rows MiniTblRecTwoKeys[] ;
+		try  
+			setEmpty ( ) ;
+			setVariation ( "get array of rows" ) ;
+			row.id = 2 ;
+			get rows from ds ;
+			for ( i from 1 to lastPosition )
+				row = rows[i] ;
+				checkRow ( row.id ) ;
+				j -= 1 ;			
+			end
+			checkValue ( "Row count", lastPosition, rows.getSize() ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end 
+	
+	
+	function basicOpenResultSet ( ) {@Test}
+		localRS SQLResultSet? ;
+		try  
+			setVariation ( "open result set" ) ;
+			rs = openResultSet ( localRS ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicFetchFromResultSet ( ) {@Test}
+		j int = lastPosition ;
+		i int ;
+		try  
+			setVariation ( "read all rows" ) ;
+			for ( i from 1 to 10 )
+				checkNextRow ( rs, j ) ;
+				j -= 1 ;
+			end 
+			checkNextRow ( rs, 0 ) ;
+			checkResultSetClosed ( rs ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicClose ( ) {@Test}
+		try  
+			setVariation ( "close result set" ) ;
+			closeResultSet ( rs ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end			
+	end	
+		
+	function basicOpenResultSetForUpdate ( ) { @Test }
+		rs SQLResultSet? { @SQLResultSetControl { concurrency = CONCUR_UPDATABLE } } ;
+		id int = 19 ;
+		try  
+			setVariation ( "add three records " ) ;
+			addRow ( 20 ) ;
+			addRow ( 21 ) ;
+			addRow ( 22 ) ;
+			setVariation ( "open result set with SQL for update" ) ;
+			setEmpty ( ) ;
+			row.id = ( 19 ) ;
+			// for DB2Express ... need to add order by id desc before for update
+			if (Constants.isBindingDerby())
+				open rs from ds with
+					#sql{
+						select
+							id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+							aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+						from MINITBL
+						where
+							id > ?
+						for update of
+							aChar, aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+							aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+					} using row.id ;
+			else
+				open rs from ds with
+					#sql{
+						select
+							id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+							aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+						from MINITBL
+						where
+							id > ?
+						order by id asc
+						for update of
+							aChar, aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+							aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+					} using row.id ;
+			end
+			setVariation ( "replace row in result set ") ;
+			checkNextRow ( rs, 20 ) ;
+			updateRowInRS ( rs ) ;
+			setVariation ( "delete row in result set" ) ;
+			checkNextRow ( rs, 21 ) ;
+			deleteRowInRS ( rs ) ;
+			setVariation ( "delete row from result set" ) ;
+			checkNextRow ( rs, 22 ) ;
+			deleteRowFromRS ( rs ) ;
+			setVariation ( "read to end of file" ) ;
+			checkNextRow ( rs, 0 ) ;
+			setVariation ( "close rs" ) ;
+			closeResultSet ( rs ) ;
+			setVariation ( "verfiy row deleted" ) ;
+			checkDeletedRow ( 21 ) ;   
+			setVariation ( "verfiy row deleted" ) ;
+			checkDeletedRow ( 22) ;
+			
+			// do this one last because it currently fails, causing anything after to not run
+			setVariation ( "verify row updated") ;
+			verifyUpdatedRow ( 20 ) ;
+			deleteRow ( 20 ) ; 
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function getRowFromDSVariations ( ) {@Test}
+		id int = 5 ;
+		try  
+			setVariation ( "default get row" ) ;
+			getRow ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row using id" ) ;
+			getRowUsingId ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get into list of record variables" ) ;
+			getRowIntoRecordVariables ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get into list of primitive variables" ) ;
+			getRowIntoPrimitiveVariables ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row with sql statement / using clause" ) ;
+			getRowWithSQLStatement ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row with prepared statement / using clause" ) ;
+			getRowWithPreparedStatement ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get into variables with prepared statement / using clause" ) ;
+			getIntoWithPreparedStatement ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row with default SQL statement saved in program" ) ;
+			getRowWithDefaultSQLStatement ( id ) ;
+			checkRow ( id ) ;
+			setVariation ( "get row into dictionary" ) ;
+			notSupported ( )  ;			 
+//			getRowIntoDictionary ( id ) ;
+//			checkRow ( id ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+ 	function insertRowFromDSVariations ( ) {@Test}
+ 		try
+	 		setVariation ( "default add statement " ) ;
+	 		addRow ( 100 ) ;
+	 		verifyRow ( 100 ) ;
+	 		setVariation ( "execute insert sql statement " ) ;
+	 		insertRowWithExecuteStatement ( 101 ) ;
+	 		verifyRow ( 101 ) ;
+	 		setVariation ( "prepare and insert sql statement " ) ;
+	 		insertRowWithPrepareStatement ( 102 ) ;
+	 		verifyRow ( 102) ;
+	 		setVariation ( "saved default add statement " ) ;
+	 		addRowWithDefaultSQLStatement ( 103 ) ;
+	 		verifyRow ( 103) ;
+	 		success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+ 	function replaceRowFromDSVariations ( ) {@Test}
+ 		// these were broken up because a couple fail and cause the rest not to run.
+ 		pass boolean = true;
+ 		try
+	 		setVariation ( "default replace statement" ) ;
+	 		replaceRow ( 2 ) ;
+	 		verifyUpdatedRow ( 2 ) ;
+	 	onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+			pass = false;
+		end
+		
+		try
+	 		setVariation ( "execute replace sql statement " ) ;
+	 		updateRowWithExecuteStatement ( 3 ) ;
+	 		verifyUpdatedRow ( 3 ) ;
+	 	onException ( ex anyException ) 
+			unexpectedException ( ex ) ;
+			pass = false; 
+		end
+		
+		try
+	 		setVariation ( "prepare and replace sql statement " ) ;
+	 		updateRowWithPreparedStatement ( 4 ) ;
+	 		verifyUpdatedRow ( 4 ) ;
+	 	onException ( ex anyException ) 
+			unexpectedException ( ex ) ;
+			pass = false; 
+		end
+		
+		try
+	 		setVariation ( "saved default replace statement" ) ;
+	 		replaceRowWithDefaultSQLStatement ( 5 ) ;
+	 		verifyUpdatedRow ( 5 ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ;
+			pass = false; 
+		end
+		
+		try  
+		//with an updateable id default SQL can't be used
+		//the id in the update is the new value
+		//the id in the where must be the old value
+		//in this case the id field is aInt
+			setVariation ( "replace row with updateable ID" ) ;
+			id int = 6;
+			row.id = id ;
+			initializeRow ( row, id + 100 ) ;
+			replace row to ds with
+				#sql{
+					update MINITBL
+					set
+						aChar = ?,
+						aString = ?,
+						aLString = ?,
+						afloat = ?,
+						aSmallInt = ?,
+						aBigint = ?,
+						aNullValue = ?,
+						aBoolean = ?,
+						aDate = ?,
+						aTime = ?,
+						aTimeStamp = ?,
+						aStringDate = ?,
+						aStringTime = ?,
+						aStringTimeStamp = ?,
+						aInt = ?
+					where
+						id = ?
+							and aInt = ?
+				} 
+				using row.aChar, 
+						row.aString, 
+						row.aLString,
+						row.aFloat,
+						row.aSmallInt, 
+						row.aBigint,
+						row.aNullValue,
+						row.aBoolean,
+						row.aDate,
+						row.aTime,
+						row.aTimeStamp,
+						row.aStringDate,
+						row.aStringTime,
+						row.aStringTimeStamp,
+						row.aint,
+						row.id,row.id ;
+			setVariation ( "check replaced updateable ID" ) ;
+			setEmpty ( ) ;
+			row.id = id;
+			row.aInt = id + 100;
+			get row from ds;
+			aRow.id = id ;
+			initializeRow ( aRow, id + 100 ) ;
+			compareRow ( aRow, row ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+		if (pass)
+			success ( ) ;
+		end
+	end	
+	
+	function deleteRowFromDSVariations ( ) {@Test}
+ 		try
+	 		setVariation ( "default delete statement " ) ;
+	 		deleteRow ( 100 ) ;
+	 		checkDeletedRow ( 100 ) ;
+	 		setVariation ( "execute delete sql statement " ) ;
+	 		deleteRowWithExecuteStatement ( 101 ) ;
+	 		checkDeletedRow ( 101 ) ;
+	 		setVariation ( "prepare and delete sql statement " ) ;
+	 		deleteRowWithPreparedStatement ( 102 ) ;
+	 		checkDeletedRow ( 102) ;
+	 		setVariation ( "saved default delete statement " ) ;
+	 		deleteRowWithDefaultSQLStatement ( 103 ) ;
+	 		checkDeletedRow ( 103) ;
+	 		success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end		
+	
+	function openResultSetWithFetchVariations ( ) {@Test}
+		id int = lastPosition ;
+		try
+			setVariation ( "open result set" ) ;
+			rs = openResultSet ( rs ) ;
+			getRowFromRSVariations ( rs, id, -1 ) ;	
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+//	function openResultSetUsingIDWithFetchVariations ( ) {@Test}
+//		id int = 4 ;
+//		try
+//			setVariation ( "open result set using id" ) ;
+//			rs = openResultSetUsingID ( rs, id ) ;
+//			getRowFromRSVariations ( rs, 1, 1 ) ;	
+//		onException ( ex anyException ) 
+//			unexpectedException ( ex ) ; 
+//		end
+//	end		
+	
+	function openResultSetWithSQLStatementPlusFetchVariations ( ) {@Test}
+		id int = 6 ;
+		try
+			setVariation ( "open result set with SQL statement" ) ;
+			rs = openResultSetWithSQLStatement ( rs, id ) ;
+			id += 1 ;
+			getRowFromRSVariations ( rs, id, 1 ) ;	
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end		
+	
+	function openResultSetWithPreparePlusFetchVariations ( ) {@Test}
+		id int = 6 ;
+		try
+			setVariation ( "open result set with prepare" ) ;	
+			rs = openResultSetWithPreparedStatement ( rs, id ) ;
+			id += 1 ;
+			getRowFromRSVariations ( rs, id, 1 ) ;	
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+				
+	function openResultSetWithDefaultSQLStatementPlusFetchVariations ( ) {@Test}
+		id int = lastPosition ;
+		try
+			setVariation ( "open result set with default SQL statement" ) ;
+			rs = openResultSetWithDefaultSQLStatement ( rs ) ;
+			getRowFromRSVariations ( rs, lastPosition, -1 ) ;	
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function positionInResultSet ( ) {@Test}
+		rs SQLResultSet? { @SQLResultSetControl { scrollablity = TYPE_SCROLL_INSENSITIVE } } ;		
+		id int = -1 ;
+		try  
+			setVariation ( "open result set with scrolling" ) ;
+			open rs from ds with #sql{ 
+			select id, rtrim(aChar), aString, aLString, aFloat, aInt, aSmallInt, aBigInt, aNullValue,
+			aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from MINITBL where id > ?
+			}  		
+			using id ;
+			setVariation ( "set next record" ) ;				
+			positionAndcheckNextRow ( rs, 1, rs.setNext() ) ;			
+			setVariation ( "set last record " ) ;	
+			positionAndcheckNextRow ( rs, lastPosition, rs.setLast() ) ;	
+			setVariation ( "set previous" ) ;
+			positionAndcheckNextRow ( rs, nextToLastPosition, rs.setPrevious() ) ;
+			setVariation ( "set first record" ) ;	
+			positionAndcheckNextRow ( rs, 1, rs.setFirst() ) ;
+			setVariation ( "set absolute" ) ;
+			positionAndcheckNextRow ( rs, 2, rs.setAbsolute(2) ) ;
+			setVariation ( "set absolute, no record at position" ) ;
+			setVariation ( "set relative minus" ) ;
+			positionAndcheckNextRow ( rs, 1, rs.setRelative(-1) ) ;	
+			setVariation ( "set relative plus" ) ;
+			positionAndcheckNextRow ( rs, 3, rs.setRelative(2) ) ;
+			setVariation ( "set absolute, no record at position" ) ;
+			positionAndcheckNextRow ( rs, 0, rs.setAbsolute(1000) ) ;
+			setVariation ( "set absolute after row not valid" ) ;
+			positionAndcheckNextRow ( rs, 1, rs.setAbsolute(1) ) ;		
+			setVariation ( "set relative plus, no record at position" ) ;
+			positionAndcheckNextRow ( rs, 0, rs.setRelative(1000) ) ;	
+			// need to get the cursor back in a valid spot for DB2
+			checkIt boolean = rs.setFirst();
+			setVariation ( "set relative minus, no record at position" ) ;
+			positionAndcheckNextRow ( rs, 0, rs.setRelative(-1000)  ) ;	
+			setVariation ( "close result set" ) ;
+			closeResultSet ( rs ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function basicDropTable ( ) {@Test}
+		try  
+			setVariation ( "drop table" ) ;
+			dropTable ( ) ;
+			success ( ) ;
+		onException ( ex sqlException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function disconnect() { @Test }
+		try  
+			setVariation ( "disconnect" ) ;
+			if ( ds != null && !ds.isClosed() )
+				close ds;
+			end
+			success ( ) ;
+		onException ( ex sqlException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function createTable()
+		dropTable ( ) ;
+		execute from ds with #sql{
+			CREATE TABLE MINITBL 
+			   (
+			      id INTEGER NOT NULL,
+			      aChar CHAR(25) NOT NULL ,
+			      aString VARCHAR(20),
+			      aLString VARCHAR(20),
+			      aFloat DOUBLE PRECISION,
+			      aInt INTEGER,
+			      aSmallInt SMALLINT,
+			      aBigInt BIGINT,
+			      aNullValue VARCHAR(20), 
+			      aBoolean SMALLINT,
+			      aDate DATE,
+			      aTime TIME,
+			      aTimeStamp TIMESTAMP,
+			      aStringDate DATE,
+			      aStringTime TIME,
+			      aStringTimeStamp TIMESTAMP
+			   );
+			
+			
+			ALTER TABLE MINITBL
+			   ADD CONSTRAINT MINITBL_PK Primary Key (
+			      id );
+		};
+	end
+	
+	function createSchema()
+		try
+			execute from ds with #sql{
+				CREATE SCHEMA EUNIT 
+			};
+		onException (ex anyException )
+		end			
+	end
+	
+	
+	function dropTable()
+		try
+			execute with #sql{ drop table MINITBL } from ds;
+		onException ( ex sqlException)	
+			if ( ex.SQLState != "42Y55" )
+				unexpectedException ( ex ) ; 
+			end
+		end
+	end
+		
+	function addRow ( id int in )
+		setRowForAdd ( row, id ) ;
+		add row to ds;  
+	end	
+	
+	function insertRowWithExecuteStatement ( id int in )
+		setRowForAdd ( row, id ) ;
+		execute from ds with
+			#sql{
+				insert into MINITBL
+					(id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigint, 
+					aNullValue, aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp )
+				values
+					(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			} 
+			using row.id, row.aChar, row.aString, row.aLString, row.afloat, row.aInt, row.aSmallInt, row.aBigInt, row.aNullValue, 
+				row.aBoolean, row.aDate, row.aTime, row.aTimeStamp, row.aStringDate, row.aStringTime, row.aStringTimeStamp 
+			;
+	end	
+	
+	function insertRowWithPrepareStatement ( id int in )
+		insertStmt SQLStatement? ;
+		insertStmtString String ;
+		setRowForAdd ( row, id ) ;
+		insertStmtString = "insert into MINITBL " +
+					"(id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigint, " +
+					"aNullValue, aboolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp ) " +
+					" values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " ;
+		prepare insertStmt from ds with insertStmtString ;
+		execute from ds with insertStmt 
+			using row.id, row.aChar, row.aString, row.aLString, row.afloat, row.aInt, row.aSmallInt, row.aBigInt, row.aNullValue, 
+				row.aBoolean, row.aDate, row.aTime, row.aTimeStamp, row.aStringDate, row.aStringTime, row.aStringTimeStamp
+			;
+	end	
+	
+//	function addListWithPrepareStatement ( id int in )
+//		// not supported
+//		insertStmt SQLStatement? ;
+//		insertStmtString String ; 
+//		setRowForAdd( row, id ) ;
+//		insertStmtString = "insert into MINITBL " +
+//					"(id, aChar, aString, afloat, aInt, aSmallInt, aBigint, " +
+//					"aNullValue, aboolean, aDate, aTimeStamp, aStringDate, aStringTimeStamp ) " +
+//					" values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " ;
+//		prepare insertStmt from ds with insertStmtString ;
+//		add row.id, row.aChar, row.aString, row.afloat, row.aInt, row.aSmallInt, row.aBigInt, row.aNullValue, 
+//				row.aBoolean, row.aDate, row.aTimeStamp, row.aStringDate, row.aStringTimeStamp 
+//				to ds with insertStmt ;
+//	end	
+	
+	function addRowWithDefaultSQLStatement ( id int in )
+		setRowForAdd ( row, id ) ;
+		add row to ds with
+			#sql{
+				insert into MINITBL
+					(id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigint, 
+					aNullValue, aBoolean, aDate, aTime, aTimeStamp, aStringDate, 
+					aStringTime, aStringTimeStamp)
+				values
+					(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			} ;
+	end	
+	
+	function replaceRow ( id int in )
+		setRowForUpdate ( row, id ) ;
+		replace row to ds ;
+	end	
+	
+	function updateRowWithExecuteStatement ( id int in )
+		setRowForUpdate ( row, id) ;
+		execute from ds with#sql{
+				update MINITBL
+				set
+					aChar = ?,
+					aString = ?,
+					aLString = ?,
+					afloat = ?,
+					aInt = ?,
+					aSmallInt = ?,
+					aBigint = ?,
+					aNullValue = ?,
+					aboolean = ?,
+					aDate = ?,
+					aTimeStamp = ?,
+					aTime = ?,
+					aStringDate = ?,
+					aStringTime = ?,
+					aStringTimeStamp = ?
+				where
+					id = ?
+			}  
+			using row.aChar, row.aString, row.aLString, row.afloat, row.aInt, row.aSmallInt, row.aBigInt, row.aNullValue, 
+				row.aBoolean, row.aDate, row.aTime, row.aTimeStamp, row.aStringDate, row.aStringTime, row.aStringTimeStamp, id
+			;
+	end	
+	
+	function updateRowWithPreparedStatement ( id int in )
+		replaceStmt SQLStatement? ;
+		replaceStmtString String ;
+		setRowForUpdate ( row, id ) ;
+		replaceStmtString = "update MINITBL " +
+			"set aChar = ?, aString = ?, aLString = ?, aFloat = ?, aInt = ?, aSmallInt = ?, aBigint = ?, aNullValue = ?, " +
+			"aBoolean = ?, aDate = ?, aTime = ?, aTimeStamp = ?, aStringDate = ?, aStringTime = ?, aStringTimeStamp = ? " +
+			"where id = ? " ;
+		prepare replaceStmt from ds with replaceStmtString ;
+		execute from ds with replaceStmt 
+			using row.aChar, row.aString, row.aLString, row.afloat, row.aInt, row.aSmallInt, row.aBigInt, row.aNullValue, 
+				row.aBoolean, row.aDate, row.aTime, row.aTimeStamp, row.aStringDate, row.aStringTime, row.aStringTimeStamp, id
+			;
+	end	
+	
+	function replaceRowWithDefaultSQLStatement ( id int in )
+		setRowForUpdate ( row, id ) ;
+		replace row to ds with
+			#sql{
+				update MINITBL
+				set
+					aChar = ?,
+					aString = ?,
+					aLString = ?,
+					afloat = ?,
+					aInt = ?,
+					aSmallInt = ?,
+					aBigint = ?,
+					aNullValue = ?,
+					aBoolean = ?,
+					aDate = ?,
+					aTimeStamp = ?,
+					aTime = ?,
+					aStringDate = ?,
+					aStringTime = ?,
+					aStringTimeStamp = ?
+				where
+					id = ? and
+					aInt = ?
+			} ;
+	end		
+	
+	function deleteRow ( id int in )
+		row.id = id ;
+		delete from ds with #sql{DELETE FROM MINITBL WHERE id = ?} using id;
+	end	
+	
+	function deleteRowWithExecuteStatement ( id int in )
+		execute from ds  with
+			#sql{
+				delete from MINITBL
+				where
+					id = ?
+			}  
+			using id ;
+	end	
+	
+	function deleteRowWithPreparedStatement ( id int in )
+		deleteStmt SQLStatement? ;
+		deleteStmtString String ;
+		deleteStmtString = "delete from MINITBL where id = ?" ;
+		prepare deleteStmt from ds with deleteStmtString ;
+		execute from ds with deleteStmt using id ;
+	end		
+	
+	function deleteRowWithDefaultSQLStatement ( id int in )
+		row.id = id ;
+		delete row from ds with
+			#sql{
+				delete from MINITBL
+				where
+					id = ? and aInt = ?
+			} ;
+	end	
+	
+	function getRow ( id int in )
+		setEmpty ( ) ;
+		row.id = id;
+		row.aInt = id;
+		get row from ds;
+	end
+		
+	function getRowUsingId ( id int in )
+		setEmpty ( ) ;
+		row.id = id ;
+		get row from ds using id, id;
+	end
+	
+	function getRowIntoRecordVariables( key int in )
+//FIXME 082CHANGE		set bRow empty ;
+		bRow = new MiniTblRecTwoKeys;
+		get bRow.id, bRow.aChar, bRow.aString, bRow.aLString, bRow.afloat, bRow.aInt, bRow.aSmallInt, bRow.aBigint, brow.aNullValue,		
+				bRow.aBoolean, bRow.aDate, brow.aTime, brow.aTimeStamp, bRow.aStringDate, bRow.aStringTime, bRow.aStringTimeStamp 
+			from ds using key with #sql{
+				select
+					id, rtrim(aChar), aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+					aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+				from MINITBL
+				where
+					id = ?
+			} ;
+		row = bRow ;
+	end
+	
+	function getRowIntoPrimitiveVariables ( key int in )
+		id int ;
+		aChar string;
+		aString string;
+		aLString string(20);
+		aFloat float;
+		aInt int;
+		aSmallInt smallint;
+		aBigint bigint;
+		aNullValue string? ;
+		aBoolean boolean ;
+		aDate date ;
+		aTime time ;
+		aTimeStamp timeStamp("yyyyMMddHHmmssf") ;
+		aStringDate string ;
+		aStringTime string ;
+		aStringTimeStamp string ;
+ 		get id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigint, aNullValue,
+ 			aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+ 		from ds using key with #sql{
+			select
+				id, rtrim(aChar), aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+				aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+			from MINITBL
+			where
+				id = ?
+		} ;
+ 		row.id = id ; 
+		row.aChar = aChar ;
+		row.aString = aString ;
+		row.aLString = aLString ;
+		row.aFloat = aFloat ;
+		row.aInt = aInt ;
+		row.aSmallInt = aSmallInt ;
+		row.aBigInt = aBigInt ;
+		row.aNullValue = aNullValue ;
+		row.aBoolean = aBoolean ;
+		row.aDate = aDate ;
+		row.aTime = aTime ;
+		row.aTimeStamp = aTimeStamp ;
+		row.aStringDate = aStringDate ;
+		row.aStringTime = aStringTime ;
+		row.aStringTimeStamp = aStringTimeStamp ;
+	end		
+	
+//	function getRowIntoDictionary ( id int in )
+//		rowDictionary dictionary = new Dictionary ;
+//		set row empty ;
+// 		get rowDictionary from ds using id with #sql{
+//			select
+//				id, rtrim(aChar), aString, afloat, aInt, aSmallInt, aBigInt, aNullValue
+//			from MINITBL
+//			where
+//				id = ?
+//		} ; 
+//		getRowFromDictionary ( rowDictionary, row ) ;
+//	end	
+//	
+//	function getRowFromDictionary ( rowDictionary dictionary, row MiniTblRecTwoKeys ) 
+//		checkValue ( "rowDictionary.size", 8, rowDictionary.size() ) ;
+// 		row.id = rowDictionary [ "id" ] ;
+// 		row.aChar = rowDictionary [ "aChar" ] ;
+// 		row.aString = rowDictionary [ "aString" ] ;
+// 		row.aFloat = rowDictionary [ "aFloat" ] ;
+// 		row.aInt = rowDictionary [ "aInt" ] ;
+// 		row.aSmallInt = rowDictionary [ "aSmallInt" ] ;
+// 		row.aBigInt = rowDictionary [ "aBigInt" ] ;
+// 		row.aNullValue = rowDictionary [ "aNullValue" ] ;
+//	end
+	
+	function getRowWithSQLStatement ( id int in )
+		setEmpty ( ) ;
+		get row from ds
+			using id
+			with #sql{
+				select
+					id, rtrim(aChar), aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue,
+					aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp
+				from MINITBL
+				where
+					id = ?
+			} ;
+	end
+	
+	function getRowWithPreparedStatement ( id int in )
+	    getStmt SQLStatement? ;
+		getStmtString String ;
+		getStmtString = "select id, rtrim(aChar), aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue, " +
+			"aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from MINITBL where id = ?" ;
+		prepare getStmt from ds with getStmtString ;
+		get row from ds
+			with getStmt 
+			using id ;
+	end	
+	
+	function getIntoWithPreparedStatement ( id int in )
+	    getStmt SQLStatement? ;
+		getStmtString String ;
+		getStmtString = "select id, rtrim(aChar), aString, aLString, afloat, aInt, aSmallInt, aBigInt, aNullValue, " +
+			"aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from MINITBL where id = ?" ;
+		prepare getStmt from ds with getStmtString ;
+		get bRow.id, bRow.aChar, bRow.aString, brow.aLString, bRow.afloat, bRow.aInt, bRow.aSmallInt, bRow.aBigint, bRow.aNullValue, 
+			bRow.aBoolean, bRow.aDate, bRow.aTime, bRow.aTimeStamp, bRow.aStringDate, bRow.aStringTime, bRow.aStringTimeStamp
+			from ds
+			with getStmt 
+			using id ;
+		row = bRow ;
+	end
+	
+	function getRowWithDefaultSQLStatement ( id int in )
+		setEmpty ( ) ;
+		row.id = id ;
+		row.aInt = id;
+		get row from ds using row.id, row.aInt  with
+			#sql{
+				select
+					id, rtrim(aChar), rtrim(aString), rtrim(aLString), afloat, aInt, 
+					aSmallInt, aBigint, rtrim(aNullValue), aboolean, aDate, 
+					aTime, aTimeStamp, rtrim(aStringDate), rtrim(aStringTime), rtrim(aStringTimeStamp)
+				from MINITBL
+				where
+					id = ?
+						and aInt = ?
+			}  ;
+	end
+	
+	function checkDeletedRow ( id int in )
+		setEmpty ( ) ;
+		try
+			get row from ds using id ;
+			if ( row.id == id )
+				throwException ( "Record " + id + " read, record should not be in table" ) ;
+			end
+		end
+	end
+	
+	function openResultSet ( rs SQLResultSet? ) returns ( SQLResultSet? )
+		setEmpty ( ) ;
+//		open rs from ds for row; // this uses the keys in the WHERE which means 0 or 1 row will be returned. NOT what the other functions expect that call this.
+        open rs from ds with #sql{ 
+			select id, rtrim(aChar), aString, aLString, aFloat, aInt, aSmallInt, aBigInt, aNullValue, aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from MINITBL
+			};
+		return ( rs ) ;
+	end 	
+	
+	function openResultSetUsingID ( rs SQLResultSet?,  id int ) returns ( SQLResultSet? )
+		setEmpty ( ) ;
+		notSupported ( ) ;
+//      open rs from ds for row using id ;
+		return ( rs ) ;
+	end 	
+	
+	function openResultSetWithSQLStatement ( rs SQLResultSet? ,  id int ) returns ( SQLResultSet? )
+		setEmpty ( ) ;
+		//  for DB2Express need to force row order 
+		open rs from ds with #sql{ 
+			select id, rtrim(aChar), aString, aLString, aFloat, aInt, aSmallInt, aBigInt, aNullValue, aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp 
+			from MINITBL where id > ? order by id asc
+			}  		
+			using id ;
+		return ( rs ) ;
+	end 		
+	
+	function openResultSetWithPreparedStatement ( rs SQLResultSet?,  id int ) returns ( SQLResultSet? )
+		openStmt SQLStatement? ;
+		openStmtString String ; 
+		//  for DB2Express need to force row order 
+		openStmtString = "select id, rtrim(aChar), aString, aLString, aFloat, aInt, aSmallInt, aBigInt, aNullValue, " +
+			"aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from MINITBL where id > ? order by id asc" ;
+		prepare openStmt from ds with openStmtString ;
+		open rs from ds with openStmt using id ;
+		return ( rs ) ;
+	end 		
+	
+	function openResultSetWithDefaultSQLStatement ( rs SQLResultSet? ) returns ( SQLResultSet? )
+		setEmpty ( ) ;
+		//  for DB2Express need to force row order and range
+		open rs from ds with
+			#sql{
+				select
+					id, rtrim(aChar), rtrim(aString), rtrim(aLString), afloat, aInt, 
+					aSmallInt, aBigint, rtrim(aNullValue), aBoolean, aDate, 
+					aTime, aTimeStamp, rtrim(aStringDate), rtrim(aStringTime), rtrim(aStringTimeStamp)
+				from MINITBL
+				where id <= 10
+				order by id desc
+			} ;		
+		return ( rs ) ;
+	end 
+	
+	function getRowFromRSVariations ( rs SQLResultSet?, id int in, idDelta int in)  
+		try  
+			setVariation ( "default get row" ) ;
+			getRowFromRS ( rs, id ) ;
+			checkRow ( id ) ;
+			id += idDelta ;
+			setVariation ( "default get row again" ) ;
+			getRowFromRS ( rs, id ) ;
+			checkRow ( id ) ;
+			id += idDelta ;
+			setVariation ( "get into list of variables" ) ;
+			getRowFromRSIntoRecordVariables ( rs, id ) ;
+			checkRow ( id ) ;
+			id += idDelta ;
+			setVariation ( "get into list of primitive variables" ) ;
+			getRowFromRSIntoPrimitiveVariables ( rs, id ) ;
+			checkRow ( id ) ;
+			id += idDelta ;
+			setVariation ( "get row into dictionary" ) ;
+			notSupported ( ) ;
+//			getRowFromRSIntoDictionary ( rs, id ) ;
+//			checkRow ( id ) ;
+//			id += idDelta ;
+			setVariation ( "close result set" ) ;
+			closeResultSet ( rs ) ;
+			checkResultSetClosed ( rs ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function getRowFromRS ( rs SQLResultSet?, id int inOut )
+		if ( rs.setNext() )
+			get row from rs ;
+		else
+			throwException ( "rs.setNext() for row " + id + " returned false" ) ;
+		end
+	end	
+	
+	function getRowFromRSIntoRecordVariables ( rs SQLResultSet?, id int inOut )
+		if ( rs.setNext() )			
+			get bRow.id, bRow.aChar, bRow.aString, bRow.aLString, bRow.afloat, bRow.aInt, bRow.aSmallInt, bRow.aBigint, brow.aNullValue,
+				bRow.aBoolean, bRow.aDate, brow.aTime, brow.aTimeStamp, bRow.aStringDate, bRow.aStringTime, bRow.aStringTimeStamp from rs ;
+			row = bRow ;
+		else
+			throwException ( "rs.setNext() for row " + id + " returned false" ) ;
+		end
+	end	
+	
+	function getRowFromRSIntoPrimitiveVariables ( rs SQLResultSet?, key int inOut )
+		id int ;
+		aChar string;
+		aString string;
+		aLString string(20);
+		aFloat float;
+		aInt int;
+		aSmallInt smallint;
+		aBigint bigint;
+		aNullValue string? ;
+		aBoolean boolean ;
+		aDate date ;
+		aTime time ;
+		aTimeStamp timeStamp("yyyyMMddHHmmssf") ;
+		aStringDate string ;
+		aStringTime string ;
+		aStringTimeStamp string ;
+		if ( rs.setNext() )	
+ 			get id, aChar, aString, aLString, afloat, aInt, aSmallInt, aBigint, aNullValue,
+ 			aBoolean, aDate, aTime, aTimeStamp, aStringDate, aStringTime, aStringTimeStamp from rs ; 		
+		else
+			throwException ( "rs.setNext() for row " + id + " returned false" ) ;
+		end
+ 		row.id = id ; 
+		row.aChar = aChar ;
+		row.aString = aString ;
+		row.aLString = aLString;
+		row.aFloat = aFloat ;
+		row.aInt = aInt ;
+		row.aSmallInt = aSmallInt ;
+		row.aBigInt = aBigInt ;
+		row.aNullValue = aNullValue ;
+		row.aBoolean = aBoolean ;
+		row.aDate = aDate ;
+		row.aTime = aTime ;
+		row.aTimeStamp = aTimeStamp ;
+		row.aStringDate = aStringDate ;
+		row.aStringTime = aStringTime;
+		row.aStringTimeStamp = aStringTimeStamp ;
+	end		
+	
+//	function getRowFromRSIntoDictionary ( rs SQLResultSet?, id int inOut )
+//		if ( rs.setNext() )			
+//			rowDictionary dictionary = new Dictionary ;
+// 			get rowDictionary from rs ; 
+//			getRowFromDictionary ( rowDictionary, row ) ;
+//		else
+//			throwException ( "rs.setNext() for row " + id + " returned false" ) ;
+//		end
+//	end
+	
+	function updateRowInRS ( rs SQLResultSet? )	
+		setRowForUpdate( row, row.id ) ;
+		replace row to rs ;
+	end
+	
+	function deleteRowFromRS ( rs SQLResultSet? )  
+		delete row from rs ;
+	end
+	
+	function deleteRowInRS ( rs SQLResultSet? )
+		rs.deleteRow ( ) ;
+	end
+	
+	function closeResultSet ( rs SQLResultSet? ) 
+		close rs ;
+	end	
+		
+	function checkResultSetClosed ( rs SQLResultSet? )
+		try
+			get row from rs ;
+		onException ( ex anyException ) 
+			expectedException ( ex ) ;
+			return ;
+		end
+		throwException ( "no exception thrown on use of closed result set" ) ;
+	end		   
+
+	function setRowForAdd ( row MiniTblRecTwoKeys, id int in )
+		row.id = id ;
+		initializeRow ( row, id ) ;
+	end	   
+
+	function setRowForUpdate( row MiniTblRecTwoKeys, id int in )
+		row.id = id ;
+		initializeRow ( row, id + 100 ) ;
+		row.aInt  = id;
+	end
+	
+	function initializeRow ( row MiniTblRecTwoKeys, value int in )
+		row.aChar = "Some Char " + value ;
+		row.aString = "Some String " + value ;
+		row.aLString = "Some LString " + value ;
+		row.aFloat = value ;
+		row.aInt = value ;
+		row.aSmallInt = value ;
+		row.aBigInt = value ;
+		row.aNullValue = null ;
+		row.aBoolean = valueIsOdd ( value ) ;		
+		row.aDate = "03/22/2011";
+		row.aTime = "02:56:34";
+		row.aTimeStamp = row.aDate ;
+		row.aStringDate = strLib.formatDate ( row.aDate, "yyyy-MM-dd" ) ;
+		row.aStringTime = row.aTime as string;
+		row.aStringTimeStamp = strLib.formatTimeStamp ( row.aTimeStamp, "yyyy-MM-dd HH:mm:ss.f" ) ;
+	end
+	
+	function valueIsOdd ( value int ) returns ( boolean ) 
+		return ( ( value % 2 ) == 1 ) ;
+	end
+	
+	function verifyRow ( expectedId int in )
+		getRowWithSQLStatement( expectedId ) ;
+		checkRow ( expectedId ) ;
+	end	
+	
+	function verifyUpdatedRow ( expectedId int in )
+		getRow ( expectedId ) ;
+		checkUpdatedRow ( expectedId ) ;
+	end	
+	
+	function checkRow ( expectedId int in )
+		aRow.id = expectedId ;
+		setRowForAdd ( aRow, expectedId ) ;
+		compareRow ( aRow, row ) ;
+	end	
+	
+	function checkUpdatedRow ( expectedId int in )
+		setRowForUpdate ( aRow, expectedId ) ;
+		compareRow ( aRow, row ) ;
+	end
+	
+	function checkId ( expectedId int )
+		if ( row.id != expectedId)
+			throwException ( "actual row = " + row.id + ", expected row = " + expectedId ) ;
+		end
+	end
+	
+	function checkNextRow ( rs SQLResultSet?, expectedId int in)
+		if ( rs.setNext() )
+			get row from rs ;
+			row.aChar = row.aChar.clip();
+			checkRow ( expectedId ) ;
+		else
+			if ( expectedId != 0)
+				throwException ( "rs.setNext() for row " + expectedId + " returned false" ) ;
+			end
+		end
+	end	
+	
+	function checkNextRowAndPosition ( rs SQLResultSet?, expectedId int )
+		getRowFromRS ( rs, expectedID ) ;
+		checkPosition ( rs, expectedId ) ;
+	end	
+	
+	function checkPosition ( rs SQLResultSet?, expectedPosition int )
+		if ( expectedPosition != 0 )
+			get row from rs ;
+			position int = row.id ; // rs.getPosition ( ) ;
+			checkValue ( "result set position", expectedPosition, position) ;
+			if ( position == 1)
+				checkValue ( "isFirst", true, rs.isFirst ( ) ) ;
+			else			
+				checkValue ( "isFirst", false, rs.isFirst ( ) ) ;
+			end
+			
+			if ( position == lastPosition )
+				checkValue ( "isLast", true, rs.isLast ( ) ) ;
+			else			
+				checkValue ( "isLast", false, rs.isLast ( ) ) ;
+			end
+		end
+	end
+	
+	function positionAndcheckNextRow ( rs SQLResultSet?, expectedId int in, recordFound boolean in )
+		checkNextRowFound ( ( expectedId != 0 ), recordFound ) ;
+		if ( recordFound )
+			get row from rs ;
+		end
+	end
+	
+	function checkNextRowFound ( expectedRecordFound boolean in, actualRecordFound boolean in )
+		if ( expectedRecordFound != actualRecordFound )
+			if ( expectedRecordFound )
+				throwException ( "No record position set" ) ;
+			else
+				throwException ( "Record position set when not expected" ) ;
+			end
+		end
+	end
+	
+	function checkNoRecordFound ( isSet boolean in )
+		if ( isSet )
+			throwException ( "record found when not expected" ) ;
+		end
+	end
+	
+	function checkColumnValue ( column string in, expectedValue string? in, actualValue string? in )
+//		if (  trim(actualValue) != trim(expectedValue) )
+		if ( column == "aStringTimeStamp" )
+			if (actualValue != expectedValue  )
+			//	syslib.writestdout(actualValue + " reformatted timestamp ");
+				expectedValue = expectedValue + "00000";
+				expectedValue = expectedValue.replaceStr(" ", "-");
+				expectedValue = expectedValue.replaceStr(":", ".");
+			else
+			//	syslib.writestdout(actualValue + " reformatted timestamp SKIPPED ");
+			end
+		end
+		if ( column == "aStringTime" )
+			if (actualValue != expectedValue  )
+			//	syslib.writestdout(actualValue + " reformatted time ");
+				expectedValue = expectedValue.replaceStr(":", ".");
+			else
+			//	syslib.writestdout(actualValue + " reformatted time SKIPPED ");
+			end
+		end			
+		if ( actualValue != expectedValue )
+			throwException ( "Column = " + column + ", expected value = '" + expectedValue + "', actual value = '" + actualValue + "'" ) ;
+		end
+	end	
+	
+	function checkValue ( desc string in, expectedValue string? in, actualValue string? in )
+//		if (  trim(actualValue) != trim(expectedValue) )
+		if ( actualValue != expectedValue )
+			throwException ( desc + ", expected value = '" + expectedValue + "', actual value = '" + actualValue + "'" ) ;
+		end
+	end
+	
+	function checkUnTrimmedValue ( desc string in, expectedValue string in, actualValue string in )
+		if ( actualValue != expectedValue )
+			throwException ( desc + ", expected value = '" + expectedValue + "', actual value = '" + actualValue + "'" ) ;
+		end
+	end
+	
+	function trim ( value string? in ) returns ( string? )
+		if ( value == null )
+			return ( value ) ;
+		else
+			return ( value.clip() ) ;
+		end
+	end	
+	
+	function compareRow ( expectedRow MiniTblRecTwoKeys, actualRow MiniTblRecTwoKeys )
+		checkColumnValue ( "id", expectedRow.id, actualRow.id ) ;
+		checkColumnValue ( "aChar", expectedRow.aChar, actualRow.aChar ) ;
+		checkColumnValue ( "aString", expectedRow.aString, actualRow.aString ) ;
+		checkColumnValue ( "aLString", expectedRow.aLString, actualRow.aLString ) ;
+		checkColumnValue ( "aFloat", expectedRow.aFloat, actualRow.aFloat ) ;
+		checkColumnValue ( "aInt", expectedRow.aInt, actualRow.aInt ) ;
+		checkColumnValue ( "aSmallInt", expectedRow.aSmallInt, actualRow.aSmallInt ) ;
+		checkColumnValue ( "aBigint", expectedRow.aBigint, actualRow.aBigint ) ;
+		checkColumnValue ( "aNullValue", expectedRow.aNullValue, actualRow.aNullValue ) ;
+		checkColumnValue ( "aBoolean", expectedRow.aBoolean, actualRow.aBoolean ) ;
+		checkColumnValue ( "aDate", expectedRow.aDate, actualRow.aDate ) ;
+		checkColumnValue ( "aTime", expectedRow.aTime, actualRow.aTime ) ;
+		checkColumnValue ( "aTimeStamp", expectedRow.aTimeStamp, actualRow.aTimeStamp ) ;
+		checkColumnValue ( "aStringDate", expectedRow.aStringDate, actualRow.aStringDate ) ;
+		checkColumnValue ( "aStringTime", expectedRow.aStringTime, actualRow.aStringTime ) ;
+		checkColumnValue ( "aStringTimeStamp", expectedRow.aStringTimeStamp, actualRow.aStringTimeStamp ) ;
+	end
+	
+	function setEmpty ( )
+//FIXME 082CHANGE		set row empty ;
+		row = new MiniTblRecTwoKeys;
+	end
+	
+end
+
+record MiniTblRecTwoKeys {@Table {name="MINITBL"}} 
+//	id int {@Id };
+	id int {@Id, @Column { updateable=false } };
+	aChar string ;
+	aString string ;
+	aLString string(20);
+	aFloat float;
+	aInt int {@Id};
+	aSmallInt smallint ;
+	aBigint bigint ;
+	aNullValue string ? ;
+	aBoolean boolean ;
+	aDate date ;
+	aTime time ;
+	aTimeStamp timeStamp("yyyyMMddHHmmssf") ;
+	aStringDate string ; // { @Column { name="aDate", insertable=false } } ;
+	aStringTime string ; // { @Column { name="aTimeStamp", insertable=false } } ;
+	aStringTimeStamp string ; // { @Column { name="aTimeStamp", insertable=false } } ;
+end 

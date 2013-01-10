@@ -1,0 +1,203 @@
+package server.test.rpg.handlers;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.AnyException;
+import server.host.rpg.programs.ComplexTypes;
+import server.host.rpg.programs.data.handlers.Handler2;
+
+// basic library
+library HandlerFields2
+	
+	rec Handler2;
+	testParameters boolean = true;
+	function test1(){@Test}
+		rec.char20 = "abcd"; 
+		rec.lchar20 = "defg"; 
+		rec.unicode20 = "xyz"; 
+		rec.lunicode20 = "abc"; 
+		rec.bin1sign = -1;
+		rec.bin2sign = 1;
+		rec.bin4sign = 2;
+		rec.bin8sign = 3;
+		rec.dec174 = 45.67;
+		rec.dec8 = 14;
+		rec.num150 = 5;
+		rec.num112 = 11.61;
+		rec.bin1 = 5;
+		rec.bin2 = 6;
+		rec.bin4  = 7;
+		rec.bin8  = 8;
+		rec.date1 = "06/24/2011";
+		rec.date2 = "05/19/1997";
+		rec.date3 = "04/03/1922";
+		rec.time1 = "17:54:34";
+		rec.time2 = "07:14:03";
+		rec.time3 = "01:45:43";
+		rec.timestamp1 = "2012/02/11 17:54:34";
+		rec.float4 = 8;
+		rec.float8 = 9;
+		try
+        	LogResult.logStdOut("call ComplexTypes.primitiveHostProgram12");
+			ComplexTypes.primitiveHostProgram12(rec);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function char20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.char20 value");
+            LogResult.assertStringEqual("Fail rec.char20", "abcdYYYYY", rec.char20);
+		end
+	end
+	function lchar20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.lchar20 value");
+            LogResult.assertStringEqual("Fail rec.lchar20", "defgYYYYY", rec.lchar20);
+		end
+	end
+	function unicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.unicode20 value");
+            LogResult.assertStringEqual("Fail rec.unicode20", "xyz ZZZZZZZZZZ", rec.unicode20);
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.lunicode20 value");
+            LogResult.assertStringEqual("Fail rec.lunicode20", "abc ZZZZZZZZZZ", rec.lunicode20);
+		end
+	end
+	function bin1signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin1sign value");
+            LogResult.assertBigIntEqual("Fail rec.bin1sign", 97, rec.bin1sign);
+		end
+	end
+	function bin2signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin2sign value");
+            LogResult.assertBigIntEqual("Fail rec.bin2sign", 999, rec.bin2sign);
+		end
+	end
+	function bin4signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin4sign value");
+            LogResult.assertBigIntEqual("Fail rec.bin4sign", 10000, rec.bin4sign);
+		end
+	end
+	function bin8signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin8sign value");
+            LogResult.assertBigIntEqual("Fail rec.bin8sign", 100001, rec.bin8sign);
+		end
+	end
+	function dec174Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.dec174 value");
+            LogResult.assertDecimalEqual("Fail rec.dec174", 10043.67, rec.dec174);
+		end
+	end
+	function dec8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.dec8 value");
+            LogResult.assertDecimalEqual("Fail rec.dec8", 100012, rec.dec8);
+		end
+	end
+	function num150Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.num150 value");
+            LogResult.assertDecimalEqual("Fail rec.num150", 1003, rec.num150);
+		end
+	end
+	function num112Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.num112 value");
+            LogResult.assertDecimalEqual("Fail rec.num112", 109.61, rec.num112);
+		end
+	end
+	function bin1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin1 value");
+            LogResult.assertBigIntEqual("Fail rec.bin1", 103, rec.bin1);
+		end
+	end
+	function bin2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin2 value");
+            LogResult.assertBigIntEqual("Fail rec.bin2", 1004, rec.bin2);
+		end
+	end
+	function bin4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin4 value");
+            LogResult.assertBigIntEqual("Fail rec.bin4", 10005, rec.bin4);
+		end
+	end
+	function bin8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.bin8 value");
+            LogResult.assertBigIntEqual("Fail rec.bin8", 100006, rec.bin8);
+		end
+	end
+	function date1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.date1 value");
+            LogResult.assertDateEqual("Fail rec.date1", "11/29/2016", rec.date1);
+		end
+	end
+	function date2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.date2 value");
+            LogResult.assertDateEqual("Fail rec.date2", "10/24/2002", rec.date2);
+		end
+	end
+
+	function date3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.date3 value");
+            LogResult.assertDateEqual("Fail rec.date3", "09/08/1927", rec.date3);
+		end
+	end
+	function time1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.time1 value");
+            LogResult.assertTimeEqual("Fail rec.time1", "22:59:39", rec.time1);
+		end
+	end
+	function time2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.time2 value");
+            LogResult.assertTimeEqual("Fail rec.time2", "12:19:08", rec.time2);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.time3 value");
+            LogResult.assertTimeEqual("Fail rec.time3", "06:50:48", rec.time3);
+		end
+	end
+	function timestamp1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.timestamp1 value");
+            LogResult.assertTimestampEqual("Fail rec.timestamp1", "2017/07/16 22:59:39", rec.timestamp1);
+		end
+	end
+	function float4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.float4 value");
+            LogResult.assertFloatEqual("Fail rec.float4", 8.99 as smallfloat, rec.float4);
+		end
+	end
+	function float8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing rec.float8 value");
+            LogResult.assertFloatEqual("Fail rec.float8", 9.99, rec.float8);
+		end
+	end
+
+end

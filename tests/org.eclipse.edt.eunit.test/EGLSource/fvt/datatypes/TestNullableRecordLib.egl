@@ -1,0 +1,799 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.NullValueException;
+
+/**
+* @name TestNullableRecordLib
+* @title TestNullableRecordLib - RunNullableRecordFunctions
+* @description test case for Nullable Record behavior
+* @sources TestNullableRecordLib.egl
+* @keywords Nullable Record, functions
+**/
+
+library TestNullableRecordLib
+
+    gblnRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+    gblnRec2 myFlexRecord?;
+    gblaRec myFlexRecord{s = "abc", i = 5};
+    gblaRec2 myFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    nRec myFlexRecord?;
+    aRec myFlexRecord;
+    nullRec NullRecord;
+    nullRec2 NullRecord?;
+    //d Dictionary;
+    d Dictionary?;
+    exRec myException?;
+    aString string;
+    aInt int;
+    i int;
+    const actualValue string = "Actual value = ";
+    const expectedValue string = "Expected value = ";
+
+    function runTestRecords1(){@Test}
+        nRec = null;
+        LogResult.logStdOut("Null Record - 1");
+        LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+    end
+
+    function runTestRecords2(){@Test}
+        nRec = null;
+        LogResult.logStdOut("Null Record - 1b");
+        LogResult.assertTrue("(null == nRec),true)",(null == nRec) == true);
+    end
+
+    function runTestRecords3(){@Test}
+        LogResult.logStdOut("Null Record - 2");
+        LogResult.assertTrue("(aRec == null),false)",(aRec != null));
+    end
+
+    function runTestRecords4(){@Test}
+    	LogResult.logStdOut("Use fields of Null Record");
+    	try
+        	nRec = null;
+        	aString = nRec.s;
+        	wantNVE();
+        onException (nve NullValueException)
+        	LogResult.passed("OK");
+        end
+
+    end
+
+    function runTestRecords5(){@Test}
+    	LogResult.logStdOut("Assign to fields of Null record, is still null?");
+    	try
+        	nRec.s = "abc";
+        	nRec.i = 15;
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runTestRecords6(){@Test}
+        LogResult.logStdOut("Assign to fields of Null record");
+        try
+        	LogResult.assertStringEqual1("abc", nRec.s);
+        	LogResult.assertTrue1(nRec.i == 15);
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end        	
+    end
+
+    function runTestRecords7(){@Test}
+        nRec = null;
+        LogResult.logStdOut("Set Null record to null, is still null?");
+        LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+    end
+
+    function runTestRecords8(){@Test}
+        LogResult.logStdOut("Set Null record to null, is not null?");
+        LogResult.assertTrue("(nRec != null),false)",(nRec != null) == false);
+    end
+
+    function runTestRecords9(){@Test}
+        nRec = new myFlexRecord;
+        LogResult.logStdOut("Null Record - 3");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestRecords10(){@Test}
+        LogResult.logStdOut("Nested null Record - 1");
+        LogResult.assertTrue("(nRec.empty == null),true)",(nRec.empty == null) == true);
+    end
+
+    function runTestRecords11(){@Test}
+        nRec.empty = null;
+        nRec myFlexRecord?;
+        LogResult.logStdOut("Null Record - 4");
+        LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+    end
+
+    function runTestRecords12(){@Test}
+   		LogResult.logStdOut("Null Record - 5");
+        nRec = getNullFlexRecord();
+	    LogResult.assertTrue("(nRec == null),true)",(nRec == null));
+    end
+
+    function runTestRecords13(){@Test}
+// 		gets validation error now    
+//      aRec = null;
+        aRec.s = "abc";
+        aRec.i = 15;
+        LogResult.logStdOut("Assign to fields of Null, non-nullable record, is null?");
+        LogResult.assertTrue(" (aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestRecords14(){@Test}
+        LogResult.logStdOut("Assign to fields of Null, non-nullable record");
+        LogResult.assertStringEqual1("abc", aRec.s);
+        LogResult.assertTrue1(aRec.i == 15);
+    end
+
+    function runTestRecords15(){@Test}
+// 		gets validation error now
+//        aRec = null;
+        LogResult.logStdOut("Set non-nullable record = null");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestRecords16(){@Test}
+        LogResult.logStdOut("Check fields after non-nullable record = null");
+        LogResult.assertStringEqual1("abc", aRec.s);
+        LogResult.assertTrue1(aRec.i == 15);
+    end
+
+    function runTestRecords17(){@Test}
+        eRec myEmptyRecord?;
+	    eRec = null;  
+        LogResult.logStdOut("Set empty record to null");
+        LogResult.assertTrue("(eRec == null),true)",(eRec == null));
+    end
+
+    function runTestRecords18(){@Test}
+        aRecArray myFlexRecord[] = new myFlexRecord[3];
+        i int;
+        LogResult.logStdOut("Assign to fields of Null, non-nullable record[" + i + "], is null?");
+        for(i from 1 to 3)
+//          aRecArray[i] = null;  // validation error now
+            aRecArray[i].s = "abc";
+            aRecArray[i].i = 15;
+            LogResult.logStdOut("Assign to fields of Null, non-nullable record[" + i + "], is null?");
+            LogResult.assertTrue("(aRecArray[i] == null),false)",(aRecArray[i] == null) == false);
+        end
+    end
+
+    function runTestRecords19(){@Test}
+        aRecArray myFlexRecord[] = new myFlexRecord[3];
+        for(i from 1 to 3)
+//          aRecArray[i] = null;  // validation error now
+            aRecArray[i].s = "abc";
+            aRecArray[i].i = 15;
+            LogResult.logStdOut("Assign to fields of Null, non-nullable record[" + i + "]");
+            LogResult.assertStringEqual1("abc", aRecArray[i].s);
+            LogResult.assertTrue1(aRecArray[i].i == 15);
+        end
+    end
+
+    function runTestRecords20(){@Test}
+        nRecArray myFlexRecord?[] = new myFlexRecord?[3];
+        LogResult.logStdOut("Assign to fields of Null, nullable record[" + i + "], is null?");   
+        LogResult.assertTrue("(nRecArray[i] == null),true)",(nRecArray[2] == null));
+ 
+    end
+
+    function runTestRecords21(){@Test}
+        nRecArray myFlexRecord?[] = new myFlexRecord?[3];
+        LogResult.logStdOut("runTestRecords - 21");
+        LogResult.assertTrue("(nRecArray[i] == null),true)",(nRecArray[1] == null));
+    end
+
+    function runTestRecordB1(){@Test}
+        nRec2 myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        aRec myFlexRecord{s = "abc", i = 5};
+        aRec = nRec2;
+        nRec2.s = "xyz";
+        nRec2.i = 15;
+        aString = aRec.s;
+        aInt = aRec.i;
+        LogResult.logStdOut("Assign record from Nullable Record - 1");
+        LogResult.assertStringEqual1("abc", aString);
+        LogResult.assertTrue1(aInt == 5);
+    end
+
+    function runTestRecordB2(){@Test}
+        aRec myFlexRecord{s = "abc", i = 5};
+        LogResult.logStdOut("Assign record from Nullable Record - 2");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestRecordB3(){@Test}
+   		try
+        	nRec3 myFlexRecord?;
+        	nRec3.s = "abc";
+        	nRec3.i = 5;
+        	LogResult.logStdOut("Null Record - 1a");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runTestRecordB4(){@Test}
+    	LogResult.logStdOut("Null Record - 1b");
+    	try
+        	nRec3 myFlexRecord?;
+        	aRec = nRec3;
+        	LogResult.failed("Expcecting NullValueException");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runTestRecordB5(){@Test}
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        LogResult.logStdOut("Null Record - 1c");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestRecordB6(){@Test}
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        aString = nRec.s;
+        aInt = nRec.i;
+        LogResult.logStdOut("Use fields of Nullable Record - 1");
+        LogResult.assertStringEqual1("abc", aString);
+        LogResult.assertTrue1(aInt == 5);
+    end
+
+    function runTestRecordB7(){@Test}
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = null;
+        LogResult.logStdOut("Null Record - 2");
+        LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+    end
+
+    function runTestRecordB8(){@Test}
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        aString = "xyz";
+        aInt = 15;
+        aString = nRec.s;
+        aInt = nRec.i;
+        LogResult.logStdOut("Use fields of Nullable Record - 2");
+        LogResult.assertStringEqual1("abc", aString);
+        LogResult.assertTrue1(aInt == 5);
+    end
+
+    function runTestExceptionRecords1(){@Test}
+        LogResult.logStdOut("runTestExceptionRecords - 1");
+        LogResult.assertTrue("(exRec == null),true)",(exRec == null) == true);
+    end
+
+    function runTestExceptionRecords2(){@Test}
+        exRec = null;
+        LogResult.logStdOut("runTestExceptionRecords - 2");
+        LogResult.assertTrue("(exRec == null),true)",(exRec == null) == true);
+    end
+
+    function runTestExceptionRecords3(){@Test}
+        exRec = null;
+        LogResult.logStdOut("runTestExceptionRecords - 3");
+        try
+            exRec.message = "message";
+            LogResult.assertTrue("false", false);
+        onException(ex NullValueException)
+            LogResult.assertTrue("true", true);
+        end
+    end
+
+    function runTestExceptionRecords4(){@Test}
+        LogResult.logStdOut("runTestExceptionRecords - 4");
+        //nRecArray myException[3];
+        nRecArray myException[] = new myException[3];
+        i int;
+        for(i from 1 to 3)
+            nRecArray[i] = new myException;
+            nRecArray[i].message = "abc";
+            nRecArray[i].foo = 15;
+            LogResult.assertTrue("(nRecArray[i] == null),false)",(nRecArray[i] == null) == false);
+            LogResult.assertStringEqual1("abc", nRecArray[i].message);
+            LogResult.assertTrue1(nRecArray[i].foo == 15);
+        end
+    end
+
+    function runTestDictionary1(){@Test}
+        LogResult.logStdOut("runTestDictionary - 1");
+        LogResult.assertTrue("(d == null),true)",(d == null) == true);
+    end
+
+    function runTestDictionary2(){@Test}
+        d = null;
+        LogResult.logStdOut("runTestDictionary - 2");
+        LogResult.assertTrue("(d == null),true)",(d == null) == true);
+    end
+
+    function runTestDictionary3(){@Test}
+        d = null;
+        LogResult.logStdOut("runTestDictionary - 3");
+        try
+            d.message = "message";
+            LogResult.assertTrue("false", false);
+        onException(ex NullValueException)
+            LogResult.assertTrue("true", true);
+        end
+    end
+
+    function runTestDictionary4(){@Test}
+        LogResult.logStdOut("runTestDictionary - 4");
+        d = new Dictionary;
+        LogResult.assertTrue("(d != null),true)",(d != null) == true);
+    end
+
+    function runTestDictionary5(){@Test}
+        d = new Dictionary;
+        d["message"] = "message";
+        LogResult.logStdOut("runTestDictionary - 5");
+        LogResult.assertStringEqual1("message", d.message);
+    end
+
+    function runTestRecordsAsParms1(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Record as parameter - 1");
+        LogResult.assertStringEqual1("item1", nullRec.item1);
+    end
+
+    function runTestRecordsAsParms2(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Record as parameter - 2");
+        LogResult.assertTrue("9999==nullRec.item2 ", 9999 == nullRec.item2);
+    end
+
+    function runTestRecordsAsParms3(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Record as parameter - 3");
+        LogResult.assertDecimalEqual1(nullRec.item3, 999999.99);
+    end
+
+    function runTestRecordsAsParms4(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Record as parameter - 4");
+        LogResult.assertTrue("(nullRec == null),false)",(nullRec == null) == false);
+    end
+
+    function runTestRecordsAsParms5(){@Test}
+        initNullRecord(nullRec);
+        localNullRec2 NullRecord? = new NullRecord;
+        initNullRecord2(localNullRec2);
+        LogResult.logStdOut("Nullable record as parameter - 1");
+        LogResult.assertStringEqual1("item2", localNullRec2.item1);
+    end
+
+    function runTestRecordsAsParms6(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Nullable record as parameter - 2");
+        LogResult.assertTrue("99==nullRec2.item2 ", 9999 == nullRec.item2);
+    end
+
+    function runTestRecordsAsParms7(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Nullable record as parameter - 3");
+        LogResult.assertDecimalEqual1(999999.99, nullRec.item3);
+    end
+
+    function runTestRecordsAsParms8(){@Test}
+        initNullRecord(nullRec);
+        LogResult.logStdOut("Nullable record as parameter - 4");
+        LogResult.assertTrue("(nullRec2 == null),true)",(nullRec != null));
+    end
+
+    function runTestRecordsAsParms9(){@Test}
+    	LogResult.logStdOut("Nullable record assignment to a null non-nullable record - 1");
+    	try
+    		nullRec2 = null;
+        	initNullRecord(nullRec);
+        	nullRec = nullRec2;
+        	LogResult.failed("Expcecting NullValueException");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runTestRecordsAsParms10(){@Test}
+    	LogResult.logStdOut("Nullable record assignment to a null non-nullable record - 2");
+    	try
+        	initNullRecord(nullRec);
+        	nullRec = nullRec2;
+//        	LogResult.logStdOut("Nullable record assignment to a null non-nullable record - 2");
+//        	LogResult.assertTrue("0==nullRec.item2 ", 0 == nullRec.item2);
+        	LogResult.failed("Expcecting NullValueException");
+    	onException(nve NullValueException)
+    		LogResult.passed("OK");
+    	end
+    end
+
+    function runTestRecordsAsParms11(){@Test}
+    	LogResult.logStdOut("Nullable record assignment to a null non-nullable record - 3");
+        try
+        	initNullRecord(nullRec);
+        	nullRec = nullRec2;
+        	// LogResult.assertDecimalEqual1(0, nullRec.item3);
+        	LogResult.failed("Expcecting NullValueException");
+    	onException(nve NullValueException)
+    		LogResult.passed("OK");
+    	end
+    end
+
+    function runTestRecordsAsParms12(){@Test}
+    	LogResult.logStdOut("Nullable record assignment to a null non-nullable record - 4");
+    	try
+        	initNullRecord(nullRec);
+        	nullRec = nullRec2;
+        	// LogResult.assertTrue("(nullRec == null),false)",(nullRec == null) == false);
+            LogResult.failed("Expcecting NullValueException");
+    	onException(nve NullValueException)
+    		LogResult.passed("OK");
+    	end
+    end
+
+    function runTestRecordsAsParms13()  {@Test} 
+       initNullRecord(nullRec);
+       nullRec2 = nullRec;
+       LogResult.logStdOut("Non-nullable record assignment to nullable record - 1");
+       LogResult.assertStringEqual1("item1", nullRec2.item1);    
+    end
+
+    function runTestRecordsAsParms14() {@Test}  
+    	initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    LogResult.logStdOut("Non-nullable record assignment to nullable record - 2");  
+	    LogResult.assertTrue("9999==nullRec2.item2 ", 9999 == nullRec2.item2);	        
+    end
+
+    function runTestRecordsAsParms15()  {@Test}  
+		initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    LogResult.logStdOut("Non-nullable record assignment to nullable record - 3");
+	    LogResult.assertDecimalEqual1(999999.99, nullRec2.item3); 
+    end
+
+    function runTestRecordsAsParms16() {@Test}  
+		initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    LogResult.logStdOut("Non-nullable record assignment to nullable record - 4");
+	    LogResult.assertTrue("(nullRec2 == null),false)",(nullRec2 == null) == false);   	        
+    end
+
+    function runTestRecordsAsParms17(){@Test}
+		initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    nullRec.item1 = "junk";
+	    nullRec.item2 = 56;
+	    nullRec.item3 = 45.55;
+	    nullRec = nullRec2;
+	    LogResult.logStdOut("Nullable record assignment to a non-null non-nullable record - 1");
+	    LogResult.assertStringEqual1("item1", nullRec.item1);
+    end
+
+    function runTestRecordsAsParms18() {@Test}
+    	initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    nullRec.item1 = "junk";
+	    nullRec.item2 = 56;
+	    nullRec.item3 = 45.55;
+	    nullRec = nullRec2;
+	    LogResult.logStdOut("Nullable record assignment to a non-null non-nullable record - 2");
+	    LogResult.assertTrue("9999==nullRec.item2 ", 9999 == nullRec.item2);	        
+    end
+
+    function runTestRecordsAsParms19() {@Test}
+		initNullRecord(nullRec);
+	    nullRec2 = nullRec;
+	    nullRec.item1 = "junk";
+	    nullRec.item2 = 56;
+	    nullRec.item3 = 45.55;
+	    nullRec = nullRec2;
+	    LogResult.logStdOut("Nullable record assignment to a non-null non-nullable record - 3");
+	    LogResult.assertDecimalEqual1(999999.99, nullRec.item3); 	        
+    end
+
+    function runTestRecordsAsParms20() {@Test}
+		initNullRecord(nullRec);
+		nullRec2 = nullRec;
+		nullRec.item1 = "junk";
+		nullRec.item2 = 56;
+		nullRec.item3 = 45.55;
+		nullRec = nullRec2;
+		LogResult.logStdOut("Nullable record assignment to a non-null non-nullable record - 4");
+		LogResult.assertTrue("(nullRec == null),false)",(nullRec == null) == false);        
+    end
+
+    function runTestFunctionsReturningRecords2(){@Test}
+    	LogResult.logStdOut("Null Record - 5a");
+        initGlobalRecords();
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getNullFlexRecord();
+		if (nRec == null)
+			LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+        else
+        	LogResult.failed("Expcecting NullValueException");
+        end
+    end
+
+    function runTestFunctionsReturningRecords3(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getGblNullFlexRecord();
+        gblnRec.s = "xyz";
+        LogResult.logStdOut("Null Record - 5b");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords4(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        aRec myFlexRecord{s = "abc", i = 5};
+        LogResult.logStdOut("Null Record - 5b...");
+        LogResult.assertStringEqual1("abc", nRec.s);
+    end
+
+    function runTestFunctionsReturningRecords5(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getGblNullFlexRecord2();
+        LogResult.logStdOut("Null Record - 5c");
+        if (nRec != null)
+        	LogResult.failed("Expcecting NullValueException");
+        else
+        	LogResult.assertTrue("(nRec == null),true)",(nRec == null) == true);
+        end
+    end
+
+    function runTestFunctionsReturningRecords6(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getNonNullFlexRecord();
+        LogResult.logStdOut("Null Record - 6a");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords7(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getGblNonNullFlexRecord();
+        LogResult.logStdOut("Null Record - 6b");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords8(){@Test}
+        initGlobalRecords();
+        nRec myFlexRecord? = new myFlexRecord{s = "abc", i = 5};
+        nRec = getGblNonNullFlexRecord2();
+        LogResult.logStdOut("Null Record - 6c");
+        LogResult.assertTrue("(nRec == null),false)",(nRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords9(){@Test}
+    	try
+        	initGlobalRecords();
+        	aRec myFlexRecord{s = "abc", i = 5};
+        	aRec = getNullFlexRecord();
+	//        LogResult.logStdOut("Null Record - 7a");
+	//        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+			LogResult.failed("Expcecting NullValueException");
+		onException(nve NullValueException)
+			LogResult.passed("OK");
+		end
+    end
+
+    function runTestFunctionsReturningRecords10(){@Test}
+        initGlobalRecords();
+        aRec myFlexRecord{s = "abc", i = 5};
+        aRec = getGblNullFlexRecord();
+        LogResult.logStdOut("Null Record - 7b");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords11(){@Test}
+        initGlobalRecords();
+        nullableRec myFlexRecord?;
+        aRec myFlexRecord{s = "abc", i = 5};
+        nullableRec = aRec;
+        nullableRec = getGblNullFlexRecord2();
+        LogResult.logStdOut("Null Record - 7c");
+     	if (nullableRec == null)
+        	LogResult.assertTrue("(aRec == null),false)",(nullableRec == null) );
+        else
+        	LogResult.failed("Expcecting NullValueException");
+        end
+    end
+
+    function runTestFunctionsReturningRecords12(){@Test}
+        initGlobalRecords();
+        aRec myFlexRecord{s = "abc", i = 5};
+        aRec = getNonNullFlexRecord();
+        LogResult.logStdOut("Null Record - 8a");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords13(){@Test}
+        initGlobalRecords();
+        aRec myFlexRecord{s = "abc", i = 5};
+        aRec = getGblNonNullFlexRecord();
+        LogResult.logStdOut("Null Record - 8b");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runTestFunctionsReturningRecords14(){@Test}
+        initGlobalRecords();
+        aRec myFlexRecord{s = "abc", i = 5};
+        aRec = getGblNonNullFlexRecord2();
+        LogResult.logStdOut("Null Record - 8c");
+        LogResult.assertTrue("(aRec == null),false)",(aRec == null) == false);
+    end
+
+    function runXtraTests01(){@Test}
+        nullableRec Nullrecord; // shouldn't be nullab;e
+        LogResult.logStdOut("xtraTests0 - 1");
+        LogResult.assertTrue("( nullableRec != null ),true) ",(nullableRec != null) == true);
+    end
+
+    function runXtraTests02(){@Test}
+        nullableRec NullRecord? = new NullRecord{item2 = 3};
+        nullableRec = null;
+        LogResult.logStdOut("xtraTests0 - 2");
+        LogResult.assertTrue("( nullableRec != null ),true) ",(nullableRec == null));
+    end
+
+    function runXtraTests03(){@Test}
+        nullableRec2 Nullrecord?; // should be null
+        LogResult.logStdOut("xtraTests0 - 3");
+        LogResult.assertTrue("( nullableRec2 == null ),true) ",(nullableRec2 == null) == true);
+    end
+
+    function runXtraTests04(){@Test}
+        nullableRec2 Nullrecord?;
+        nullableRec2 = null;
+        LogResult.logStdOut("xtraTests0 - 4");
+        LogResult.assertTrue("( nullableRec2 == null ),true) ",(nullableRec2 == null) == true);
+    end
+
+    function runXtraTests05(){@Test}
+        nullableRec3 Nullrecord{}; // shouldn't be nullable
+        LogResult.logStdOut("xtraTests0 - 5");
+        LogResult.assertTrue(" (nullableRec3 != null),true) ",(nullableRec3 != null) == true);
+    end
+
+    function runXtraTests06(){@Test}
+        nullableRec3 Nullrecord? = new Nullrecord;
+        nullableRec3 = null;
+        LogResult.logStdOut("xtraTests0 - 6");
+        LogResult.assertTrue(" (nullableRec3 != null),true) ",(nullableRec3 == null) );
+    end
+
+    function runXtraTests07(){@Test}
+        nullableRec4 Nullrecord{item2 = 3}; // shouldn't be nullable
+        LogResult.logStdOut("xtraTests0 - 7");
+        LogResult.assertTrue(" (nullableRec4 != null),true) ",(nullableRec4 != null) == true);
+    end
+
+    function runXtraTests08(){@Test}
+        nullableRec4 Nullrecord? = new Nullrecord{item2 = 3};
+        nullableRec4 = null;
+        LogResult.logStdOut("xtraTests0 - 8");
+        LogResult.assertTrue(" (nullableRec4 != null),true) ",(nullableRec4 == null) );
+    end
+
+    function runXtraTests11(){@Test}
+    	// unlike in RBD, putting curlies on a variable doesn't make it non-null.
+        nullableRec NullRecord?{};  
+        LogResult.logStdOut("xtraTests1 - 1");
+        LogResult.assertTrue(" (nullableRec != null),true) ",(nullableRec == null));
+    end
+
+    function runXtraTests12(){@Test}
+        nullableRec NullRecord?{};
+        nullableRec = null;
+        //writeStdout(conditionasint(nullableRec == null));
+        LogResult.logStdOut("xtraTests1 - 2");
+        LogResult.assertTrue(" (nullableRec == null),true) ",(nullableRec == null) == true);
+    end
+
+   function runXtraTests13(){@Test}
+        nullableRec NullRecord?{};
+        LogResult.logStdOut("xtraTests1 - 3");
+        LogResult.assertTrue(" (nullableRec == null) ",(nullableRec == null));
+   end
+    
+   function runXtraTests14(){@Test}
+      nullableRec NullRecord?{};
+      nullableRec = new Nullrecord{}; 
+      LogResult.logStdOut("xtraTests1 - 4");
+      LogResult.assertTrue(" (nullableRec != null) ",(nullableRec != null));
+   end
+    
+    function runXtraTests15(){@Test}
+        nullableRec NullRecord?{};
+        nullableRec = null;
+        LogResult.logStdOut("xtraTests1 - 5");
+        LogResult.assertTrue(" (nullableRec == null),true) ",(nullableRec == null) == true);
+    end
+
+    function runXtraTests1a1(){@Test}
+        nullableRec NullRecord? = new NullRecord{item2 = 3}; // shouldn't be null
+        LogResult.logStdOut("xtraTests1a - 1");
+        LogResult.assertTrue(" (nullableRec != null),true) ",(nullableRec != null) == true);
+    end
+
+    function runXtraTests1a2(){@Test}
+        nullableRec NullRecord?{};
+        nullableRec = null;
+        LogResult.logStdOut("xtraTests1a - 2");
+        LogResult.assertTrue(" (nullableRec == null),true) ",(nullableRec == null) == true);
+    end
+
+    function runXtraTests1a5(){@Test}
+        nullableRec NullRecord?{};
+        nullableRec = null;
+        LogResult.logStdOut("xtraTests1a - 5");
+        LogResult.assertTrue(" (nullableRec == null),true) ",(nullableRec == null) == true);
+    end
+
+    function initGlobalRecords()
+    //        gblnRec = new myFlexRecord?{s = "abc", i = 5};
+    //        gblnRec2 = new myFlexRecord?;
+        gblaRec = new myFlexRecord{s = "abc", i = 5};
+        gblaRec2 = new myFlexRecord;
+    end
+
+    function getNullFlexRecord() returns(myFlexRecord?)
+    	local myFlexRecord?;
+    	return(local);
+    end
+
+    function getNonNullFlexRecord() returns(myFlexRecord)
+    	return (gblaRec);
+    end
+
+    function getGblNullFlexRecord() returns(myFlexRecord?)
+        return(gblnRec);
+    end
+
+    function getGblNonNullFlexRecord() returns(myFlexRecord)
+        return(gblaRec);
+    end
+
+    function getGblNullFlexRecord2() returns(myFlexRecord?)
+        return(gblnRec2);
+    end
+
+    function getGblNonNullFlexRecord2() returns(myFlexRecord)
+        return(gblaRec2);
+    end
+
+    function initNullRecord(rec NullRecord)
+        rec.item1 = "item1";
+        rec.item2 = 9999;
+        rec.item3 = 999999.99;
+    end
+
+    function initNullRecord2(rec NullRecord?)
+        rec.item1 = "item2";
+        rec.item2 = 99;
+        rec.item3 = 9999.99;
+    end
+    
+    function wantNVE()
+    	LogResult.failed("Expecting NullValueException");
+    end
+
+end
+
+record NullRecord
+    Item1 string?;
+    item2 int;
+    item3 decimal(10, 2);
+end

@@ -1,0 +1,236 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EFloat009
+  * @title EFloat009 - runISAFunction
+  * @description testing float variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EFloat009.egl
+  * @keywords float, isa
+ **/
+library EFloat009 {}
+
+	isIt boolean;
+	expected boolean;
+	float1 float = 4.40282344e+38;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "float/variable is any";
+		isIt = float1 isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "float/variable is bigInt";
+		isIt = float1 isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "float/variable is boolean";
+		isIt = float1 isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "float/variable is date";
+		isIt = float1 isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "float/variable is decimal(4,2)";
+		isIt = float1 isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "float/variable is decimal";
+		isIt = float1 isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "float/variable is dictionary";
+		isIt = float1 isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "float/variable is float";
+		isIt = float1 isa float;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "float/variable is int";
+		isIt = float1 isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "float/variable is number";
+		isIt = float1 isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "float/variable is smallFloat";
+		isIt = float1 isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "float/variable is smallInt";
+		isIt = float1 isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "float/variable is string";
+		isIt = float1 isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "float/variable is timestamp";
+		isIt = float1 isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "float/variable is anyexception";
+		isIt = float1 isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "float/variable is DynamicAccessException";
+		isIt = float1 isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "float/variable is InvalidArgumentException";
+		isIt = float1 isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "float/variable is InvalidIndexException";
+		isIt = float1 isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "float/variable is InvalidPatternException";
+		isIt = float1 isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "float/variable is InvocationException";
+		isIt = float1 isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "float/variable is JavaObjectException";
+//		isIt = float1 isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "float/variable is JavaScriptObjectException";
+//		isIt = float1 isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "float/variable is NullValueException";
+		isIt = float1 isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "float/variable is NumericOverflowException";
+		isIt = float1 isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "float/variable is ServiceInvocationException";
+		isIt = float1 isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "float/variable is SQLException";
+//		isIt = float1 isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "float/variable is TypeCastException";
+		isIt = float1 isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "float/variable is bytes";
+		isIt = float1 isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "float/variable is bytes(8)";
+		isIt = float1 isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // EFloat009

@@ -1,0 +1,23 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLSchemaType;
+
+handler primitiveAndNestedFlex
+    panf1 bigInt;
+    panf2 int;
+    panf3 smallInt;
+    panf4 float;
+    panf5 smallFloat;
+    panf9 decimal(4);
+    panf10 decimal(10);
+    panf11 decimal(20);
+    panf12 decimal(6, 2);
+    panf13 string;
+    panf14 string(7);
+    panf19 date;
+    panf20 time;
+    panf21 timeStamp?;
+    panf25 boolean;
+    panf26 bytes(3){@XMLSchemaType{name="hexBinary"}};
+    panf27 primitiveArrayFlex;
+end

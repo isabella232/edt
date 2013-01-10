@@ -1,0 +1,47 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestEGLPropertyLib
+* @title The function test EGLProperty in RUIhandler
+* @keywords EGLProperty, RuiHanlder
+* @author EDT team
+* @createDate 2011/08/31
+* @description 
+* Test EGLProperty in RUIhandler.
+*/
+
+library TestEGLPropertyLib
+
+    eglprop TestRuiHandler{};
+
+    function testEGLProperty1(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Go into the source code and uncomment the top lines " +
+                        "in testEGLProperty. Each line should have a validation error.");
+        LogResult.logStdOut("Also, verify that a wacky statement is printed out " + "for each data type tested here.");
+        LogResult.logStdOut("set and get int1, no properties");
+        eglprop.int1 = 1;
+        LogResult.assertBigIntEqual1(1, eglprop.int1);
+    end
+
+    function testEGLProperty2(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("set and get int2, @EGLProperty");
+        eglprop.int2 = 100;
+        LogResult.assertBigIntEqual1(100, eglprop.int2);
+    end
+
+    function testEGLProperty3(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("set int5, set and get explicit");
+        eglprop.int5 = 24700;
+        LogResult.assertBigIntEqual1(24700, eglprop.int5);
+    end
+
+    function testEGLProperty4(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("set int6, set and get explicit");
+        eglprop.int6 = -88;
+        LogResult.assertBigIntEqual1(-88, eglprop.int6);
+    end
+
+end

@@ -1,0 +1,498 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+
+/*
+* @name TestDateTimeLibTestLib
+* @title The function test program for DateTimeLib in EDT for RichUI
+* @keywords DateTimeLib
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+* Test the functions defined for date, time and timestamp.
+*/
+
+library TestDateTimeLibTestLib
+
+    cDate date?;
+    //cTime time?;
+    cTimeStamp timeStamp?;
+    s1, s2 string;
+    d date;
+    i int?;
+    tsString string?;
+
+    //datex1 date = currentDate();
+    //datex2 date = currentDate();
+    datex1 date;
+    datex2 date;
+    
+    //    function testDateTimeLib1(){@Test}
+    //        LogResult.logStdOut("Test currentDate(), currentTime(), currentTimeStamp() functions");
+    //        // Moved here in case another handler modifies these values after the tests are created.
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        defaultTimestampFormat = "";
+    //        cDate = currentDate();
+    //        cTime = currentTime();
+    //        cTimeStamp = currentTimeStamp();
+    //        LogResult.assertTrue1((dateOf(cTimeStamp) == cDate) &&(timeOf(cTimeStamp) == cTime));
+    //    end
+    
+    function testDateTimeLib2(){@Test}
+        LogResult.logStdOut("dateOf #1");
+//        cTimeStamp = "1943-12-08-12.12.12.121212";
+		cTimeStamp = "1943-12-08-12.12.12";
+        //cDate = dateOf(cTimeStamp);
+        cDate = cTimeStamp.dateOf();
+        LogResult.assertTrue1(cDate == "12/08/1943");
+    end
+
+    //    function testDateTimeLib3(){@Test}
+    //        LogResult.logStdOut("dateOf #2");
+    //        cDate = dateOf(null);
+    //        LogResult.assertTrue1(cDate == null);
+    //    end
+    
+    function testDateTimeLib4(){@Test}
+        LogResult.logStdOut("dateValue #1");
+        cDate = StrLib.formatDate("12/08/1946", "MM/dd/yyyy");
+        LogResult.assertTrue1(cDate == "12/08/1946");
+    end
+
+    function testDateTimeLib5() // {@Test}
+        LogResult.logStdOut("dateValue #2");
+//         cDate = dateValue(null);
+        cDate = null;
+        LogResult.assertTrue1(cDate == null);
+    end
+
+    function testDateTimeLib6(){@Test}
+    	pass boolean = false;
+        LogResult.logStdOut("dateValue #3");
+        try
+            d = "";
+        onException(ex AnyException)
+        	pass = true;
+        end
+        LogResult.assertTrue1(pass);
+    end
+
+    function testDateTimeLib7(){@Test}
+    	pass boolean = false;
+        LogResult.logStdOut("dateValue #5");
+        try
+            cDate = "";
+        onException(ex AnyException)
+        	pass = true;
+        end
+        LogResult.assertTrue1(pass);
+    end
+
+    function testDateTimeLib8(){@Test}
+        LogResult.logStdOut("dateValue #6");
+        try
+            cDate = null;
+            s string = "cDate=" + cDate;
+            //writestdout(s);
+            LogResult.logStdOut(s);
+            LogResult.assertTrue1(cDate == null);
+        onException(ex AnyException)
+            //writestdout("Unexpected Exception");
+            LogResult.logStdOut("Unexpected Exception");
+            LogResult.assertTrue1(false);
+        end
+    end
+
+    function testDateTimeLib9(){@Test}
+        LogResult.logStdOut("dateValueFromJulian #1");
+        //cDate = dateValueFromJulian(1999032);
+        cDate = DateTimeLib.dateFromJulian(1999032);
+        LogResult.assertTrue1(cDate == "02/01/1999");
+    end
+
+    function testDateTimeLib10() // {@Test}
+        LogResult.logStdOut("dateValueFromJulian #2");
+        //cDate = dateValueFromJulian(null);
+        //        cDate = DateTimeLib.dateFromJulian(null);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testDateTimeLib11(){@Test}
+        LogResult.logStdOut("dateValueFromGregorian #1");
+        //cDate = dateValueFromGregorian(19980321);
+        cDate = DateTimeLib.dateFromGregorian(19980321);
+        LogResult.assertTrue1(cDate == "03/21/1998");
+    end
+
+    function testDateTimeLib12() // {@Test}
+        LogResult.logStdOut("dateValueFromGregorian #2");
+        //cDate = dateValueFromGregorian(null);
+        //        cDate = DateTimeLib.dateFromGregorian(null);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testDateTimeLib13(){@Test}
+        LogResult.logStdOut("dayOf #1");
+//        cTimeStamp = "1943-12-14-08.15.53.987654";
+        cTimeStamp = "1943-12-14-08.15.53";
+        //i = dayOf(cTimeStamp);
+        i = cTimeStamp.dayOf();
+        LogResult.assertTrue1(i == 14);
+    end
+
+    //    function testDateTimeLib14(){@Test}
+    //        LogResult.logStdOut("dayOf #2");
+    //        i = dayOf(null);
+    //        LogResult.assertTrue1(i == null);
+    //    end
+    
+    function testDateTimeLib15(){@Test}
+        LogResult.logStdOut("monthOf #1");
+        //i = monthOf(cTimeStamp);
+        i = cTimeStamp.monthOf();
+        LogResult.assertTrue1(i == 12);
+    end
+
+    //    function testDateTimeLib16(){@Test}
+    //        LogResult.logStdOut("monthOf #2");
+    //        i = monthOf(null);
+    //        LogResult.assertTrue1(i == null);
+    //    end
+    
+    //    function testDateTimeLib17(){@Test}
+    //        LogResult.logStdOut("timeOf #1");
+    //        cTime = timeOf(cTimeStamp);
+    //        LogResult.assertTrue1(cTime == "08:15:53");
+    //    end
+    
+    //    function testDateTimeLib18(){@Test}
+    //        LogResult.logStdOut("timeOf #2");
+    //        cTime = timeOf(null);
+    //        LogResult.assertTrue1(cTime == null);
+    //    end
+    
+    function testDateTimeLib19(){@Test}
+        LogResult.logStdOut("weekdayOf #1");
+        //i = weekdayOf(cTimeStamp);
+        i = cTimeStamp.weekdayOf();
+        LogResult.assertTrue1(i == 2);
+    end
+
+    //    function testDateTimeLib20(){@Test}
+    //        LogResult.logStdOut("weekdayOf #2");
+    //        i = weekdayOf(null);
+    //        LogResult.assertTrue1(i == null);
+    //    end
+    
+    function testDateTimeLib21(){@Test}
+        LogResult.logStdOut("yearOf #1");
+        //i = yearOf(cTimeStamp);
+        i = cTimeStamp.yearOf();
+        LogResult.assertTrue1(i == 1943);
+    end
+
+    //    function testDateTimeLib22(){@Test}
+    //        LogResult.logStdOut("yearOf #2");
+    //        i = yearOf(null);
+    //        LogResult.assertTrue1(i == null);
+    //    end
+    
+    function testDateTimeLib23() // {@Test}
+        //        LogResult.logStdOut("dateFromInt #1");
+        //        cDate = DateTimeLib.dateFromInt(1);
+        //        LogResult.assertTrue1(cDate == 1 && cDate == "01/01/1900");
+        LogResult.skipped("cDate is not valid for compare to 1");
+    end
+
+    function testDateTimeLib24() // {@Test}
+        LogResult.logStdOut("dateFromInt #2");
+        //        cDate = DateTimeLib.dateFromInt(null);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testDateTimeLib25(){@Test}
+        LogResult.logStdOut("dateFromInt #3");
+        cDate = DateTimeLib.dateFromInt(0);
+ //       LogResult.assertTrue1(cDate == "12/31/1899");
+ 		LogResult.assertTrue("Bug 358495", cDate == "12/31/1969");
+
+    end
+
+    function testDateTimeLib26(){@Test}
+        LogResult.logStdOut("mdy #1");
+        //cDate = mdy(2, 15, 2003);
+        cDate = DateTimeLib.mdy(2, 15, 2003);
+        LogResult.assertTrue1(cDate == "02/15/2003");
+    end
+
+    function testDateTimeLib27() // {@Test}
+        LogResult.logStdOut("mdy #2");
+        //cDate = mdy(null, 15, 2003);
+        //        cDate = DateTimeLib.mdy(null, 15, 2003);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testDateTimeLib28() // {@Test}
+        LogResult.logStdOut("mdy #3");
+        //cDate = mdy(2, null, 2003);
+        //        cDate = DateTimeLib.mdy(2, null, 2003);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testDateTimeLib29()// {@Test}
+        LogResult.logStdOut("mdy #4");
+        //cDate = mdy(2, 15, null);
+        //        cDate = DateTimeLib.mdy(2, 15, null);
+        //        LogResult.assertTrue1(cDate == null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    //    function testDateTimeLib30(){@Test}
+    //        LogResult.logStdOut("timeValue #1");
+    //        cTime = timeValue("08:13:54");
+    //        LogResult.assertTrue1(cTime == "08:13:54");
+    //    end
+    
+    //    function testDateTimeLib31(){@Test}
+    //        LogResult.logStdOut("timeValue #2");
+    //        cTime = timeValue(null);
+    //        LogResult.assertTrue1(cTime == null);
+    //    end
+    
+    function testDateTimeLib32(){@Test}
+        LogResult.logStdOut("timeStampValue #1");
+        //cTimeStamp = timeStampValue("2007-08-12-11.13.14");
+        cTimeStamp = "2007-08-12-11.13.14";
+        LogResult.assertTrue1(cTimeStamp == "2007-08-12 11:13:14");
+    end
+
+    function testDateTimeLib33(){@Test}
+        LogResult.logStdOut("timeStampValue #2");
+        //cTimeStamp = timeStampValue(null);
+        cTimeStamp = null;
+        LogResult.assertTrue1(cTimeStamp == null);
+    end
+
+    function testDateTimeLib34(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #1");
+        cTimeStamp = "2007-08-12-11.13.14";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, "yyyy-MM-dd-HH.mm.ss.ffffff");
+        LogResult.assertStringEqual1("2007-08-12-11.13.14.000000", tsString);
+    end
+
+    function testDateTimeLib35(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #2");
+        //cTimeStamp = timeStampValueWithPattern(null);
+        tsString = StrLib.formatTimeStamp(null, "yyyy-MM-dd-HH.mm.ss.ffffff");
+        LogResult.assertTrue1(tsString == null);
+    end
+
+    function testDateTimeLib36(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.odbcTimeStampFormat); //"yyyy-MM-dd HH:mm:ss.SSSSSS";
+        LogResult.assertStringEqual1("2009-11-13 15:04:05.000000", tsString);
+    end
+
+    function testDateTimeLib36a(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-a");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.db2TimeStampFormat); //"yyyy-MM-dd-HH.mm.ss.SSSSSS";
+        LogResult.assertStringEqual1("2009-11-13-15.04.05.000000", tsString);
+    end    
+    
+    function testDateTimeLib36b(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-b");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.jisTimeFormat); //"HH:mm:ss";
+        LogResult.assertStringEqual1("15:04:05", tsString);
+    end     
+
+    function testDateTimeLib36c(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-c");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.eurTimeFormat); //"HH.mm.ss";
+        LogResult.assertStringEqual1("15.04.05", tsString);
+    end     
+    
+        function testDateTimeLib36d(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-d");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.usaTimeFormat); //"hh:mm a";
+        LogResult.assertStringEqual1("03:04 PM", tsString);
+    end     
+
+    function testDateTimeLib36e(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-e");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.isoTimeFormat); //"HH.mm.ss";
+        LogResult.assertStringEqual1("15.04.05", tsString);
+    end  
+
+    function testDateTimeLib36f(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-f");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.isoDateFormat); //"yyyy-MM-dd";
+        LogResult.assertStringEqual1("2009-11-13", tsString);
+    end    
+    
+    
+        function testDateTimeLib36g(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-g");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.usaDateFormat); //"MM/dd/yyyy";
+        LogResult.assertStringEqual1("11/13/2009", tsString);
+    end    
+    
+    
+    function testDateTimeLib36h(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-h");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.eurDateFormat); //"dd.MM.yyyy";
+        LogResult.assertStringEqual1("13.11.2009", tsString);
+    end    
+    
+   function testDateTimeLib36i(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #3-i");
+        cTimeStamp = "2009-11-13 15:04:05";
+        tsString = StrLib.formatTimeStamp(cTimeStamp, Constants.jisDateFormat); //"yyyy-MM-dd";
+        LogResult.assertStringEqual1("2009-11-13", tsString);
+    end    
+        
+    
+    function testDateTimeLib37(){@Test}
+        LogResult.logStdOut("timeStampValueWithPattern #4");
+        cTimeStamp = "2000-04-01-03.04.05";  
+        tsString = StrLib.formatTimeStamp(cTimeStamp, null);
+        LogResult.assertTrue1(tsString == null);        	
+    end
+
+    //    function testDateTimeLib38(){@Test}
+    //        LogResult.logStdOut("timestampFrom #1");
+    //        cDate = "05/12/1982";
+    //        cTime = "10:01:39";
+    //        cTimeStamp = timestampFrom(cDate, cTime);
+    //        LogResult.assertTrue1(cTimeStamp == "1982-05-12-10.01.39.000000");
+    //    end
+    
+    //    function testDateTimeLib39(){@Test}
+    //        LogResult.logStdOut("timestampFrom #2");
+    //        cTimeStamp = timestampFrom(null, cTime);
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    //    function testDateTimeLib40(){@Test}
+    //        LogResult.logStdOut("timestampFrom #3");
+    //        cTimeStamp = timestampFrom(cDate, null);
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    //    function testDateTimeLib41(){@Test}
+    //        LogResult.logStdOut("extend time #1");
+    //        cTime = "08:59:42";
+    //        cTimeStamp = extend(cTime);
+    //        LogResult.assertTrue1(cTimeStamp as time == "08:59:42");
+    //    end
+    
+    //    function testDateTimeLib42(){@Test}
+    //        LogResult.logStdOut("extend time #2");
+    //        cTimeStamp = extend(null as time?);
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    //    function testDateTimeLib43(){@Test}
+    //        LogResult.logStdOut("extend time #3");
+    //        cTimeStamp = extend(cTime, null as string?);
+    //        LogResult.assertTrue1(cTimeStamp as time == "08:59:42");
+    //    end
+    
+    //    function testDateTimeLib44(){@Test}
+    //        LogResult.logStdOut("extend time #4");
+    //        cTimeStamp = extend(null as time?, "yyyyMMddhhmmss");
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    function testDateTimeLib45(){@Test}
+        LogResult.logStdOut("extend date #1");
+        cDate = "12/05/1893";
+        //cTimeStamp = extend(cDate);
+        cTimeStamp = cDate.extend("yyyyMMdd");
+        LogResult.assertTrue1(cTimeStamp as date == "12/05/1893");
+    end
+
+    //    function testDateTimeLib46(){@Test}
+    //        LogResult.logStdOut("extend date #2");
+    //        cTimeStamp = extend(null as date?);
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    //    function testDateTimeLib47(){@Test}
+    //        LogResult.logStdOut("extend date #3");
+    //        cTimeStamp = extend(cDate, null as string?);
+    //        LogResult.assertTrue1(cTimeStamp as date == "12/05/1893");
+    //    end
+    
+    //    function testDateTimeLib48(){@Test}
+    //        LogResult.logStdOut("extend date #4");
+    //        cTimeStamp = extend(null as date?, "yyyyMMddhhmmss");
+    //        LogResult.assertTrue1(cTimeStamp == null);
+    //    end
+    
+    ts2 timeStamp("yyyy")?;
+
+    function testDateTimeLib49(){@Test}
+        LogResult.logStdOut("extend timestamp #1");
+        cTimeStamp = "2004-08-02-07.19.43";
+        //ts2 = extend(cTimeStamp);
+        ts2 = cTimeStamp.extend("yyyyMMddHHmmssffffff");
+        LogResult.assertTrue1(ts2 == "2004");
+    end
+
+    //    function testDateTimeLib50(){@Test}
+    //        LogResult.logStdOut("extend timestamp #2");
+    //        ts2 = extend(null as timeStamp?);
+    //        LogResult.assertTrue1(ts2 == null);
+    //    end
+    
+    //    function testDateTimeLib51(){@Test}
+    //        LogResult.logStdOut("extend timestamp #3");
+    //        ts2 = extend(cTimeStamp, null as string?);
+    //        LogResult.assertTrue1(ts2 == "2004");
+    //    end
+    
+    //    function testDateTimeLib52(){@Test}
+    //        LogResult.logStdOut("extend timestamp #4");
+    //        ts2 = extend(null as timeStamp?, "yyyyMMddhhmmss");
+    //        LogResult.assertTrue1(ts2 == null);
+    //    end
+    
+    //    function testDateTimeLib53(){@Test}
+    //        LogResult.assertTrue1(_testCalculateDate(datex2, datex1));
+    //    end
+    
+    //    function testDateTimeLib54(){@Test}
+    //        //currentStr string = currentDate();
+    //        //datex2 = currentStr;
+    //        _testCalculateDate(datex2, datex1);
+    //        LogResult.assertTrue1(_testCalculateDate(datex2, datex1));
+    //    end
+    
+    // The operator "-" is not supported in EDT for Date and TimeStamp
+    //    function _testCalculateDate(d date in, currentDate date in) returns(boolean)
+    //        d -= 0;
+    //        if(d - currentDate == 0)
+    //            d -= 1;
+    //            return(d - currentDate == -1);
+    //        end
+    //        return(false);
+    //    end
+    
+end

@@ -1,0 +1,18 @@
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
+// interface
+library INOAWeather
+	function getWeather(zipcode string in, days int in, today date in) returns (Dwml)
+		{ 
+			@Rest {
+				method = HttpMethod._GET,
+				uriTemplate = "http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?whichClient=NDFDgenByDayMultiZipCode&lat=&lon=&listLatLon=&lat1=&lon1=&lat2=&lon2=&resolutionSub=&endPoint1Lat=&endPoint1Lon=&endPoint2Lat=&endPoint2Lon=&centerPointLat=&centerPointLon=&distanceLat=&distanceLon=&resolutionSquare=&zipCodeList={zipcode}&citiesLevel=&format=12+hourly&startDate={today}&numDays={days}&Unit=e&Submit=Submit"
+			}
+		}      
+	end		
+    
+end
+ 

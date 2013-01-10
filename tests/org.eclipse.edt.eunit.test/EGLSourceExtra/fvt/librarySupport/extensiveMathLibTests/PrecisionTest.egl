@@ -1,0 +1,2115 @@
+package fvt.librarySupport.extensiveMathLibTests;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name Precision 
+* @title The function test program for Presicion in EDT
+* @keywords Precision 
+* @author EDT team
+* @createDate 2011/09/08
+* @description 
+* Test the Presicon Funciton
+*/
+
+library PrecisionTest
+
+    EXPECTED_RESULT_INT int;
+    RESULT_INT int;
+
+    maxPrecisionDec18 int = 18;
+    maxPrecisionDec31 int = 31;  // always 31 -- not an odd/even issue
+    
+    PD_SQL PD_SQL; // record
+    DECIMAL01D0 decimal(1);
+    DECIMAL02D0 decimal(2);
+    DECIMAL03D0 decimal(3);
+    DECIMAL04D0 decimal(4);
+    DECIMAL05D0 decimal(5);
+    DECIMAL06D0 decimal(6);
+    DECIMAL07D0 decimal(7);
+    DECIMAL08D0 decimal(8);
+    DECIMAL09D0 decimal(9);
+    DECIMAL10D0 decimal(10);
+    DECIMAL11D0 decimal(11);
+    DECIMAL12D0 decimal(12);
+    DECIMAL13D0 decimal(13);
+    DECIMAL14D0 decimal(14);
+    DECIMAL15D0 decimal(15);
+    DECIMAL16D0 decimal(16);
+    DECIMAL17D0 decimal(17);
+    DECIMAL18D0 decimal(18);
+
+    DECIMAL19D0 decimal(19);  // egl allows the even length
+    DECIMAL20D0 decimal(20);
+    DECIMAL21D0 decimal(21);
+    DECIMAL22D0 decimal(22);
+    DECIMAL23D0 decimal(23);
+    DECIMAL24D0 decimal(24);
+    DECIMAL25D0 decimal(25);
+    DECIMAL26D0 decimal(26);
+    DECIMAL27D0 decimal(27);
+    DECIMAL28D0 decimal(28);
+    DECIMAL29D0 decimal(29);
+    DECIMAL30D0 decimal(30);
+    DECIMAL31D0 decimal(31);
+
+    DECIMAL32D0 decimal(32);
+
+    DECIMAL18D00 decimal(18);
+    DECIMAL18D01 decimal(18, 1);
+    DECIMAL18D02 decimal(18, 2);
+    DECIMAL18D03 decimal(18, 3);
+    DECIMAL18D04 decimal(18, 4);
+    DECIMAL18D05 decimal(18, 5);
+    DECIMAL18D06 decimal(18, 6);
+    DECIMAL18D07 decimal(18, 7);
+    DECIMAL18D08 decimal(18, 8);
+    DECIMAL18D09 decimal(18, 9);
+    DECIMAL18D10 decimal(18, 10);
+    DECIMAL18D11 decimal(18, 11);
+    DECIMAL18D12 decimal(18, 12);
+    DECIMAL18D13 decimal(18, 13);
+    DECIMAL18D14 decimal(18, 14);
+    DECIMAL18D15 decimal(18, 15);
+    DECIMAL18D16 decimal(18, 16);
+    DECIMAL18D17 decimal(18, 17);
+    DECIMAL18D18 decimal(18, 18);
+    DECIMAL31D00 decimal(31);
+    DECIMAL31D01 decimal(31, 1);
+    DECIMAL31D02 decimal(31, 2);
+    DECIMAL31D03 decimal(31, 3);
+    DECIMAL31D04 decimal(31, 4);
+    DECIMAL31D05 decimal(31, 5);
+    DECIMAL31D06 decimal(31, 6);
+    DECIMAL31D07 decimal(31, 7);
+    DECIMAL31D08 decimal(31, 8);
+    DECIMAL31D09 decimal(31, 9);
+    DECIMAL31D10 decimal(31, 10);
+    DECIMAL31D11 decimal(31, 11);
+    DECIMAL31D12 decimal(31, 12);
+    DECIMAL31D13 decimal(31, 13);
+    DECIMAL31D14 decimal(31, 14);
+    DECIMAL31D15 decimal(31, 15);
+    DECIMAL31D16 decimal(31, 16);
+    DECIMAL31D17 decimal(31, 17);
+    DECIMAL31D18 decimal(31, 18);
+    DECIMAL31D19 decimal(31, 19);
+    DECIMAL31D20 decimal(31, 20);
+    DECIMAL31D21 decimal(31, 21);
+    DECIMAL31D22 decimal(31, 22);
+    DECIMAL31D23 decimal(31, 23);
+    DECIMAL31D24 decimal(31, 24);
+    DECIMAL31D25 decimal(31, 25);
+    DECIMAL31D26 decimal(31, 26);
+    DECIMAL31D27 decimal(31, 27);
+    DECIMAL31D28 decimal(31, 28);
+    DECIMAL31D29 decimal(31, 29);
+    DECIMAL31D30 decimal(31, 30);
+    DECIMAL31D31 decimal(31, 31);
+    DECIMAL32D00 decimal(32);
+    DECIMAL32D01 decimal(32, 1);
+    DECIMAL32D02 decimal(32, 2);
+    DECIMAL32D03 decimal(32, 3);
+    DECIMAL32D04 decimal(32, 4);
+    DECIMAL32D05 decimal(32, 5);
+    DECIMAL32D06 decimal(32, 6);
+    DECIMAL32D07 decimal(32, 7);
+    DECIMAL32D08 decimal(32, 8);
+    DECIMAL32D09 decimal(32, 9);
+    DECIMAL32D10 decimal(32, 10);
+    DECIMAL32D11 decimal(32, 11);
+    DECIMAL32D12 decimal(32, 12);
+    DECIMAL32D13 decimal(32, 13);
+    DECIMAL32D14 decimal(32, 14);
+    DECIMAL32D15 decimal(32, 15);
+    DECIMAL32D16 decimal(32, 16);
+    DECIMAL32D17 decimal(32, 17);
+    DECIMAL32D18 decimal(32, 18);
+    DECIMAL32D19 decimal(32, 19);
+    DECIMAL32D20 decimal(32, 20);
+    DECIMAL32D21 decimal(32, 21);
+    DECIMAL32D22 decimal(32, 22);
+    DECIMAL32D23 decimal(32, 23);
+    DECIMAL32D24 decimal(32, 24);
+    DECIMAL32D25 decimal(32, 25);
+    DECIMAL32D26 decimal(32, 26);
+    DECIMAL32D27 decimal(32, 27);
+    DECIMAL32D28 decimal(32, 28);
+    DECIMAL32D29 decimal(32, 29);
+    DECIMAL32D30 decimal(32, 30);
+    DECIMAL32D31 decimal(32, 31);
+    DECIMAL32D32 decimal(32, 32);
+
+    function PRECISION_31_DEC0(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL19D0"));
+        EXPECTED_RESULT_INT = 19;
+        RESULT_INT = mathLib.precision(DECIMAL19D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL20D0"));
+        EXPECTED_RESULT_INT = 20;
+        RESULT_INT = mathLib.precision(DECIMAL20D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL21D0"));
+        EXPECTED_RESULT_INT = 21;
+        RESULT_INT = mathLib.precision(DECIMAL21D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL22D0"));
+        EXPECTED_RESULT_INT = 22;
+        RESULT_INT = mathLib.precision(DECIMAL22D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL23D0"));
+        EXPECTED_RESULT_INT = 23;
+        RESULT_INT = mathLib.precision(DECIMAL23D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL24D0"));
+        EXPECTED_RESULT_INT = 24;
+        RESULT_INT = mathLib.precision(DECIMAL24D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL25D0"));
+        EXPECTED_RESULT_INT = 25;
+        RESULT_INT = mathLib.precision(DECIMAL25D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL26D0"));
+        EXPECTED_RESULT_INT = 26;
+        RESULT_INT = mathLib.precision(DECIMAL26D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL27D0"));
+        EXPECTED_RESULT_INT = 27;
+        RESULT_INT = mathLib.precision(DECIMAL27D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL28D0"));
+        EXPECTED_RESULT_INT = 28;
+        RESULT_INT = mathLib.precision(DECIMAL28D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL29D0"));
+        EXPECTED_RESULT_INT = 29;
+        RESULT_INT = mathLib.precision(DECIMAL29D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL30D0"));
+        EXPECTED_RESULT_INT = 30;
+        RESULT_INT = mathLib.precision(DECIMAL30D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D0"));
+        EXPECTED_RESULT_INT = 31;
+        RESULT_INT = mathLib.precision(DECIMAL31D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL0(){@Test}
+
+        LogResult.logStdOut(("Precision - DECIMAL19D0_S"));
+        EXPECTED_RESULT_INT = 19;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL19D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL20D0_S"));
+        EXPECTED_RESULT_INT = 20;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL20D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL21D0_S"));
+        EXPECTED_RESULT_INT = 21;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL21D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL22D0_S"));
+        EXPECTED_RESULT_INT = 22;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL22D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL23D0_S"));
+        EXPECTED_RESULT_INT = 23;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL23D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL24D0_S"));
+        EXPECTED_RESULT_INT = 24;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL24D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL25D0_S"));
+        EXPECTED_RESULT_INT = 25;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL25D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL26D0_S"));
+        EXPECTED_RESULT_INT = 26;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL26D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL27D0_S"));
+        EXPECTED_RESULT_INT = 27;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL27D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL28D0_S"));
+        EXPECTED_RESULT_INT = 28;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL28D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL29D0_S"));
+        EXPECTED_RESULT_INT = 29;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL29D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL30D0_S"));
+        EXPECTED_RESULT_INT = 30;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL30D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_SQL12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D0_S"));
+        EXPECTED_RESULT_INT = 31;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL31D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D0(){@Test}
+        EXPECTED_RESULT_INT = 31;
+        LogResult.logStdOut(("Precision - DECIMAL31D00"));
+        RESULT_INT = mathLib.precision(DECIMAL31D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D01"));
+        RESULT_INT = mathLib.precision(DECIMAL31D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D02"));
+        RESULT_INT = mathLib.precision(DECIMAL31D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D03"));
+        RESULT_INT = mathLib.precision(DECIMAL31D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D04"));
+        RESULT_INT = mathLib.precision(DECIMAL31D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D05"));
+        RESULT_INT = mathLib.precision(DECIMAL31D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D06"));
+        RESULT_INT = mathLib.precision(DECIMAL31D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D07"));
+        RESULT_INT = mathLib.precision(DECIMAL31D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D08"));
+        RESULT_INT = mathLib.precision(DECIMAL31D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D09"));
+        RESULT_INT = mathLib.precision(DECIMAL31D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D10"));
+        RESULT_INT = mathLib.precision(DECIMAL31D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D11"));
+        RESULT_INT = mathLib.precision(DECIMAL31D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D12"));
+        RESULT_INT = mathLib.precision(DECIMAL31D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D13"));
+        RESULT_INT = mathLib.precision(DECIMAL31D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D14"));
+        RESULT_INT = mathLib.precision(DECIMAL31D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D15"));
+        RESULT_INT = mathLib.precision(DECIMAL31D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D16"));
+        RESULT_INT = mathLib.precision(DECIMAL31D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D17"));
+        RESULT_INT = mathLib.precision(DECIMAL31D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D18"));
+        RESULT_INT = mathLib.precision(DECIMAL31D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D19(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D19"));
+        RESULT_INT = mathLib.precision(DECIMAL31D19);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D20(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D20"));
+        RESULT_INT = mathLib.precision(DECIMAL31D20);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D21(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D21"));
+        RESULT_INT = mathLib.precision(DECIMAL31D21);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D22(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D22"));
+        RESULT_INT = mathLib.precision(DECIMAL31D22);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D23(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D23"));
+        RESULT_INT = mathLib.precision(DECIMAL31D23);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D24(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D24"));
+        RESULT_INT = mathLib.precision(DECIMAL31D24);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D25(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D25"));
+        RESULT_INT = mathLib.precision(DECIMAL31D25);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D26(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D26"));
+        RESULT_INT = mathLib.precision(DECIMAL31D26);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D27(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D27"));
+        RESULT_INT = mathLib.precision(DECIMAL31D27);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D28(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D28"));
+        RESULT_INT = mathLib.precision(DECIMAL31D28);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D29(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D29"));
+        RESULT_INT = mathLib.precision(DECIMAL31D29);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D30(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D30"));
+        RESULT_INT = mathLib.precision(DECIMAL31D30);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_31_DEC_D31(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL31D31"));
+        RESULT_INT = mathLib.precision(DECIMAL31D31);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D0(){@Test}
+        EXPECTED_RESULT_INT = maxPrecisionDec18;
+        LogResult.logStdOut(("Precision - DECIMAL18D00"));
+        RESULT_INT = mathLib.precision(DECIMAL18D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D01"));
+        RESULT_INT = mathLib.precision(DECIMAL18D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D02"));
+        RESULT_INT = mathLib.precision(DECIMAL18D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D03"));
+        RESULT_INT = mathLib.precision(DECIMAL18D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D04"));
+        RESULT_INT = mathLib.precision(DECIMAL18D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D05"));
+        RESULT_INT = mathLib.precision(DECIMAL18D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D06"));
+        RESULT_INT = mathLib.precision(DECIMAL18D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D07"));
+        RESULT_INT = mathLib.precision(DECIMAL18D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D08"));
+        RESULT_INT = mathLib.precision(DECIMAL18D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D09"));
+        RESULT_INT = mathLib.precision(DECIMAL18D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D10"));
+        RESULT_INT = mathLib.precision(DECIMAL18D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D11"));
+        RESULT_INT = mathLib.precision(DECIMAL18D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D12"));
+        RESULT_INT = mathLib.precision(DECIMAL18D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D13"));
+        RESULT_INT = mathLib.precision(DECIMAL18D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D14"));
+        RESULT_INT = mathLib.precision(DECIMAL18D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D15"));
+        RESULT_INT = mathLib.precision(DECIMAL18D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D16"));
+        RESULT_INT = mathLib.precision(DECIMAL18D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D17"));
+        RESULT_INT = mathLib.precision(DECIMAL18D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D18"));
+        RESULT_INT = mathLib.precision(DECIMAL18D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC0(){@Test}
+
+        LogResult.logStdOut(("Precision - DECIMAL01D0"));
+        EXPECTED_RESULT_INT = 1;
+        RESULT_INT = mathLib.precision(DECIMAL01D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL02D0"));
+        EXPECTED_RESULT_INT = 2;
+        RESULT_INT = mathLib.precision(DECIMAL02D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL03D0"));
+        EXPECTED_RESULT_INT = 3;
+        RESULT_INT = mathLib.precision(DECIMAL03D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL04D0"));
+        EXPECTED_RESULT_INT = 4;
+        RESULT_INT = mathLib.precision(DECIMAL04D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL05D0"));
+        EXPECTED_RESULT_INT = 5;
+        RESULT_INT = mathLib.precision(DECIMAL05D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL06D0"));
+        EXPECTED_RESULT_INT = 6;
+        RESULT_INT = mathLib.precision(DECIMAL06D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL07D0"));
+        EXPECTED_RESULT_INT = 7;
+        RESULT_INT = mathLib.precision(DECIMAL07D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL08D0"));
+        EXPECTED_RESULT_INT = 8;
+        RESULT_INT = mathLib.precision(DECIMAL08D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL09D0"));
+        EXPECTED_RESULT_INT = 9;
+        RESULT_INT = mathLib.precision(DECIMAL09D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL10D0"));
+        EXPECTED_RESULT_INT = 10;
+        RESULT_INT = mathLib.precision(DECIMAL10D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL11D0"));
+        EXPECTED_RESULT_INT = 11;
+        RESULT_INT = mathLib.precision(DECIMAL11D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL12D0"));
+        EXPECTED_RESULT_INT = 12;
+        RESULT_INT = mathLib.precision(DECIMAL12D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL13D0"));
+        EXPECTED_RESULT_INT = 13;
+        RESULT_INT = mathLib.precision(DECIMAL13D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC13(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL14D0"));
+        EXPECTED_RESULT_INT = 14;
+        RESULT_INT = mathLib.precision(DECIMAL14D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC14(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL15D0"));
+        EXPECTED_RESULT_INT = 15;
+        RESULT_INT = mathLib.precision(DECIMAL15D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC15(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL16D0"));
+        EXPECTED_RESULT_INT = 16;
+        RESULT_INT = mathLib.precision(DECIMAL16D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC16(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL17D0"));
+        EXPECTED_RESULT_INT = 17;
+        RESULT_INT = mathLib.precision(DECIMAL17D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC17(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D0"));
+        EXPECTED_RESULT_INT = maxPrecisionDec18;   // varies based on maxNumDigits & JavaGen
+        RESULT_INT = mathLib.precision(DECIMAL18D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL0(){@Test}
+
+        LogResult.logStdOut(("Precision - DECIMAL01D0_S"));
+        EXPECTED_RESULT_INT = 1;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL01D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL02D0_S"));
+        EXPECTED_RESULT_INT = 2;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL02D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL03D0_S"));
+        EXPECTED_RESULT_INT = 3;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL03D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL04D0_S"));
+        EXPECTED_RESULT_INT = 4;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL04D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL05D0_S"));
+        EXPECTED_RESULT_INT = 5;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL05D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL06D0_S"));
+        EXPECTED_RESULT_INT = 6;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL06D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL07D0_S"));
+        EXPECTED_RESULT_INT = 7;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL07D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL08D0_S"));
+        EXPECTED_RESULT_INT = 8;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL08D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL09D0_S"));
+        EXPECTED_RESULT_INT = 9;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL09D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL10D0_S"));
+        EXPECTED_RESULT_INT = 10;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL10D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL11D0_S"));
+        EXPECTED_RESULT_INT = 11;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL11D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL12D0_S"));
+        EXPECTED_RESULT_INT = 12;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL12D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL13D0_S"));
+        EXPECTED_RESULT_INT = 13;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL13D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL13(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL14D0_S"));
+        EXPECTED_RESULT_INT = 14;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL14D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL14(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL15D0_S"));
+        EXPECTED_RESULT_INT = 15;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL15D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL15(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL16D0_S"));
+        EXPECTED_RESULT_INT = 16;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL16D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL16(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL17D0_S"));
+        EXPECTED_RESULT_INT = 17;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL17D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_DEC_SQL17(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL18D0_S"));
+        EXPECTED_RESULT_INT = maxPrecisionDec18;   // varies based on maxNumDigits & JavaGen
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL18D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC()
+        LogResult.logStdOut(("Precision - DECIMAL32D0"));
+        EXPECTED_RESULT_INT = 32;
+        RESULT_INT = mathLib.precision(DECIMAL32D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_SQL()
+        LogResult.logStdOut(("Precision - DECIMAL32D0_S"));
+        EXPECTED_RESULT_INT = 32;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL32D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D0(){@Test}
+        EXPECTED_RESULT_INT = 32;
+        LogResult.logStdOut(("Precision - DECIMAL32D00"));
+        RESULT_INT = mathLib.precision(DECIMAL32D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D01"));
+        RESULT_INT = mathLib.precision(DECIMAL32D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D02"));
+        RESULT_INT = mathLib.precision(DECIMAL32D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D03"));
+        RESULT_INT = mathLib.precision(DECIMAL32D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D04"));
+        RESULT_INT = mathLib.precision(DECIMAL32D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D05"));
+        RESULT_INT = mathLib.precision(DECIMAL32D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D06"));
+        RESULT_INT = mathLib.precision(DECIMAL32D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D07"));
+        RESULT_INT = mathLib.precision(DECIMAL32D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D08"));
+        RESULT_INT = mathLib.precision(DECIMAL32D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D09"));
+        RESULT_INT = mathLib.precision(DECIMAL32D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D10"));
+        RESULT_INT = mathLib.precision(DECIMAL32D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D11"));
+        RESULT_INT = mathLib.precision(DECIMAL32D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D12"));
+        RESULT_INT = mathLib.precision(DECIMAL32D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D13"));
+        RESULT_INT = mathLib.precision(DECIMAL32D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D14"));
+        RESULT_INT = mathLib.precision(DECIMAL32D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D15"));
+        RESULT_INT = mathLib.precision(DECIMAL32D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D16"));
+        RESULT_INT = mathLib.precision(DECIMAL32D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D17"));
+        RESULT_INT = mathLib.precision(DECIMAL32D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D18"));
+        RESULT_INT = mathLib.precision(DECIMAL32D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D19(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D19"));
+        RESULT_INT = mathLib.precision(DECIMAL32D19);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D20(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D20"));
+        RESULT_INT = mathLib.precision(DECIMAL32D20);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D21(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D21"));
+        RESULT_INT = mathLib.precision(DECIMAL32D21);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D22(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D22"));
+        RESULT_INT = mathLib.precision(DECIMAL32D22);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D23(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D23"));
+        RESULT_INT = mathLib.precision(DECIMAL32D23);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D24(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D24"));
+        RESULT_INT = mathLib.precision(DECIMAL32D24);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D25(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D25"));
+        RESULT_INT = mathLib.precision(DECIMAL32D25);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D26(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D26"));
+        RESULT_INT = mathLib.precision(DECIMAL32D26);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D27(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D27"));
+        RESULT_INT = mathLib.precision(DECIMAL32D27);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D28(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D28"));
+        RESULT_INT = mathLib.precision(DECIMAL32D28);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D29(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D29"));
+        RESULT_INT = mathLib.precision(DECIMAL32D29);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D30(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D30"));
+        RESULT_INT = mathLib.precision(DECIMAL32D30);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D31(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D31"));
+        RESULT_INT = mathLib.precision(DECIMAL32D31);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_32_DEC_D32(){@Test}
+        LogResult.logStdOut(("Precision - DECIMAL32D32"));
+        RESULT_INT = mathLib.precision(DECIMAL32D32);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    SmallFloat_A smallFloat;
+    Float_A float;
+
+    function PRECISION_FLOATS0(){@Test}
+        LogResult.logStdOut(("Precision - SmallFloat - based on VAGen HEX"));
+        EXPECTED_RESULT_INT = 6;
+        RESULT_INT = mathLib.precision(SmallFloat_A);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_FLOATS1(){@Test}
+        LogResult.logStdOut(("Precision - Float - based on VAGen HEX"));
+        EXPECTED_RESULT_INT = 15;
+        RESULT_INT = mathLib.precision(Float_A);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    SMALLINT_A smallInt;
+    INT_A int;
+    bigINT_A bigInt;
+
+    function PRECISION_18_INTS0(){@Test}
+
+        LogResult.logStdOut(("Precision - SmallInt"));
+        EXPECTED_RESULT_INT = 4;
+        RESULT_INT = mathLib.precision(SMALLINT_A);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_INTS1(){@Test}
+        LogResult.logStdOut(("Precision - Int"));
+        EXPECTED_RESULT_INT = 9;
+        RESULT_INT = mathLib.precision(INT_A);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_18_INTS2(){@Test}
+        LogResult.logStdOut(("Precision - BigInt"));
+        EXPECTED_RESULT_INT = 18;
+        RESULT_INT = mathLib.precision(BIGINT_A);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    //    function myPrecisionNumberParm(myNumber decimal in)
+    //        RESULT_INT = mathLib.precision(myNumber);
+    //        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    //    end
+    
+    function PRECISION_PassToNumber_18_DEC_D0(){@Test}
+
+        EXPECTED_RESULT_INT = maxPrecisionDec18;   // varies based on maxNumDigits & JavaGen
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D00"));
+        RESULT_INT = mathLib.precision(DECIMAL18D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D01"));
+        RESULT_INT = mathLib.precision(DECIMAL18D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D02"));
+        RESULT_INT = mathLib.precision(DECIMAL18D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D03"));
+        RESULT_INT = mathLib.precision(DECIMAL18D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D04"));
+        RESULT_INT = mathLib.precision(DECIMAL18D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D05"));
+        RESULT_INT = mathLib.precision(DECIMAL18D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D06"));
+        RESULT_INT = mathLib.precision(DECIMAL18D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D07"));
+        RESULT_INT = mathLib.precision(DECIMAL18D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D08"));
+        RESULT_INT = mathLib.precision(DECIMAL18D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D09"));
+        RESULT_INT = mathLib.precision(DECIMAL18D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D10"));
+        RESULT_INT = mathLib.precision(DECIMAL18D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D11"));
+        RESULT_INT = mathLib.precision(DECIMAL18D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D12"));
+        RESULT_INT = mathLib.precision(DECIMAL18D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D13"));
+        RESULT_INT = mathLib.precision(DECIMAL18D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D14"));
+        RESULT_INT = mathLib.precision(DECIMAL18D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D15"));
+        RESULT_INT = mathLib.precision(DECIMAL18D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D16"));
+        RESULT_INT = mathLib.precision(DECIMAL18D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D17"));
+        RESULT_INT = mathLib.precision(DECIMAL18D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D18"));
+        RESULT_INT = mathLib.precision(DECIMAL18D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D0(){@Test}
+
+        EXPECTED_RESULT_INT = 31;
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D00"));
+        RESULT_INT = mathLib.precision(DECIMAL31D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D01"));
+        RESULT_INT = mathLib.precision(DECIMAL31D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D02"));
+        RESULT_INT = mathLib.precision(DECIMAL31D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D03"));
+        RESULT_INT = mathLib.precision(DECIMAL31D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D04"));
+        RESULT_INT = mathLib.precision(DECIMAL31D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D05"));
+        RESULT_INT = mathLib.precision(DECIMAL31D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D06"));
+        RESULT_INT = mathLib.precision(DECIMAL31D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D07"));
+        RESULT_INT = mathLib.precision(DECIMAL31D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D08"));
+        RESULT_INT = mathLib.precision(DECIMAL31D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D09"));
+        RESULT_INT = mathLib.precision(DECIMAL31D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D10"));
+        RESULT_INT = mathLib.precision(DECIMAL31D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D11"));
+        RESULT_INT = mathLib.precision(DECIMAL31D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D12"));
+        RESULT_INT = mathLib.precision(DECIMAL31D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D13"));
+        RESULT_INT = mathLib.precision(DECIMAL31D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D14"));
+        RESULT_INT = mathLib.precision(DECIMAL31D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D15"));
+        RESULT_INT = mathLib.precision(DECIMAL31D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D16"));
+        RESULT_INT = mathLib.precision(DECIMAL31D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D17"));
+        RESULT_INT = mathLib.precision(DECIMAL31D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D18"));
+        RESULT_INT = mathLib.precision(DECIMAL31D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D19(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D19"));
+        RESULT_INT = mathLib.precision(DECIMAL31D19);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D20(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D20"));
+        RESULT_INT = mathLib.precision(DECIMAL31D20);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D21(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D21"));
+        RESULT_INT = mathLib.precision(DECIMAL31D21);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D22(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D22"));
+        RESULT_INT = mathLib.precision(DECIMAL31D22);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D23(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D23"));
+        RESULT_INT = mathLib.precision(DECIMAL31D23);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D24(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D24"));
+        RESULT_INT = mathLib.precision(DECIMAL31D24);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D25(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D25"));
+        RESULT_INT = mathLib.precision(DECIMAL31D25);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D26(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D26"));
+        RESULT_INT = mathLib.precision(DECIMAL31D26);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D27(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D27"));
+        RESULT_INT = mathLib.precision(DECIMAL31D27);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D28(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D28"));
+        RESULT_INT = mathLib.precision(DECIMAL31D28);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D29(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D29"));
+        RESULT_INT = mathLib.precision(DECIMAL31D29);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D30(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D30"));
+        RESULT_INT = mathLib.precision(DECIMAL31D30);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_D31(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D31"));
+        RESULT_INT = mathLib.precision(DECIMAL31D31);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL01D0"));
+        EXPECTED_RESULT_INT = 1;
+        RESULT_INT = mathLib.precision(DECIMAL01D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL02D0"));
+        EXPECTED_RESULT_INT = 2;
+        RESULT_INT = mathLib.precision(DECIMAL02D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL03D0"));
+        EXPECTED_RESULT_INT = 3;
+        RESULT_INT = mathLib.precision(DECIMAL03D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL04D0"));
+        EXPECTED_RESULT_INT = 4;
+        RESULT_INT = mathLib.precision(DECIMAL04D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL05D0"));
+        EXPECTED_RESULT_INT = 5;
+        RESULT_INT = mathLib.precision(DECIMAL05D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL06D0"));
+        EXPECTED_RESULT_INT = 6;
+        RESULT_INT = mathLib.precision(DECIMAL06D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL07D0"));
+        EXPECTED_RESULT_INT = 7;
+        RESULT_INT = mathLib.precision(DECIMAL07D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL08D0"));
+        EXPECTED_RESULT_INT = 8;
+        RESULT_INT = mathLib.precision(DECIMAL08D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL09D0"));
+        EXPECTED_RESULT_INT = 9;
+        RESULT_INT = mathLib.precision(DECIMAL09D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL10D0"));
+        EXPECTED_RESULT_INT = 10;
+        RESULT_INT = mathLib.precision(DECIMAL10D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL11D0"));
+        EXPECTED_RESULT_INT = 11;
+        RESULT_INT = mathLib.precision(DECIMAL11D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL12D0"));
+        EXPECTED_RESULT_INT = 12;
+        RESULT_INT = mathLib.precision(DECIMAL12D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL13D0"));
+        EXPECTED_RESULT_INT = 13;
+        RESULT_INT = mathLib.precision(DECIMAL13D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC13(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL14D0"));
+        EXPECTED_RESULT_INT = 14;
+        RESULT_INT = mathLib.precision(DECIMAL14D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC14(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL15D0"));
+        EXPECTED_RESULT_INT = 15;
+        RESULT_INT = mathLib.precision(DECIMAL15D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC15(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL16D0"));
+        EXPECTED_RESULT_INT = 16;
+        RESULT_INT = mathLib.precision(DECIMAL16D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC16(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL17D0"));
+        EXPECTED_RESULT_INT = 17;
+        RESULT_INT = mathLib.precision(DECIMAL17D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC17(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D0"));
+        EXPECTED_RESULT_INT = maxPrecisionDec18;   // varies based on maxNumDigits & JavaGen
+        RESULT_INT = mathLib.precision(DECIMAL18D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL01D0_S"));
+        EXPECTED_RESULT_INT = 1;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL01D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL02D0_S"));
+        EXPECTED_RESULT_INT = 2;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL02D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL03D0_S"));
+        EXPECTED_RESULT_INT = 3;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL03D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL04D0_S"));
+        EXPECTED_RESULT_INT = 4;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL04D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL05D0_S"));
+        EXPECTED_RESULT_INT = 5;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL05D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL06D0_S"));
+        EXPECTED_RESULT_INT = 6;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL06D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL07D0_S"));
+        EXPECTED_RESULT_INT = 7;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL07D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL08D0_S"));
+        EXPECTED_RESULT_INT = 8;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL08D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL09D0_S"));
+        EXPECTED_RESULT_INT = 9;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL09D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL10D0_S"));
+        EXPECTED_RESULT_INT = 10;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL10D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL11D0_S"));
+        EXPECTED_RESULT_INT = 11;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL11D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL12D0_S"));
+        EXPECTED_RESULT_INT = 12;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL12D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL13D0_S"));
+        EXPECTED_RESULT_INT = 13;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL13D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL13(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL14D0_S"));
+        EXPECTED_RESULT_INT = 14;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL14D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL14(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL15D0_S"));
+        EXPECTED_RESULT_INT = 15;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL15D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL15(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL16D0_S"));
+        EXPECTED_RESULT_INT = 16;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL16D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL16(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL17D0_S"));
+        EXPECTED_RESULT_INT = 17;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL17D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_18_DEC_SQL17(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL18D0_S"));
+        EXPECTED_RESULT_INT = maxPrecisionDec18;   // varies based on maxNumDigits & JavaGen
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL18D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL19D0"));
+        EXPECTED_RESULT_INT = 19;
+        RESULT_INT = mathLib.precision(DECIMAL19D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL20D0"));
+        EXPECTED_RESULT_INT = 20;
+        RESULT_INT = mathLib.precision(DECIMAL20D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL21D0"));
+        EXPECTED_RESULT_INT = 21;
+        RESULT_INT = mathLib.precision(DECIMAL21D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL22D0"));
+        EXPECTED_RESULT_INT = 22;
+        RESULT_INT = mathLib.precision(DECIMAL22D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL23D0"));
+        EXPECTED_RESULT_INT = 23;
+        RESULT_INT = mathLib.precision(DECIMAL23D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL24D0"));
+        EXPECTED_RESULT_INT = 24;
+        RESULT_INT = mathLib.precision(DECIMAL24D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL25D0"));
+        EXPECTED_RESULT_INT = 25;
+        RESULT_INT = mathLib.precision(DECIMAL25D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL26D0"));
+        EXPECTED_RESULT_INT = 26;
+        RESULT_INT = mathLib.precision(DECIMAL26D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL27D0"));
+        EXPECTED_RESULT_INT = 27;
+        RESULT_INT = mathLib.precision(DECIMAL27D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL28D0"));
+        EXPECTED_RESULT_INT = 28;
+        RESULT_INT = mathLib.precision(DECIMAL28D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL29D0"));
+        EXPECTED_RESULT_INT = 29;
+        RESULT_INT = mathLib.precision(DECIMAL29D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL30D0"));
+        EXPECTED_RESULT_INT = 30;
+        RESULT_INT = mathLib.precision(DECIMAL30D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D0"));
+        EXPECTED_RESULT_INT = 31;
+        RESULT_INT = mathLib.precision(DECIMAL31D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL19D0_S"));
+        EXPECTED_RESULT_INT = 19;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL19D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL20D0_S"));
+        EXPECTED_RESULT_INT = 20;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL20D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL21D0_S"));
+        EXPECTED_RESULT_INT = 21;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL21D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL22D0_S"));
+        EXPECTED_RESULT_INT = 22;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL22D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL23D0_S"));
+        EXPECTED_RESULT_INT = 23;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL23D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL24D0_S"));
+        EXPECTED_RESULT_INT = 24;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL24D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL25D0_S"));
+        EXPECTED_RESULT_INT = 25;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL25D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL26D0_S"));
+        EXPECTED_RESULT_INT = 26;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL26D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL27D0_S"));
+        EXPECTED_RESULT_INT = 27;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL27D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL28D0_S"));
+        EXPECTED_RESULT_INT = 28;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL28D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL29D0_S"));
+        EXPECTED_RESULT_INT = 29;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL29D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL30D0_S"));
+        EXPECTED_RESULT_INT = 30;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL30D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_31_DEC_SQL12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL31D0_S"));
+        EXPECTED_RESULT_INT = 31;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL31D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D0"));
+        EXPECTED_RESULT_INT = 32;
+        RESULT_INT = mathLib.precision(DECIMAL32D0);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_SQL0(){@Test}
+
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D0_S"));
+        EXPECTED_RESULT_INT = 32;
+        RESULT_INT = mathLib.precision(PD_SQL.DECIMAL32D0_S);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D0(){@Test}
+
+        EXPECTED_RESULT_INT = 32;
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D00"));
+        RESULT_INT = mathLib.precision(DECIMAL32D00);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D1(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D01"));
+        RESULT_INT = mathLib.precision(DECIMAL32D01);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D2(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D02"));
+        RESULT_INT = mathLib.precision(DECIMAL32D02);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D3(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D03"));
+        RESULT_INT = mathLib.precision(DECIMAL32D03);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D4(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D04"));
+        RESULT_INT = mathLib.precision(DECIMAL32D04);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D5(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D05"));
+        RESULT_INT = mathLib.precision(DECIMAL32D05);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D6(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D06"));
+        RESULT_INT = mathLib.precision(DECIMAL32D06);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D7(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D07"));
+        RESULT_INT = mathLib.precision(DECIMAL32D07);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D8(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D08"));
+        RESULT_INT = mathLib.precision(DECIMAL32D08);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D9(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D09"));
+        RESULT_INT = mathLib.precision(DECIMAL32D09);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D10(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D10"));
+        RESULT_INT = mathLib.precision(DECIMAL32D10);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D11(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D11"));
+        RESULT_INT = mathLib.precision(DECIMAL32D11);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D12(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D12"));
+        RESULT_INT = mathLib.precision(DECIMAL32D12);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D13(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D13"));
+        RESULT_INT = mathLib.precision(DECIMAL32D13);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D14(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D14"));
+        RESULT_INT = mathLib.precision(DECIMAL32D14);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D15(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D15"));
+        RESULT_INT = mathLib.precision(DECIMAL32D15);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D16(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D16"));
+        RESULT_INT = mathLib.precision(DECIMAL32D16);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D17(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D17"));
+        RESULT_INT = mathLib.precision(DECIMAL32D17);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D18(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D18"));
+        RESULT_INT = mathLib.precision(DECIMAL32D18);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D19(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D19"));
+        RESULT_INT = mathLib.precision(DECIMAL32D19);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D20(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D20"));
+        RESULT_INT = mathLib.precision(DECIMAL32D20);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D21(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D21"));
+        RESULT_INT = mathLib.precision(DECIMAL32D21);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D22(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D22"));
+        RESULT_INT = mathLib.precision(DECIMAL32D22);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D23(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D23"));
+        RESULT_INT = mathLib.precision(DECIMAL32D23);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D24(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D24"));
+        RESULT_INT = mathLib.precision(DECIMAL32D24);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D25(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D25"));
+        RESULT_INT = mathLib.precision(DECIMAL32D25);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D26(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D26"));
+        RESULT_INT = mathLib.precision(DECIMAL32D26);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D27(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D27"));
+        RESULT_INT = mathLib.precision(DECIMAL32D27);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D28(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D28"));
+        RESULT_INT = mathLib.precision(DECIMAL32D28);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D29(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D29"));
+        RESULT_INT = mathLib.precision(DECIMAL32D29);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D30(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D30"));
+        RESULT_INT = mathLib.precision(DECIMAL32D30);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D31(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D31"));
+        RESULT_INT = mathLib.precision(DECIMAL32D31);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+    function PRECISION_PassToNumber_32_DEC_D32(){@Test}
+        LogResult.logStdOut(("Precision - PassToNumber - DECIMAL32D32"));
+        RESULT_INT = mathLib.precision(DECIMAL32D32);
+        LogResult.assertTrue1(RESULT_INT == EXPECTED_RESULT_INT);
+    end
+
+end

@@ -1,0 +1,8 @@
+#Mon Oct 10 17:29:30 EDT 2011
+eclipse.preferences.version=1
+javaGenDirectory//EGLSource/services=P/generatedJava
+javaGenDirectory//EGLSource/utilities=P/generatedJava
+javaGenDirectory/<project>=P/generatedJava
+jsGenDirectory//EGLSource/libraries=P/generatedJavaScript
+jsGenDirectory//EGLSource/utilities=P/generatedJavaScript
+jsGenDirectory/<project>=P/generatedJavaScript

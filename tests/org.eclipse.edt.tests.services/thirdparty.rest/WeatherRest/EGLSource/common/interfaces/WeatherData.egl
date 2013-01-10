@@ -1,0 +1,138 @@
+package common.interfaces;
+
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+
+record Dwml{@XMLRootElement{name = "dwml"}}
+    version string{@XMLAttribute{}};
+    head Head;
+    data Data;
+end
+
+record Head
+    product Product;
+    source Source;
+end
+
+record Product
+    conciseName string{@XMLAttribute{name = "concise-name"}};
+    operationalMode string{@XMLAttribute{name = "operational-mode"}};
+    srsName string{@XMLAttribute{}};
+    title string;
+    field1 string{@XMLElement{name = "field"}};
+    category string;
+    creationDate CreationDate{@XMLElement{name = "creation-date"}};
+end
+
+record CreationDate{@XMLValue{kind = XMLStructureKind.simpleContent}}
+    refreshFrequency string{@XMLAttribute{name = "refresh-frequency"}};
+    egl_value string?;
+end
+
+record Source
+    moreInformation string{@XMLElement{name = "more-information"}};
+    productionCenter ProductionCenter{@XMLElement{name = "production-center"}};
+    disclaimer string;
+    credit string;
+    creditLogo string{@XMLElement{name = "credit-logo"}};
+    feedback string;
+end
+
+record ProductionCenter
+    subCenter string{@XMLElement{name = "sub-center"}};
+end
+
+record Data
+    location Location;
+    moreWeatherInformation MoreWeatherInformation;
+    timeLayout TimeLayout[]{@XMLElement{name = "time-layout"}};
+    parameters Parameters;
+end
+
+record Location
+    locationKey string{@XMLElement{name = "location-key"}};
+    point Point;
+end
+
+record Point
+    latitude string{@XMLAttribute{}};
+    longitude string{@XMLAttribute{}};
+end
+
+record MoreWeatherInformation{@XMLValue{kind = XMLStructureKind.simpleContent}}
+    applicableLocation string{@XMLAttribute{name = "applicable-location"}};
+    egl_value string?;
+end
+
+record TimeLayout
+    summarization string{@XMLAttribute{}};
+    timeCoordinate string{@XMLAttribute{name = "time-coordinate"}};
+    layoutKey string{@XMLElement{name = "layout-key"}};
+    startValidTimes StartValidTime[]{@XMLElement{name = "start-valid-time"}};
+    endValidTimes string[]{@XMLElement{name = "end-valid-time"}};
+end
+
+record StartValidTime{@XMLValue{kind = XMLStructureKind.simpleContent}}
+    periodName string?{@XMLAttribute{name = "period-name"}};
+    egl_value string?;
+end
+
+record Parameters
+    applicableLocation string?{@XMLAttribute{name = "applicable-location"}};
+    temperature Temperature?[];
+    probabilityOfPrecipitation ProbabilityOfPrecipitation?{@XMLElement{name = "probability-of-precipitation"}};
+    weather Weather?;
+    conditionsIcon ConditionsIcon?{@XMLElement{name = "conditions-icon"}};
+    hazards Hazards?;
+end
+
+record Temperature
+    timeLayout string{@XMLAttribute{name = "time-layout"}};
+    type1 string{@XMLAttribute{name = "type"}};
+    units string{@XMLAttribute{}};
+    name string;
+    value string?[];
+end
+
+record ProbabilityOfPrecipitation
+    timeLayout string{@XMLAttribute{name = "time-layout"}};
+    type1 string{@XMLAttribute{name = "type"}};
+    units string{@XMLAttribute{}};
+    name string;
+    value string?[];
+end
+
+record Weather
+    timeLayout string{@XMLAttribute{name = "time-layout"}};
+    name string;
+    weatherConditions WeatherConditions?[]{@XMLElement{name = "weather-conditions"}};
+end
+
+record WeatherConditions//{@XMLValue{kind = XMLStructureKind.simpleContent}}
+    weatherSummary string{@XMLAttribute{name = "weather-summary"}};
+    value Value?;
+end
+
+record Value
+    coverage string{@XMLAttribute{}};
+    intensity string{@XMLAttribute{}};
+    qualifier string{@XMLAttribute{}};
+    weatherType string{@XMLAttribute{name = "weather-type"}};
+end
+
+record ConditionsIcon
+    timeLayout string{@XMLAttribute{name = "time-layout"}};
+    type1 string{@XMLAttribute{name = "type"}};
+    name string;
+    iconLink string?[]{@XMLElement{name = "icon-link"}};
+end
+
+record Hazards
+    timeLayout string{@XMLAttribute{name = "time-layout"}};
+    name string;
+    hazardConditions string?{@XMLElement{name = "hazard-conditions", nillable = true}};
+end

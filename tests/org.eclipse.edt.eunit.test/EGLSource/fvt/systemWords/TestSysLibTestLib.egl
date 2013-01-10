@@ -1,0 +1,83 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+
+/*
+* @name TestSysLibTestLib
+* @title The function test program for SysLib in EDT for RichUI
+* @keywords SysLib
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+* Test the functions defined in SysLib: conditionAsInt and getProperty.
+*/
+
+library TestSysLibTestLib
+
+    bool1 boolean;
+    propVal string?;
+    //integer1, integer2 int;
+    integer1 int;
+    integer2 int;
+    
+    function testStrLibMain1()
+        LogResult.logStdOut("Test implicit conditionAsInt(condition boolean in) w/ 'true'");
+        //        bool1 = true;
+        //        integer2 = 1;
+        //        integer1 = bool1;
+        //        LogResult.assertTrue1(integer1 == integer2);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testStrLibMain2()
+        LogResult.logStdOut("Test implicit conditionAsInt(condition boolean in) w/ 'false'");
+        //        bool1 = false;
+        //        integer2 = 0;
+        //        integer1 = bool1;
+        //        LogResult.assertTrue1(integer1 == integer2);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    //    function testStrLibMain3(){@Test}
+    //        LogResult.logStdOut("Test explicit conditionAsInt(condition boolean in) w/ 'true'");
+    //        bool1 = true;
+    //        integer2 = 1;
+    //        integer1 = SysLib.conditionAsInt(bool1);
+    //        LogResult.assertTrue1(integer1 == integer2);
+    //    end
+    
+    //    function testStrLibMain4(){@Test}
+    //        LogResult.logStdOut("Test explicit conditionAsInt(condition boolean in) w/ 'false'");
+    //        bool1 = false;
+    //        integer2 = 0;
+    //        integer1 = SysLib.conditionAsInt(bool1);
+    //        LogResult.assertTrue1(integer1 == integer2);
+    //    end
+    
+    function testStrLibMain5(){@Test{targetLang = [JAVA]}}
+        LogResult.logStdOut("Test getProperty for non-existant property");
+        propVal = syslib.getProperty("I DO NOT EXIST!");
+        LogResult.assertTrue1(propVal == null);
+    end
+
+	// pgmName.properties needs to be in the same directory as the program
+	// TODO figure out how to generate the program.properties when generate java
+	// eunits
+    function testStrLibMain6() // {@Test{targetLang = [JAVA]}}
+        LogResult.logStdOut("Test getProperty for program property");
+        propVal = syslib.getProperty("Prop1");
+        LogResult.assertStringEqual1("Program's prop1 value", propVal);
+    end
+
+	// rununit.properties file needs to be in src file
+	// reuse the one from the framework
+    function testStrLibMain7(){@Test{targetLang = [JAVA]}}
+        LogResult.logStdOut("Test getProperty for rununit property ResultRoot");
+        propVal = syslib.getProperty("EGLTestResultRoot");
+        good boolean = propVal.matchesPattern("*ResultRoot");
+        LogResult.assertTrue1(good);
+    end
+
+end

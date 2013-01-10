@@ -1,0 +1,211 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp004
+  * @title EdtTimestamp004 - runValueFunction
+  * @description testing timestamp function monthOf
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp004.egl
+  * @keywords timestamp, functions, monthOf
+ **/
+library ETimestamp004 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	 	
+	function runMonthOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant monthOf", 10, constTimeStamp.monthOf());
+	end
+	 	
+	function runMonthOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full monthOf", 12, constTimeStampFull.monthOf());
+	end
+	 	
+	function runMonthOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime monthOf", 12, constTimeStampDateTime.monthOf());
+	end
+	 	
+	function runMonthOfFunction04(){@Test}
+		LogResult.assertBigIntEqual("constant date monthOf", 12, constTimeStampDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction05(){@Test}
+		aMonth int;
+		try
+		    aMonth = constTimeStampYDate.monthOf();
+			LogResult.failed("constant Ydate monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction06(){@Test}
+		LogResult.assertBigIntEqual("constant YMdate monthOf", 06, constTimeStampYMDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction07(){@Test}
+		LogResult.assertBigIntEqual("constant MDdate monthOf", 06, constTimeStampMDDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction08(){@Test}
+		aMonth int;
+		try
+		    aMonth = constTimeStampDHDate.monthOf();
+			LogResult.failed("constant DHdate monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction09(){@Test}
+		aMonth int;
+		try
+		    aMonth = constTimeStampTime.monthOf();
+			LogResult.failed("constant time monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant time monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction10(){@Test}
+		aMonth int;
+		try
+		    aMonth = constTimeStampHMTime.monthOf();
+			LogResult.failed("constant HMtime monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMTime monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction11(){@Test}
+		aMonth int;
+		try
+		    aMonth = constTimeStampMSTime.monthOf();
+			LogResult.failed("constant MStime monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MStime monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable monthOf", 10, varTimeStamp.monthOf());
+	end
+	 	
+	function runMonthOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full monthOf", 12, varTimeStampFull.monthOf());
+	end
+	 	
+	function runMonthOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime monthOf", 12, varTimeStampDateTime.monthOf());
+	end
+	 	
+	function runMonthOfFunction15(){@Test}
+		LogResult.assertBigIntEqual("variable date monthOf", 12, varTimeStampDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction16(){@Test}
+		aMonth int;
+		try
+		    aMonth = varTimeStampYDate.monthOf();
+			LogResult.failed("variable Ydate monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable Ydate monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction17(){@Test}
+		LogResult.assertBigIntEqual("variable YMdate monthOf", 06, varTimeStampYMDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction18(){@Test}
+		LogResult.assertBigIntEqual("variable MDdate monthOf", 06, varTimeStampMDDate.monthOf());
+	end
+	 	
+	function runMonthOfFunction19(){@Test}
+		aMonth int;
+		try
+		    aMonth = varTimeStampDHDate.monthOf();
+			LogResult.failed("variable DHdate monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable DHdate monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction20(){@Test}
+		aMonth int;
+		try
+		    aMonth = varTimeStampTime.monthOf();
+			LogResult.failed("variable time monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable time monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction21(){@Test}
+		aMonth int;
+		try
+		    aMonth = varTimeStampHMTime.monthOf();
+			LogResult.failed("variable HMtime monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMtime monthOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runMonthOfFunction22(){@Test}
+		aMonth int;
+		try
+		    aMonth = varTimeStampMSTime.monthOf();
+			LogResult.failed("variable MStime monthOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MStime monthOf: wrong exception thrown");
+		end
+	end
+	
+end

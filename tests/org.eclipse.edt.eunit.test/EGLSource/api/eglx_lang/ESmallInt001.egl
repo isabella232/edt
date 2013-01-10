@@ -1,0 +1,204 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name ESmallInt001
+  * @title ESmallInt001 - runAssignmentFunction
+  * @description testing smallInt assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction27
+  * @sources ESmallInt001.egl
+  * @keywords smallInt, assignment, initialization
+ **/
+library ESmallInt001 {}
+
+	// Constant Declarations
+	const constInt smallInt = 87;
+	
+	// Variable Declarations
+	int1 smallInt;
+	int2 smallInt = 75;
+	nullableInt1 smallInt?;
+	nullableInt2 smallInt? = -98;
+	badInt smallInt = 76.4;  
+	variation string;
+	 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTrue("constant initialization", (constInt == 87) );
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		LogResult.assertTrue("variable default initialization", (int1 == 0) );
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		LogResult.assertTrue("variable initialization", (int2 == 75) );
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		LogResult.assertTrue("nullable variable default initialization", (nullableInt1 == null) );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		LogResult.assertTrue("nullable variable initialization",  (nullableInt2 == -98));
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		variation = "decimal assignment";
+		LogResult.assertTrue("decimal assignment", (badInt == 76));
+	end
+	
+	function runAssignmentFunction07(){@Test}
+	    localInt smallInt = 78.9;
+		LogResult.assertTrue("decimal assignment rounding ", (localInt == 78));
+	end
+	
+	function runAssignmentFunction08(){@Test}
+		myInt smallInt?;
+		myInt = int2;
+		myInt = null;
+		LogResult.assertTrue("nullable reset to null", (myInt == null ));
+	end
+		
+	function runAssignmentFunction09(){@Test}
+		localInt, another smallInt?;
+		localInt = int2;
+		localInt = another;
+		LogResult.assertTrue("nullable indirectly set to null", (localInt == null ));
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		localInt smallInt = int2;
+		localInt += 5;
+		LogResult.assertTrue("assignment w/ addition", (localInt == 80 ));
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		localInt smallInt = int2;
+		localInt -= 5;
+		LogResult.assertTrue("assignment w/ subtraction", (localInt == 70 ));
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		localInt smallInt = int2;
+		localInt -= -5;
+		LogResult.assertTrue("assignment w/ negative subtraction", (localInt == 80 ));
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		localInt smallInt = int2;
+		localInt *= -1;
+		LogResult.assertTrue("assignment w/ negative multiplication", (localInt == -75 ));
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		localInt smallInt = int2;
+		localInt /= 5;
+		LogResult.assertTrue("assignment w/ division", (localInt == 15 ));
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		localInt smallInt = int2;
+		localInt %= 4;
+		LogResult.assertTrue("assignment w/ modulous", (localInt == 3 ));
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		localInt smallInt = 3;
+		localInt **= 3;
+		LogResult.assertTrue("assignment w/ power", (localInt == 27 ));
+	end
+	
+	function runAssignmentFunction17(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = 5;
+		localInt += operand;
+		LogResult.assertTrue("assignment w/ addition var", (localInt == 80 ));
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = 5;
+		localInt -= operand;
+		LogResult.assertTrue("assignment w/ subtraction var", (localInt == 70 ));
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = -5;
+		localInt -= operand;
+		LogResult.assertTrue("assignment w/ negative subtraction var", (localInt == 80 ));
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = -1;
+		localInt *= operand;
+		LogResult.assertTrue("assignment w/ negative multiplication var", (localInt == -75 ));
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = 5;
+		localInt /= operand;
+		LogResult.assertTrue("assignment w/ division var", (localInt == 15 ));
+	end
+	
+	function runAssignmentFunction22(){@Test}
+		localInt smallInt = int2;
+		operand smallInt = 4;
+		localInt %= operand;
+		LogResult.assertTrue("assignment w/ modulous var", (localInt == 3 ));
+	end
+	
+	function runAssignmentFunction23(){@Test}
+	
+		localInt smallInt = 3;
+		operand smallInt = 3;
+		localInt **= operand;
+		LogResult.assertTrue("assignment w/ power var", (localInt == 27 ));
+	end
+	
+	function runAssignmentFunction24(){@Test}
+		localInt smallInt = +45;
+		LogResult.assertTrue("assignment w/ uninary +", (localInt == 45 ));
+	end
+	
+	function runAssignmentFunction25(){@Test}
+		localInt smallInt = -45;
+		LogResult.assertTrue("assignment w/ uninary -", (localInt == -45 ));
+	end
+		
+	function runAssignmentFunction26(){@Test}
+		localInt smallInt = +0;
+		LogResult.assertTrue("assignment w/ uninary + zero", (localInt == 0));
+	end
+	
+	function runAssignmentFunction27(){@Test}
+		localInt smallInt = -0;
+		LogResult.assertTrue("assignment w/ uninary - zero", (localInt == 0));
+	end
+	
+	function runAssignmentFunction28() {@Test}
+	 	variation string = "assigment overflow";
+		try
+			overflow smallInt = 32780;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed(variation);
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+
+end  // EInt001 library

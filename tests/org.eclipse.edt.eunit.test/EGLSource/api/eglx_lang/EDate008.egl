@@ -1,0 +1,72 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate008
+  * @title EdtDate008 - runConversionFunction
+  * @description testing Date 'extend' functions
+  * @testcases runConversionFunction05 - runConversionFunction12
+  * @sources EdtDate008.egl
+  * @keywords date, conversion, extend, timestamp
+ **/
+library EDate008 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+
+	febLeap date = "02-29-2000";
+	febLeapReference date? = "02-29-2000";
+	
+	
+	const febLeapTimeStamp timeStamp("yyyyMMdd") = "2000-02-29";
+	const febLeapTimeStampYDate timeStamp("yyyy") = "2000";
+	const febLeapTimeStampYMDate timeStamp("yyyyMM") = "2000-02";
+	const febLeapTimeStampMDDate timeStamp("MMdd") = "02/29";
+
+	
+	actual timestamp?;
+	
+	function runConversionFunction05(){@Test}
+		actual=febLeap.extend("yyyyMMdd");
+		LogResult.assertTimestampEqual("date to timestamp yyyyMMdd",febLeapTimeStamp,actual);
+	end
+	
+	function runConversionFunction06(){@Test}
+		actual=febLeap.extend("yyyy");
+		LogResult.assertTimestampEqual("date to timestamp yyyy",febLeapTimeStampYDate,actual);
+	end
+	
+	function runConversionFunction07(){@Test}
+		actual=febLeap.extend("yyyyMM");
+		LogResult.assertTimestampEqual("date to timestamp yyyyMM",febLeapTimeStampYMDate,actual);
+	end
+	
+	function runConversionFunction08(){@Test}
+		actual=febLeap.extend("MMdd");
+		LogResult.assertTimestampEqual("date to timestamp MMdd",febLeapTimeStampMDDate,actual);
+	end
+	
+	function runConversionFunction09(){@Test}
+		actual=febLeapReference.extend("yyyyMMdd");
+		LogResult.assertTimestampEqual("date to timestamp yyyyMMdd",febLeapTimeStamp,actual);
+	end
+	
+	function runConversionFunction10(){@Test}
+		actual=febLeapReference.extend("yyyy");
+		LogResult.assertTimestampEqual("date to timestamp yyyy",febLeapTimeStampYDate,actual);
+	end
+	
+	function runConversionFunction11(){@Test}
+		actual=febLeapReference.extend("yyyyMM");
+		LogResult.assertTimestampEqual("date to timestamp yyyyMM",febLeapTimeStampYMDate,actual);
+	end
+	
+	function runConversionFunction12(){@Test}
+		actual=febLeapReference.extend("MMdd");
+		LogResult.assertTimestampEqual("date to timestamp MMdd",febLeapTimeStampMDDate,actual);
+	end
+end

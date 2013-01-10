@@ -1,0 +1,103 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.Test;
+
+library isaOthersLIB
+
+	isA_WS isA_WS;
+	use isaLIB;
+	isA_OTHER_NUMS isA_OTHER_NUMS;
+
+Function runOthersISAFunction001() {@Test}
+    isaLIB.setVariation("isA - SmallInt");
+    isA_WS.EXPECTED_COMPARE = "==";
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.SMALLINT_A isa smallInt)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+
+Function runOthersISAFunction002() {@Test}
+    isaLIB.setVariation("isA - SmallInt - is it an INT");
+    isA_WS.EXPECTED_COMPARE = "!=";    
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.SMALLINT_A isa Int)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+
+Function runOthersISAFunction003() {@Test}    
+    isaLIB.setVariation("isA - SmallInt - is it a BIGINT");
+    isA_WS.EXPECTED_COMPARE = "!=";    
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.SMALLINT_A isa bigInt)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);     
+end
+
+Function runOthersISAFunction004() {@Test}
+    isaLIB.setVariation("isA - Int");
+    isA_WS.EXPECTED_COMPARE = "==";    
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.INT_A isa int)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+
+Function runOthersISAFunction005() {@Test}
+    isaLIB.setVariation("isA - Int - is it a BIGINT");
+    isA_WS.EXPECTED_COMPARE = "!=";    
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.INT_A isa bigInt)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+
+Function runOthersISAFunction006() {@Test}
+    isaLIB.setVariation("isA - BigInt");
+    isA_WS.EXPECTED_COMPARE = "==";    
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.BIGINT_A isa bigInt)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+         
+end // end isA_18_INTS
+
+Function runOthersISAFunction007() {@Test}
+    isaLIB.setVariation("isA - SmallFloat - based on VAGen HEX");
+    isA_WS.EXPECTED_COMPARE = "==";
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.SmallFloat_A isa smallFloat)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+
+Function runOthersISAFunction008() {@Test}
+    isaLIB.setVariation("isA - SmallFloat - is it a FLOAT");
+    isA_WS.EXPECTED_COMPARE = "!=";
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.SmallFloat_A isa float)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+   
+end
+
+Function runOthersISAFunction009() {@Test}
+    isaLIB.setVariation("isA - Float - based on VAGen HEX");
+    isA_WS.EXPECTED_COMPARE = "==";
+    isA_WS.RESULT_COMPARE = "!=";
+    if(isA_OTHER_NUMS.Float_A isa float)
+        isA_WS.RESULT_COMPARE = "==";
+    end
+    isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end // isA_FLOATS
+	
+end

@@ -1,0 +1,244 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+
+/** @test
+  * @name ESmallInt010
+  * @title ESmallInt010 - runISAFunction
+  * @description testing smallInt nullable variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources ESmallInt010.egl
+  * @keywords smallInt, isa
+ **/
+library ESmallInt010 {}
+
+	isIt boolean;
+	expected boolean;
+	smallInt1n smallInt? = 44;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "smallint/nullable variable is any";
+		isIt = smallInt1n isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "smallint/nullable variable is bigInt";
+		isIt = smallInt1n isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "smallint/nullable variable is boolean";
+		isIt = smallInt1n isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "smallint/nullable variable is date";
+		isIt = smallInt1n isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "smallint/nullable variable is decimal(4,2)";
+		isIt = smallInt1n isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "smallint/nullable variable is decimal";
+		isIt = smallInt1n isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "smallint/nullable variable is dictionary";
+		isIt = smallInt1n isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "smallint/nullable variable is float";
+		isIt = smallInt1n isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "smallint/nullable variable is int";
+		isIt = smallInt1n isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "smallint/nullable variable is number";
+		isIt = smallInt1n isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "smallint/nullable variable is smallFloat";
+		isIt = smallInt1n isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "smallint/nullable variable is smallInt";
+		isIt = smallInt1n isa smallInt;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "smallint/nullable variable is string";
+		isIt = smallInt1n isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "smallint/nullable variable is timestamp";
+		isIt = smallInt1n isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "smallint/nullable variable is anyexception";
+		isIt = smallInt1n isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "smallint/nullable variable is DynamicAccessException";
+		isIt = smallInt1n isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "smallint/nullable variable is InvalidArgumentException";
+		isIt = smallInt1n isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "smallint/nullable variable is InvalidIndexException";
+		isIt = smallInt1n isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "smallint/nullable variable is InvalidPatternException";
+		isIt = smallInt1n isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "smallint/nullable variable is InvocationException";
+		isIt = smallInt1n isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "smallint/nullable variable is JavaObjectException";
+//		isIt = smallInt1n isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "smallint/nullable variable is JavaScriptObjectException";
+//		isIt = smallInt1n isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "smallint/nullable variable is NullValueException";
+		isIt = smallInt1n isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "smallint/nullable variable is NumericOverflowException";
+		isIt = smallInt1n isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "smallint/nullable variable is ServiceInvocationException";
+		isIt = smallInt1n isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "smallint/nullable variable is SQLException";
+//		isIt = smallInt1n isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "smallint/nullable variable is TypeCastException";
+		isIt = smallInt1n isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "smallint/null is SmallInt";
+		smallInt1n = null;
+		isIt = smallInt1n isa SmallInt;
+		expected = false;
+		assertTrue();
+	end	
+		
+	function runISAFunction31(){@Test}
+		variation = "smallint/nullable variable is bytes";
+		isIt = smallInt1n isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction32(){@Test}
+		variation = "smallint/nullable variable is bytes(8)";
+		isIt = smallInt1n isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+end // ESmallInt010

@@ -1,0 +1,6 @@
+package fvt.xml.handlers.data;
+
+handler parent
+    childA string;
+    childB string;
+end

@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler SmallIntArrayHandler
+	item1 smallint[];
+end

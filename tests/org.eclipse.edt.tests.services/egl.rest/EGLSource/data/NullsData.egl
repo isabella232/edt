@@ -1,0 +1,9 @@
+package data;
+
+//Put EGL Source File Contents Here
+
+Record NullRecord
+  Item1 string?;
+  item_2_a int;
+  item3a decimal(10,2);
+end

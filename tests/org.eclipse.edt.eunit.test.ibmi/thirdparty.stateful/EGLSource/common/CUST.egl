@@ -1,0 +1,15 @@
+package common;
+
+record CUST 
+  CUSTNO string{@StructText{length = 7}};//CUSTNO char(7)
+  CUSTNA string{@StructText{length = 40}};//CUSTNA char(40)
+  REPNO string{@StructText{length = 5}};//REPNO char(5)
+  CONTAC string{@StructText{length = 30}};//CONTAC char(30)
+  CPHONE string{@StructText{length = 17}};//CPHONE char(17)
+  CFAX string{@StructText{length = 17}};//CFAX char(17)
+  CADDR string{@StructText{length = 40}};//CADDR char(40);
+  CCITY string{@StructText{length = 30}};//CCITY char(30);
+  CCOUNT string{@StructText{length = 20}};//CCOUNT char(20);
+  CZIP string{@StructText{length = 10}};//CZIP char(10);
+  CZIPLO string{@StructText{length = 1}};//CZIPLO char(1);
+end    

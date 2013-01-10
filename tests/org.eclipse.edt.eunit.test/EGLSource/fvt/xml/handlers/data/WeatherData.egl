@@ -1,0 +1,12 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLElement;
+
+handler WeatherData{}
+    Day string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    WeatherImage string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MaxTemperatureF string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MinTemperatureF string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MaxTemperatureC string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MinTemperatureC string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+end

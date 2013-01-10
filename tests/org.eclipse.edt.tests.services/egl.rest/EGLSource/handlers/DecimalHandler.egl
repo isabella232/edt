@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler DecimalHandler
+	item1 decimal(10,2);
+end

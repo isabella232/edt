@@ -1,0 +1,109 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Field intialization of DECIMALs based on default constructor rules Enhancement 372125
+* @keywords default constructor decimal
+* @author EDT team
+* @createDate 2012/03/09
+* @description 
+*  Field intialization of DECIMALs based on default constructor rules Enhancement 372125
+*/
+library defaultConstructorDecimal
+	
+	function testDecimal() {@Test}
+		d1 decimal;
+		
+		LogResult.assertDecimalEqual1(0, d1);
+	end
+	
+	function testDecimalNotEqual() {@Test}
+		d1 number;
+		
+		LogResult.assertTrue1(!(d1 != 0));
+	end
+	
+	function testNullableDecimal() {@Test}
+		d2 decimal?;
+		
+		LogResult.assertTrue1(d2 == null);
+	end
+	
+	function testDecimalArray() {@Test}
+		d3 decimal[];
+		
+		LogResult.assertTrue1(d3 isa decimal[] && d3.getSize() == 0);
+	end
+	
+	function testNullableDecimalArray() {@Test}
+		d4 decimal?[];
+		
+		LogResult.assertTrue1(d4 isa decimal?[] && d4.getSize() == 0);
+	end
+	
+	function testDecimalArrayWithNew() {@Test}
+		d5 decimal[] = new decimal[];
+		
+		LogResult.assertTrue1(d5 isa decimal[] && d5.getSize() == 0);
+	end
+	
+	function testDecimalArrayWithNewParameter() {@Test}
+		d6 decimal[] = new decimal[4];
+		
+		LogResult.assertTrue1(d6 isa decimal[] && d6.getSize() == 4 && d6[1] == 0);
+	end
+	
+	function testNullableDecimalArrayWithNew() {@Test}
+		d7 decimal?[] = new decimal?[];
+		
+		LogResult.assertTrue1(d7 isa decimal?[] && d7.getSize() == 0);
+	end
+	
+	function testNullableDecimalArrayWithNewParameter() {@Test}
+		d8 decimal?[] = new decimal?[4];
+		
+		LogResult.assertTrue1(d8 isa decimal?[] && d8.getSize() == 4 && d8[1] == null);
+	end
+	
+	function testDecimalNullableArray() {@Test}
+		d9 decimal[]?;
+
+		LogResult.assertTrue1(d9 == null);
+	end
+	
+	function testDecimalNullableArrayWithNew() {@Test}
+		d10 decimal[]? = new decimal[];
+
+		LogResult.assertTrue1(d10 isa decimal[] && d10.getSize() == 0);
+	end
+	
+	function testDecimalNullableArrayWithNewParameter() {@Test}
+		d11 decimal[]? = new decimal[4];
+
+		LogResult.assertTrue1(d11 isa decimal[] && d11.getSize() == 4 && d11[1] == 0);
+	end
+	
+	function testNullableDecimalNullableArray() {@Test}
+		d13 decimal?[]?;
+
+		LogResult.assertTrue1(d13 == null);
+	end
+	
+	function testNullableDecimalNullableArrayWithNew() {@Test}
+		d14 decimal?[]? = new decimal?[];
+
+		LogResult.assertTrue1(d14 isa decimal?[] && d14.getSize() == 0);
+	end
+	
+	function testNullableDecimalNullableArrayWithNewParameter() {@Test}
+		d15 decimal?[]? = new decimal?[4];
+
+		LogResult.assertTrue1(d15 isa decimal?[] && d15.getSize() == 4 && d15[1] == null);
+	end
+end
+
+		
+	

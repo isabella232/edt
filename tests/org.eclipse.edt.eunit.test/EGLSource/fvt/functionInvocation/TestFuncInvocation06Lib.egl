@@ -1,0 +1,185 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation06Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation06Lib
+
+    s string = "abc";
+    x string;
+
+    rec myRecord{s = "abc", i = 10};
+    rec2 myRecord;
+
+    i int = 10;
+    y int;
+
+    function testLocalInParametersRet1a(){@Test}
+        s = "abc";
+        x = localInString(s);
+        LogResult.logStdOut("Local function IN String parameter - 1a");
+        LogResult.assertStringEqual1("cde", x);
+    end
+
+    function testLocalInParametersRet1b(){@Test}
+        LogResult.logStdOut("Local function IN String parameter - 1b");
+        LogResult.assertStringEqual1("abc", s);
+    end
+
+    function testLocalInParametersRet2a(){@Test}
+        i = 10;
+        y = localInInt(i);
+        LogResult.logStdOut("Local function IN integer parameter - 2a");
+        LogResult.assertBigIntEqual1(5, y);
+    end
+
+    function testLocalInParametersRet2b(){@Test}
+        LogResult.logStdOut("Local function IN integer parameter - 2b");
+        LogResult.assertBigIntEqual1(10, i);
+    end
+
+    function testLocalInParametersRet3a(){@Test}
+        rec myRecord{s = "abc", i = 10};
+        rec2 = localInRecord(rec);
+        LogResult.logStdOut("Local function IN record parameter - 3a");
+        LogResult.assertTrue1((rec2.s == "cde") &&(rec2.i == 5));
+    end
+
+    function testLocalInParametersRet3b(){@Test}
+        LogResult.logStdOut("Local function IN record parameter - 3b");
+        LogResult.assertTrue1((rec.s == "abc") &&(rec.i == 10));
+    end
+
+    function testLocalOutParametersRet1a(){@Test}
+        s = "abc";
+        x = localOutString(s);
+        LogResult.logStdOut("Local function OUT String parameter - 1a");
+        LogResult.assertStringEqual1("", x);
+    end
+
+    function testLocalOutParametersRet1b(){@Test}
+        LogResult.logStdOut("Local function OUT String parameter - 1b");
+        LogResult.assertStringEqual1("", s);
+    end
+
+    function testLocalOutParametersRet2a(){@Test}
+        i = 10;
+        y = localOutInt(i);
+        LogResult.logStdOut("Local function OUT integer parameter - 2a");
+        LogResult.assertBigIntEqual1(0, y);
+    end
+
+    function testLocalOutParametersRet2b(){@Test}
+        LogResult.logStdOut("Local function OUT integer parameter - 2b");
+        LogResult.assertBigIntEqual1(0, i);
+    end
+
+    function testLocalOutParametersRet3a(){@Test}
+        rec myRecord{s = "abc", i = 10};
+        rec2 = localOutRecord(rec);
+        LogResult.logStdOut("Local function OUT record parameter - 3a");
+        LogResult.assertTrue1((rec2.s == "") &&(rec2.i == 0));
+    end
+
+    function testLocalOutParametersRet3b(){@Test}
+        rec myRecord{s = "abc", i = 10};
+        rec2 = localOutRecord(rec);
+        LogResult.logStdOut("Local function OUT record parameter - 3b");
+        LogResult.assertTrue1((rec.s == "") &&(rec.i == 0));
+    end
+
+    function testLocalInOutParametersRet1a(){@Test}
+        s = "abc";
+        x = localInOutString(s);
+        LogResult.logStdOut("Local function INOUT String parameter - 1a");
+        LogResult.assertStringEqual1("cde", x);
+    end
+
+    function testLocalInOutParametersRet1b(){@Test}
+        LogResult.logStdOut("Local function INOUT String parameter - 1b");
+        LogResult.assertStringEqual1(s, x);
+    end
+
+    function testLocalInOutParametersRet2a(){@Test}
+        i = 10;
+        y = localInOutInt(i);
+        LogResult.logStdOut("Local function INOUT integer parameter - 2a");
+        LogResult.assertBigIntEqual1(5, y);
+    end
+
+    function testLocalInOutParametersRet2b(){@Test}
+        LogResult.logStdOut("Local function INOUT integer parameter - 2b");
+        LogResult.assertBigIntEqual1(i, y);
+    end
+
+    function testLocalInOutParametersRet3a(){@Test}
+        rec myRecord{s = "abc", i = 10};
+        rec2 myRecord = localInOutRecord(rec);
+        LogResult.logStdOut("Local function INOUT record parameter - 3a");
+        LogResult.assertTrue1((rec2.s == "cde") &&(rec2.i == 5));
+    end
+
+    function testLocalInOutParametersRet3b(){@Test}
+        rec myRecord{s = "abc", i = 10};
+        rec2 myRecord = localInOutRecord(rec);
+        LogResult.logStdOut("Local function INOUT record parameter - 3b");
+        LogResult.assertTrue1((rec2.s == rec.s) &&(rec2.i == rec.i));
+    end
+
+    /*********************************************************************/
+
+    function localInString(s string in) returns(string)
+        s = "cde";
+        return(s);
+    end
+
+    function localInInt(i int in) returns(int)
+        i = 5;
+        return(i);
+    end
+
+    function localInRecord(rec myRecord in) returns(myRecord)
+        rec.s = "cde";
+        rec.i = 5;
+        return(rec);
+    end
+
+    function localOutString(s string out) returns(string)
+        return(s);
+    end
+
+    function localOutInt(i int out) returns(int)
+        return(i);
+    end
+
+    function localOutRecord(rec myRecord out) returns(myRecord)
+        return(rec);
+    end
+
+    function localInOutString(s string inOut) returns(string)
+        s = "cde";
+        return(s);
+    end
+
+    function localInOutInt(i int inOut) returns(int)
+        i = 5;
+        return(i);
+    end
+
+    function localInOutRecord(rec myRecord inOut) returns(myRecord)
+        rec.s = "cde";
+        rec.i = 5;
+        return(rec);
+    end
+
+end

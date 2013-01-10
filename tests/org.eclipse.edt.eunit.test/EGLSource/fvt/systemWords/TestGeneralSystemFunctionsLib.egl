@@ -1,0 +1,84 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+
+/*
+* @name TestGeneralSystemFunctionsLib
+* @title The function test program for general system functions in EDT for RichUI
+* @keywords general system functions
+* @author EDT team
+* @createDate 2011/08/27
+* @description
+* This test has no runnable testcases.
+*/
+
+library TestGeneralSystemFunctionsLib
+
+	//property, propertyKey string;
+    property string;
+    propertyKey string;
+    
+    //message, messageKey, insert1, insert2 string;
+    message string;
+    messageKey string;
+    insert1 string;
+    insert2 string;
+    //inserts string[0];
+    inserts string[] = new string[0];
+
+    //inserts1 string[0] =["insert 1", "Insert 2"];
+    inserts1 string[] =["insert 1", "Insert 2"];
+
+    function testGsfPropertyAccess1()
+        LogResult.logStdOut("GetProperty 1");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfPropertyAccess2()
+        LogResult.logStdOut("GetProperty 2");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfPropertyAccess3()
+        LogResult.logStdOut("GetProperty 2");
+        propertyKey = "egl.syntax.systemWords.generalSystemFunctions.rununit.property";
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfPropertyAccess4()
+        LogResult.logStdOut("GetProperty 3");
+        propertyKey = "egl.syntax.systemWords.generalSystemFunctions.user.property";
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfMessageFileAccess1()
+        LogResult.logStdOut("Get Message 1 ");
+        //results.generationException( "Milestone 4 does not support the getMessage() function." ) ;
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfMessageFileAccess2()
+        LogResult.logStdOut("Get Message 2");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfMessageFileAccess3()
+        LogResult.logStdOut("Getmessage 3");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfMessageFileAccess4()
+        LogResult.logStdOut("Getmessage 4");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfAlternateMessageFile1()
+        LogResult.logStdOut("User message");
+        LogResult.skipped("Current case will be skipped.");
+    end
+
+    function testGsfAlternateMessageFile2()
+        LogResult.logStdOut("Message override");
+        LogResult.skipped("Current case will be skipped.");
+    end
+end

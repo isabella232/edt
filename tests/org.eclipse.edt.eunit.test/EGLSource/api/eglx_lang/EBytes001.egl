@@ -1,0 +1,94 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes001
+  * @title EBytes001 - runAssignmentFunction
+  * @description testing bytes assignemt and inialization functions
+  * @testcases runAssignmentFunction01 - runAssignmentFunction14
+  * @sources EBytes001.egl
+  * @keywords bytes, assignment, initialization
+ **/
+library EBytes001
+	const constant1 bytes(2) = 0x87DE;
+	const constant2 bytes = 0xDEADBEEF;
+	
+	B1 bytes(4);
+	B2 bytes(4) = 0xef097b5c;
+	nullableB1 bytes(4)?;
+	nullableB2 bytes(4)? = 0xEF093D8A;
+	B1X bytes;
+	B2X bytes = 0xef097b5c;
+	nullableB1X bytes?;
+	nullableB2X bytes? = 0xEF093D8A;
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTrue("constant initialization", (constant1 == 0x87DE));
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		LogResult.assertTrue("constant (no length) initialization", (constant2 == 0xDEADBEEF));
+	end
+	
+	function runAssignmentFunction03(){@Test}	
+		LogResult.assertTrue("variable default initialization", (B1 == 0x00000000));
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		LogResult.assertTrue("variable initialization", (B2 == 0xEf097b5C));
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		LogResult.assertTrue("nullable variable default initialization", (nullableB1 == null));
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		LogResult.assertTrue("nullable variable initialization",  (nullableB2 == 0xEF093D8A));
+	end
+	
+	function runAssignmentFunction07(){@Test}
+		myBytes bytes(4)?;
+		myBytes = B2;
+		myBytes = null;
+		LogResult.assertTrue("nullable reset to null", (myBytes == null));
+	end
+		
+	function runAssignmentFunction08(){@Test}
+		localBytes, another bytes(4)?;
+		localBytes = B2;
+		localBytes = another;
+		LogResult.assertTrue("nullable indirectly set to null", (localBytes == null));
+	end	
+	
+	function runAssignmentFunction09(){@Test}
+		LogResult.assertTrue("variable (no length) default initialization", (B1X == new bytes));
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		LogResult.assertTrue("variable (no length) initialization", (B2X == 0xEf097b5C));
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		LogResult.assertTrue("nullable variable (no length) default initialization", (nullableB1X == null));
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		LogResult.assertTrue("nullable variable (no length) initialization",  (nullableB2X == 0xEF093D8A));
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		myBytes bytes?;
+		myBytes = B2X;
+		myBytes = null;
+		LogResult.assertTrue("nullable (no length) reset to null", (myBytes == null));
+	end
+		
+	function runAssignmentFunction14(){@Test}
+		localBytes, another bytes?;
+		localBytes = B2X;
+		localBytes = another;
+		LogResult.assertTrue("nullable (no length) indirectly set to null", (localBytes == null));
+	end
+end

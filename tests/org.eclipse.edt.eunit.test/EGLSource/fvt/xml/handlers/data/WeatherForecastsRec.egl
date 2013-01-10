@@ -1,0 +1,15 @@
+package fvt.xml.handlers.data;
+
+import eglx.json.JsonName;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+handler WeatherForecastsRec{@xmlRootElement{name = "WeatherForecasts", namespace = "http://www.webservicex.net"}}
+    Lat string{@JSONName{"Latitude"}, @XMLElement{name = "Latitude", namespace = "http://www.webservicex.net"}};
+    long string{@JSONName{"Longitude"}, @XMLElement{name = "Longitude", namespace = "http://www.webservicex.net"}};
+    AllocationFactor string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    FipsCode string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    PlaceName string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    StateCode string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    Details Details{@XMLElement{namespace = "http://www.webservicex.net"}};
+end

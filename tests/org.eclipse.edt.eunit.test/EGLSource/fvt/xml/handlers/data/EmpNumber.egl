@@ -1,0 +1,10 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+handler EmpNumber{@XMLValue{kind = xmlStructurekind.simpleContent}}
+    department string{@XMLAttribute{name = "dept"}};
+    value int;
+end

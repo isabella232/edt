@@ -1,0 +1,226 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp013
+  * @title EdtTimestamp013 - runValueFunction
+  * @description testing timestamp function Secondof
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp013.egl
+  * @keywords timestamp, functions, SecondOf
+ **/
+library ETimestamp013 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runSecondOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant SecondOf", 59, constTimeStamp.SecondOf());
+	end
+	 	
+	function runSecondOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full SecondOf", 30, constTimeStampFull.SecondOf());
+	end
+	 	
+	function runSecondOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime SecondOf", 30, constTimeStampDateTime.SecondOf());
+	end
+	 	
+	function runSecondOfFunction04(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampDate.SecondOf();
+			LogResult.failed("constant date Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant date Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction05(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampYDate.SecondOf();
+			LogResult.failed("constant Ydate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction06(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampYMDate.SecondOf();
+			LogResult.failed("constant YMdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction07(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampMDDate.SecondOf();
+			LogResult.failed("constant MDdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MDdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction08(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampDHDate.SecondOf();
+			LogResult.failed("constant DHdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction09(){@Test}
+		LogResult.assertBigIntEqual("constant time SecondOf", 00, constTimeStampTime.SecondOf());
+	end
+	 	
+	function runSecondOfFunction10(){@Test}
+		aSecond int;
+		try
+		    aSecond = constTimeStampHMTime.SecondOf();
+			LogResult.failed("constant HMTime Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMTime Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunction11(){@Test}
+		LogResult.assertBigIntEqual("constant MStime SecondOf", 15, constTimeStampMSTime.SecondOf());
+	end
+	
+	function runSecondOfFunctionX01(){@Test}
+		LogResult.assertBigIntEqual("variable SecondOf", 59, varTimeStamp.SecondOf());
+	end
+	 	
+	function runSecondOfFunctionX02(){@Test}
+		LogResult.assertBigIntEqual("variable full SecondOf", 30, varTimeStampFull.SecondOf());
+	end
+	 	
+	function runSecondOfFunctionX03(){@Test}
+		LogResult.assertBigIntEqual("variable datetime SecondOf", 30, varTimeStampDateTime.SecondOf());
+	end
+	 	
+	function runSecondOfFunctionX04(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampDate.SecondOf();
+			LogResult.failed("variable date Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable date Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX05(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampYDate.SecondOf();
+			LogResult.failed("variable Ydate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable Ydate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX06(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampYMDate.SecondOf();
+			LogResult.failed("variable YMdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX07(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampMDDate.SecondOf();
+			LogResult.failed("variable MDdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MDdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX08(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampDHDate.SecondOf();
+			LogResult.failed("variable DHdate Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable DHdate Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX09(){@Test}
+		LogResult.assertBigIntEqual("variable time SecondOf", 00, varTimeStampTime.SecondOf());
+	end
+	 	
+	function runSecondOfFunctionX10(){@Test}
+		aSecond int;
+		try
+		    aSecond = varTimeStampHMTime.SecondOf();
+			LogResult.failed("variable HMTime Secondof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMTime Secondof: wrong exception thrown");
+		end
+	end
+	 	
+	function runSecondOfFunctionX11(){@Test}
+		LogResult.assertBigIntEqual("variable MStime SecondOf", 15, varTimeStampMSTime.SecondOf());
+	end
+
+end

@@ -1,0 +1,126 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EList001
+  * @title EList001 - runBitwiseFunction
+  * @description testing int bitwise functions
+  * @testcases -testForwardReference, testForwardReferenceConverstion, testConverstion
+  * @sources EInt002.egl
+  * @keywords EList, forward reference
+ **/
+library EList001
+	
+	intList1 int[] = [getFirstValue(), getSecondValue(), getThirdValue()];
+	
+	function testForwardReference() {@Test} 
+		element1, element2, element3 int;
+		element1 = intList1[1];
+		element2 = intList1[2];
+		element3 = intList1[3];
+		LogResult.assertTrue1( intList1.getSize() == 3 && intList1[ 1 ] == 1 
+			&& intList1[ 2 ] == 2 && intList1[ 3 ] == 23  );
+	end
+	
+	function testForwardReferenceConverstion() {@Test}
+		try
+			intList2 int[] = [getFirstValue(), getSecondValue(), getThirdValue(), getStringValue(), getStringValue()];
+			LogResult.failed("Expecting an TypeCastException");
+		onException(oops AnyException)
+			if ( oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				LogResult.failed("Got wrong Exception");
+			end
+		end
+	end
+	
+	function testConverstion() {@Test}
+		holdit int;
+		try
+			holdit = getStringValue();
+			LogResult.failed("Expecting an TypeCastException");
+		onException(oops AnyException)
+			if ( oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				LogResult.failed("Got wrong Exception");
+			end
+		end
+	end
+	
+		function arrayDeclaration1() { @Test }
+		objects any[];
+		LogResult.assertBigIntEqual1( 0, objects.getSize() );
+	end
+	
+	function arrayDeclaration2() { @Test }
+		objects any[]?;
+		LogResult.assertTrue1(objects == null);
+	end
+	
+	function arrayDeclaration3() { @Test }
+		ints int[]? = new int[ 5 ];
+		LogResult.assertTrue1( ints.getSize() == 5 && ints[ 1 ] == 0 
+			&& ints[ 2 ] == 0 && ints[ 3 ] == 0 && ints[ 4 ] == 0 && ints[ 5 ] == 0 );
+	end
+	
+	function arrayDeclaration4() { @Test }
+		ints int[]{ 1, 2, 3 };
+		LogResult.assertTrue1( ints.getSize() == 3 && ints[ 1 ] == 1 
+			&& ints[ 2 ] == 2 && ints[ 3 ] == 3 );
+	end
+	
+	function arrayDeclaration5() { @Test }
+		ints int[]? = new int[]{ 1, 2, 3 }; // changed for EDT 0.8
+		LogResult.assertTrue1( ints.getSize() == 3 && ints[ 1 ] == 1 
+			&& ints[ 2 ] == 2 && ints[ 3 ] == 3);
+	end
+	
+	function arrayDeclaration6() {@Test}
+//		state ExceptionState = ExceptionState.noException;
+//		try
+//			ints int[]?{ 1, 2, 3 };
+//		onException ( nvx NullValueException )
+//			state = ExceptionState.correct;
+//		onException ( ax AnyException )
+//			state = ExceptionState.wrongException;
+//		end
+//		LogResult.assertTrue1( state == ExceptionState.correct );
+
+		// Throws valiation error
+		LogResult.passed("OK");
+	end
+	
+	function arrayDeclaration7() { @Test }
+		ints int[]? = [ 100000, 100001, 100010 ];
+		LogResult.assertTrue1( ints.getSize() == 3 && ints[ 1 ] == 100000 
+			&& ints[ 2 ] == 100001 && ints[ 3 ] == 100010 );
+	end
+	
+	function arrayDeclaration8() { @Test }
+		ints int?[] = new int?[ 5 ];
+		LogResult.assertTrue1( ints.getSize() == 5 && ints[ 1 ] == null 
+			&& ints[ 2 ] == null && ints[ 3 ] == null && ints[ 4 ] == null && ints[ 5 ] == null );
+	end
+	
+	
+	function getFirstValue()returns(int)
+		return(1);
+	end
+	
+	function getSecondValue()returns(int)
+		return(2);
+	end
+	
+	function getThirdValue()returns(decimal)
+		return(23.6);
+	end
+	
+	function getStringValue() returns (string)
+		return ("badstuff");
+	end
+	
+end

@@ -1,0 +1,240 @@
+package services;
+
+import data.ArrayContainingRecord;
+import data.SimpleRecord;
+import interfaces.IArrayPassing;
+import utilities.CommonUtilities;
+
+
+// service
+Service ArrayPassing 
+	
+	function singleIn(_array string[] in) returns(string)
+		return (_array[1]);
+	end
+	
+	function singleInout( _array string[] inout)
+		_array[1] = "outdex1";	
+		_array[2] = "outdex2";
+		_array[3] = "outdex3";	
+	end
+	
+	function singleOut( _array string[] out)
+		if( _array == null )
+			_array = new string[];
+		end
+		_array.appendElement("outdex1");
+		_array.appendElement("outdex2");
+		_array.appendElement("outdex3");
+	end
+	
+	function singleAll(_array1 string[] in, _array2 string[] inout, _array3 string[] out) returns(string[])
+		_array2[1] = "outdex1";
+		_array2[2] = "outdex2";
+		_array2[3] = "outdex3";
+		_array3 = new string[];
+		_array3.appendElement("outdex1");
+		_array3.appendElement("outdex2");
+		_array3.appendElement("outdex3");
+		return (_array1);
+	end
+	
+	function singleIntIn(_array int[] in) returns(int)
+		return (_array[1]);
+	end
+	
+	function singleIntInout( _array int[] inout)
+		_array[1] = 10;	
+		_array[2] = 13;
+		_array[3] = 27;	
+	end
+	
+	function singleIntOut( _array int[] out)
+		if( _array == null )
+			_array = new int[];
+		end
+		_array.appendElement(10);
+		_array.appendElement(13);
+		_array.appendElement(27);
+	end
+	
+	function singleIntAll(_array1 int[] in, _array2 int[] inout, _array3 int[] out) returns(int[])
+		_array2[1] = 15;
+		_array2[2] = 22;
+		_array2[3] = 78;
+		_array3 = new int[];
+		_array3.appendElement(19);
+		_array3.appendElement(90);
+		_array3.appendElement(-7);
+		return (_array1);
+	end
+	
+	function singleBigintIn(_array Bigint[] in) returns(Bigint)
+		return (_array[1]);
+	end
+	
+	function singleBigintInout( _array Bigint[] inout)
+		_array[1] = 10;	
+		_array[2] = 13;
+		_array[3] = 27;	
+	end
+	
+	function singleBigintOut( _array Bigint[] out)
+		if( _array == null )
+			_array = new Bigint[];
+		end
+		_array.appendElement(10);
+		_array.appendElement(13);
+		_array.appendElement(27);
+	end
+	
+	function singleBigintAll(_array1 Bigint[] in, _array2 Bigint[] inout, _array3 Bigint[] out) returns(Bigint[])
+		_array2[1] = 15;
+		_array2[2] = 22;
+		_array2[3] = 78;
+		_array3 = new bigint[];
+		_array3.appendElement(19);
+		_array3.appendElement(90);
+		_array3.appendElement(-7);
+		return (_array1);
+	end
+	
+	function singleDecimalIn(_array Decimal[] in) returns(Decimal)
+		return (_array[1]);
+	end
+	
+	function singleDecimalInout( _array Decimal[] inout)
+		_array[1] += 1.1;	
+		_array[2] += 1.1;
+		_array[3] += 1.1;	
+	end
+	
+	function singleDecimalOut( _array Decimal[] out)
+		if( _array == null )
+			_array = new Decimal[];
+		end
+		_array.appendElement(11.2);
+		_array.appendElement(14.4);
+		_array.appendElement(28.2);
+	end
+	
+	function singleDecimalAll(_array1 Decimal[] in, _array2 Decimal[] inout, _array3 Decimal[] out) returns(Decimal[])
+		_array2[1] += 1.1;
+		_array2[2] += 1.1;
+		_array2[3] += 1.1;
+		_array3 = new Decimal[];
+		_array3.appendElement(20.2);
+		_array3.appendElement(91.2);
+		_array3.appendElement(-6.0);
+		return (_array1);
+	end
+	
+	function singleDateIn(_array Date[] in) returns(Date)
+		return (_array[1]);
+	end
+	
+	function singleDateInout( _array Date[] inout)
+		_array = new Date[3];
+		_array[1] = ("01/19/1976");
+		_array[2] = ("10/17/1942");
+		_array[3] = ("12/16/2006");
+	end
+	
+	function singleDateOut( _array Date[] out)
+		if( _array == null )
+			_array = new Date[];
+		end
+		_array.appendElement("01/19/1976");
+		_array.appendElement("10/17/1942");
+		_array.appendElement("12/16/2006");
+	end
+	
+	function singleDateAll(_array1 Date[] in, _array2 Date[] inout, _array3 Date[] out) returns(Date[])
+		_array2.appendElement("07/13/2006");
+		_array3 = new date[];
+		_array3.removeAll();
+		_array3.appendElement("07/12/2006");
+		return(_array1);			
+	end
+	
+	function singleTimestampIn(_array Timestamp("yyyyMMddHHmmss")[] in) returns(Timestamp)
+		return (_array[1]);
+	end
+	
+	function singleTimestampInout( _array Timestamp("yyyyMMddHHmmss")[] inout)
+		_array = new Timestamp("yyyyMMddHHmmss")[3];
+		_array[1] = ("1976/01/19 12:56:41");
+		_array[2] = ("1942/10/17 17:41:13");
+		_array[3] = ("1976/12/16 01:18:59");
+	end
+	
+	function singleTimestampOut( _array Timestamp("yyyyMMddHHmmss")[] out)
+		if( _array == null )
+			_array = new Timestamp("yyyyMMddHHmmss")[];
+		end
+		_array.appendElement("1976/01/19 00:00:59");
+		_array.appendElement("1942/10/17 17:43:44");
+		_array.appendElement("1976/12/16 09:56:31");
+	end
+	
+	function singleTimestampAll(_array1 Timestamp("yyyyMMddHHmmss")[] in, _array2 Timestamp("yyyyMMddHHmmss")[] inout, _array3 Timestamp("yyyyMMddHHmmss")[] out) returns(Timestamp("yyyyMMddHHmmss")[])
+		_array2.appendElement("2006/07/13 00:41:52");
+		_array3 = new Timestamp("yyyyMMddHHmmss")[];
+		_array3.removeAll();
+		_array3.appendElement("2006/07/12 06:05:09");
+		return(_array1);			
+	end
+	
+	function simpleRecordArrayIn(recArray SimpleRecord[] in) returns(string)
+		i int = recArray.getSize();
+		return (recArray[i].item1);
+	end
+	
+	function simpleRecordArrayInout(recArray SimpleRecord[] inout)
+		i int = recArray.getSize();
+		recArray[i].item1 = "Value changed";
+	end
+	
+	function simpleRecordArrayOut(recArray SimpleRecord[] out)
+		recArray = new SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(recArray);		
+	end
+	
+	function simpleRecordArrayAll(recArray1 SimpleRecord[] in, recArray2 SimpleRecord[] inout, recArray3 SimpleRecord[] out) 
+	returns(SimpleRecord[])
+		i int = recArray2.getSize();
+		recArray2[i].item1 = "Value changed";
+		recArray3 = new SimpleRecord[0];
+		recArray3.appendAll(recArray1);	
+		return (recArray1);		
+	end
+		
+	function arrayContainingRecordArrayIn(recArray arrayContainingRecord[] in) returns(string)
+		i int = recArray.getSize();
+		j int = recArray[i].item1.getSize();
+		return (recArray[i].item1[j]);
+	end
+	
+	function arrayContainingRecordArrayInout(recArray arrayContainingRecord[] inout)
+		i int = recArray.getSize();
+		j int = recArray[i].item1.getSize();
+		recArray[i].item1[j] = "Value changed";
+	end
+	
+	function arrayContainingRecordArrayOut(recArray arrayContainingRecord[] out)
+		recArray = new ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(recArray);
+		
+	end
+	
+	function arrayContainingRecordArrayAll(recArray1 arrayContainingRecord[] in, recArray2 arrayContainingRecord[] inout, recArray3 arrayContainingRecord[] out) 
+	returns(arrayContainingRecord[])
+		i int = recArray2.getSize();
+		j int = recArray2[i].item1.getSize();
+		recArray2[i].item1[j] = "Value changed";
+		recArray3 = new ArrayContainingRecord[];
+		recArray3.appendAll(recArray1);	
+		return (recArray1);		
+	end
+	
+end

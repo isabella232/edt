@@ -1,0 +1,40 @@
+package common.data;
+
+// basic library
+library MyLib
+	
+	// Use Declarations
+	//use usePartReference;
+	
+	// Function Declarations
+	function getNewCollege() returns (CollegeData)
+		newCollege CollegeData;
+		newCollege.id = null;
+		newCollege.href = null;
+		newCollege.statistics = null;
+		newCollege.address.lat = null;
+		newCollege.address.lon = null;
+		newCollege.name = "My name";
+		newCollege._url = "some url";
+		newCollege.duration = "4 years";
+		newCollege._private = true;
+		newCollege.forProfit = false;
+		newCollege.opeId = "34752";
+		newCollege.address.address = "123 Main street";
+		newCollege.address.city = "New York";
+		newCollege.address.state = "NY";
+		newCollege.address.country = "USA";
+		newCollege.address.postalCode = "11234";
+		newCollege.awardsOffered = new AwardsOffered{};
+		newCollege.awardsOffered.associateDegree = true;
+		newCollege.awardsOffered.bachelorsDegree = true;
+		newCollege.awardsOffered.mastersDegree = true;
+		newCollege.awardsOffered.phdDegree = false;
+		newCollege.awardsOffered.otherNonDegreeAwards = true;		
+		
+		return (newCollege);
+	end
+	
+
+	
+end

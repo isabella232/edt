@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <bindings>
+    <binding name="srvcIColleges" type=" edt.binding.rest" uri="" useURI="true">
+      <parameters>
+        <parameter name="enableGeneration" value="true"/>
+      </parameters>
+    </binding>
+    <binding name="IColleges2" type=" edt.binding.rest" uri="http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/colleges/?state=" useURI="true">
+      <parameters>
+        <parameter name="enableGeneration" value="true"/>
+      </parameters>
+    </binding>
+  </bindings>
+</egl:deployment>

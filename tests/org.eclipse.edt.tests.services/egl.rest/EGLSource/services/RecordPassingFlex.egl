@@ -1,0 +1,334 @@
+package services;
+
+import data.IntArrayFlexRecord;
+import data.IntFlexRecord;
+import data.OuterFlexibleRecord;
+import data.StringArrayFlexRecord;
+import data.StringFlexRecord;
+import data.StringRec;
+import data.bigIntArrayFlexRecord;
+import data.bigIntFlexRecord;
+import data.booleanArrayFlexRecord;
+import data.booleanFlexRecord;
+import data.dateArrayFlexRecord;
+import data.dateFlexRecord;
+import data.decimalArrayFlexRecord;
+import data.decimalFlexRecord;
+import data.floatArrayFlexRecord;
+import data.floatFlexRecord;
+import data.lStringArrayFlexRecord;
+import data.lStringFlexRecord;
+import data.smallFloatArrayFlexRecord;
+import data.smallFloatFlexRecord;
+import data.smallIntArrayFlexRecord;
+import data.smallIntFlexRecord;
+import data.timeArrayFlexRecord;
+import data.timeFlexRecord;
+import data.timeStampArrayFlexRecord;
+import data.timestampFlexRecord;
+import utilities.CommonUtilities;
+
+// service
+Service RecordPassingFlex 
+
+	//prim PrimitivePassing{@DedicatedService};
+
+	// Function Declarations
+	function outerFlexibleRecordIn(flex OuterFlexibleRecord in) returns(string)
+		return ("flex.item4.item1[1] = " + flex.item4.item1[1]);
+	end
+
+	function outerFlexibleRecordInout(flex OuterFlexibleRecord inout)
+//		;
+	end
+
+	function outerFlexibleRecordOut(flex OuterFlexibleRecord out)
+		CommonUtilities.initOuterFlexibleRecord(flex);		
+	end
+
+	function outerFlexibleRecordAll(flex1 OuterFlexibleRecord in, flex2 OuterFlexibleRecord inout, flex3 OuterFlexibleRecord out) returns(string)
+		flex3 = flex1;
+		return (flex1.item4.item1[1]);
+	end
+	
+	function intFlexAll(flex1 intFlexRecord in, flex2 intFlexRecord inout, flex3 intFlexRecord out) returns (int[])
+		flex1.item1 = flex1.item1 +1;
+		flex2.item1 = flex2.item1 +1;
+		flex3.item1 = 100;
+
+		retvals int[];		
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		return (retvals);
+	end		
+	
+	function intArrayFlexAll(flexArray1 intArrayFlexRecord in,
+							flexArray2 intArrayFlexRecord inout,
+							flexArray3 intArrayFlexRecord out) returns(int[])
+		flexArray2.item1.appendElement(1);
+		flexArray3.item1 = new int[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(100);
+		return(flexArray1.item1);								
+	end
+
+	function bigIntFlexAll(flex1 bigIntFlexRecord in, flex2 bigIntFlexRecord inout, flex3 bigIntFlexRecord out) returns(bigInt[])
+		flex1.item1 = flex1.item1 +1;
+		flex2.item1 = flex2.item1 +1;
+		flex3.item1 = 100;
+
+		retvals bigInt[];		
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		return (retvals);
+	end
+	
+	function bigIntArrayFlexAll(flexArray1 bigIntArrayFlexRecord in, 
+								flexArray2 bigIntArrayFlexRecord inout,
+								flexArray3 bigIntArrayFlexRecord out) returns(bigInt[])
+		flexArray2.item1.appendElement(1);
+		flexArray3.item1 = new bigInt[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(100);
+		return(flexArray1.item1);
+	end
+	
+	function smallIntFlexAll(flex1 smallIntFlexRecord in, 
+							 flex2 smallIntFlexRecord inout,
+							 flex3 smallIntFlexRecord out) returns(smallInt[])
+		flex3.item1 = 7;							 	
+		ret smallInt = commonCodeLib.smallint_all(flex1.item1, flex2.item1, flex3.item1);								 	
+		retvals smallInt[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+	
+	function smallIntArrayFlexAll(flexArray1 smallIntArrayFlexRecord in,
+								  flexArray2 smallIntArrayFlexRecord inout,
+								  flexArray3 smallIntArrayFlexRecord out)returns(smallInt[])
+		flexArray2.item1.appendElement(1);
+		flexArray3.item1 = new smallInt[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(10);
+		return(flexArray1.item1);
+	end
+	
+	function smallFloatFlexAll(flex1 smallFloatFlexRecord in,
+							   flex2 smallFloatFlexRecord inout,
+							   flex3 smallFloatFlexRecord out) returns(smallFloat[])
+		flex3.item1 = 1.3;							   	
+		ret smallFloat = commonCodeLib.smallfloat_all(flex1.item1, flex2.item1, flex3.item1);
+		retvals smallFloat[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end			
+	
+	function smallFloatArrayFlexAll(flexArray1 smallFloatArrayFlexRecord in,
+								    flexArray2 smallFloatArrayFlexRecord inout,
+								    flexArray3 smallFloatArrayFlexRecord out) returns(smallFloat[])			   	
+		flexArray2.item1.appendElement(2.7);
+		flexArray3.item1 = new smallFloat[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(9.4);
+		return(flexArray1.item1);
+	end								    
+				
+	function floatFlexAll(flex1 floatFlexRecord in,
+						  flex2 floatFlexRecord inout,
+						  flex3 floatFlexRecord out) returns(float[])
+		flex3.item1 = 1.3;
+		ret float = commonCodeLib.float_all(flex1.item1, flex2.item1, flex3.item1);
+		retvals float[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+	
+	function floatArrayFlexAll(flexArray1 floatArrayFlexRecord in,
+							   flexArray2 floatArrayFlexRecord inout,
+							   flexArray3 floatArrayFlexRecord out) returns(float[])
+		flexArray2.item1.appendElement(23.2);
+		flexArray3.item1 = new float[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(7.3);
+		return(flexArray1.item1);		
+	end							 
+	
+	function decimalFlexAll(flex1 decimalFlexRecord in,
+							flex2 decimalFlexRecord inout,
+							flex3 decimalFlexRecord out)  returns(decimal(10, 2)[])
+		flex3.item1 = 1.3;		
+		ret decimal(10, 2) = commonCodeLib.decimal_all(flex1.item1, flex2.item1, flex3.item1);
+		retvals decimal(10, 2)[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+
+	function deciamlArrayFlexAll(flexArray1 decimalArrayFlexRecord in,
+							   flexArray2 decimalArrayFlexRecord inout,
+							   flexArray3 decimalArrayFlexRecord out)returns(decimal(10, 2)[])
+		flexArray2.item1.appendElement(3.4);
+		flexArray3.item1 = new decimal(10, 2)[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement(7.3);
+		return(flexArray1.item1);
+	end
+	
+	
+	function stringFlexAll(flex1 stringFlexRecord in, 
+							flex2 stringFlexRecord,
+							flex3 stringFlexRecord out) returns(string[])
+		flex3.item1 = "c";
+		ret string = commonCodeLib.string_all(flex1.item1, flex2.item1, flex3.item1);
+		retvals string[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);												
+	end
+	
+	function stringArrayFlexAll(flexArray1 stringArrayFlexRecord in,
+								flexArray2 stringArrayFlexRecord,
+								flexArray3 stringArrayFlexRecord out) returns(string[])
+		flexArray2.item1.appendElement("Yahoo");
+		flexArray3.item1 = new string[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement("HiHi");
+		return(flexArray1.item1);
+	end	
+
+	function LstringFlexAll(flex1 LstringFlexRecord in, 
+							flex2 LstringFlexRecord,
+							flex3 LstringFlexRecord out) returns(string(7)[])
+		flex3.item1 = "c123456789";
+		s3 string = flex3.item1;
+		s1 string = flex1.item1;
+		ret string(7) = commonCodeLib.string_all(s1, flex2.item1, s3);
+		flex3.item1 = s3;
+		flex1.item1 = s1;
+		retvals string(7)[];
+		retvals.appendElement(flex1.item1 + "123456789");
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);												
+	end
+	
+	function lstringArrayFlexAll(flexArray1 lstringArrayFlexRecord in,
+								flexArray2 lstringArrayFlexRecord,
+								flexArray3 lstringArrayFlexRecord out) returns(string(5)[])
+		flexArray2.item1.appendElement("Yahoo12345");
+		flexArray3.item1 = new string(5)[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement("HiHi12345");
+		return(flexArray1.item1);
+	end	
+
+	function timeStampFlexAll(flex1 timestampFlexRecord in, 
+								flex2 timestampFlexRecord) returns(timeStamp[])
+		ret timeStamp = commonCodeLib.timestamp_all(flex1.item1, flex2.item1);
+		retvals timeStamp[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(ret);
+		return(retvals);										
+	end
+			
+	function timeStampArrayFlexAll(flexArray1 timeStampArrayFlexRecord in,
+									flexArray2 timeStampArrayFlexRecord,
+									flexArray3 timeStampArrayFlexRecord out) returns(timeStamp("yyyyMMddHHmmss")[])
+		flexArray2.item1.appendElement("2006/07/13-18:30:23");
+		flexArray3.item1 = new timeStamp("yyyyMMddHHmmss")[]; //
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement("2006/07/12-20:23:54");
+		return(flexArray1.item1);
+	end
+	
+	function timeFlexAll(flex1 timeFlexRecord in, 
+								flex2 timeFlexRecord) returns(time[])
+		ret time = commonCodeLib.time_all(flex1.item1, flex2.item1);
+		retvals time[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(ret);
+		return(retvals);										
+	end
+			
+	function timeArrayFlexAll(flexArray1 timeArrayFlexRecord in,
+									flexArray2 timeArrayFlexRecord,
+									flexArray3 timeArrayFlexRecord out) returns(time[])
+		flexArray2.item1.appendElement("18:30:23");
+		flexArray3.item1 = new time[]; //
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement("20:23:54");
+		return(flexArray1.item1);
+	end
+	
+	function dateFlexAll(flex1 dateFlexRecord in, 
+						 flex2 dateFlexRecord,
+						 flex3 dateFlexRecord out) returns (date[])
+		ret date = commonCodeLib.date_all(flex1.item1, flex2.item1, flex3.item1);
+		flex3.item1 = "10/01/2007";
+		retvals date[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);						 	
+	end	
+
+	function dateArrayFlexAll(flexArray1 dateArrayFlexRecord in,
+								flexArray2 dateArrayFlexRecord,
+								flexArray3 dateArrayFlexRecord out) returns(date[])
+		flexArray2.item1.appendElement("07/13/2006");
+		flexArray3.item1 = new date[];
+		flexArray3.item1.removeAll();
+		flexArray3.item1.appendElement("07/12/2006");
+		return(flexArray1.item1);			
+	end
+		
+	function booleanFlexAll(flex1 booleanFlexRecord in,
+							flex2 booleanFlexRecord inout,
+							flex3 booleanFlexRecord out) returns(boolean[])
+		flex3.item1 = false;
+		ret boolean = commonCodeLib.boolean_all(flex1.item1, flex2.item1, flex3.item1);
+		retvals boolean[];
+		retvals.appendElement(flex1.item1);
+		retvals.appendElement(flex2.item1);
+		retvals.appendElement(flex3.item1);
+		retvals.appendElement(ret);
+		return(retvals);										
+	end
+
+	function booleanArrayFlexAll(flexArray1 booleanArrayFlexRecord in,
+								flexArray2 booleanArrayFlexRecord,
+								flexArray3 booleanArrayFlexRecord out) returns(boolean[])
+		flexArray2.item1.appendElement(true);
+		flexArray3.item1 = new boolean[];
+		flexArray3.item1.appendElement(false);
+		return(flexArray1.item1);
+	end
+	
+	
+	function ratlc01399882StringRec( param1 StringRec in, param2 StringRec out, param3 StringRec inout)returns(StringRec)
+		param2 = param3;
+		param3 = param1;
+		param4 StringRec = CommonUtilities.getStringRec(4);
+		return(param4);
+	end
+
+end

@@ -1,0 +1,384 @@
+package fvt.numericdata;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestNumericData01Lib
+* @title The function test param in function for float, smallfloat, decimal and money in EDT
+* @keywords float, smallfloat, decimal and money
+* @author EDT team
+* @createDate 2011/08/29
+* @description 
+* Test the param in function for float, smallfloat, decimal and money.
+*/
+
+library TestNumericData02Lib
+
+    aF float;
+    aD decimal(4, 1);
+    aSF smallFloat;
+    testfloat float;
+    // aM money(6);
+    aSFL smallFloat;
+    aFL float;
+    //mD money(5, 1);
+    
+    data1 int = 2;
+    data2 decimal(2, 1) = 1.1;
+    data3 float = -0.4E+1;
+    data5 smallFloat = -4;
+    // data6 money(3, 2) = 1.01;
+    
+    function floatDataTest1(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 1");
+        aF = 3.45E+2;
+        arithmeticParamTest1(aF + 5);
+    end
+
+    function floatDataTest2(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 2");
+        aF = 3.45E+2;
+        arithmeticParamTest2(aF + 7.7);
+    end
+
+    function floatDataTest3(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 3");
+        aF = 3.45E+2;
+        aD = 100.1;
+        arithmeticParamTest3(aF + aD);
+    end
+
+    function floatDataTest4(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 4");
+        aF = 3.45E+2;
+        aSF = 100.1;
+        testfloat = aF + aSF;
+        arithmeticParamTest4(aF + aSF);
+    end
+
+    //    function floatDataTest5(){@Test}
+    //        LogResult.logStdOut("float data type in arithmetic expression param test 5");
+    //        aF = 3.45E+2;
+    //        aM = 1000.15;
+    //        arithmeticParamTest5(aF + aM);
+    //    end
+    
+    function floatDataTest6(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 8");
+        aF = -3.45E+1;
+        arithmeticParamTest6(aF ** 2);
+    end
+
+    function floatDataTest7(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 9");
+        aF = -3.45E+1;
+        arithmeticParamTest7(aF + 3.25E+1);
+    end
+
+    function floatDataTest8(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 10");
+        aF = -3.33E+1;
+        testfloat = aF / 3;
+        arithmeticParamTest8(aF / 3);
+    end
+
+    function floatDataTest9(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression param test 11");
+        aF = -3.33E+1;
+        testfloat = aF * 3;
+        arithmeticParamTest9(aF * 3);
+    end
+
+    function floatDataTestSF1(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 1");
+        aSFL = 3.45E+2;
+        arithmeticParamTestSF1(aSFL + 5);
+    end
+
+    function floatDataTestSF2(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 2");
+        aSFL = 3.45E+2;
+        arithmeticParamTestSF2(aSFL + 7.7);
+    end
+
+    function floatDataTestSF3(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 3");
+        aSFL = 3.45E+2;
+        aD = 100.1;
+        arithmeticParamTestSF3(aSFL + aD);
+    end
+
+    function floatDataTestSF4(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 4");
+        aSFL = 3.45E+2;
+        aFL = 100.1;
+        arithmeticParamTestSF4(aSFL + aFL);
+    end
+
+    //    function floatDataTestSF5(){@Test}
+    //        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 5");
+    //        aSFL = 3.45E+2;
+    //        aM = 1000.15;
+    //        arithmeticParamTestSF5(aSFL + aM);
+    //    end
+    
+    function floatDataTestSF6(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 8");
+        aSFL = -3.45E+1;
+        arithmeticParamTestSF6(aSFL ** 2);
+    end
+
+    function floatDataTestSF7(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 9");
+        aSFL = -3.45E+1;
+        arithmeticParamTestSF7(aSFL + 3.25E+1);
+    end
+
+    function floatDataTestSF8(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 10");
+        aSFL = -3.33E+1;
+        testfloat = aSFL / 3;
+        arithmeticParamTestSF8(aSFL / 3);
+    end
+
+    function floatDataTestSF9(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression param test 10");
+        aSFL = -3.33E+1;
+        testfloat = aSFL * 3;
+        arithmeticParamTestSF9(aSFL * 3);
+    end
+
+    //    function floatDataTestM1(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 1");
+    //        mD = 10.2;
+    //        aF = -3.45E+2;
+    //        arithmeticParamTestM1(mD + aF);
+    //    end
+    //
+    //    function floatDataTestM2(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 2");
+    //        mD = 10.2;
+    //        arithmeticParamTestM2(mD + 10);
+    //    end
+    //
+    //    function floatDataTestM3(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 3");
+    //        mD = 10.2;
+    //        aD = 100.1;
+    //        arithmeticParamTestM3(mD + aD);
+    //    end
+    //
+    //    function floatDataTestM4(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 4");
+    //        mD = 10.2;
+    //        aSF = 10.1;
+    //        arithmeticParamTestM4(mD + aSF);
+    //    end
+    //
+    //    function floatDataTestM5(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 5");
+    //        mD = 10.2;
+    //        aM = 1000.15;
+    //        arithmeticParamTestM5(mD + aM);
+    //    end
+    //
+    //    function floatDataTestM6(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 8");
+    //        mD = 10.2;
+    //        arithmeticParamTestM6(mD ** 2);
+    //    end
+    //
+    //    function floatDataTestM7(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 9");
+    //        mD = -10.2;
+    //        arithmeticParamTestM7(mD + 3.25);
+    //    end
+    //
+    //    function floatDataTestM8(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 10");
+    //        mD = -33.3;
+    //        arithmeticParamTestM8(mD / 3);
+    //    end
+    //
+    //    function floatDataTestM9(){@Test}
+    //        LogResult.logStdOut("money data type in arithmetic expression param test 11");
+    //        mD = -3.3;
+    //        arithmeticParamTestM9(mD * 3);
+    //    end
+    
+    function powerOperatorParamTest1(){@Test}
+        LogResult.logStdOut("power operator test powerOperatorParamTest 1");
+        powerOperatorParamFunc1(5 ** 2);
+    end
+
+    function powerOperatorParamTest2(){@Test}
+        LogResult.logStdOut("power operator test powerOperatorParamTest 2");
+        powerOperatorParamFunc2(data1 ** data1);
+    end
+
+    function powerOperatorParamTest3(){@Test}
+        LogResult.logStdOut("power operator test powerOperatorParamTest 3");
+        powerOperatorParamFunc3(data2 ** 2);
+    end
+
+    function powerOperatorParamTest4(){@Test}
+        LogResult.logStdOut("power operator test 4 data2**2");
+        powerOperatorParamFunc4(data3 ** 3);
+    end
+
+    function powerOperatorParamTest5(){@Test}
+        LogResult.logStdOut("power operator test 6 data2**2");
+        powerOperatorParamFunc5(data5 ** data5);
+    end
+
+    //    function powerOperatorParamTest6(){@Test}
+    //        LogResult.logStdOut("power operator test 7 powerOperatorParamTest");
+    //        powerOperatorParamFunc6(data6 ** 2);
+    //    end
+    /*=================================================================================*/
+
+    function arithmeticParamTest1(aF float in)
+        LogResult.assertFloatEqual1(3.5E+2, aF);
+    end
+
+    function arithmeticParamTest2(aF float in)
+        LogResult.assertFloatEqual1(3.527E+2, aF);
+    end
+
+    function arithmeticParamTest3(aF float in)
+        LogResult.assertFloatEqual1(4.451E+2, aF);
+    end
+
+    function arithmeticParamTest4(aF float in)
+        LogResult.assertFloatEqual1(4.451E+2, aF);
+    end
+
+    function arithmeticParamTest5(aF float in)
+        LogResult.assertFloatEqual1(1.34515E+3, aF);
+    end
+
+    function arithmeticParamTest6(aF float in)
+        LogResult.assertFloatEqual1(1190.25, aF);
+    end
+
+    function arithmeticParamTest7(aF float in)
+        LogResult.assertFloatEqual1(-2.0, aF);
+    end
+
+    function arithmeticParamTest8(aF float in)
+        LogResult.assertFloatEqual1(-1.11e+1, aF);
+    end
+
+    function arithmeticParamTest9(aF float in)
+        LogResult.assertFloatEqual1(-9.99e+1, aF);
+    end
+
+    function arithmeticParamTestSF1(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(3.5E+2, aSFL);
+    end
+
+    function arithmeticParamTestSF2(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(3.527E+2, aSFL);
+    end
+
+    function arithmeticParamTestSF3(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(4.451E+2, aSFL);
+    end
+
+    function arithmeticParamTestSF4(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(4.451E+2, aSFL);
+    end
+
+    function arithmeticParamTestSF5(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(1.34515E+3, aSFL);
+    end
+
+    function arithmeticParamTestSF6(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(1190.25, aSFL);
+    end
+
+    function arithmeticParamTestSF7(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(-2.0, aSFL);
+    end
+
+    function arithmeticParamTestSF8(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(-1.11e+1, aSFL);
+    end
+
+    function arithmeticParamTestSF9(aSFL smallFloat in)
+        LogResult.assertFloatEqual1(-9.99e+1, aSFL);
+    end
+
+    //    function arithmeticParamTestM1(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(-334.8, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM2(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(20.2, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    
+    function arithmeticParamTestM3(aD decimal(4, 1) in)
+    //LogResult.assertFloatEqual1(110.3, aD);
+        LogResult.skipped("NOT RUN");
+    end
+    //
+    //    function arithmeticParamTestM4(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(20.3, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM5(aM money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(1010.3, aM);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM6(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(104.0, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM7(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(-6.9, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM8(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(-11.1, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    //
+    //    function arithmeticParamTestM9(mD money(5, 1) in)
+    //    //LogResult.assertFloatEqual1(-9.9, mD);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+    
+    function powerOperatorParamFunc1(i int in)
+        LogResult.assertBigIntEqual1(25, i);
+    end
+
+    function powerOperatorParamFunc2(i int in)
+        LogResult.assertBigIntEqual1(4, i);
+    end
+
+    function powerOperatorParamFunc3(i decimal(3, 2) in)
+    //LogResult.assertFloatEqual1(1.21, i);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function powerOperatorParamFunc4(i int in)
+        LogResult.assertBigIntEqual1(-64, i);
+    end
+
+    function powerOperatorParamFunc5(i smallFloat in)
+        LogResult.assertFloatEqual1(0.00390625, i);
+    end
+
+    //    function powerOperatorParamFunc6(i money(3, 2) in)
+    //    //LogResult.assertFloatEqual1(1.02, i);
+    //        LogResult.skipped("NOT RUN");
+    //    end
+end
+	

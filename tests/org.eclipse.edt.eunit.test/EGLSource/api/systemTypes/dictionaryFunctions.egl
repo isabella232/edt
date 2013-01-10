@@ -1,0 +1,86 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library dictionaryFunctions
+
+  myDictionary Dictionary = new dictionary ( true, OrderingKind.byInsertion )
+    {
+      ID        = 5,
+      lastName  = "Twain",
+      firstName = "Mark"
+    };
+
+  anotherDictionary Dictionary 
+    {
+      ID        = 7,
+      lastName  = "Huckleberry ",
+      firstName = "Finn"
+    }; 
+
+    myBoolean boolean;
+    key string;
+    keys string[];
+    values any[];
+    myInt int;
+    myOrder OrderingKind?;
+
+    function assignl(){@Test}
+        myDictionary.age = 30;
+        LogResult.assertDecimalEqual1(30, myDictionary.age);
+    end
+
+    function assign2(){@Test}
+        myDictionary["Credit"] = 700;
+        LogResult.assertTrue1(myDictionary.containsKey("Credit"));
+    end
+
+    function containsKey(){@Test}
+        LogResult.assertTrue1(myDictionary.containsKey("age"));
+    end 
+
+    function getKeys1(){@Test}
+        keys = myDictionary.getKeys();								 
+        myInt = keys.getSize();
+        LogResult.assertBigIntEqual1(5, myInt);
+    end
+
+    function getValues1(){@Test}
+        values = myDictionary.getValues();							 
+        LogResult.assertStringEqual1("Mark", values[3]);
+    end
+
+    function insertAll(){@Test}
+        myDictionary.insertAll(anotherDictionary);
+        LogResult.assertStringEqual1("Finn", myDictionary.firstname);
+    end
+
+    function removeAll(){@Test}
+        anotherDictionary.removeAll();
+        myInt = anotherDictionary.size();
+        LogResult.assertDecimalEqual1(0, myInt);
+    end
+
+    function removeElement(){@Test}
+        myDictionary.removeElement("lastName");
+        myBoolean = myDictionary.containsKey("lastName");
+        LogResult.assertStringEqual1("false", myBoolean);
+    end 
+
+    function size(){@Test}
+        myInt = myDictionary.size();
+        LogResult.assertDecimalEqual1(7, myInt);
+    end
+
+    function getCaseSensitive(){@Test}
+        myBoolean = myDictionary.getCaseSensitive();
+        LogResult.assertStringEqual1("true", myBoolean);
+    end
+
+    function getOrdering(){@Test}
+        myOrder = myDictionary.getOrdering();
+        LogResult.assertTrue1(myOrder != null);
+    end
+
+end

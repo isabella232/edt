@@ -1,0 +1,524 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp014
+  * @title EdtTimestamp014 - runAssignmentFunction
+  * @description testing timestamp assignemt to date and time(timestamp) variables
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction66
+  * @sources EdtTimestamp014.egl
+  * @keywords timestamp, functions, assignemnt
+ **/
+library ETimestamp014 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2012-02-29 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2012-02-29-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2012-02-29-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2012-02-29";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2012-02";
+	const constTimeStampMDDate timeStamp("MMdd") = "02-29";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2012-02-29 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2012-02-29-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2012-02-29-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2012-02-29";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2012-02";
+	varTimeStampMDDate timeStamp("MMdd") = "02-29";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runAssignmentFunction01(){@Test}
+	    aDate date = constTimeStamp;
+		LogResult.assertDateEqual("constant initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction02(){@Test}
+	    aDate date = constTimeStampFull;
+		LogResult.assertDateEqual("constant full initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction03(){@Test}
+	    aDate date = constTimeStampDateTime;
+		LogResult.assertDateEqual("constant dateTime initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction04(){@Test}
+	    aDate date = constTimeStampDate;
+		LogResult.assertDateEqual("constant date initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction05(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampYDate;
+			LogResult.failed("constant Ydate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			syslib.writestdout(exception.message);
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction06(){@Test}
+		try
+			aDate date = constTimeStampYMDate;
+			LogResult.failed("date from YMdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction07(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampMDDate;
+			LogResult.failed("constant MDdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction08(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampDHDate;
+			LogResult.failed("constant DHdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction09(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampTime;
+			LogResult.failed("constant time initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction10(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampHMTime;
+			LogResult.failed("constant HMtime initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction11(){@Test}
+		aDate date;
+		try
+		    aDate = constTimeStampMSTime;
+			LogResult.failed("constant MStime initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction12(){@Test}
+	    aDate date = varTimeStamp;
+		LogResult.assertDateEqual("variable initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction13(){@Test}
+	    aDate date = varTimeStampFull;
+		LogResult.assertDateEqual("variable full initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction14(){@Test}
+	    aDate date = varTimeStampDateTime;
+		LogResult.assertDateEqual("variable dateTime initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction15(){@Test}
+	    aDate date = varTimeStampDate;
+		LogResult.assertDateEqual("variable date initialization", "02-29-2012", aDate);
+	end
+	 	
+	function runAssignmentFunction16(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampYDate;
+			LogResult.failed("variable Ydate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction17(){@Test}
+		try
+			aDate date = varTimeStampYMDate;
+			LogResult.failed("variable YMdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction18(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampMDDate;
+			LogResult.failed("variable MDdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction19(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampDHDate;
+			LogResult.failed("variable DHdate initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction20(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampTime;
+			LogResult.failed("variable time initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction21(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampHMTime;
+			LogResult.failed("variable HMtime initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction22(){@Test}
+		aDate date;
+		try
+		    aDate = varTimeStampMSTime;
+			LogResult.failed("variable MStime initialization");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction23(){@Test}
+	    aDate date = constTimeStamp;
+		LogResult.assertDateEqual("constant initialization", aDate, constTimeStamp.dateOf());
+	end
+	
+	function runAssignmentFunction24(){@Test}
+	    aDate date = constTimeStampFull;
+		LogResult.assertDateEqual("constant full initialization", aDate, constTimeStampFull.dateOf());
+	end
+	
+	function runAssignmentFunction25(){@Test}
+	    aDate date = constTimeStampDateTime;
+		LogResult.assertDateEqual("constant datetime initialization", aDate, constTimeStampDateTime.dateOf());
+	end
+	
+	function runAssignmentFunction26(){@Test}
+	    aDate date = constTimeStampDate;
+		LogResult.assertDateEqual("constant date initialization", aDate, constTimeStampDate.dateOf());
+	end
+	
+	function runAssignmentFunction27(){@Test}
+	    aDate date;
+		try
+	    	aDate = constTimeStampYMDate.dateOf();
+			LogResult.failed("constant YMdate dateOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate dateOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runAssignmentFunction28(){@Test}
+	    aDate date = varTimeStamp;
+		LogResult.assertDateEqual("variable initialization", aDate, varTimeStamp.dateOf());
+	end
+	
+	function runAssignmentFunction29(){@Test}
+	    aDate date = varTimeStampFull;
+		LogResult.assertDateEqual("variable full initialization", aDate, varTimeStampFull.dateOf());
+	end
+	
+	function runAssignmentFunction30(){@Test}
+	    aDate date = varTimeStampDateTime;
+		LogResult.assertDateEqual("variable datetime initialization", aDate, varTimeStampDateTime.dateOf());
+	end
+	
+	function runAssignmentFunction31(){@Test}
+	    aDate date = varTimeStampDate;
+		LogResult.assertDateEqual("variable date initialization", aDate, varTimeStampDate.dateOf());
+	end
+	
+	function runAssignmentFunction32(){@Test}
+	    aDate date;
+		try
+	    	aDate = varTimeStampYMDate.dateOf();
+			LogResult.failed("variable YMdate dateOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate dateOf: wrong exception thrown");
+		end
+	end
+	
+	function runAssignmentFunction33(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStamp;
+	    aTime1 timeStamp("HHmmss") = "12.17.59";
+		LogResult.assertTimestampEqual("constant initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction34(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampFull;
+	    aTime1 timeStamp("HHmmss") = "10.55.30";
+		LogResult.assertTimestampEqual("constant full initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction35(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampDateTime;
+	    aTime1 timeStamp("HHmmss") = "10.55.30";
+		LogResult.assertTimestampEqual("constant datetime initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction36(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction37(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampYDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction38(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampYMDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction39(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampMDDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction40(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampDHDate;
+	    aTime1 timeStamp("HHmmss") = "09.00.00";
+		LogResult.assertTimestampEqual("constant DHdate initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction41(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampTime;
+	    aTime1 timeStamp("HHmmss") = "11.31.00";
+		LogResult.assertTimestampEqual("constant time initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction42(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampHMTime;
+	    aTime1 timeStamp("HHmmss") = "15.18.00";
+		LogResult.assertTimestampEqual("constant HMtime initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction43(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampMSTime;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction44(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStamp;
+	    aTime1 timeStamp("HHmmss") = "12.17.59";
+		LogResult.assertTimestampEqual("variable initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction45(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampFull;
+	    aTime1 timeStamp("HHmmss") = "10.55.30";
+		LogResult.assertTimestampEqual("variable full initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction46(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampDateTime;
+	    aTime1 timeStamp("HHmmss") = "10.55.30";
+		LogResult.assertTimestampEqual("variable datetime initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction47(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction48(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampYDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction49(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampYMDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction50(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampMDDate;
+		LogResult.passed("OK");
+	end
+	
+	function runAssignmentFunction51(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampDHDate;
+	    aTime1 timeStamp("HHmmss") = "09.00.00";
+		LogResult.assertTimestampEqual("variable DHdate initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction52(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampTime;
+	    aTime1 timeStamp("HHmmss") = "11.31.00";
+		LogResult.assertTimestampEqual("variable time initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction53(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampHMTime;
+	    aTime1 timeStamp("HHmmss") = "15.18.00";
+		LogResult.assertTimestampEqual("variable HMtime initialization", aTime1 ,aTime);
+	end
+	
+	function runAssignmentFunction54(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampMSTime;
+		LogResult.passed("OK");
+	end
+
+	function runAssignmentFunction55(){@Test}
+	    aTime time = constTimeStamp;
+		LogResult.assertTrue("constant initialization", (constTimeStamp.timeOf() == aTime) );
+	end
+	
+	function runAssignmentFunction56(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampFull;
+		LogResult.assertTimestampEqual("constant full initialization", aTime,constTimeStampFull.timeOf() );
+	end
+	
+	function runAssignmentFunction57(){@Test}
+	    aTime timeStamp("HHmmss") = constTimeStampDateTime;
+		LogResult.assertTimestampEqual("constant datetime initialization", aTime,constTimeStampDateTime.timeOf() );
+	end
+	
+	function runAssignmentFunction58(){@Test}
+		aTime time;
+		try
+			aTime = constTimeStampDHDate.timeOf();
+			LogResult.failed("constant DHdate timeOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate timeOf: wrong exception thrown");
+		end
+	end
+	
+	function runAssignmentFunction59(){@Test}
+	    aTime time = constTimeStampTime;
+		LogResult.assertTrue("constant time initialization", (constTimeStampTime.timeOf() == aTime) );
+	end
+	
+	function runAssignmentFunction60(){@Test}
+		aTime time;
+		try
+			aTime = constTimeStampHMTime.timeOf();
+			LogResult.failed("constant HMTime timeOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMTime timeOf: wrong exception thrown");
+		end
+	end
+
+	function runAssignmentFunction61(){@Test}
+	    aTime time = varTimeStamp;
+		LogResult.assertTrue("variable initialization", (varTimeStamp.timeOf() == aTime) );
+	end
+	
+	function runAssignmentFunction62(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampFull;
+		LogResult.assertTimestampEqual("variable full initialization", aTime,varTimeStampFull.timeOf() );
+	end
+	
+	function runAssignmentFunction63(){@Test}
+	    aTime timeStamp("HHmmss") = varTimeStampDateTime;
+		LogResult.assertTimestampEqual("variable datetime initialization", aTime,varTimeStampDateTime.timeOf());
+	end
+	
+	function runAssignmentFunction64(){@Test}
+	    aTime time;
+	    try
+			aTime = varTimeStampDHDate.timeOf();
+			LogResult.failed("variable DHdate timeOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable DHdate timeOf: wrong exception thrown");
+		end
+	end
+	
+	function runAssignmentFunction65(){@Test}
+	    aTime time = varTimeStampTime;
+		LogResult.assertTrue("variable time initialization", (varTimeStampTime.timeOf() == aTime) );
+	end
+	
+	function runAssignmentFunction66(){@Test}
+	    aTime time;
+	    try
+			aTime = varTimeStampHMTime.timeOf();
+			LogResult.failed("variable HMtime timeOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMtime timeOf: wrong exception thrown");
+		end
+	end
+
+end

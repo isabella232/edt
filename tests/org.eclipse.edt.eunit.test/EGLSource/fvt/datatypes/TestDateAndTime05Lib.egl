@@ -1,0 +1,137 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestDateAndTime05Lib
+* @title TestDateAndTime05Lib - runDateAndTime05
+* @description test case for "Date/Time" data type behavior
+* @testcases runDateAndTime05
+* @sources TestDateAndTime05Lib.egl
+* @keywords TestDateAndTime, functions
+**/
+
+library TestDateAndTime05Lib
+
+    thing, aThing, bThing any?;
+
+    //    function runDateAndTime1(){ @Test}
+    //        LogResult.logStdOut("variation 0");
+    //        olddateformat string = StrLib.defaultDateFormat;
+    //        //oldtimeformat string = StrLib.defaultTimeFormat;
+    //        oldtsformat string = StrLib.defaultTimeStampFormat;
+    //        LogResult.assertTrue("1 == 1", 1 == 1);
+    //    end
+    
+    //    function runDateAndTime2(){@Test}
+    //        LogResult.logStdOut("variation 1");
+    //        olddateformat string = StrLib.defaultDateFormat;
+    //        oldtimeformat string = StrLib.defaultTimeFormat;
+    //        oldtsformat string = StrLib.defaultTimeStampFormat;
+    //        strLib.defaultTimeFormat = "HH:mm:ss";
+    //        t time;
+    //        t = "12:12:12";
+    //        LogResult.assertTrue("true", true);
+    //    end
+    //
+    //    function runDateAndTime3(){@Test}
+    //        LogResult.logStdOut("variation 2");
+    //        s string;
+    //        olddateformat string = StrLib.defaultDateFormat;
+    //        oldtimeformat string = StrLib.defaultTimeFormat;
+    //        oldtsformat string = StrLib.defaultTimeStampFormat;
+    //        t time;
+    //        t = "12:12:12";
+    //        s = t;
+    //        LogResult.assertTrue("2", 2);
+    //    end
+    
+    function runDateAndTime4(){@Test}
+        LogResult.logStdOut("variation 4");
+        d date;
+        d = "12-31-2004";
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime5(){@Test}
+        LogResult.logStdOut("variation 5");
+        s string;
+        d date = "12-31-2004";
+        s = d;
+		expected string = "12/31/2004";
+		LogResult.assertStringEqual1(expected, s);
+    end
+
+    function runDateAndTime6(){@Test}
+        LogResult.logStdOut("variation 6");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime7(){@Test}
+        LogResult.logStdOut("variation 7");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        s = ts1;
+		expected string = "2004-12-31 12:12:12.123000";
+		LogResult.assertStringEqual1(expected, s);
+    end
+
+    function runDateAndTime8(){@Test}
+        LogResult.logStdOut("variation 8");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        ts2 timeStamp("yyyyMMddHHmmss");
+        ts2 = "2004-12-31 12:12:12";
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime9(){@Test}
+        LogResult.logStdOut("variation 9");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        ts2 timeStamp("yyyyMMddHHmmss");
+        ts2 = "2004-12-31 12:12:12";
+        s = ts2;
+        expected string = "2004-12-31 12:12:12";
+        LogResult.assertStringEqual1(expected, s);
+    end
+
+    function runDateAndTime10(){@Test}
+        LogResult.logStdOut("variation 10");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        ts2 timeStamp("yyyyMMddHHmmss");
+        ts2 = "2004-12-31 12:12:12";
+        ts3 timeStamp("yyyyMMddHH");
+        ts3 = "2004-12-31 12";
+        LogResult.assertTrue("true", true);
+    end
+
+    function runDateAndTime11(){@Test}
+        LogResult.logStdOut("variation 11");
+        s string;
+        d date;
+        ts1 timeStamp("yyyyMMddHHmmssffffff");
+        ts1 = "2004-12-31 12:12:12.123456";
+        ts2 timeStamp("yyyyMMddHHmmss");
+        ts2 = "2004-12-31 12:12:12";
+        ts3 timeStamp("yyyyMMddHH");
+        ts3 = "2004-12-31 12";
+        s = ts3;
+        expected string = "2004-12-31 12";
+        LogResult.assertStringEqual1(expected, s);
+    end
+end

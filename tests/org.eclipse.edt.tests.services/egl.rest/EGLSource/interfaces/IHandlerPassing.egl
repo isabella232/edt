@@ -1,0 +1,129 @@
+package interfaces;
+
+import eglx.rest.EglService;
+
+
+library IHandlerPassing
+
+	function outerHandlerIn(data handlers.OuterHandler in) returns (string)
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function outerHandlerInout(data handlers.OuterHandler inOut)
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function outerHandlerOut(data handlers.OuterHandler out)
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function outerHandlerAll(data1 handlers.OuterHandler in, data2 handlers.OuterHandler inOut, data3 handlers.OuterHandler out) returns (string)
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function bigIntAll(data1 handlers.bigIntHandler in, data2 handlers.bigIntHandler inOut, data3 handlers.bigIntHandler out) returns (bigInt[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function bigIntArrayAll(dataArray1 handlers.bigIntArrayHandler in, dataArray2 handlers.bigIntArrayHandler inOut, dataArray3 handlers.bigIntArrayHandler out) returns (bigInt[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function intAll(data1 handlers.intHandler in, data2 handlers.intHandler inOut, data3 handlers.intHandler out) returns (int[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function intArrayAll(dataArray1 handlers.intArrayHandler in, dataArray2 handlers.intArrayHandler inOut, dataArray3 handlers.intArrayHandler out) returns (int[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function smallIntAll(data1 handlers.smallIntHandler in, data2 handlers.smallIntHandler inOut, data3 handlers.smallIntHandler out) returns (smallInt[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function smallIntArrayAll(dataArray1 handlers.smallIntArrayHandler in, dataArray2 handlers.smallIntArrayHandler inOut, dataArray3 handlers.smallIntArrayHandler out) returns (smallInt[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function smallFloatAll(data1 handlers.smallFloatHandler in, data2 handlers.smallFloatHandler inOut, data3 handlers.smallFloatHandler out) returns (smallFloat[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function smallFloatArrayAll(dataArray1 handlers.smallFloatArrayHandler in, dataArray2 handlers.smallFloatArrayHandler inOut, dataArray3 handlers.smallFloatArrayHandler out) returns (smallFloat[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function floatAll(data1 handlers.floatHandler in, data2 handlers.floatHandler inOut, data3 handlers.floatHandler out) returns (float[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function floatArrayAll(dataArray1 handlers.floatArrayHandler in, dataArray2 handlers.floatArrayHandler inOut, dataArray3 handlers.floatArrayHandler out) returns (float[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function decimalAll(data1 handlers.decimalHandler in, data2 handlers.decimalHandler inOut, data3 handlers.decimalHandler out) returns (decimal(10,2)[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function deciamlArrayAll(dataArray1 handlers.decimalArrayHandler in, dataArray2 handlers.decimalArrayHandler inOut, dataArray3 handlers.decimalArrayHandler out) returns (decimal(10,2)[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function stringAll(data1 handlers.stringHandler in, data2 handlers.stringHandler inout, data3 handlers.stringHandler out) returns (string[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function stringArrayAll(dataArray1 handlers.stringArrayHandler in, dataArray2 handlers.stringArrayHandler inout, dataArray3 handlers.stringArrayHandler out) returns (string[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function dateAll(data1 handlers.DateHandler in, data2 handlers.DateHandler inout, data3 handlers.DateHandler out) returns (Date[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function dateArrayAll(dataArray1 handlers.DateArrayHandler in, dataArray2 handlers.DateArrayHandler inout, dataArray3 handlers.DateArrayHandler out) returns (Date[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function timeStampAll(data1 handlers.timestampHandler in, data2 handlers.timestampHandler inout) returns (timeStamp[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function timeStampArrayAll(dataArray1 handlers.timeStampArrayHandler in, dataArray2 handlers.timeStampArrayHandler inout, dataArray3 handlers.timeStampArrayHandler out) returns (timeStamp("yyyyMMddHHmmss")[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function booleanAll(data1 handlers.booleanHandler in, data2 handlers.booleanHandler inOut, data3 handlers.booleanHandler out) returns (boolean[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+	function booleanArrayAll(dataArray1 handlers.booleanArrayHandler in, dataArray2 handlers.booleanArrayHandler inout, dataArray3 handlers.booleanArrayHandler out) returns (boolean[])
+		{
+			@EglService {serviceName = "services.HandlerPassing"}
+		}
+	end
+end
+

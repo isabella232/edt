@@ -1,0 +1,243 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EBigInt010
+  * @title EBigInt010 - runISAFunction
+  * @description testing bigInt nullable variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn30
+  * @sources EBigInt010.egl
+  * @keywords bigInt, isa
+ **/
+library EBigInt010 {}
+
+	isIt boolean;
+	expected boolean;
+	bigInt1n bigInt? = 2147483650I;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "bigInt/nullable variable is any";
+		isIt = bigInt1n isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "bigInt/nullable variable is bigInt";
+		isIt = bigInt1n isa bigInt;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "bigInt/nullable variable is boolean";
+		isIt = bigInt1n isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "bigInt/nullable variable is date";
+		isIt = bigInt1n isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "bigInt/nullable variable is decimal(4,2)";
+		isIt = bigInt1n isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "bigInt/nullable variable is decimal";
+		isIt = bigInt1n isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "bigInt/nullable variable is dictionary";
+		isIt = bigInt1n isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "bigInt/nullable variable is float";
+		isIt = bigInt1n isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "bigInt/nullable variable is int";
+		isIt = bigInt1n isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "bigInt/nullable variable is number";
+		isIt = bigInt1n isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "bigInt/nullable variable is smallFloat";
+		isIt = bigInt1n isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "bigInt/nullable variable is smallInt";
+		isIt = bigInt1n isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "bigInt/nullable variable is string";
+		isIt = bigInt1n isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "bigInt/nullable variable is timestamp";
+		isIt = bigInt1n isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "bigInt/nullable variable is anyexception";
+		isIt = bigInt1n isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "bigInt/nullable variable is DynamicAccessException";
+		isIt = bigInt1n isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "bigInt/nullable variable is InvalidArgumentException";
+		isIt = bigInt1n isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "bigInt/nullable variable is InvalidIndexException";
+		isIt = bigInt1n isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "bigInt/nullable variable is InvalidPatternException";
+		isIt = bigInt1n isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "bigInt/nullable variable is InvocationException";
+		isIt = bigInt1n isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "bigInt/nullable variable is JavaObjectException";
+//		isIt = bigInt1n isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "bigInt/nullable variable is JavaScriptObjectException";
+//		isIt = bigInt1n isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "bigInt/nullable variable is NullValueException";
+		isIt = bigInt1n isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "bigInt/nullable variable is NumericOverflowException";
+		isIt = bigInt1n isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "bigInt/nullable variable is ServiceInvocationException";
+		isIt = bigInt1n isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "bigInt/nullable variable is SQLException";
+//		isIt = bigInt1n isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "bigInt/nullable variable is TypeCastException";
+		isIt = bigInt1n isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "bigInt/null is BigInt";
+		bigInt1n = null;
+		isIt = bigInt1n isa BigInt;
+		expected = false;
+		assertTrue();
+	end	
+		
+	function runISAFunction31(){@Test}
+		variation = "bigInt/nullable variable is bytes";
+		isIt = bigInt1n isa bytes;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction32(){@Test}
+		variation = "bigInt/nullable variable is bytes(8)";
+		isIt = bigInt1n isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+end // EBigInt010

@@ -1,0 +1,34 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLSchemaType;
+
+handler MyRecord{@XMLRootElement{name = "stump", namespace = "http://mynamespace.com"}}//{@XMLStructure {value = xmlStructureKind.simpleContent}}
+    itemName string;
+    litem string(5);
+    item2 int;
+    litems string(5)[] = new string(5)[5];
+    items string[] = new string[5];
+    //binary bin(9,2);
+    //sbinary bin(4,2);
+    //    shrt bin(4){@XMLElement{namespace = "http://mynamespace.com"}};
+    //    intt bin(9);
+    //    lng bin(18);
+    //dbl bin(18,5);
+    bint bigInt;
+    bdec decimal(32, 4);
+    flt float;
+    //    numb num(5, 2);
+    datefield date;
+    timefield time;
+    ts timeStamp("yyyyMMddHHmmss");
+    //    timefield time;
+    //hhex hex(12);
+    bool boolean;
+    bool2 boolean;
+    nStr string?{@XMLElement{nillable = true, namespace = "http://mynamespace.com"}};
+    nStr2 string?;
+    bits1 bytes{@XMLSchemaType{name="hexBinary"}};
+    bits2 bytes(3){@XMLSchemaType{name="hexBinary"}};
+end

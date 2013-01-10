@@ -1,0 +1,274 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Function paramater declarations of type sized Decimal all valid modifiers passing decimal literals
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/10/05
+* @description 
+*  Function paramater declarations of type sized Decimal all valid modifiers passing decimal literals
+*/
+library DecimalSizedParameters001
+	toggleValue int;
+	const updated decimal(5,2) = 543.21;
+	
+	function testFunctionParameterIn1() {@Test}
+		toggleValue = 1;
+        switchOnInParameter(111.11);
+    end	
+    
+  	function testFunctionParameterIn2() {@Test}
+  		toggleValue = 2;
+        switchOnInParameter(222.22);
+    end	
+    
+    function testFunctionParameterIn3() {@Test}
+    	toggleValue = 3;
+        switchOnInParameter(333.33);
+    end	
+
+    function testFunctionParameterInWithUpdate() {@Test}
+//		Meaningless when passing literal or constant to an OUT parameter
+// 		This is a place holder.
+//      updateInParameter(333.33); 
+        LogResult.assertTrue1(true);
+    end	
+    
+    function testFunctionParameterInOut1() 
+// 		IWN.VAL.6674.e - Error in argument 111.11 in function invocation switchOnInOutParameter. 
+//		This type of argument requires that the parameter be defined with the IN modifier. 
+//    	toggleValue = 1;
+//        switchOnInOutParameter(111.11);
+    end
+    
+    function testFunctionParameterInOut2() 
+// 		IWN.VAL.6674.e - Error in argument 222.22 in function invocation switchOnInOutParameter. 
+//		This type of argument requires that the parameter be defined with the IN modifier. 
+//    	toggleValue = 2;
+//    	switchOnInOutParameter(222.22);
+    end
+           
+    function testFunctionParameterInOut3()  
+// 		IWN.VAL.6674.e - Error in argument 333.33 in function invocation switchOnInOutParameter. 
+//		This type of argument requires that the parameter be defined with the IN modifier.           
+//    	toggleValue = 3;
+//	   	switchOnInOutParameter(333.33);
+    end
+    
+    function testFunctionParameterInOutWithUpdate() {@Test}
+//		Meaningless when passing literal or constant to an OUT parameter
+// 		This is a place holder.
+//      updateInOutParameter(333.33); 
+        LogResult.assertTrue1(true);
+    end	
+    
+    function testFunctionParameterOutWithUpdate() {@Test}
+//		Validation error when passing literal or constant to an OUT parameter
+// 		This is a place holder.
+//      updateOutParameter(333.33);    
+		LogResult.assertTrue1(true);
+    end	
+        
+	function testFunctionParameterDefault1()  
+// 		Produces validation error	
+//		toggleValue = 1;
+//      switchOnDefaultParameter(111.11);
+    end
+    
+    function testFunctionParameterDefault2() //{@Test}
+// 		Produces validation error	
+//   	toggleValue = 2;
+//      switchOnDefaultParameter(222.22);  
+    end
+    
+    function testFunctionParameterDefault3() //{@Test}  
+// 		Produces validation error	    
+//    	toggleValue = 3;                                            
+//        switchOnDefaultParameter(333.33);
+    end
+    
+    function testFunctionParameterDefaultWithUpdate() 
+// 		Produces validation error
+//        updateDefaultParameter(333.33);
+    end	
+    
+   	function testFunctionParameterConstIn1() {@Test}
+		toggleValue = 1;
+        switchOnConstInParameter(111.11);
+    end
+    
+    function testFunctionParameterConstIn2() {@Test}
+   		toggleValue = 2;
+        switchOnConstInParameter(222.22);  
+    end
+    
+    function testFunctionParameterConstIn3() {@Test}  
+    	toggleValue = 3;                                            
+        switchOnConstInParameter(333.33);
+    end
+    
+    function testFunctionParameterConstInWithUpdate()                                            
+        // called function always results in a validation error
+    end
+      
+   	function testFunctionParameterConstInOut1()  
+// 		Produces validation error
+//		toggleValue = 1;
+//      switchOnConstInOutParameter(111.11);
+    end
+    
+    function testFunctionParameterConstInOut2()  
+// 		Produces validation error
+//   	toggleValue = 2;
+//      switchOnConstInOutParameter(222.22);  
+    end
+    
+    function testFunctionParameterConstInOut3() 
+// 		Produces valiation error
+//    	toggleValue = 3;                                            
+//        switchOnConstInOutParameter(333.33);
+    end
+
+    function testFunctionParameterConstInOutWithUpdate()                                            
+        // called function always results in a validation error
+    end
+    
+   	function testFunctionParameterConstDefault1() 
+// 		Produces validaiton error
+//		toggleValue = 1;
+//      switchOnConstDefaultParameter(111.11);
+    end
+    
+    function testFunctionParameterConstDefault2()  
+// 		Produces validation error
+//   	toggleValue = 2;
+//       switchOnConstDefaultParameter(222.22);  
+    end
+    
+    function testFunctionParameterConstDefault3() 
+// 		Produces validation error
+//    	toggleValue = 3;                                            
+//      switchOnConstDefaultParameter(333.33);
+    end
+    
+    function testFunctionParameterConstDefaultWithUpdate()                                            
+        // called function always results in a validation error
+    end
+   
+    function switchOnInParameter(localLen decimal(5,2) in)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnInOutParameter(localLen decimal(5,2) inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnDefaultParameter(localLen decimal(5,2))
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+   function switchOnConstDefaultParameter(localLen decimal(5,2) const)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+   
+    function switchOnConstInParameter(localLen decimal(5,2) const in)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+ 
+    function switchOnConstInOutParameter(localLen decimal(5,2) const inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(111.11)
+                resolved = 1;
+            when(222.22)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+ 
+    function updateInParameter(localLen decimal(5,2) in)
+    	localLen = 543.21;
+    end
+    
+    function updateInOutParameter(localLen decimal(5,2) inOut)
+    	localLen = 543.21;
+    end
+
+    function updateOutParameter(localLen decimal(5,2) out)
+    	localLen = 543.21;
+    end
+        
+    function updateDefaultParameter(localLen decimal(5,2) )
+    	localLen = 543.21;
+    end
+/*    
+   function updateConstInParameter(localLen decimal(5,2) const in)
+   		localLen = 543.21;
+   end
+   		
+	function updateConstInOutParameter(localLen decimal(5,2) const inout)
+		localLen = 543.21;
+	end
+   		
+	function updateConstDefaultParameter(localLen decimal(5,2) const)
+		localLen = 543.21;
+	end
+*/
+end

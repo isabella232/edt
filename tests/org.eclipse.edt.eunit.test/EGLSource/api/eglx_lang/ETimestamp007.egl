@@ -1,0 +1,1375 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp007
+  * @title EdtTimestamp007 - runCompareFunction
+  * @description testing timestamp compare operators
+  * @testcases runCompareFunction01 - runCompareFunctionnnn
+  * @sources EdtTimestamp007.egl
+  * @keywords timestamp, operation, compare
+ **/
+library ETimestamp007 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.55";
+	const constTimeStampE timeStamp = "2011-10-07 12.17.55";
+	const constTimeStampN timeStamp = "1999-05-06 15.09.25";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-55-30-987654";
+	const constTimeStampFullL1 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-55-29-987654";
+	const constTimeStampFullL2 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-54-30-987654";
+	const constTimeStampFullL3 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-09-55-30-987654";
+	const constTimeStampFullL4 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-29-10-55-30-987654";
+	const constTimeStampFullL5 timeStamp("yyyyMMddHHmmssffffff") = "2011-09-30-10-55-30-987654";
+	const constTimeStampFullL6 timeStamp("yyyyMMddHHmmssffffff") = "2010-10-30-10-55-30-987654";
+	const constTimeStampFullG1 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-55-31-987654";
+	const constTimeStampFullG2 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-56-30-987654";
+	const constTimeStampFullG3 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-11-55-30-987654";
+	const constTimeStampFullG4 timeStamp("yyyyMMddHHmmssffffff") = "2011-10-31-10-55-30-987654";
+	const constTimeStampFullG5 timeStamp("yyyyMMddHHmmssffffff") = "2011-11-30-10-55-30-987654";
+	const constTimeStampFullG6 timeStamp("yyyyMMddHHmmssffffff") = "2012-10-30-10-55-30-987654";
+	const constTimeStampFullE timeStamp("yyyyMMddHHmmssffffff") = "2011-10-30-10-55-30-987654";
+	const constTimeStampFullN timeStamp("yyyyMMddHHmmssffffff") = "1995-05-06-05-08-20-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-36-20";
+	const constTimeStampDateTimeL1 timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-36-19";
+	const constTimeStampDateTimeL2 timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-35-20";
+	const constTimeStampDateTimeL3 timeStamp("yyyyMMddHHmmss") = "2011-10-26-09-36-20";
+	const constTimeStampDateTimeL4 timeStamp("yyyyMMddHHmmss") = "2011-10-25-10-36-20";
+	const constTimeStampDateTimeL5 timeStamp("yyyyMMddHHmmss") = "2011-09-26-10-36-20";
+	const constTimeStampDateTimeL6 timeStamp("yyyyMMddHHmmss") = "2010-10-26-10-36-20";
+	const constTimeStampDateTimeG1 timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-36-21";
+	const constTimeStampDateTimeG2 timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-37-20";
+	const constTimeStampDateTimeG3 timeStamp("yyyyMMddHHmmss") = "2011-10-26-11-36-20";
+	const constTimeStampDateTimeG4 timeStamp("yyyyMMddHHmmss") = "2011-10-27-10-36-20";
+	const constTimeStampDateTimeG5 timeStamp("yyyyMMddHHmmss") = "2011-11-26-10-36-20";
+	const constTimeStampDateTimeG6 timeStamp("yyyyMMddHHmmss") = "2012-10-26-10-36-20";
+	const constTimeStampDateTimeE timeStamp("yyyyMMddHHmmss") = "2011-10-26-10-36-20";
+	const constTimeStampDateTimeN timeStamp("yyyyMMddHHmmss") = "2005-03-21-18-54-37";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-04-15";
+	const constTimeStampDateL1 timeStamp("yyyyMMdd") = "2011-04-14";
+	const constTimeStampDateL2 timeStamp("yyyyMMdd") = "2011-03-15";
+	const constTimeStampDateL3 timeStamp("yyyyMMdd") = "2010-04-15";
+	const constTimeStampDateG1 timeStamp("yyyyMMdd") = "2011-04-16";
+	const constTimeStampDateG2 timeStamp("yyyyMMdd") = "2011-05-15";
+	const constTimeStampDateG3 timeStamp("yyyyMMdd") = "2012-04-15";
+	const constTimeStampDateE timeStamp("yyyyMMdd") = "2011-04-15";
+	const constTimeStampDateN timeStamp("yyyyMMdd") = "2015-06-08";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYDateL1 timeStamp("yyyy") = "2011";
+	const constTimeStampYDateG1 timeStamp("yyyy") = "2013";
+	const constTimeStampYDateE timeStamp("yyyy") = "2012";
+	const constTimeStampYDateN timeStamp("yyyy") = "1220";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampYMDateL1 timeStamp("yyyyMM") = "2011-05";
+	const constTimeStampYMDateL2 timeStamp("yyyyMM") = "2010-06";
+	const constTimeStampYMDateG1 timeStamp("yyyyMM") = "2011-07";
+	const constTimeStampYMDateG2 timeStamp("yyyyMM") = "2012-06";
+	const constTimeStampYMDateE timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampYMDateN timeStamp("yyyyMM") = "2022-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampMDDateL1 timeStamp("MMdd") = "06-14";
+	const constTimeStampMDDateL2 timeStamp("MMdd") = "05-15";
+	const constTimeStampMDDateG1 timeStamp("MMdd") = "06-16";
+	const constTimeStampMDDateG2 timeStamp("MMdd") = "07-15";
+	const constTimeStampMDDateE timeStamp("MMdd") = "06-15";
+	const constTimeStampMDDateN timeStamp("MMdd") = "11-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampDHDateL1 timeStamp("ddHH") = "24-08";
+	const constTimeStampDHDateL2 timeStamp("ddHH") = "23-09";
+	const constTimeStampDHDateG1 timeStamp("ddHH") = "24-10";
+	const constTimeStampDHDateG2 timeStamp("ddHH") = "25-09";
+	const constTimeStampDHDateE timeStamp("ddHH") = "24-09";
+	const constTimeStampDHDateN timeStamp("ddHH") = "09-23";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-05";
+	const constTimeStampTimeL1 timeStamp("HHmmss") = "11-31-04";
+	const constTimeStampTimeL2 timeStamp("HHmmss") = "11-30-05";
+	const constTimeStampTimeL3 timeStamp("HHmmss") = "10-31-05";
+	const constTimeStampTimeG1 timeStamp("HHmmss") = "11-31-06";
+	const constTimeStampTimeG2 timeStamp("HHmmss") = "11-32-05";
+	const constTimeStampTimeG3 timeStamp("HHmmss") = "12-31-05";
+	const constTimeStampTimeE timeStamp("HHmmss") = "11-31-05";
+	const constTimeStampTimeN timeStamp("HHmmss") = "23-31-05";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampHMTimeL1 timeStamp("HHmm") = "15-17";
+	const constTimeStampHMTimeL2 timeStamp("HHmm") = "14-18";
+	const constTimeStampHMTimeG1 timeStamp("HHmm") = "15-19";
+	const constTimeStampHMTimeG2 timeStamp("HHmm") = "16-18";
+	const constTimeStampHMTimeE timeStamp("HHmm") = "15-18";
+	const constTimeStampHMTimeN timeStamp("HHmm") = "18-15";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	const constTimeStampMSTimeL1 timeStamp("mmss") = "16-14";
+	const constTimeStampMSTimeL2 timeStamp("mmss") = "15-15";
+	const constTimeStampMSTimeG1 timeStamp("mmss") = "16-16";
+	const constTimeStampMSTimeG2 timeStamp("mmss") = "17-15";
+	const constTimeStampMSTimeE timeStamp("mmss") = "16-15";
+	const constTimeStampMSTimeN timeStamp("mmss") = "15-16";
+	 	
+	function runCompareFunction01(){@Test}
+		LogResult.assertTrue1(constTimeStamp == constTimeStampE);
+
+		
+	end
+
+	function runCompareFunction02(){@Test}
+		LogResult.assertTrue1(!(constTimeStamp != constTimeStampE));
+	end
+	 	
+	function runCompareFunction03(){@Test}
+		LogResult.assertTrue1(constTimeStamp != constTimeStampN);
+	end
+
+	function runCompareFunction04(){@Test}
+		LogResult.assertTrue1(!(constTimeStamp == constTimeStampN));
+	end
+
+	function runCompareFunction101(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL1);
+	end
+	 	
+	function runCompareFunction102(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL1));
+	end
+	 	
+	function runCompareFunction103(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL2);
+	end
+	 	
+	function runCompareFunction104(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL2));
+	end
+	 	
+	function runCompareFunction105(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL3);
+	end
+	 	
+	function runCompareFunction106(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL3));
+	end
+	 	
+	function runCompareFunction107(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL4);
+	end
+	 	
+	function runCompareFunction108(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL4));
+	end
+	 	
+	function runCompareFunction109(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL5);
+	end
+	 	
+	function runCompareFunction110(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL5));
+	end
+	 	
+	function runCompareFunction111(){@Test}
+		LogResult.assertTrue1(constTimeStampFull > constTimeStampFullL6);
+	end
+	 	
+	function runCompareFunction112(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull <= constTimeStampFullL6));
+	end
+	 	
+	function runCompareFunction113(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL1);
+	end
+	 	
+	function runCompareFunction114(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL1));
+	end
+	 	
+	function runCompareFunction115(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL2);
+	end
+	 	
+	function runCompareFunction116(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL2));
+	end
+	 	
+	function runCompareFunction117(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL3);
+	end
+	 	
+	function runCompareFunction118(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL3));
+	end
+	 	
+	function runCompareFunction119(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL4);
+	end
+	 	
+	function runCompareFunction120(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL4));
+	end
+	 	
+	function runCompareFunction121(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL5);
+	end
+	 	
+	function runCompareFunction122(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL5));
+	end
+	 	
+	function runCompareFunction123(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullL6);
+	end
+	 	
+	function runCompareFunction124(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullL6));
+	end
+	 	
+	function runCompareFunction125(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG1);
+	end
+	 	
+	function runCompareFunction126(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG1));
+	end
+	 	
+	function runCompareFunction127(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG2);
+	end
+	 	
+	function runCompareFunction128(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG2));
+	end
+	 	
+	function runCompareFunction129(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG3);
+	end
+	 	
+	function runCompareFunction130(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG3));
+	end
+	 	
+	function runCompareFunction131(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG4);
+	end
+	 	
+	function runCompareFunction132(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG4));
+	end
+	 	
+	function runCompareFunction133(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG5);
+	end
+	 	
+	function runCompareFunction134(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG5));
+	end
+	 	
+	function runCompareFunction135(){@Test}
+		LogResult.assertTrue1(constTimeStampFull < constTimeStampFullG6);
+	end
+	 	
+	function runCompareFunction136(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull >= constTimeStampFullG6));
+	end
+	 	
+	function runCompareFunction137(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG1);
+	end
+	 	
+	function runCompareFunction138(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG1));
+	end
+	 	
+	function runCompareFunction139(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG2);
+	end
+	 	
+	function runCompareFunction140(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG2));
+	end
+	 	
+	function runCompareFunction141(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG3);
+	end
+	 	
+	function runCompareFunction142(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG3));
+	end
+	 	
+	function runCompareFunction143(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG4);
+	end
+	 	
+	function runCompareFunction144(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG4));
+	end
+	 	
+	function runCompareFunction145(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG5);
+	end
+	 	
+	function runCompareFunction146(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG5));
+	end
+	 	
+	function runCompareFunction147(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullG6);
+	end
+	 	
+	function runCompareFunction148(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullG6));
+	end
+	 	
+	function runCompareFunction149(){@Test}
+		LogResult.assertTrue1(constTimeStampFull == constTimeStampFullE);
+	end
+
+	function runCompareFunction150(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull != constTimeStampFullE));
+	end
+	 	
+	function runCompareFunction151(){@Test}
+		LogResult.assertTrue1(constTimeStampFull >= constTimeStampFullE);
+	end
+
+	function runCompareFunction152(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull < constTimeStampFullE));
+	end
+	 	
+	function runCompareFunction153(){@Test}
+		LogResult.assertTrue1(constTimeStampFull <= constTimeStampFullE);
+	end
+
+	function runCompareFunction154(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull > constTimeStampFullE));
+	end
+	 	
+	function runCompareFunction155(){@Test}
+		LogResult.assertTrue1(constTimeStampFull != constTimeStampFullN);
+	end
+
+	function runCompareFunction156(){@Test}
+		LogResult.assertTrue1(!(constTimeStampFull == constTimeStampFullN));
+	end
+	 	
+	function runCompareFunction201(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL1);
+	end
+	 	
+	function runCompareFunction202(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL1));
+	end
+	 	
+	function runCompareFunction203(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL2);
+	end
+	 	
+	function runCompareFunction204(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL2));
+	end
+	 	
+	function runCompareFunction205(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL3);
+	end
+	 	
+	function runCompareFunction206(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL3));
+	end
+	 	
+	function runCompareFunction207(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL4);
+	end
+	 	
+	function runCompareFunction208(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL4));
+	end
+	 	
+	function runCompareFunction209(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL5);
+	end
+	 	
+	function runCompareFunction210(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL5));
+	end
+	 	
+	function runCompareFunction211(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime > constTimeStampDateTimeL6);
+	end
+	 	
+	function runCompareFunction212(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime <= constTimeStampDateTimeL6));
+	end
+	 	
+	function runCompareFunction213(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL1);
+	end
+	 	
+	function runCompareFunction214(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL1));
+	end
+	 	
+	function runCompareFunction215(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL2);
+	end
+	 	
+	function runCompareFunction216(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL2));
+	end
+	 	
+	function runCompareFunction217(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL3);
+	end
+	 	
+	function runCompareFunction218(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL3));
+	end
+	 	
+	function runCompareFunction219(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL4);
+	end
+	 	
+	function runCompareFunction220(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL4));
+	end
+	 	
+	function runCompareFunction221(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL5);
+	end
+	 	
+	function runCompareFunction222(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL5));
+	end
+	 	
+	function runCompareFunction223(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeL6);
+	end
+	 	
+	function runCompareFunction224(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeL6));
+	end
+	 	
+	function runCompareFunction225(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG1);
+	end
+	 	
+	function runCompareFunction226(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG1));
+	end
+	 	
+	function runCompareFunction227(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG2);
+	end
+	 	
+	function runCompareFunction228(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG2));
+	end
+	 	
+	function runCompareFunction229(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG3);
+	end
+	 	
+	function runCompareFunction230(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG3));
+	end
+	 	
+	function runCompareFunction231(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG4);
+	end
+	 	
+	function runCompareFunction232(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG4));
+	end
+	 	
+	function runCompareFunction233(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG5);
+	end
+	 	
+	function runCompareFunction234(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG5));
+	end
+	 	
+	function runCompareFunction235(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime < constTimeStampDateTimeG6);
+	end
+	 	
+	function runCompareFunction236(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime >= constTimeStampDateTimeG6));
+	end
+	 	
+	function runCompareFunction237(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG1);
+	end
+	 	
+	function runCompareFunction238(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG1));
+	end
+	 	
+	function runCompareFunction239(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG2);
+	end
+	 	
+	function runCompareFunction240(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG2));
+	end
+	 	
+	function runCompareFunction241(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG3);
+	end
+	 	
+	function runCompareFunction242(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG3));
+	end
+	 	
+	function runCompareFunction243(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG4);
+	end
+	 	
+	function runCompareFunction244(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG4));
+	end
+	 	
+	function runCompareFunction245(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG5);
+	end
+	 	
+	function runCompareFunction246(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG5));
+	end
+	 	
+	function runCompareFunction247(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeG6);
+	end
+	 	
+	function runCompareFunction248(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeG6));
+	end
+	 	
+	function runCompareFunction249(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime == constTimeStampDateTimeE);
+	end
+
+	function runCompareFunction250(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime != constTimeStampDateTimeE));
+	end
+	 	
+	function runCompareFunction251(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime >= constTimeStampDateTimeE);
+	end
+
+	function runCompareFunction252(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime < constTimeStampDateTimeE));
+	end
+	 	
+	function runCompareFunction253(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime <= constTimeStampDateTimeE);
+	end
+
+	function runCompareFunction254(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime > constTimeStampDateTimeE));
+	end
+	 	
+	function runCompareFunction255(){@Test}
+		LogResult.assertTrue1(constTimeStampDateTime != constTimeStampDateTimeN);
+	end
+
+	function runCompareFunction256(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDateTime == constTimeStampDateTimeN));
+	end
+	 	
+	function runCompareFunction301(){@Test}
+		LogResult.assertTrue1(constTimeStampDate > constTimeStampDateL1);
+	end
+	 	
+	function runCompareFunction302(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate <= constTimeStampDateL1));
+	end
+	 	
+	function runCompareFunction303(){@Test}
+		LogResult.assertTrue1(constTimeStampDate > constTimeStampDateL2);
+	end
+	 	
+	function runCompareFunction304(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate <= constTimeStampDateL2));
+	end
+	 	
+	function runCompareFunction305(){@Test}
+		LogResult.assertTrue1(constTimeStampDate > constTimeStampDateL3);
+	end
+	 	
+	function runCompareFunction306(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate <= constTimeStampDateL3));
+	end
+	 	
+	function runCompareFunction307(){@Test}
+		LogResult.assertTrue1(constTimeStampDate >= constTimeStampDateL1);
+	end
+	 	
+	function runCompareFunction308(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate < constTimeStampDateL1));
+	end
+	 	
+	function runCompareFunction309(){@Test}
+		LogResult.assertTrue1(constTimeStampDate >= constTimeStampDateL2);
+	end
+	 	
+	function runCompareFunction310(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate < constTimeStampDateL2));
+	end
+	 	
+	function runCompareFunction311(){@Test}
+		LogResult.assertTrue1(constTimeStampDate >= constTimeStampDateL3);
+	end
+	 	
+	function runCompareFunction312(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate < constTimeStampDateL3));
+	end
+	 	
+	function runCompareFunction313(){@Test}
+		LogResult.assertTrue1(constTimeStampDate < constTimeStampDateG1);
+	end
+	 	
+	function runCompareFunction314(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate >= constTimeStampDateG1));
+	end
+	 	
+	function runCompareFunction315(){@Test}
+		LogResult.assertTrue1(constTimeStampDate < constTimeStampDateG2);
+	end
+	 	
+	function runCompareFunction316(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate >= constTimeStampDateG2));
+	end
+	 	
+	function runCompareFunction317(){@Test}
+		LogResult.assertTrue1(constTimeStampDate < constTimeStampDateG3);
+	end
+	 	
+	function runCompareFunction318(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate >= constTimeStampDateG3));
+	end
+	 	
+	function runCompareFunction319(){@Test}
+		LogResult.assertTrue1(constTimeStampDate <= constTimeStampDateG1);
+	end
+	 	
+	function runCompareFunction320(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate > constTimeStampDateG1));
+	end
+	 	
+	function runCompareFunction321(){@Test}
+		LogResult.assertTrue1(constTimeStampDate <= constTimeStampDateG2);
+	end
+	 	
+	function runCompareFunction322(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate > constTimeStampDateG2));
+	end
+	 	
+	function runCompareFunction323(){@Test}
+		LogResult.assertTrue1(constTimeStampDate <= constTimeStampDateG3);
+	end
+	 	
+	function runCompareFunction324(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate > constTimeStampDateG3));
+	end
+	 	
+	function runCompareFunction325(){@Test}
+		LogResult.assertTrue1(constTimeStampDate == constTimeStampDateE);
+	end
+
+	function runCompareFunction326(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate != constTimeStampDateE));
+	end
+	 	
+	function runCompareFunction327(){@Test}
+		LogResult.assertTrue1(constTimeStampDate >= constTimeStampDateE);
+	end
+
+	function runCompareFunction328(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate < constTimeStampDateE));
+	end
+	 	
+	function runCompareFunction329(){@Test}
+		LogResult.assertTrue1(constTimeStampDate <= constTimeStampDateE);
+	end
+
+	function runCompareFunction330(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate > constTimeStampDateE));
+	end
+	 	
+	function runCompareFunction331(){@Test}
+		LogResult.assertTrue1(constTimeStampDate != constTimeStampDateN);
+	end
+
+	function runCompareFunction332(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDate == constTimeStampDateN));
+	end
+	 	
+	function runCompareFunction401(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate > constTimeStampYDateL1);
+	end
+	 	
+	function runCompareFunction402(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate <= constTimeStampYDateL1));
+	end
+	 	
+	function runCompareFunction403(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate >= constTimeStampYDateL1);
+	end
+	 	
+	function runCompareFunction404(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate < constTimeStampYDateL1));
+	end
+	 	
+	function runCompareFunction405(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate < constTimeStampYDateG1);
+	end
+	 	
+	function runCompareFunction406(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate >= constTimeStampYDateG1));
+	end
+	 	
+	function runCompareFunction407(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate <= constTimeStampYDateG1);
+	end
+	 	
+	function runCompareFunction408(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate > constTimeStampYDateG1));
+	end
+	 	
+	function runCompareFunction409(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate == constTimeStampYDateE);
+	end
+
+	function runCompareFunction410(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate != constTimeStampYDateE));
+	end
+	 	
+	function runCompareFunction411(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate >= constTimeStampYDateE);
+	end
+
+	function runCompareFunction412(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate < constTimeStampYDateE));
+	end
+	 	
+	function runCompareFunction413(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate <= constTimeStampYDateE);
+	end
+
+	function runCompareFunction414(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate > constTimeStampYDateE));
+	end
+	 	
+	function runCompareFunction415(){@Test}
+		LogResult.assertTrue1(constTimeStampYDate != constTimeStampYDateN);
+	end
+
+	function runCompareFunction416(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYDate == constTimeStampYDateN));
+	end
+	 	
+	function runCompareFunction501(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate > constTimeStampYMDateL1);
+	end
+	 	
+	function runCompareFunction502(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate <= constTimeStampYMDateL1));
+	end
+	 	
+	function runCompareFunction503(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate > constTimeStampYMDateL2);
+	end
+	 	
+	function runCompareFunction504(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate <= constTimeStampYMDateL2));
+	end
+	 	
+	function runCompareFunction505(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate >= constTimeStampYMDateL1);
+	end
+	 	
+	function runCompareFunction506(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate < constTimeStampYMDateL1));
+	end
+	 	
+	function runCompareFunction507(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate >= constTimeStampYMDateL2);
+	end
+	 	
+	function runCompareFunction508(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate < constTimeStampYMDateL2));
+	end
+	 	
+	function runCompareFunction509(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate < constTimeStampYMDateG1);
+	end
+	 	
+	function runCompareFunction510(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate >= constTimeStampYMDateG1));
+	end
+	 	
+	function runCompareFunction511(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate < constTimeStampYMDateG2);
+	end
+	 	
+	function runCompareFunction512(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate >= constTimeStampYMDateG2));
+	end
+	 	
+	function runCompareFunction513(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate <= constTimeStampYMDateG1);
+	end
+	 	
+	function runCompareFunction514(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate > constTimeStampYMDateG1));
+	end
+	 	
+	function runCompareFunction515(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate <= constTimeStampYMDateG2);
+	end
+	 	
+	function runCompareFunction516(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate > constTimeStampYMDateG2));
+	end
+	 	
+	function runCompareFunction517(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate == constTimeStampYMDateE);
+	end
+
+	function runCompareFunction518(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate != constTimeStampYMDateE));
+	end
+	 	
+	function runCompareFunction519(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate >= constTimeStampYMDateE);
+	end
+
+	function runCompareFunction520(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate < constTimeStampYMDateE));
+	end
+	 	
+	function runCompareFunction521(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate <= constTimeStampYMDateE);
+	end
+
+	function runCompareFunction522(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate > constTimeStampYMDateE));
+	end
+	 	
+	function runCompareFunction523(){@Test}
+		LogResult.assertTrue1(constTimeStampYMDate != constTimeStampYMDateN);
+	end
+
+	function runCompareFunction524(){@Test}
+		LogResult.assertTrue1(!(constTimeStampYMDate == constTimeStampYMDateN));
+	end
+	 	
+	function runCompareFunction601(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate > constTimeStampMDDateL1);
+	end
+	 	
+	function runCompareFunction602(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate <= constTimeStampMDDateL1));
+	end
+	 	
+	function runCompareFunction603(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate > constTimeStampMDDateL2);
+	end
+	 	
+	function runCompareFunction604(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate <= constTimeStampMDDateL2));
+	end
+	 	
+	function runCompareFunction605(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate >= constTimeStampMDDateL1);
+	end
+	 	
+	function runCompareFunction606(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate < constTimeStampMDDateL1));
+	end
+	 	
+	function runCompareFunction607(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate >= constTimeStampMDDateL2);
+	end
+	 	
+	function runCompareFunction608(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate < constTimeStampMDDateL2));
+	end
+	 	
+	function runCompareFunction609(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate < constTimeStampMDDateG1);
+	end
+	 	
+	function runCompareFunction610(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate >= constTimeStampMDDateG1));
+	end
+	 	
+	function runCompareFunction611(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate < constTimeStampMDDateG2);
+	end
+	 	
+	function runCompareFunction612(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate >= constTimeStampMDDateG2));
+	end
+	 	
+	function runCompareFunction613(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate <= constTimeStampMDDateG1);
+	end
+	 	
+	function runCompareFunction614(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate > constTimeStampMDDateG1));
+	end
+	 	
+	function runCompareFunction615(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate <= constTimeStampMDDateG2);
+	end
+	 	
+	function runCompareFunction616(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate > constTimeStampMDDateG2));
+	end
+	 	
+	function runCompareFunction617(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate == constTimeStampMDDateE);
+	end
+
+	function runCompareFunction618(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate != constTimeStampMDDateE));
+	end
+	 	
+	function runCompareFunction619(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate >= constTimeStampMDDateE);
+	end
+
+	function runCompareFunction620(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate < constTimeStampMDDateE));
+	end
+	 	
+	function runCompareFunction621(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate <= constTimeStampMDDateE);
+	end
+
+	function runCompareFunction622(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate > constTimeStampMDDateE));
+	end
+	 	
+	function runCompareFunction623(){@Test}
+		LogResult.assertTrue1(constTimeStampMDDate != constTimeStampMDDateN);
+	end
+
+	function runCompareFunction624(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMDDate == constTimeStampMDDateN));
+	end
+	 	
+	function runCompareFunction701(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate > constTimeStampDHDateL1);
+	end
+	 	
+	function runCompareFunction702(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate <= constTimeStampDHDateL1));
+	end
+	 	
+	function runCompareFunction703(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate > constTimeStampDHDateL2);
+	end
+	 	
+	function runCompareFunction704(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate <= constTimeStampDHDateL2));
+	end
+	 	
+	function runCompareFunction705(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate >= constTimeStampDHDateL1);
+	end
+	 	
+	function runCompareFunction706(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate < constTimeStampDHDateL1));
+	end
+	 	
+	function runCompareFunction707(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate >= constTimeStampDHDateL2);
+	end
+	 	
+	function runCompareFunction708(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate < constTimeStampDHDateL2));
+	end
+	 	
+	function runCompareFunction709(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate < constTimeStampDHDateG1);
+	end
+	 	
+	function runCompareFunction710(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate >= constTimeStampDHDateG1));
+	end
+	 	
+	function runCompareFunction711(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate < constTimeStampDHDateG2);
+	end
+	 	
+	function runCompareFunction712(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate >= constTimeStampDHDateG2));
+	end
+	 	
+	function runCompareFunction713(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate <= constTimeStampDHDateG1);
+	end
+	 	
+	function runCompareFunction714(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate > constTimeStampDHDateG1));
+	end
+	 	
+	function runCompareFunction715(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate <= constTimeStampDHDateG2);
+	end
+	 	
+	function runCompareFunction716(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate > constTimeStampDHDateG2));
+	end
+	 	
+	function runCompareFunction717(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate == constTimeStampDHDateE);
+	end
+
+	function runCompareFunction718(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate != constTimeStampDHDateE));
+	end
+	 	
+	function runCompareFunction719(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate >= constTimeStampDHDateE);
+	end
+
+	function runCompareFunction720(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate < constTimeStampDHDateE));
+	end
+	 	
+	function runCompareFunction721(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate <= constTimeStampDHDateE);
+	end
+
+	function runCompareFunction722(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate > constTimeStampDHDateE));
+	end
+	 	
+	function runCompareFunction723(){@Test}
+		LogResult.assertTrue1(constTimeStampDHDate != constTimeStampDHDateN);
+	end
+
+	function runCompareFunction724(){@Test}
+		LogResult.assertTrue1(!(constTimeStampDHDate == constTimeStampDHDateN));
+	end
+	 	
+	function runCompareFunction801(){@Test}
+		LogResult.assertTrue1(constTimeStampTime > constTimeStampTimeL1);
+	end
+	 	
+	function runCompareFunction802(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime <= constTimeStampTimeL1));
+	end
+	 	
+	function runCompareFunction803(){@Test}
+		LogResult.assertTrue1(constTimeStampTime > constTimeStampTimeL2);
+	end
+	 	
+	function runCompareFunction804(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime <= constTimeStampTimeL2));
+	end
+	 	
+	function runCompareFunction805(){@Test}
+		LogResult.assertTrue1(constTimeStampTime > constTimeStampTimeL3);
+	end
+	 	
+	function runCompareFunction806(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime <= constTimeStampTimeL3));
+	end
+	 	
+	function runCompareFunction807(){@Test}
+		LogResult.assertTrue1(constTimeStampTime >= constTimeStampTimeL1);
+	end
+	 	
+	function runCompareFunction808(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime < constTimeStampTimeL1));
+	end
+	 	
+	function runCompareFunction809(){@Test}
+		LogResult.assertTrue1(constTimeStampTime >= constTimeStampTimeL2);
+	end
+	 	
+	function runCompareFunction810(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime < constTimeStampTimeL2));
+	end
+	 	
+	function runCompareFunction811(){@Test}
+		LogResult.assertTrue1(constTimeStampTime >= constTimeStampTimeL3);
+	end
+	 	
+	function runCompareFunction812(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime < constTimeStampTimeL3));
+	end
+	 	
+	function runCompareFunction813(){@Test}
+		LogResult.assertTrue1(constTimeStampTime < constTimeStampTimeG1);
+	end
+	 	
+	function runCompareFunction814(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime >= constTimeStampTimeG1));
+	end
+	 	
+	function runCompareFunction815(){@Test}
+		LogResult.assertTrue1(constTimeStampTime < constTimeStampTimeG2);
+	end
+	 	
+	function runCompareFunction816(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime >= constTimeStampTimeG2));
+	end
+	 	
+	function runCompareFunction817(){@Test}
+		LogResult.assertTrue1(constTimeStampTime < constTimeStampTimeG3);
+	end
+	 	
+	function runCompareFunction818(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime >= constTimeStampTimeG3));
+	end
+	 	
+	function runCompareFunction819(){@Test}
+		LogResult.assertTrue1(constTimeStampTime <= constTimeStampTimeG1);
+	end
+	 	
+	function runCompareFunction820(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime > constTimeStampTimeG1));
+	end
+	 	
+	function runCompareFunction821(){@Test}
+		LogResult.assertTrue1(constTimeStampTime <= constTimeStampTimeG2);
+	end
+	 	
+	function runCompareFunction822(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime > constTimeStampTimeG2));
+	end
+	 	
+	function runCompareFunction823(){@Test}
+		LogResult.assertTrue1(constTimeStampTime <= constTimeStampTimeG3);
+	end
+	 	
+	function runCompareFunction824(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime > constTimeStampTimeG3));
+	end
+	 	
+	function runCompareFunction825(){@Test}
+		LogResult.assertTrue1(constTimeStampTime == constTimeStampTimeE);
+	end
+
+	function runCompareFunction826(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime != constTimeStampTimeE));
+	end
+	 	
+	function runCompareFunction827(){@Test}
+		LogResult.assertTrue1(constTimeStampTime >= constTimeStampTimeE);
+	end
+
+	function runCompareFunction828(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime < constTimeStampTimeE));
+	end
+	 	
+	function runCompareFunction829(){@Test}
+		LogResult.assertTrue1(constTimeStampTime <= constTimeStampTimeE);
+	end
+
+	function runCompareFunction830(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime > constTimeStampTimeE));
+	end
+	 	
+	function runCompareFunction831(){@Test}
+		LogResult.assertTrue1(constTimeStampTime != constTimeStampTimeN);
+	end
+
+	function runCompareFunction832(){@Test}
+		LogResult.assertTrue1(!(constTimeStampTime == constTimeStampTimeN));
+	end
+	 	
+	function runCompareFunction901(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime > constTimeStampHMTimeL1);
+	end
+	 	
+	function runCompareFunction902(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime <= constTimeStampHMTimeL1));
+	end
+	 	
+	function runCompareFunction903(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime > constTimeStampHMTimeL2);
+	end
+	 	
+	function runCompareFunction904(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime <= constTimeStampHMTimeL2));
+	end
+	 	
+	function runCompareFunction905(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime >= constTimeStampHMTimeL1);
+	end
+	 	
+	function runCompareFunction906(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime < constTimeStampHMTimeL1));
+	end
+	 	
+	function runCompareFunction907(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime >= constTimeStampHMTimeL2);
+	end
+	 	
+	function runCompareFunction908(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime < constTimeStampHMTimeL2));
+	end
+	 	
+	function runCompareFunction909(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime < constTimeStampHMTimeG1);
+	end
+	 	
+	function runCompareFunction910(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime >= constTimeStampHMTimeG1));
+	end
+	 	
+	function runCompareFunction911(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime < constTimeStampHMTimeG2);
+	end
+	 	
+	function runCompareFunction912(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime >= constTimeStampHMTimeG2));
+	end
+	 	
+	function runCompareFunction913(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime <= constTimeStampHMTimeG1);
+	end
+	 	
+	function runCompareFunction914(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime > constTimeStampHMTimeG1));
+	end
+	 	
+	function runCompareFunction915(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime <= constTimeStampHMTimeG2);
+	end
+	 	
+	function runCompareFunction916(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime > constTimeStampHMTimeG2));
+	end
+	 	
+	function runCompareFunction917(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime == constTimeStampHMTimeE);
+	end
+
+	function runCompareFunction918(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime != constTimeStampHMTimeE));
+	end
+	 	
+	function runCompareFunction919(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime >= constTimeStampHMTimeE);
+	end
+
+	function runCompareFunction920(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime < constTimeStampHMTimeE));
+	end
+	 	
+	function runCompareFunction921(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime <= constTimeStampHMTimeE);
+	end
+
+	function runCompareFunction922(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime > constTimeStampHMTimeE));
+	end
+	 	
+	function runCompareFunction923(){@Test}
+		LogResult.assertTrue1(constTimeStampHMTime != constTimeStampHMTimeN);
+	end
+
+	function runCompareFunction924(){@Test}
+		LogResult.assertTrue1(!(constTimeStampHMTime == constTimeStampHMTimeN));
+	end
+	 	
+	function runCompareFunction1001(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime > constTimeStampMSTimeL1);
+	end
+	 	
+	function runCompareFunction1002(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime <= constTimeStampMSTimeL1));
+	end
+	 	
+	function runCompareFunction1003(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime > constTimeStampMSTimeL2);
+	end
+	 	
+	function runCompareFunction1004(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime <= constTimeStampMSTimeL2));
+	end
+	 	
+	function runCompareFunction1005(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime >= constTimeStampMSTimeL1);
+	end
+	 	
+	function runCompareFunction1006(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime < constTimeStampMSTimeL1));
+	end
+	 	
+	function runCompareFunction1007(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime >= constTimeStampMSTimeL2);
+	end
+	 	
+	function runCompareFunction1008(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime < constTimeStampMSTimeL2));
+	end
+	 	
+	function runCompareFunction1009(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime < constTimeStampMSTimeG1);
+	end
+	 	
+	function runCompareFunction1010(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime >= constTimeStampMSTimeG1));
+	end
+	 	
+	function runCompareFunction1011(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime < constTimeStampMSTimeG2);
+	end
+	 	
+	function runCompareFunction1012(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime >= constTimeStampMSTimeG2));
+	end
+	 	
+	function runCompareFunction1013(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime <= constTimeStampMSTimeG1);
+	end
+	 	
+	function runCompareFunction1014(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime > constTimeStampMSTimeG1));
+	end
+	 	
+	function runCompareFunction1015(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime <= constTimeStampMSTimeG2);
+	end
+	 	
+	function runCompareFunction1016(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime > constTimeStampMSTimeG2));
+	end
+	 	
+	function runCompareFunction1017(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime == constTimeStampMSTimeE);
+	end
+
+	function runCompareFunction1018(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime != constTimeStampMSTimeE));
+	end
+	 	
+	function runCompareFunction1019(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime >= constTimeStampMSTimeE);
+	end
+
+	function runCompareFunction1020(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime < constTimeStampMSTimeE));
+	end
+	 	
+	function runCompareFunction1021(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime <= constTimeStampMSTimeE);
+	end
+
+	function runCompareFunction1022(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime > constTimeStampMSTimeE));
+	end
+	 	
+	function runCompareFunction1023(){@Test}
+		LogResult.assertTrue1(constTimeStampMSTime != constTimeStampMSTimeN);
+	end
+
+	function runCompareFunction1024(){@Test}
+		LogResult.assertTrue1(!(constTimeStampMSTime == constTimeStampMSTimeN));
+	end
+
+end

@@ -1,0 +1,16 @@
+package common;
+
+import eglx.json.JsonName;
+
+
+record ChattyGabbyRecords
+    list List[];
+    msg string;
+end
+
+record List
+    pstid int{@JSONName{"PSTID"}};
+    crtts string{@JSONName{"CRTTS"}};
+    usrid string{@JSONName{"USRID"}};
+    txt string{@JSONName{"TXT"}};
+end

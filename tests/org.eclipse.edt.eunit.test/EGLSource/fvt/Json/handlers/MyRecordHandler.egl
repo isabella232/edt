@@ -1,0 +1,47 @@
+package fvt.Json.handlers;
+
+import eglx.json.JsonName;
+
+/* 
+* @name FlexRecords
+* @title The Records library
+* @keywords Record
+* @author EDT team
+* @createDate 2011/09/09
+* @description 
+* The Records library
+*/
+
+handler MyRecordHandler
+
+//itemName string{JSONName = "item", FORMName = "item"};
+    itemName string{@JSONName{"item"}};
+    litem string(7);
+    item2 int;
+    litems string(5)[];
+    items string[] = new string[]; //change for EDT 0.7
+    //binary bin(9,2);
+    //sbinary bin(4,2);
+    //shrt bin(4);
+    shrt decimal(4); //change for EDT 0.7
+    //intt bin(9);
+    intt decimal(9); //change for EDT 0.7
+    //lng bin(18);
+    lng decimal(18); //change for EDT 0.7
+    //dbl bin(18,5);
+    bint bigInt;
+    bdec decimal(32, 4);
+    flt float;
+    //numb num(5, 2);
+    numb decimal(5, 2); //change for EDT 0.7
+    datefield date;
+    ts timeStamp("yyyyMMddHHmmss");
+    timefield time; 
+    //hhex hex(12);
+    bool boolean;
+    bool2 boolean;
+    nStr string?;
+    nStr2 string?;
+//NOBYTES    bits1 bytes;
+//NOBYTES    bits2 bytes(3);
+end

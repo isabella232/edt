@@ -1,0 +1,243 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EInt010
+  * @title EInt010 - runISAFunction
+  * @description testing int nullable variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EInt010.egl
+  * @keywords int, isa
+ **/
+library EInt010 {}
+
+	isIt boolean;
+	expected boolean;
+	int1n int? = 34767;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "int/nullable variable is any";
+		isIt = int1n isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "int/nullable variable is bigInt";
+		isIt = int1n isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "int/nullable variable is boolean";
+		isIt = int1n isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "int/nullable variable is date";
+		isIt = int1n isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "int/nullable variable is decimal(4,2)";
+		isIt = int1n isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "int/nullable variable is decimal";
+		isIt = int1n isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "int/nullable variable is dictionary";
+		isIt = int1n isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "int/nullable variable is float";
+		isIt = int1n isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "int/nullable variable is int";
+		isIt = int1n isa int;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "int/nullable variable is number";
+		isIt = int1n isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "int/nullable variable is smallFloat";
+		isIt = int1n isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "int/nullable variable is smallInt";
+		isIt = int1n isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "int/nullable variable is string";
+		isIt = int1n isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "int/nullable variable is timestamp";
+		isIt = int1n isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "int/nullable variable is anyexception";
+		isIt = int1n isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "int/nullable variable is DynamicAccessException";
+		isIt = int1n isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "int/nullable variable is InvalidArgumentException";
+		isIt = int1n isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "int/nullable variable is InvalidIndexException";
+		isIt = int1n isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "int/nullable variable is InvalidPatternException";
+		isIt = int1n isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "int/nullable variable is InvocationException";
+		isIt = int1n isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "int/nullable variable is JavaObjectException";
+//		isIt = int1n isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "int/nullable variable is JavaScriptObjectException";
+//		isIt = int1n isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "int/nullable variable is NullValueException";
+		isIt = int1n isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "int/nullable variable is NumericOverflowException";
+		isIt = int1n isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "int/nullable variable is ServiceInvocationException";
+		isIt = int1n isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "int/nullable variable is SQLException";
+//		isIt = int1n isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "int/nullable variable is TypeCastException";
+		isIt = int1n isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "int/null is int";
+		int1n = null;
+		isIt = int1n isa int;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction31(){@Test}
+		variation = "int/nullable variable is bytes";
+		isIt = int1n isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction32(){@Test}
+		variation = "int/nullable variable is bytes(8)";
+		isIt = int1n isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+end // EInt010

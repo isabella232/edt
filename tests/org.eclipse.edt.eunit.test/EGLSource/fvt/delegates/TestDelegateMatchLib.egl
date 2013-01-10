@@ -1,0 +1,84 @@
+package fvt.delegates;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestDelegateMatchLib
+* @title The function test program for delegate in EDT
+* @keywords delegate
+* @author EDT team
+* @createDate 2011/08/10
+* @description
+* Test the delegate function mathch 
+*/
+
+library TestDelegateMatchLib{}
+
+    function testMatch01(){@test}
+        type1 Del1 = foo;
+        LogResult.logStdOut("Compare type1 == foo");
+        LogResult.assertTrue1(type1 == foo);
+    end
+
+    function testMatch02(){@test}
+        type1 Del1 = foo;
+        LogResult.logStdOut("Compare type1 != foo");
+        LogResult.assertTrue1(!(type1 != foo));
+    end
+
+    function testMatch03(){@test}
+        type2 Del2 = foo2;
+        LogResult.logStdOut("Compare type2 == foo2");
+        LogResult.assertTrue1(type2 == foo2);
+    end
+
+    function testMatch04(){@test}
+        type2 Del2 = foo2;
+        LogResult.logStdOut("Compare type2 == foo3");
+        LogResult.assertTrue1(!(type2 == foo3));
+    end
+
+    function testMatch05(){@test}
+        type2 Del2 = foo2;
+        LogResult.logStdOut("Compare type2 != foo3");
+        LogResult.assertTrue1(type2 != foo3);
+    end
+
+    function testMatch06(){@test}
+        type3 Del2 = foo3;
+        LogResult.logStdOut("Compare foo3 == foo3");
+        LogResult.assertTrue1(foo3 == foo3);
+    end
+
+    function testMatch07(){@test}
+        type2 Del2 = foo2;
+        type3 Del2 = foo2;
+        LogResult.logStdOut("Compare type2(foo2) == type3(foo2)");
+        LogResult.assertTrue1(type2 == type3);
+    end
+
+    function testMatch08(){@test}
+        type2 Del2 = foo2;
+        type3 Del2 = foo3;
+        type3 = foo3;
+        LogResult.logStdOut("Compare type2(foo2) == type3(foo3)");
+        LogResult.assertTrue1(type2 != type3);
+    end
+
+    function foo()
+    end
+
+    function foo2(var int)
+    end
+
+    function foo3(var int)
+    end
+
+end
+
+delegate Del1()
+end
+
+delegate Del2(var int)
+end

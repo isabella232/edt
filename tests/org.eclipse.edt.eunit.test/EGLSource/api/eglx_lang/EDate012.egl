@@ -1,0 +1,121 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate012
+  * @title EdtDate012 - runArithmeticFunction
+  * @description testing date arithmetic
+  * @testcases runArithmeticFunction37 - runArithmeticFunction54
+  * @sources EdtDate012.egl
+  * @keywords date, addDays, daysDifferent
+ **/
+library EDate012 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+	febNonLeap date? = "02-28-1999";
+	febLeap date? = "02-29-2000";
+	marFirst date? = "03-01-2000";
+	marFirst1999 date? = "03-01-1999";
+	marFirst1998 date? = "03-01-1998";
+	lastDay2000 date? = "12-31-2000";
+	firstDay2001 date? = "01-01-2001";
+	
+	// Variable Declarations
+	actual date?;
+
+
+	
+	function runArithmeticFunction37(){@Test}
+		actual=febLeap.addDays(1);
+		LogResult.assertDateEqual("addition - feb to mar leap year", marFirst,actual );
+	end
+	
+	
+	function runArithmeticFunction38(){@Test}
+		actual=marFirst.addDays(-1);
+		LogResult.assertDateEqual("subtraction - mar to feb leap year", febLeap,actual );
+	end
+	
+	function runArithmeticFunction39(){@Test}
+		actual=febNonLeap.addDays(1);
+		LogResult.assertDateEqual("addition - feb to mar non leap year", marFirst1999,actual);
+	end
+	
+	
+	function runArithmeticFunction40(){@Test}
+		actual=marFirst1999.addDays(-1);
+		LogResult.assertDateEqual("subtraction - mar to feb non leap year", febNonLeap,actual );
+	end
+	
+	
+	function runArithmeticFunction41(){@Test}
+		LogResult.assertTrue("difference -  one leap year", marFirst.daysDifferent(marFirst1999)==366 );
+	end
+	
+	function runArithmeticFunction42(){@Test}
+		LogResult.assertTrue("difference -  one leap year negative result", marFirst1999.daysDifferent(marFirst)==-366 );
+	end
+	
+	function runArithmeticFunction43(){@Test}
+		LogResult.assertTrue("difference - no days", marFirst1999.daysDifferent(marFirst1999)==0 );
+	end
+	
+	function runArithmeticFunction44(){@Test}
+		LogResult.assertTrue("difference -  one non-leap year", marFirst1999.daysDifferent(marFirst1998)==365 );
+	end
+	
+	function runArithmeticFunction45(){@Test}
+		LogResult.assertTrue("difference -  one non-leap year negative result", marFirst1998.daysDifferent(marFirst1999)==-365 );
+	end
+	
+	function runArithmeticFunction46(){@Test}
+		actual=marFirst1999.addDays(366);
+		LogResult.assertDateEqual("addition non-leap year to leap year", marFirst,actual);
+	end
+	
+	function runArithmeticFunction47(){@Test}
+		actual=marFirst1998.addDays(365);
+		LogResult.assertDateEqual("addition non-leap year", marFirst1999,actual );
+	end
+		
+	function runArithmeticFunction48(){@Test}
+		actual=marFirst.addDays(-366);
+		LogResult.assertDateEqual("subtraction non-leap year to leap year", marFirst1999,actual);
+	end
+	
+	function runArithmeticFunction49(){@Test}
+		actual=marFirst1999.addDays(-365);
+		LogResult.assertDateEqual("subtraction non-leap year", marFirst1998,actual );
+	end
+	
+
+	function runArithmeticFunction50(){@Test}
+		
+		actual=lastDay2000.addDays(1);
+		LogResult.assertDateEqual("addition - new year", firstDay2001,actual );
+	end
+	
+	function runArithmeticFunction51(){@Test}
+		
+		actual=firstDay2001.addDays(-1);
+		LogResult.assertDateEqual("subtraction - new year", lastDay2000,actual );
+	end
+		
+	function runArithmeticFunction52(){@Test}
+		LogResult.assertTrue("postive difference - new year", firstDay2001.daysDifferent(lastDay2000)==1 );
+	end	
+	
+	function runArithmeticFunction53(){@Test}
+		LogResult.assertTrue("negative difference - new year", lastDay2000.daysDifferent(firstDay2001)==-1 );
+	end	
+	
+	function runArithmeticFunction54(){@Test}
+		actual=febLeap.addDays(0);
+		LogResult.assertDateEqual("addition - no days", febLeap,actual);
+	end
+end

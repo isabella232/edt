@@ -1,0 +1,108 @@
+package fvt.operators;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestLogicalOperatorsLib
+* @title The function test program for the EGL Logical Operators
+* @keywords Logical Operators
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Logical Operators, include:
+* <br/>
+* <ul>
+*   <li>Not</li>
+*   <li>Or</li>
+*   <li>And</li>
+* <ul>
+*/
+
+library TestLogicalOperatorsLib
+
+    total int;
+    val int = 1;
+    rc boolean;
+
+    function testNotOperators1(){@Test}
+        total = 0;
+        rc = false;
+        if(addAndReturnFalseInOut(val) || !addAndReturnTrueInOut(val) || addAndReturnTrueInOut(val))
+            rc = true;
+        end
+        LogResult.logStdOut("Or short-circuited for (false || true || true )");
+        LogResult.assertTrue1((total == 3) && rc == true);
+    end
+
+    function testNotOperators2(){@Test}
+        total = 0;
+        rc = true;
+        if(!addAndReturnFalseInOut(val) or addAndReturnFalseInOut(val) or addAndReturnFalseInOut(val))
+            rc = false;
+        end
+        LogResult.logStdOut("|| short-circuited for (false or false or false )");
+        LogResult.assertTrue1((total == 1) && rc == false);
+    end
+
+    function testOrOperators1(){@Test}
+        total = 0;
+        rc = false;
+        if(addAndReturnFalseInOut(val) || addAndReturnTrueInOut(val) || addAndReturnTrueInOut(val))
+            rc = true;
+        end
+        LogResult.logStdOut("Or short-circuited for (false || true || true )");
+        LogResult.assertTrue1((total == 2) && rc == true);
+    end
+
+    function testOrOperators2(){@Test}
+        total = 0;
+        rc = true;
+        if(addAndReturnFalseInOut(val) or addAndReturnFalseInOut(val) or addAndReturnFalseInOut(val))
+            rc = false;
+        end
+        LogResult.logStdOut("|| short-circuited for (false or false or false )");
+        LogResult.assertTrue1((total == 3) && rc == true);
+    end
+
+    function testAndOperators1(){@Test}
+        total = 0;
+        rc = true;
+        if(addAndReturnTrueInOut(val) && addAndReturnTrueInOut(val) && addAndReturnFalseInOut(val))
+            rc = false;
+        end
+        LogResult.logStdOut("And short-circuited for (true && false && false )");
+        LogResult.assertTrue1((total == 3) && rc == true);
+    end
+
+    function testAndOperators2(){@Test}
+        total = 0;
+        rc = true;
+        if(addAndReturnFalseInOut(val) and addAndReturnTrueInOut(val) and addAndReturnTrueInOut(val))
+            rc = false;
+        end
+        LogResult.logStdOut("And short-circuited for (false and true and true )");
+        LogResult.assertTrue1((total == 1) && rc == true);
+    end
+
+    private function addAndReturnFalse(parm int in) returns(boolean)
+        total += parm;
+        return(false);
+    end
+
+    private function addAndReturnFalseInOut(parm int inOut) returns(boolean)
+        total += parm;
+        return(false);
+    end
+
+    private function addAndReturnTrue(parm int in) returns(boolean)
+        total += parm;
+        return(true);
+    end
+
+    private function addAndReturnTrueInOut(parm int inOut) returns(boolean)
+        total += parm;
+        return(true);
+    end
+
+end

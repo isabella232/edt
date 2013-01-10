@@ -1,0 +1,79 @@
+package fvt.operators;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestNotOperatorLib
+* @title The function test program for the EGL NOT operator
+* @keywords NOT
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL NOT operator
+*/
+
+library TestNotOperatorLib
+
+    myString string;
+
+    //NOTE: The operator "NOT" is not supported in EDT 0.7, so comment the following code.
+    //    function testNotBlanks1(){@Test}
+    //        LogResult.logStdOut("Test NOT BLANK - 1");
+    //        LogResult.assertTrue1(!(myString not blanks));
+    //    end
+    //
+    //    function testNotBlanks2(){@Test}
+    //        myString = "ABC";
+    //        LogResult.logStdOut("Test NOT BLANK - 2");
+    //        LogResult.assertTrue1((myString not blanks));
+    //    end
+    //
+    //    function testNotNumeric1(){@Test}
+    //        LogResult.logStdOut("Test NOT Numeric - 1");
+    //        LogResult.assertTrue1((myString not Numeric));
+    //    end
+    //
+    //    function testNotNumeric2(){@Test}
+    //        myString = "ABC";
+    //        LogResult.logStdOut("Test NOT Numeric - 2");
+    //        LogResult.assertTrue1((myString not Numeric));
+    //    end
+    //
+    //    function testNotNumeric3(){@Test}
+    //        myString = "123 456";
+    //        LogResult.logStdOut("Test NOT Numeric - 3");
+    //        LogResult.assertTrue1((myString not Numeric));
+    //    end
+    //
+    //    function testNotNumeric4(){@Test}
+    //        myString = "123456";
+    //        LogResult.logStdOut("Test NOT Numeric - 4");
+    //        LogResult.assertTrue1(!(myString not Numeric));
+    //    end
+    //
+    //    function testNotSystemTypeDebug(){@Test}
+    //        if(systemType not debug)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test NOT SystemType debug - 1");
+    //            LogResult.assertTrue1((systemType not debug));
+    //        end
+    //    end
+    //
+    //    function testNotSystemTypeWin(){@Test}
+    //        if(systemType not win)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test NOT SystemType win - 1");
+    //            LogResult.assertTrue1((systemType not win));
+    //        end
+    //    end
+    //
+    //    function testNotSystemTypeJavaScript(){@Test}
+    //        if(systemType not javascript)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test NOT SystemType javascript - 1");
+    //            LogResult.assertTrue1((systemType not javascript));
+    //        end
+    //    end
+    
+end

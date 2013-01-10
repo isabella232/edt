@@ -1,0 +1,28 @@
+package fvt.classes;
+
+class ConcreteClass extends AbstractClass 
+	field1 int = super.field1 + 1;
+	const const1 int = super.const1 + 10;
+	 
+	function abstractFunc() returns(int)
+		return 10;
+	end
+	
+	function getField1(callSuper boolean in) returns(int)
+		if (callSuper)
+			return super.getField1(callSuper);
+		end
+		return field1;
+	end
+	
+	function getConst1(callSuper boolean in) returns(int)
+		if (callSuper)
+			return super.getConst1(callSuper);
+		end
+		return const1;
+	end
+	
+	function getSuperDotField1() returns(int)
+		return super.field1;
+	end
+end

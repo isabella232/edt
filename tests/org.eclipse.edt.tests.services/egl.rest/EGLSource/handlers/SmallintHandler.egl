@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler SmallintHandler
+	item1 smallint;
+end

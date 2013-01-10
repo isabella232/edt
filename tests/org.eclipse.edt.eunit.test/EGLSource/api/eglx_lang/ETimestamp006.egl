@@ -1,0 +1,242 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp006
+  * @title EdtTimestamp006 - runValueFunction
+  * @description testing timestamp function weekDayOf
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp006.egl
+  * @keywords timestamp, functions, weekDayOf
+ **/
+library ETimestamp006 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runWeekDayOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant weekDayOf", 5, constTimeStamp.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full weekDayOf", 6, constTimeStampFull.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime weekDayOf", 6, constTimeStampDateTime.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction04(){@Test}
+		LogResult.assertBigIntEqual("constant date weekDayOf", 6, constTimeStampDate.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction05(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = constTimeStampYDate.weekDayOf();
+			LogResult.failed("constant Ydate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction06(){@Test}
+		aWeekDay int;
+		try
+	    	aWeekDay = constTimeStampYMDate.weekDayOf();
+			LogResult.failed("constant YMdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction07(){@Test}
+		aWeekDay int;
+		try
+	    	aWeekDay = constTimeStampMDDate.weekDayOf();
+			LogResult.failed("constant MDdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MDdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction08(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = constTimeStampDHDate.weekDayOf();
+			LogResult.failed("constant DHdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant DHdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction09(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = constTimeStampTime.weekDayOf();
+			LogResult.failed("constant time weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant time weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction10(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = constTimeStampHMTime.weekDayOf();
+			LogResult.failed("constant HMtime weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant HMtime weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction11(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = constTimeStampMSTime.weekDayOf();
+			LogResult.failed("constant MStime weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MStime weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable weekDayOf", 5, varTimeStamp.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full weekDayOf", 6, varTimeStampFull.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime weekDayOf", 6, varTimeStampDateTime.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction15(){@Test}
+		LogResult.assertBigIntEqual("variable date weekDayOf", 6, varTimeStampDate.weekDayOf());
+	end
+	 	
+	function runWeekDayOfFunction16(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = varTimeStampYDate.weekDayOf();
+			LogResult.failed("variable Ydate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable Ydate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction17(){@Test}
+		aWeekDay int;
+		try
+	    	aWeekDay = varTimeStampYMDate.weekDayOf();
+			LogResult.failed("variable YMdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction18(){@Test}
+		aWeekDay int;
+		try
+	    	aWeekDay = varTimeStampMDDate.weekDayOf();
+			LogResult.failed("variable MDdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MDdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction19(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = varTimeStampDHDate.weekDayOf();
+			LogResult.failed("variable DHdate weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable DHdate weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction20(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = varTimeStampTime.weekDayOf();
+			LogResult.failed("variable time weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable time weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction21(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = varTimeStampHMTime.weekDayOf();
+			LogResult.failed("variable HMtime weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable HMtime weekDayOf: wrong exception thrown");
+		end
+	end
+	 	
+	function runWeekDayOfFunction22(){@Test}
+		aWeekDay int;
+		try
+		    aWeekDay = varTimeStampMSTime.weekDayOf();
+			LogResult.failed("variable MStime weekDayOf: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MStime weekDayOf: wrong exception thrown");
+		end
+	end
+	
+end

@@ -1,0 +1,4 @@
+DefaultDeploymentDescriptorPath/<project>=/WeatherRest/EGLSource/WeatherRest.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=

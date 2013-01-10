@@ -1,0 +1,13 @@
+package api.systemTypes;
+
+// service
+service myService
+	
+	// Variable Declarations
+	variableName string;
+	
+	// Function Declarations
+	function functionName()
+	end
+
+end

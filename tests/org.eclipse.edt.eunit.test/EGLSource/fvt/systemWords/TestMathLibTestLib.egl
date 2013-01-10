@@ -1,0 +1,181 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestMathLibTestLib
+* @title The function test program for MathLib in EDT for RichUI
+* @keywords MathLib
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+* Test the functions defined in mathLib: round, abs, log10 and etc.
+* Removed variations that would have used vgLib.  Changed to use more specific assertDecimalEqual1
+*/
+
+library TestMathLibTestLib
+
+    Re decimal(18, 6);
+    X decimal(18, 6);
+    Y decimal(18, 6);
+
+    decimal19 decimal(19, 3);
+    decimal31 decimal(31, 3);
+
+    function testMathLib1(){@Test}
+        LogResult.logStdOut("Test abs(numericItem mathLibNumber in)");
+        X = -000007894985.888000;
+        Re = mathLib.round(mathLib.abs(X), -Re.decimals());
+       	LogResult.assertDecimalEqual1(000007894985.888000, RE);
+    end
+
+    function testMathLib2(){@Test}
+        LogResult.logStdOut("Test acos(numericItem mathLibNumber in)");
+        X = 000000000000.423486;
+        Re = mathLib.round(mathLib.acos(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000001.133506, Re);
+    end
+
+    function testMathLib3(){@Test}
+        LogResult.logStdOut("Test asin(numericItem mathLibNumber in)");
+        X = 000000000000.523486;
+        Re = mathLib.round(mathLib.asin(X), -Re.decimals());
+		LogResult.assertDecimalEqual1(000000000000.550937, Re);
+    end
+
+    function testMathLib4(){@Test}
+        LogResult.logStdOut("Test atan(numericItem mathLibNumber in)");
+        X = 000000000223.523486;
+        Re = mathLib.round(mathLib.atan(X), -Re.decimals());
+		LogResult.assertDecimalEqual1(1.566323, Re);
+    end
+
+    function testMathLib5(){@Test}
+        LogResult.logStdOut("Test atan2(numericItem1 mathLibNumber in, numericItem2 mathLibNumber in)");
+        X = 000000000005.593919;
+        Y = 000000000000.490412;
+        Re = mathLib.round(mathLib.atan2(X, Y), -Re.decimals());
+ 		LogResult.assertDecimalEqual1(1.483351, Re);
+    end
+
+    function testMathLib7(){@Test}
+        LogResult.logStdOut("Test cos(numericItem mathLibNumber in)");
+        X = -000000000000.000480;
+        Re = mathLib.round(mathLib.cos(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000001.000000, Re);
+    end
+
+    function testMathLib8(){@Test}
+        LogResult.logStdOut("Test cosh(numericItem mathLibNumber in)");
+        X = 000000000000.200000;
+        Re = mathLib.round(mathLib.cosh(X), -Re.decimals());
+		LogResult.assertDecimalEqual1(0000000001.020067,Re);
+    end
+
+    function testMathLib9(){@Test}
+        LogResult.logStdOut("Test exp(numericItem mathLibNumber in)");
+        X = 000000000001.000000;
+        Re = mathLib.round(mathLib.exp(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000002.718282, Re);
+    end
+
+    function testMathLib15(){@Test}
+        LogResult.logStdOut("Test log(numericItem mathLibNumber in)");
+        X = 000983771896.039000;
+        Re = mathLib.round(mathLib.log(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000020.706905,Re);
+    end
+
+    function testMathLib16(){@Test}
+        LogResult.logStdOut("Test log10(numericItem mathLibNumber in)");
+        X = 000000000000.200000;
+        Re = mathLib.round(mathLib.log10(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(-000000000000.698970,Re);
+    end
+
+    function testMathLib17(){@Test}
+        LogResult.logStdOut("Test maximum(numericItem1 mathLibNumber in, numericItem2 mathLibNumber in)");
+        X = 000000000000.212000;
+        Y = 000000000000.212300;
+        Re = mathLib.round(mathLib.max(X, Y), -Re.decimals());
+       	LogResult.assertDecimalEqual1(000000000000.212300,Re);
+
+    end
+
+    function testMathLib18(){@Test}
+        LogResult.logStdOut("Test minimum(numericItem1 mathLibNumber in, numericItem2 mathLibNumber in)");
+        X = -000000000003.120000;
+        Y = 000000000001.670000;
+        Re = mathLib.round(mathLib.min(X, Y), -Re.decimals());
+        LogResult.assertDecimalEqual1(-000000000003.120000,Re);
+    end
+
+    function testMathLib19(){@Test}
+        LogResult.logStdOut("Test pow(numericItem1 mathLibNumber in, numericItem2 mathLibNumber in)");
+        X = 000000000003.000000;
+        Y = 000000000003.000000;
+        Re = mathLib.round(mathLib.pow(X, Y), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000027.000000,Re);
+    end
+
+    function testMathLib20(){@Test}
+        LogResult.logStdOut("Test round(numericItem mathLibNumber in, powerOf10 int in)");
+        X = 000123499999.000000;
+        I int = 6;
+        Re = mathLib.round(X, I);
+        LogResult.assertDecimalEqual1(000123000000.000000,Re);
+    end
+
+    function testMathLib21(){@Test}
+        LogResult.logStdOut("Test sin(numericItem mathLibNumber in)");
+        X = 000983771896.039000;
+        Re = mathLib.round(mathLib.sin(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000000.726784,Re);
+    end
+
+    function testMathLib22(){@Test}
+        LogResult.logStdOut("Test sinh(numericItem mathLibNumber in)");
+        X = 000000000000.200000;
+        Re = mathLib.round(mathLib.sinh(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000000.201336,Re);
+    end
+
+    function testMathLib23(){@Test}
+        LogResult.logStdOut("Test sqrt(numericItem mathLibNumber in)");
+        X = 000000000214.702732;
+        Re = mathLib.round(mathLib.sqrt(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000014.652738,Re);
+    end
+
+    function testMathLib24(){@Test}
+        LogResult.logStdOut("Test tan(numericItem mathLibNumber in)");
+        X = 000983771896.039000;
+        Re = mathLib.round(mathLib.tan(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000001.058117,Re);
+    end
+
+    function testMathLib25(){@Test}
+        LogResult.logStdOut("Test tanh(numericItem mathLibNumber in)");
+        X = 000000000010.000000;
+        Re = mathLib.round(mathLib.tanh(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(000000000001.00000,Re);
+    end
+
+    function testMathLib26(){@Test}
+        LogResult.logStdOut("Test floor(numericItem mathLibNumber in)");
+        X = -000000000000.000480;
+        Re = mathLib.round(mathLib.floor(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(-000000000001.000000,Re);	
+    end
+
+    function testMathLib27(){@Test}
+        LogResult.logStdOut("Test ceiling(numericItem mathLibNumber in)");
+        X = 000000429496.729700;
+        Re = mathLib.ceiling(x);
+        //Re = mathLib.round(mathLib.ceiling(X), -decimals(Re));
+//        Re = mathLib.round(mathLib.ceiling(X), -Re.decimals());
+        LogResult.assertDecimalEqual1(429497,Re);
+    end
+
+end

@@ -1,0 +1,25 @@
+package fvt.functionInvocation;
+
+/*
+* @name myRecord
+* @title The EGL Record
+* @keywords EGL Record
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* The EGL Record, this data type is designed to test the function invocation
+*/
+
+record myRecord
+    s string;
+    i int;
+    rec myRecord2;
+    recArray myRecord2[];
+    recArray3 myRecord2[] = new myRecord2[3];//Change for EDT 0.7
+end
+
+record myRecord2
+    s string;
+    i int;
+end
+ 

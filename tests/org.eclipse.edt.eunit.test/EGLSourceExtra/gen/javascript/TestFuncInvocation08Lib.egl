@@ -1,0 +1,211 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation08Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation08Lib
+
+    exType ExType[] = new ExType[3];
+    exType1 ExType[] = new ExType[3];
+
+    function testLocalInParameters4a(){@Test{targetLang =[JAVASCRIPT]}}
+        exType[1] = new ExType("abc");
+        exType[2] = new ExType("cde");
+        exType[3] = new ExType("efg");
+        localInExternalArray4a(exType);
+    end
+
+    function testLocalInParameters4b(){@Test{targetLang =[JAVASCRIPT]}}
+        localInExternalArray4b(exType);
+    end
+
+    function testLocalInParameters4c(){@Test{targetLang =[JAVASCRIPT]}}
+        localInExternalArray4c(exType);
+    end
+
+    function testLocalInParameters4d(){@Test{targetLang =[JAVASCRIPT]}}
+        localInExternalArray4d(exType);
+    end
+
+    function testLocalInParameters4e(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4e");
+        LogResult.assertStringEqual1("mno", exType[1].getData());
+    end
+
+    function testLocalInParameters4f(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4f");
+        LogResult.assertStringEqual1("pqr", exType[2].getData());
+    end
+
+    function testLocalInParameters4g(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4g");
+        LogResult.assertStringEqual1("stu", exType[3].getData());
+    end
+
+    function testLocalOutParameters5_1(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function externaltype[] - 5");
+        if(exType1 == null)
+        //LogResult.expect("null", "not null");
+        end
+        LogResult.assertTrue1(exType1 != null);
+    end
+
+    function testLocalOutParameters4(){@Test{targetLang =[JAVASCRIPT]}}
+        exType1[1] = new exType("abc");
+        exType1[2] = new exType("cde");
+        exType1[3] = new exType("efg");
+        localOutExternalArray(exType1);
+    end
+
+    function testLocalOutParameters4e(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function OUT externaltype[] parameter - 4e");
+        LogResult.assertBigIntEqual1(3, exType1.getSize());
+    end
+
+    function testLocalOutParameters4f(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function OUT externaltype[] parameter - 4f");
+        LogResult.assertStringEqual1("mno", exType1[1].getData());
+    end
+
+    function testLocalOutParameters4g(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function OUT externaltype[] parameter - 4g");
+        LogResult.assertStringEqual1("pqr", exType1[2].getData());
+    end
+
+    function testLocalOutParameters4h(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function OUT externaltype[] parameter - 4h");
+        LogResult.assertStringEqual1("stu", exType1[3].getData());
+    end
+
+    function testLocalInOutParameters4a(){@Test{targetLang =[JAVASCRIPT]}}
+        exType[1] = new ExType("abc");
+        exType[2] = new ExType("cde");
+        exType[3] = new ExType("efg");
+        localInOutExternalArray4a(exType);
+    end
+
+    function testLocalInOutParameters4b(){@Test{targetLang =[JAVASCRIPT]}}
+        localInOutExternalArray4b(exType);
+    end
+
+    function testLocalInOutParameters4c(){@Test{targetLang =[JAVASCRIPT]}}
+        localInOutExternalArray4c(exType);
+    end
+
+    function testLocalInOutParameters4d(){@Test{targetLang =[JAVASCRIPT]}}
+        localInOutExternalArray4d(exType);
+    end
+
+    function testLocalInOutParameters4e(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4e");
+        LogResult.assertBigIntEqual1(3, exType.getSize());
+    end
+
+    function testLocalInOutParameters4f(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4f");
+        LogResult.assertStringEqual1("mno", exType[1].getData());
+    end
+
+    function testLocalInOutParameters4g(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4g");
+        LogResult.assertStringEqual1("pqr", exType[2].getData());
+    end
+
+    function testLocalInOutParameters4h(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4h");
+        LogResult.assertStringEqual1("stu", exType[3].getData());
+    end
+
+    function localInExternalArray4a(e ExType[] in)
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4a");
+        LogResult.assertTrue1((e != null &&(e.getSize() == 3)));
+        if(e == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInExternalArray4b(e ExType[] in)
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4b");
+        LogResult.assertTrue1((e != null && e[1] != null &&(e[1].getData() == "abc")));
+        if(e[1] == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInExternalArray4c(e ExType[] in)
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4c");
+        LogResult.assertTrue1((e != null && e[3] != null &&(e[2].getData() == "cde")));
+        if(e[2] == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInExternalArray4d(e ExType[] in)
+        LogResult.logStdOut("Local function IN externaltype[] parameter - 4d");
+        LogResult.assertTrue1((e != null && e[3] != null &&(e[3].getData() == "efg")));
+        if(e[3] == null)
+        //LogResult.expect("null", "not null");
+        end
+        e[1] = new ExType("mno");
+        e[2] = new ExType("pqr");
+        e[3] = new ExType("stu");
+    end
+
+    function localOutExternalArray(e ExType[] out)
+        LogResult.logStdOut("Local function OUT externaltype[] parameter - 4");
+        if(e == null)
+        //LogResult.expect("null", "not null");
+        end
+        LogResult.assertTrue1(e != null);
+        e = new ExType[3];
+        e[1] = new ExType("mno");
+        e[2] = new ExType("pqr");
+        e[3] = new ExType("stu");
+    end
+
+    function localInOutExternalArray4a(e ExType[] inOut)
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4a");
+        LogResult.assertTrue1((e != null &&(e.getSize() == 3)));
+        if(e == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInOutExternalArray4b(e ExType[] inOut)
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4b");
+        LogResult.assertTrue1((e != null && e[1] != null &&(e[1].getData() == "abc")));
+        if(e[1] == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInOutExternalArray4c(e ExType[] inOut)
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4c");
+        LogResult.assertTrue1((e != null && e[3] != null &&(e[2].getData() == "cde")));
+        if(e[2] == null)
+        //LogResult.expect("null", "not null");
+        end
+    end
+
+    function localInOutExternalArray4d(e ExType[] inOut)
+        LogResult.logStdOut("Local function INOUT externaltype[] parameter - 4d");
+        LogResult.assertTrue1((e != null && e[3] != null &&(e[3].getData() == "efg")));
+        if(e[3] == null)
+        //LogResult.expect("null", "not null");
+        end
+        e[1] = new ExType("mno");
+        e[2] = new ExType("pqr");
+        e[3] = new ExType("stu");
+    end
+
+end

@@ -1,0 +1,109 @@
+package interfaces;
+
+import data.NullRecord;
+import eglx.rest.EglService;
+
+handler INullPassing
+
+	function nullStringIn(nullString string? in) returns(string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringInout(nullString string? inout)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringOut(nullString string? out)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringAll(nullString1 string? in, nullString2 string? inout, nullstring3 string? out) returns (string?)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullintIn(nullint int? in) returns(string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullintInout(nullint int? inout)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullintOut(nullint int? out)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullintAll(nullint1 int? in, nullint2 int? inout, nullint3 int? out) returns (int?)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringArrayIn(nullStringArray string[]? in) returns(string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringArrayInout(nullStringArray string[]? inout)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringArrayOut(nullStringArray string[]? out)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullStringArrayAll(nullStringArray1 string[]? in, nullStringArray2 string[]? inout, nullStringArray3 string[]? out) returns (string[]?)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordItemIn(nullRecord NullRecord in) returns(string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordItemInout(nullRecord NullRecord inout)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordItemOut1a(nullRecord NullRecord out)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordItemAll(nullRecord1 NullRecord in, nullRecord2 NullRecord inout, nullRecord3 NullRecord out) returns (string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordIn(nullRecord NullRecord? in) returns(string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordInout(nullRecord NullRecord? inout)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordOut(nullRecord NullRecord? out)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+	function nullRecordAll(nullRecord1 NullRecord? in, nullRecord2 NullRecord? inout, nullRecord3 NullRecord? out) returns (string)
+		{
+			@EglService {serviceName = "services.NullPassing"}
+		}
+	end
+end
+

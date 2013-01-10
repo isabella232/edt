@@ -1,0 +1,63 @@
+package sql.test;
+
+import eglx.persistence.Id;
+import eglx.persistence.Transient;
+import eglx.persistence.sql.Column;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.Table;
+
+handler Customer {@Table { name="CUSTOMER_TABLE" } }
+
+	use dataSourceLibrary ;
+
+	cust_id int { @Id, @Column { name="CUST_ID" } } ;
+	cust_name string { @Column { name="CUST_NAME" } };
+	
+	order order ;
+	orders Order[]{ @Transient } ; // { @OneToMany, @Transient } ;
+
+//    function addCustomer ( )
+//    	add this to ds ;
+//    end
+//    
+//    function getCustomer ( cust_id int )
+//    	get this from ds ;
+//    end
+    
+    function getOrders ( )
+    	// entity associations not yet supported, so specify a WHERE clause
+// 		get orders from ds;
+		get orders from ds with #sql{select ORDER_ID, ORDER_MOD, ORDER_SHIP_DATE, CUST_ID FROM ORDER_TABLE WHERE CUST_ID = ?} using cust_id;
+    end
+    
+//    function getCustomerWithOrders ( cust_id int in )
+//    	getCustomer ( cust_id ) ;
+//    	getOrders ( ) ;
+//    end
+//    
+//    function replaceCustomer ( )
+//    	replace this to ds ;
+//    end
+//    
+//    function deleteCustomer ( )
+//    	delete this from ds ;
+//    end
+    
+    function createTable ( )
+   	end
+   	
+//   	function addCustomer ( id int ) ;
+//   		initializeCustomer ( id ) ;
+//   		addCustomer ( ) ;
+//   	end
+   	
+   	function initializeCustomer ( id int )
+   		cust_id = id ;
+   		cust_name = "Customer " + id ;
+   	end
+   	
+   	function modifyCustomer ( mod int )
+   		cust_name = "Customer " + cust_id + ", mod " + mod ;
+   	end
+
+end

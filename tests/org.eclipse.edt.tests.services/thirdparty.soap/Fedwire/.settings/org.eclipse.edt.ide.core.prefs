@@ -1,0 +1,6 @@
+#Mon Jan 23 15:11:04 EST 2012
+DefaultDeploymentDescriptorPath/<project>=/Fedwire/EGLSource/Fedwire.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds//EGLSource/services=org.eclipse.edt.ide.gen.JavaGenProvider
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

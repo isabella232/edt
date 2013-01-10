@@ -1,0 +1,29 @@
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+import eglx.services.Encoding;
+
+// interface
+library ICurrency
+
+	function GetCurrencyGet(fromCurrency string in, toCurrency string in) returns(double) 
+	   {	
+	   		@Rest {
+	   			method = HttpMethod._GET,
+	   			uriTemplate="http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={fromCurrency}&ToCurrency={toCurrency}"
+	   		}
+	   	}
+   end
+   
+   function GetCurrencyPost(formdata CurrencyConvertorData in) returns(double) 
+   		{	
+   			@Rest{
+	   			method = HttpMethod.POST,
+   				uriTemplate="http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate", 
+   				requestFormat = Encoding._FORM
+   			}
+   		}
+   	end
+
+end

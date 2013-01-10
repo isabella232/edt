@@ -1,0 +1,85 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library ObjectInitialization004
+
+	function testString() {@Test}
+		s1 string;
+		s2 string?;
+		s3 string[];
+		s4 string?[];
+		s5 string[] = new string[];
+		s6 string[] = new string[4];
+		s7 string?[] = new string?[];
+		s8 string?[] = new string?[4];
+		
+		LogResult.assertTrue("s1", s1 == "");
+		LogResult.assertTrue("s2", s2 == null);
+		LogResult.assertTrue("s3", s3.getSize() == 0);
+		LogResult.assertTrue("s4", s4.getSize() == 0);
+		LogResult.assertTrue("s5", s5.getSize() == 0);
+		LogResult.assertTrue("s6", s6.getSize() == 4 && s6[1] == "");
+		LogResult.assertTrue("s7", s7.getSize() == 0);
+		LogResult.assertTrue("s8", s8.getSize() == 4 && s8[1] == null);
+	end
+	
+	function testDecimal() {@Test}
+		d1 decimal;
+		d2 decimal?;
+		d3 decimal[];
+		d4 decimal?[];
+		d5 decimal[] = new decimal[];
+		d6 decimal[] = new decimal[4];
+		d7 decimal?[] = new decimal?[];
+		d8 decimal?[] = new decimal?[4];
+		
+		LogResult.assertTrue("d1", d1 == 0);
+		LogResult.assertTrue("d2", d2 == null);
+		LogResult.assertTrue("d3", d3.getSize() == 0);
+		LogResult.assertTrue("d4", d4.getSize() == 0);
+		LogResult.assertTrue("d5", d5.getSize() == 0);
+		LogResult.assertTrue("d6", d6.getSize() == 4 && d6[1] == 0);
+		LogResult.assertTrue("d7", d7.getSize() == 0);
+		LogResult.assertTrue("d8", d8.getSize() == 4 && d8[1] == null);
+	end
+	
+	function testNumber() {@Test}
+		n1 number;
+		n2 number?;
+		n3 number[];
+		n4 number?[];
+		n5 number[] = new number[];
+		n6 number[] = new number[4];
+		n7 number?[] = new number?[];
+		n8 number?[] = new number?[4];
+		
+		LogResult.assertTrue("n1", n1 == 0);
+		LogResult.assertTrue("n2", n2 == null);
+		LogResult.assertTrue("n3", n3.getSize() == 0);
+		LogResult.assertTrue("n4", n4.getSize() == 0);
+		LogResult.assertTrue("n5", n5.getSize() == 0);
+		LogResult.assertTrue("n6", n6.getSize() == 4 && n6[1] == 0);
+		LogResult.assertTrue("n7", n7.getSize() == 0);
+		LogResult.assertTrue("n8", n8.getSize() == 4 && n8[1] == null);
+	end
+	
+	function testAny() {@Test}
+//		a1 any; // invalid
+		a2 any?;
+		a3 any[];
+		a4 any?[];
+		a5 any[] = new any[];
+//		a6 any[] = new any[4]; // invalid
+		a7 any?[] = new any?[];
+		a8 any?[] = new any?[4];
+		
+		LogResult.assertTrue("a2", a2 == null);
+		LogResult.assertTrue("a3", a3.getSize() == 0);
+		LogResult.assertTrue("a4", a4.getSize() == 0);
+		LogResult.assertTrue("a5", a5.getSize() == 0);
+		LogResult.assertTrue("a7", a7.getSize() == 0);
+		LogResult.assertTrue("a8", a8.getSize() == 4 && a8[1] == null);
+	end
+end

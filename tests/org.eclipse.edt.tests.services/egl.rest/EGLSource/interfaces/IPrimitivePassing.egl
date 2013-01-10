@@ -1,0 +1,249 @@
+package interfaces;
+
+import eglx.rest.EglService;
+ 
+library IPrimitivePassing
+
+	function int_inParm(p int in) returns (int)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function int_inoutParm(p int )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function int_outparm(p int out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function int_all(p1 int out, p2 int in, p3 int ) returns (int)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function bigint_inParm(p bigint in) returns (bigint)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function bigint_inoutParm(p bigint )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function bigint_outparm(p bigint out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function bigint_all(p1 bigint out, p2 bigint in, p3 bigint ) returns (bigint)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallint_inParm(p smallint in) returns (smallint)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallint_inoutParm(p smallint )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallint_outparm(p smallint out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallint_all(p1 smallint out, p2 smallint in, p3 smallint ) returns (smallint)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallfloat_inParm(p smallfloat in) returns (smallfloat)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallfloat_inoutParm(p smallfloat )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallfloat_outparm(p smallfloat out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function smallfloat_all(p1 smallfloat out, p2 smallfloat in, p3 smallfloat ) returns (smallfloat)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function float_inParm(p float in) returns (float)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function float_inoutParm(p float )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function float_outparm(p float out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function float_all(p1 float out, p2 float in, p3 float ) returns (float)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function decimal_inParm(p decimal(10,2) in) returns (decimal(10,2))
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function decimal_inoutParm(p decimal(10,2) )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function decimal_outparm(p decimal(10,2) out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function decimal_all(p1 decimal(10,2) out, p2 decimal(10,2) in, p3 decimal(10,2) ) returns (decimal(10,2))
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function string_inParm(p string in) returns (string)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function string_inoutParm(p string inout)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function string_outparm(p string out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function string_all(p1 string out, p2 string in, p3 string inout) returns (string)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function lstring_inParm(p string(5) in) returns (string(5))
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function lstring_inoutParm(p string(5) inout)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function lstring_outparm(p string(5) out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function lstring_all(p1 string(5) out, p2 string(5) in, p3 string(5) inout) returns (string(5))
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function time_inParm(p time in) returns (time)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function time_outparm(p time out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function time_inoutparm(p time inout)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function time_all(p2 time in, p3 time inout) returns (time)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function timestamp_inParm(p timestamp in) returns (timestamp)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function timestamp_outparm(p timestamp("yyyyMMddHHmmss") out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function timestamp_inoutparm(p timestamp("yyyyMMddHHmmss") inout)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function timestamp_all(p2 timestamp in, p3 timestamp("yyyyMMddHHmmss") inout) returns (timestamp)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function boolean_inParm(p boolean in) returns (boolean)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function boolean_inoutParm(p boolean )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function boolean_outparm(p boolean out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function boolean_all(p1 boolean out, p2 boolean in, p3 boolean ) returns (boolean)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function date_inParam(p date in) returns (date)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function date_inoutParam(p date )
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function date_outParam(p date out)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	function date_all(p1 date out, p2 date in, p3 date ) returns (date)
+		{
+			@EglService {serviceName = "services.PrimitivePassing"}
+		}
+	end
+	
+end
+

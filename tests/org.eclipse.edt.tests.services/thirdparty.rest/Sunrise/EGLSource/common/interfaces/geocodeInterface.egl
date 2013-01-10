@@ -1,0 +1,59 @@
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+// interface
+Library geocodeInterface
+
+	function GetZipCodeForAddress(address string in) returns (STRING)
+		{
+			@Rest {
+				method=HttpMethod._GET, 
+				uriTemplate="/geocode?address={address}"
+			}
+		}
+	end
+	function GetXMLForAddress(address string in) returns (STRING)
+		{
+			@Rest {
+				method=HttpMethod._GET, 
+				uriTemplate="/geocode?address={address}"
+			}
+		}
+	end
+	function GetXMLRecForAddress(address string in) returns (RDF)
+		{
+			@Rest {
+				method=HttpMethod._GET, 
+				uriTemplate="/geocode?address={address}", 
+				responseFormat = XML
+			}
+		}
+	end
+end
+
+
+
+
+/*Record geo:PointRec
+	_rdf:nodeID String?{@xmlAttribute{name="rdf:nodeID"}};
+	_dc:description String?{@xmlElement{name="dc:description"}};
+	_geo:long String?{@xmlElement{name="geo:long"}};
+	_geo:lat String?{@xmlElement{name="geo:lat"}};
+end
+*/
+Record RDF {@xmlRootElement {namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#"}}
+	Point PointRec {@xmlElement{name="Point", namespace="http://www.w3.org/2003/01/geo/wgs84_pos#"}};
+end
+
+Record PointRec
+	_nodeID String?{@xmlAttribute{name="nodeID", namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#"}};
+	_description String?{@xmlElement{name="description", namespace="http://purl.org/dc/elements/1.1/"}};
+	_long String?{@xmlElement{name="long", namespace="http://www.w3.org/2003/01/geo/wgs84_pos#"}};
+	_lat String?{@xmlElement{name="lat", namespace="http://www.w3.org/2003/01/geo/wgs84_pos#"}};
+end
+

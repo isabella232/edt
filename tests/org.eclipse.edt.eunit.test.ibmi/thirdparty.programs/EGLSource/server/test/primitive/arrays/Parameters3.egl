@@ -1,0 +1,227 @@
+package server.test.primitive.arrays;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.AnyException;
+import server.host.programs.PrimitiveArrays;
+import server.host.programs.primitive;
+
+// basic library
+library Parameters3
+	
+	char20 string[]; 
+	lchar20 string(20)[]; 
+	unicode20 string[]; 
+	lunicode20 string(20)[]; 
+	bin2sign smallint[];
+	bin4sign int[];
+	bin8sign bigint[];
+	dec112 decimal(11,2)[];
+	dec15 decimal(15)[];
+	num6 decimal(6)[];
+	num103 decimal(10,3)[];
+	bin2 int[];
+	bin4 bigint[];
+	date1 date[];
+	date2 date[];
+	date3 date[];
+	time1 time[];
+	time2 time[];
+	time3 time[];
+	timestamp1 timestamp("yyyyMMddHHmmss")[];
+	float4 smallfloat[];
+	float8 float[];
+	testParameters boolean = true;
+	function test1(){@Test}
+		char20 = ["abcd", "EFG"]; 
+		lchar20 = ["ABCD", "efg"]; 
+		unicode20 = ["xyz", "1234"]; 
+		lunicode20 = ["XYZ", "4321"]; 
+		bin2sign = [1,2];
+		bin4sign = [3,4];
+		bin8sign = [4,5];
+		dec112 = [45.67, 64.97];
+		dec15 = [6,7];
+		num6 = [8,9];
+		num103 = [11.61, 56.72];
+		bin2 = [10,11];
+		bin4  = [12,13];
+		date1 = ["06/24/2011" ,"03/12/1011"];
+		date2 = ["05/19/1997", "01/02/1947"];
+		date3 = ["04/03/1922", "07/24/1822"];
+		time1 = ["06:24:11" ,"13:12:10"];
+		time2 = ["05:19:19", "11:02:47"];
+		time3 = ["04:03:22", "17:24:18"];
+		timestamp1 = ["2012/02/11 17:54:34", "1812/06/01 08:45:26"];
+		float4 = [14,15];
+		float8 = [16,17];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgram3");
+			PrimitiveArrays.primitiveHostProgram3(char20, lchar20, unicode20, lunicode20, bin2sign, bin4sign, bin8sign, dec112, dec15, num6, num103, bin2, bin4, date1, date2, date3, time1, time2, time3, timestamp1, float4, float8, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function char20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail char20.getSize()", 2, char20.getSize());
+            LogResult.assertStringEqual("Fail char20[1]", "abcdYYYYY           ", char20[1]);
+            LogResult.assertStringEqual("Fail char20[2]", "EFG YYYYY           ", char20[2]);
+		end
+	end
+	function lchar20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail lchar20.getSize()", 2, lchar20.getSize());
+            LogResult.assertStringEqual("Fail lchar20[1]", "ABCDYYYYY           ", lchar20[1]);
+            LogResult.assertStringEqual("Fail lchar20[2]", "efg YYYYY           ", lchar20[2]);
+		end
+	end
+	function unicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail unicode20.getSize()", 2, unicode20.getSize());
+            LogResult.assertStringEqual("Fail unicode20[1]", "xyz ZZZZZZZZZZ      ", unicode20[1]);
+            LogResult.assertStringEqual("Fail unicode20[2]", "1234ZZZZZZZZZZ      ", unicode20[2]);
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail lunicode20.getSize()", 2, lunicode20.getSize());
+            LogResult.assertStringEqual("Fail lunicode20[1]", "XYZ ZZZZZZZZZZ      ", lunicode20[1]);
+            LogResult.assertStringEqual("Fail lunicode20[2]", "4321ZZZZZZZZZZ      ", lunicode20[2]);
+		end
+	end
+	function bin2signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin2sign.getSize()", 2, bin2sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin2sign[1]", 99, bin2sign[1]);
+            LogResult.assertBigIntEqual("Fail bin2sign[2]", 100, bin2sign[2]);
+		end
+	end
+	function bin4signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin4sign.getSize()", 2, bin4sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin4sign[1]", 1001, bin4sign[1]);
+            LogResult.assertBigIntEqual("Fail bin4sign[2]", 1002, bin4sign[2]);
+		end
+	end
+	function bin8signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin8sign.getSize()", 2, bin8sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin8sign[1]", 10002, bin8sign[1]);
+            LogResult.assertBigIntEqual("Fail bin8sign[2]", 10003, bin8sign[2]);
+		end
+	end
+	function dec112Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail dec112.getSize()", 2, dec112.getSize());
+            LogResult.assertDecimalEqual("Fail dec112[1]", 1043.67, dec112[1]);
+            LogResult.assertDecimalEqual("Fail dec112[2]", 1062.97, dec112[2]);
+		end
+	end
+	function dec15Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail dec15.getSize()", 2, dec15.getSize());
+            LogResult.assertDecimalEqual("Fail dec15[1]", 1004, dec15[1]);
+            LogResult.assertDecimalEqual("Fail dec15[2]", 1005, dec15[2]);
+		end
+	end
+	function num6Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail num6.getSize()", 2, num6.getSize());
+            LogResult.assertDecimalEqual("Fail num6[1]", 10006, num6[1]);
+            LogResult.assertDecimalEqual("Fail num6[2]", 10007, num6[2]);
+		end
+	end
+	function num103Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail num103.getSize()", 2, num103.getSize());
+            LogResult.assertDecimalEqual("Fail num103[1]", 10009.61, num103[1]);
+            LogResult.assertDecimalEqual("Fail num103[2]", 10054.72, num103[2]);
+		end
+	end
+	function bin2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin2.getSize()", 2, bin2.getSize());
+            LogResult.assertBigIntEqual("Fail bin2[1]", 108, bin2[1]);
+            LogResult.assertBigIntEqual("Fail bin2[2]", 109, bin2[2]);
+		end
+	end
+
+	function bin4Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin4.getSize()", 2, bin4.getSize());
+            LogResult.assertBigIntEqual("Fail bin4[1]", 1010, bin4[1]);
+            LogResult.assertBigIntEqual("Fail bin4[2]", 1011, bin4[2]);
+		end
+	end
+	function date1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date1.getSize()", 2, date1.getSize());
+            LogResult.assertDateEqual("Fail date1[1]", "11/29/2016", date1[1]);
+            LogResult.assertDateEqual("Fail date1[2]", "08/17/1016", date1[2]);
+		end
+	end
+	function date2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date2.getSize()", 2, date2.getSize());
+            LogResult.assertDateEqual("Fail date2[1]", "10/24/2002", date2[1]);
+            LogResult.assertDateEqual("Fail date2[2]", "06/07/1952", date2[2]);
+		end
+	end
+
+	function date3Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date3.getSize()", 2, date3.getSize());
+            LogResult.assertDateEqual("Fail date3[1]", "09/08/1927", date3[1]);
+            LogResult.assertDateEqual("Fail date3[2]", "12/29/1827", date3[2]);
+		end
+	end
+	function time1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time1.getSize()", 2, time1.getSize());
+            LogResult.assertTimeEqual("Fail time1[1]", "11:29:16", time1[1]);
+            LogResult.assertTimeEqual("Fail time1[2]", "18:17:15", time1[2]);
+		end
+	end
+	function time2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time2.getSize()", 2, time2.getSize());
+            LogResult.assertTimeEqual("Fail time2[1]", "10:24:24", time2[1]);
+            LogResult.assertTimeEqual("Fail time2[2]", "16:07:52", time2[2]);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time3.getSize()", 2, time3.getSize());
+            LogResult.assertTimeEqual("Fail time3[1]", "09:08:27", time3[1]);
+            LogResult.assertTimeEqual("Fail time3[2]", "22:29:23", time3[2]);
+		end
+	end
+	function timestamp1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail timestamp1.getSize()", 2, timestamp1.getSize());
+            LogResult.assertTimestampEqual("Fail timestamp1[1]", "2017/07/16 22:59:39", timestamp1[1]);
+            LogResult.assertTimestampEqual("Fail timestamp1[2]", "1817/11/06 13:50:31", timestamp1[2]);
+		end
+	end
+	function float4Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail float4.getSize()", 2, float4.getSize());
+            LogResult.assertFloatEqual("Fail float4[1]", 14.99 as smallfloat, float4[1]);
+            LogResult.assertFloatEqual("Fail float4[2]", 15.99 as smallfloat, float4[2]);
+		end
+	end
+	function float8Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail float8.getSize()", 2, float8.getSize());
+            LogResult.assertFloatEqual("Fail float8[1]", 16.99, float8[1]);
+            LogResult.assertFloatEqual("Fail float8[2]", 17.99, float8[2]);
+		end
+	end
+
+end

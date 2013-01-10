@@ -1,0 +1,41 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library dateTimeLibFunctions
+
+    myDate date;
+    myTimestamp timeStamp ("yyyyMMddHHmmss");
+    myString string;
+    i int = 19990201;
+    m int = 12;
+    d int = 25;
+    y int = 2011;
+
+    function dateFromGregorian(){@Test}
+        myDate = dateTimeLib.dateFromGregorian(i);								
+        myString = StringLib.format(myDate, "M/d/yy");
+        LogResult.assertStringEqual("dateFromGregorian", "2/1/99", myString);
+    end
+
+    function dateFromJulian(){@Test}
+        i = 1981113;
+        myDate = dateTimeLib.dateFromJulian(i);									      
+        myString = StringLib.format(myDate, "M/d/yy");
+        LogResult.assertStringEqual("dateFromJulian", "4/23/81", myString);
+    end
+
+    function mdy(){@Test}
+        myDate = dateTimeLib.mdy(m, d, y);
+        myString = StringLib.format(myDate, "M/d/yy");							
+        LogResult.assertStringEqual("mdy", "12/25/11", myString);
+    end
+
+    function dateFromInt(){@Test}
+        myDate = dateTimeLib.dateFromInt(25);									
+        myString = StringLib.format(myDate, "MM/dd/yyyy");
+        LogResult.assertStringEqual("dateFromInt", "01/25/1970", myString);
+    end
+
+end

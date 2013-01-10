@@ -1,0 +1,34 @@
+// Aug 15, 2006 3:55:26 PM - EGL V7.0 Migration
+/*
+* @name Basic Library Support
+* @title The function test program for Basic Library Support in EDT
+* @keywords Library
+* @author EDT team
+* @createDate 2011/08/25
+* @description 
+* Test the Basic Library Support
+*/
+
+package fvt.librarySupport;
+
+library TestBasicLibrarySupportLib2
+
+    aString string = "";
+    aInt int = 0;
+
+    function setString(str string in)
+        aString = str;
+    end
+
+    function getString() returns(string)
+        return(aString);
+    end
+
+    function setInt(i int in)
+        aInt = i;
+    end
+
+    function getInt() returns(int)
+        return(aInt);
+    end
+end

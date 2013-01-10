@@ -1,0 +1,173 @@
+package fvt.Json;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.json.JsonLib;
+
+/* 
+* @name JSONFixedNumTestLib
+* @title The function test program for converting JSON numeric types Dictionary fields
+* @keywords Fixed Number
+* @author EDT team
+* @createDate 2011/09/09
+* @description 
+* Test conversion JSON numeric types Dictionary fields
+*/
+
+// basic program
+//
+
+library JSONFixedNumTestLib
+
+    use JSONTestsLib;
+
+
+    testDict Dictionary;
+
+    function testType_smallint(){@Test}
+        testRecord Dictionary{f1 = SMALLINT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_smallint:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing small int convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing smallint type num(4)");
+        LogResult.assertTrue("Fail in smallint type num(4)", testDict.f1 isa decimal(4));
+    end
+
+    function test_smallint(){@Test}
+        testRecord Dictionary{f1 = SMALLINT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_smallint:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing small int convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing smallint value");
+        LogResult.assertBigIntEqual("Fail in smallint value", SMALLINT_VAL, testDict.f1);
+    end
+
+    function testType_int(){@Test}
+        testRecord Dictionary{f1 = INT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_int:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing int convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing int type num(9)");
+        LogResult.assertTrue("Fail in int type num(9)", testDict.f1 isa decimal(9));
+    end
+
+    function test_int(){@Test}
+        testRecord Dictionary{f1 = INT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_int:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing int convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing int value");
+        LogResult.assertBigIntEqual("Fail in int value", INT_VAL, testDict.f1);
+    end
+
+    function testType_bigint(){@Test}
+        testRecord Dictionary{f1 = BIGINT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing bigint convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_bigint:" + json);
+        LogResult.logStdOut("testing bigint type num(18)");
+        LogResult.assertTrue("Fail in bigint type num(18)",testDict.f1 isa decimal(18));
+        LogResult.logStdOut("testing bigint value");
+        LogResult.assertBigIntEqual("Fail in bigint value", BIGINT_VAL, testDict.f1);
+    end
+
+    function test_bigint(){@Test}
+        testRecord Dictionary{f1 = BIGINT_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing bigint convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_bigint:" + json);
+        LogResult.assertBigIntEqual("Fail in bigint value", BIGINT_VAL, testDict.f1);
+    end
+
+    function testType_num20(){@Test}
+        testRecord Dictionary{f1 = NUM20_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(20) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_num20:" + json);
+        LogResult.logStdOut("testing num(20) type num(20)");
+        LogResult.assertTrue("Fail in num(20) type num(20)", testDict.f1 isa decimal(20));
+    end
+
+    function test_num20(){@Test}
+        testRecord Dictionary{f1 = NUM20_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(20) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_num20:" + json);
+        LogResult.logStdOut("testing num(20) value");
+        LogResult.assertDecimalEqual("Fail in num(20) value", NUM20_VAL, testDict.f1 as decimal(20));
+    end
+
+    function testType_num25(){@Test}
+        testRecord Dictionary{f1 = NUM25_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(25) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_num25:" + json);
+        LogResult.logStdOut("testing num(25) type num(25)");
+        LogResult.assertTrue("Fail in num(25) type num(25)", testDict.f1 isa decimal(25));
+    end
+
+    function test_num25(){@Test}
+        testRecord Dictionary{f1 = NUM25_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(25) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("test_num25:" + json);
+        LogResult.logStdOut("testing num(25) value");
+        LogResult.assertDecimalEqual("Fail in num(25) value", NUM25_VAL, testDict.f1 as decimal(25));
+    end
+
+    function testType_num30(){@Test}
+        testRecord Dictionary{f1 = NUM30_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_num30:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(30) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing num(30) type num(30)");
+        LogResult.assertTrue("Fail in num(30) type num(30)", testDict.f1 isa decimal(30));
+    end
+
+    function test_num30(){@Test}
+        testRecord Dictionary{f1 = NUM30_VAL};
+        json string = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_num30:" + json);
+        testDict = new Dictionary{};
+        LogResult.logStdOut("testing num(30) convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing num(30) value");
+        LogResult.assertDecimalEqual("Fail in num(30) value", NUM30_VAL, testDict.f1 as decimal(30));
+    end
+end
+
+

@@ -1,0 +1,1505 @@
+package fvt.Json;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.json.JsonLib;
+import eglx.rbd.StrLib;
+import fvt.json.handlers.EmpNumberHandler;
+import fvt.json.handlers.EmployeeHandler;
+import fvt.json.handlers.MyRecordHandler;
+
+
+
+
+/* 
+* @name JSONTestsLib
+* @title The function test program for converting record, dictionary to and from JSON
+* @keywords dictionary record
+* @author EDT team
+* @createDate 2011/09/09
+* @description 
+* Test conversion record, dictionary to and from JSON
+*/
+
+// basic library
+
+library JSONTestHandlersLib
+
+    const SMALLINT_VAL smallInt = 1234;
+    const INT_VAL int = 123456789;
+    const BIGINT_VAL bigInt = 123456789012345678I;
+    //const NUM20_VAL num(20) = 12345678901234567890;
+    const NUM20_VAL decimal(20) = 12345678901234567890.; //change for EDT 0.7
+    //const NUM25_VAL num(25) = 1234567890123456789012345;
+    const NUM25_VAL decimal(25) = 1234567890123456789012345.; //change for EDT 0.7
+    //const NUM30_VAL num(30) = 123456789012345678901234567890;
+    const NUM30_VAL decimal(30) = 123456789012345678901234567890.; //change for EDT 0.7
+    const DEC314_VAL decimal(31, 4) = 123456789012345678901234567.8901;
+    const DEC3215_VAL decimal(32, 15) = 12345678901234567.890123456789012;
+    const DEC324_VAL decimal(32, 4) = 12345678901.2345;
+    const FLOAT_VAL smallFloat = 17E12;
+    const DOUBLE_VAL Float = 19.654E35;
+    const STRING_VAL string = "ABCD\"\\'{}[]()\\\b\f\n\r\t@</>a=b,c:d e-3E+6.";
+    const STRING_ITEM1_VAL string = "item1_\"\\'{}[]()\\\b\f\n\r\t@</>a=b,c:d e-3E+6.";
+    const STRING_ITEM2_VAL string = "item2_\"\\'{}[]()\\\b\f\n\r\t@</>a=b,c:d e-3E+6.";
+    const BOOL_VAL boolean = true;
+    const DATE_VAL date = "12/16/1972";
+    const TIME_VAL time = "13:15:19";
+    const TIMESTAMP_VAL timestamp("yyyyMMddHHmmss") = "1972/12/16 13:15:19";
+//NOBYTES    const BYTES_VAL bytes(5) = 0x123456789A;
+
+    emp EmployeeHandler{EmpNo{department = "sales", value = 10}, LastName = "Smith"};//, dict{abc="abc",cde="cde"} };
+    ID int[] =[1, 3, 5, 9];
+    lastName string[] =["Cervantes", "Moliere", "Twain", "Tolstoy"];
+    firstName string[] =["Miguel", "", "Mark", "Lev"];
+    age int[] =[90, 29, 30, 55];
+    emp2 EmployeeHandler{};
+    
+    function initEmp(emp EmployeeHandler inout, emp2 EmployeeHandler inout, json string inout)
+        emp.dict = new Dictionary{abc = "abc", cde = "cde"};
+
+        empNo1 EmpNumberHandler{department = "shipping", value = 20};
+        emp.array.appendElement(empNo1);
+        empNo2 EmpNumberHandler{department = "admin", value = 20};
+        emp.array.appendElement(empNo2);
+
+        emp.dict["IDs"] = ID;
+        emp.dict["dictEmpNo1"] = empNo1;
+
+        json = JSONConverter.convert2JSON(emp);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, emp2);
+    end
+    
+//    function bytesAreSkipped(){@Test}
+//    	//TODO when Bug 393331 is fixed, remove this function and uncomment everything in the package
+//    	// that's commented out with "//NOBYTES".
+//    	LogResult.skipped("Bug 393331 - JSON and XML conversion not yet supported for the bytes type");
+//    end
+
+    function testJSONConversionEmployeeDepart(){@Test}
+        initEmp(emp, emp2, json);
+        /*  		myRows ArrayDictionary
+  		{
+    		col1 = ID,
+    		col2 = lastName,
+    		col3 = firstName,
+    		col4 = age
+  		};
+ 		emp.dict["adict"]=myRows;
+*/
+
+        LogResult.logStdOut("\"department\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "department") == 0);
+    end
+
+    function testJSONConversionEmployeeDept(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("\"dept\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "dept") != 0);
+    end
+
+    function testJSONConversionEmployeeValue(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("\"value\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "value") == 0);
+    end
+
+    function testJSONConversionEmployeeNo(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("\"empno\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "empno") != 0);
+    end
+
+    function testJSONConversionEmployeeEmpNoDepart(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.EmpNo.department ");
+        LogResult.assertStringEqual1(emp.EmpNo.department, emp2.EmpNo.department);
+    end
+
+    function testJSONConversionEmployeeEmpNoValue(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.EmpNo.value ");
+        LogResult.assertBigIntEqual1(emp.EmpNo.value, emp2.EmpNo.value);
+    end
+
+    function testJSONConversionEmployeeArrSize(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.array.getSize() ");
+        LogResult.assertBigIntEqual1(emp.array.getSize(), emp2.array.getSize());
+    end
+
+    function testJSONConversionEmployeeArr(){@Test}
+        initEmp(emp, emp2, json);
+
+        i int = 0;
+        while(i < emp.array.getSize())
+            i += 1;
+
+            LogResult.logStdOut("Employee.array[" + i + "].department ");
+            LogResult.assertStringEqual("Fail in Employee.array[" + i + "].department", emp.array[i].department, emp2.array[i].department);
+
+            LogResult.logStdOut("Employee.array[" + i + "].value ");
+            LogResult.assertBigIntEqual("Fail in Employee.array[" + i + "].value", emp.array[i].value, emp2.array[i].value);
+        end
+    end
+
+    function testJSONConversionEmployeeLName(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.LastName ");
+        LogResult.assertStringEqual1(emp.LastName, emp2.LastName);
+    end
+
+    function testJSONConversionEmployeeDictAbc(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.dict[\"abc\"] ");
+        LogResult.assertStringEqual1(emp.dict["abc"], emp2.dict["abc"]);
+    end
+
+    function testJSONConversionEmployeeDictCde(){@Test}
+        initEmp(emp, emp2, json);
+
+        LogResult.logStdOut("Employee.dict[\"cde\"] ");
+        LogResult.assertStringEqual1(emp.dict["cde"], emp2.dict["cde"]);
+    end
+
+    empAny any = new EmployeeHandler{EmpNo{department = "sales", value = 10}, LastName = "Smith"};//, dict{abc="abc",cde="cde"} };
+    empAny2 any = new EmployeeHandler{};
+
+    function initEmpAny(empAny any inout, empAny2 any inout, json string inout)
+        (empAny as EmployeeHandler).dict = new Dictionary{abc = "abc", cde = "cde"};
+        empNo1 EmpNumberHandler{department = "shipping", value = 20};
+        (empAny as EmployeeHandler).array.appendElement(empNo1);
+        empNo2 EmpNumberHandler{department = "admin", value = 20};
+        (empAny as EmployeeHandler).array.appendElement(empNo2);
+        (empAny as EmployeeHandler).dict["IDs"] = ID;
+        (empAny as EmployeeHandler).dict["dictEmpNo1"] = empNo1;
+
+        json = JSONConverter.convert2JSON(empAny);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, empAny2);
+    end
+
+    function testJSONAnyConversionEmployeeDepart(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("\"department\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "department") == 0);
+    end
+
+    function testJSONAnyConversionEmployeeDept(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("\"dept\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "dept") != 0);
+    end
+
+    function testJSONAnyConversionEmployeeValue(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("\"value\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "value") == 0);
+    end
+
+    function testJSONAnyConversionEmployeeEmpNo(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("\"empno\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "empno") != 0);
+    end
+
+    function testJSONAnyConversionEmployeeEmpNoDepart(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).EmpNo.department ");
+        LogResult.assertStringEqual1(emp.EmpNo.department, emp2.EmpNo.department);
+    end
+
+    function testJSONAnyConversionEmployeeEmpNoValue(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).EmpNo.value ");
+        LogResult.assertBigIntEqual1(emp.EmpNo.value, emp2.EmpNo.value);
+    end
+
+    function testJSONAnyConversionEmployeeArrSize(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).array.getSize() ");
+        LogResult.assertBigIntEqual1((emp as EmployeeHandler).array.getSize(),(emp2 as EmployeeHandler).array.getSize());
+    end
+
+    function testJSONAnyConversionEmployeeArr(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        i int = 0;
+        while(i <(empAny as EmployeeHandler).array.getSize())
+            i += 1;
+
+            LogResult.logStdOut("(Employee as any).array[" + i + "].department ");
+            LogResult.assertStringEqual("Fail in (Employee as any).array[" + i + "].department", emp.array[i].department, emp2.array[i].department);
+
+            LogResult.logStdOut("(Employee as any).array[" + i + "].value ");
+            LogResult.assertBigIntEqual("Fail in (Employee as any).array[" + i + "].value", emp.array[i].value, emp2.array[i].value);
+        end
+    end
+
+    function testJSONAnyConversionEmployeeLName(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).LastName ");
+        LogResult.assertStringEqual1(emp.LastName, emp2.LastName);
+    end
+
+    function testJSONAnyConversionEmployeeDictAbc(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).dict[\"abc\"] ");
+        LogResult.assertStringEqual1(emp.dict["abc"], emp2.dict["abc"]);
+    end
+
+    function testJSONAnyConversionEmployeeDictCde(){@Test}
+        initEmpAny(empAny, empAny2, json);
+
+        LogResult.logStdOut("(Employee as any).dict[\"cde\"] ");
+        LogResult.assertStringEqual1(emp.dict["cde"], emp2.dict["cde"]);
+    end
+
+    myrec MyRecordHandler{itemName = STRING_ITEM1_VAL, items =[STRING_ITEM1_VAL, STRING_ITEM2_VAL], item2 = 5,
+    		litems = [STRING_ITEM2_VAL as string(5)],
+    		litem = STRING_ITEM1_VAL,
+            //binary=1245.55,
+            //sbinary=45.55,
+            shrt = 1245, intt = 1245, lng = 1245,
+            //dbl=1245.55,
+            bint = 1245, bdec = 1245.55, flt = 1245.44E20, numb = 245.55, datefield = "03/27/2009", ts = "1809/07/22 14:12:05",
+            timefield = "14:12:05",  
+            //hhex ="123456abcdef",
+            bool = true, bool2 = false};
+//NOBYTES            bits1 = 0xAB09357F, bits2 = 0x345678};
+    myrec2 MyRecordHandler{};
+    json string;
+
+    function initMyRecs(myrec MyRecordHandler inout, myrec2 MyRecordHandler inout, json string inout)
+        myrec.nStr = null;
+        json = JSONConverter.convert2JSON(myrec);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, myrec2);
+    end
+
+    function testJSONConversionPrimitiveRecordItemName(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("\"itemName\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"itemName\"") == 0);
+    end
+
+    function testJSONConversionPrimitiveRecordLItem(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("\"litem\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"litem\"") != 0);
+    end
+
+    function testJSONConversionPrimitiveRecordItem(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("\"item\" found in json: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"item\"") != 0);
+    end
+
+    function testJSONConversionPrimitiveRecordName(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.name");
+        LogResult.assertStringEqual1(myrec.itemName, myrec2.itemName);
+    end
+
+    function testJSONConversionPrimitiveRecordLItemValue(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.litem");
+        LogResult.assertStringEqual1(STRING_ITEM1_VAL as string(7), myrec2.litem);
+    end
+
+    function testJSONConversionPrimitiveRecordItemSize(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.items.getSize()");
+        LogResult.assertBigIntEqual1(myrec.items.getSize(), myrec2.items.getSize());
+    end
+
+    function testJSONConversionPrimitiveRecordItems(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        i int = 0;
+        while(i < myrec.items.getSize())
+            i += 1;
+            LogResult.logStdOut("MyRecord.items[" + i + "]");
+            LogResult.assertStringEqual("Fail in MyRecord.items[" + i + "]", myrec.items[i], myrec2.items[i]);
+        end
+    end
+
+    function testJSONConversionPrimitiveRecordLItemSize(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.litems.getSize()");
+        LogResult.assertBigIntEqual1(1, myrec2.litems.getSize());
+    end
+
+    function testJSONConversionPrimitiveRecordlItems(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        i int = 0;
+        while(i < myrec.litems.getSize())
+            i += 1;
+            LogResult.logStdOut("MyRecord.litems[" + i + "]");
+            LogResult.assertStringEqual("Fail in MyRecord.litems[" + i + "]", myrec.litems[i], myrec2.litems[i]);
+        end
+    end
+
+    function testJSONConversionPrimitiveRecordItem2(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.item2");
+        LogResult.assertBigIntEqual1(myrec.item2, myrec2.item2);
+    end
+
+    //LogResult.logStdOut("MyRecord.binary";
+    //reportStatus(compareNumber(myrec2.binary,myrec.binary) );
+    
+    //LogResult.logStdOut("MyRecord.sbinary";
+    //reportStatus(compareNumber(myrec2.sbinary,myrec.sbinary) );
+    
+    function testJSONConversionPrimitiveRecordShrt(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.shrt");
+        LogResult.assertBigIntEqual1(myrec.shrt, myrec2.shrt);
+    end
+
+    function testJSONConversionPrimitiveRecordIntt(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.intt");
+        LogResult.assertBigIntEqual1(myrec.intt, myrec2.intt);
+    end
+
+    function testJSONConversionPrimitiveRecordLng(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.lng");
+        LogResult.assertBigIntEqual1(myrec.lng, myrec2.lng);
+    end
+
+    //LogResult.logStdOut("MyRecord.dbl";
+    //reportStatus(compareDecimal(myrec2.dbl,myrec.dbl) );
+    
+    function testJSONConversionPrimitiveRecordBint(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.bint");
+        LogResult.assertBigIntEqual1(myrec.bint, myrec2.bint);
+    end
+
+    function testJSONConversionPrimitiveRecordBdec(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.bdec");
+        LogResult.assertDecimalEqual1(myrec.bdec, myrec2.bdec);
+    end
+
+    function testJSONConversionPrimitiveRecordFlt(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.flt");
+        LogResult.assertFloatEqual1(myrec.flt, myrec2.flt);
+    end
+
+    function testJSONConversionPrimitiveRecordNumb(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.numb");
+        LogResult.assertDecimalEqual1(myrec.numb, myrec2.numb);
+    end
+
+    function testJSONConversionPrimitiveRecordDate(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.datefield");
+        LogResult.assertDateEqual1(myrec.datefield, myrec2.datefield);
+    end
+
+    function testJSONConversionPrimitiveRecordTime(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.timefield");
+        LogResult.assertTimeEqual1(myrec.timefield, myrec2.timefield);
+    end
+
+    function testJSONConversionPrimitiveRecordTs(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.ts");
+        LogResult.assertTimestampEqual1(myrec.ts, myrec2.ts);
+    end
+    
+    //LogResult.logStdOut("MyRecord.hhex";
+    //reportStatus(compareHex(myrec2.hhex,myrec.hhex) );
+    
+    function testJSONConversionPrimitiveRecordBool(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.bool");
+        LogResult.assertTrue1(myrec.bool == myrec2.bool);
+    end
+
+    function testJSONConversionPrimitiveRecordBool2(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.bool2");
+        LogResult.assertTrue1(myrec.bool2 == myrec2.bool2);
+    end
+
+    function testJSONConversionPrimitiveRecordNStr(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.nStr");
+        LogResult.assertTrue1(myrec.nStr == myrec2.nStr);
+    end
+
+    function testJSONConversionPrimitiveRecordNStr2(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.nStr2");
+        LogResult.assertTrue1(myrec.nStr2 == myrec2.nStr2);
+    end
+
+    function testJSONConversionPrimitiveRecordNStr2Null(){@Test}
+        initMyRecs(myrec, myrec2, json);
+
+        LogResult.logStdOut("MyRecord.nStr2==null");
+        LogResult.assertTrue1(myrec2.nStr2 == null);
+    end
+
+//NOBYTES
+//    function testJSONConversionPrimitiveRecordBits1(){@Test}
+//        initMyRecs(myrec, myrec2, json);
+//
+//        LogResult.logStdOut("MyRecord.bits1");
+//        LogResult.assertTrue1(myrec.bits1 as bytes(4) == myrec2.bits1 as bytes(4));
+//    end
+//
+//    function testJSONConversionPrimitiveRecordBits2(){@Test}
+//        initMyRecs(myrec, myrec2, json);
+//
+//        LogResult.logStdOut("MyRecord.bits2");
+//        LogResult.assertTrue1(myrec.bits2 == myrec2.bits2);
+//    end
+
+    myrecAny any = new MyRecordHandler{itemName = STRING_ITEM1_VAL, items =[STRING_ITEM1_VAL, STRING_ITEM2_VAL
+                    //], item2 = 5, shrt = 1245, intt = 1245, lng = 1245, bint = 1245, bdec = 1245.55, flt = 1245.44E20, numb = 245.55, datefield = "03/27/2009", ts = "2009/03/27 14:12:05", timefield = "14:12:05", bool = true, bool2 = false};
+                    ],     		
+                    litems = [STRING_ITEM2_VAL as string(5)],
+    				litem = STRING_ITEM1_VAL,
+                    item2 = 5, shrt = 1245, intt = 1245, lng = 1245, bint = 1245, bdec = 1245.55, flt = 1245.44E20, numb = 245.55, datefield = "03/27/2009", ts = "1809/07/22 14:12:05", 
+		            timefield = "14:12:05",  
+                    bool = true, bool2 = false};
+//NOBYTES                    bits1 = 0xAB09357F, bits2 = 0x345678}; 
+    myrecAny2 any = new MyRecordHandler{};
+
+    function initMyRecAnys(myrecAny any inout, myrecAny2 any inout, json string inout)
+        json = JSONConverter.convert2JSON(myrecAny);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, myrecAny2);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordItemName(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("\"itemName\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"itemName\"") == 0);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordItem(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("\"item\" found in json from any: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"item\"") != 0);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordName(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).name");
+        LogResult.assertStringEqual1((myrecAny as MyRecordHandler).itemName, (myrecAny2 as MyRecordHandler).itemName);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordlitem(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).litem");
+        LogResult.assertStringEqual1((myrecAny as MyRecordHandler).litem, (myrecAny2 as MyRecordHandler).litem);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordItemSize(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).items.getSize()");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).items.getSize(),(myrecAny2 as MyRecordHandler).items.getSize());
+    end
+
+    function testJSONAnyConversionPrimitiveRecordItems(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        i int = 0;
+        while(i <(myrecAny as MyRecordHandler).items.getSize())
+            i += 1;
+            LogResult.logStdOut("(MyRecord as any).items[" + i + "]");
+            LogResult.assertStringEqual("Fail in (MyRecord as any).items[" + i + "]", (myrecAny as MyRecordHandler).items[i], (myrecAny2 as MyRecordHandler).items[i]);
+        end
+    end
+
+    function testJSONAnyConversionPrimitiveRecordLItemSize(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).litems.getSize()");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).litems.getSize(),(myrecAny2 as MyRecordHandler).litems.getSize());
+    end
+
+    function testJSONAnyConversionPrimitiveRecordLItems(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        i int = 0;
+        while(i <(myrecAny as MyRecordHandler).litems.getSize())
+            i += 1;
+            LogResult.logStdOut("(MyRecord as any).litems[" + i + "]");
+            LogResult.assertStringEqual("Fail in (MyRecord as any).litems[" + i + "]", (myrecAny as MyRecordHandler).litems[i], (myrecAny2 as MyRecordHandler).litems[i]);
+        end
+    end
+
+    function testJSONAnyConversionPrimitiveRecordItem2(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).item2");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).item2, (myrecAny2 as MyRecordHandler).item2);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordShrt(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).shrt");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).shrt, (myrecAny2 as MyRecordHandler).shrt);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordIntt(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).intt");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).intt, (myrecAny2 as MyRecordHandler).intt);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordLng(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).lng");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).lng, (myrecAny2 as MyRecordHandler).lng);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordBint(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).bint");
+        LogResult.assertBigIntEqual1((myrecAny as MyRecordHandler).bint, (myrecAny2 as MyRecordHandler).bint);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordBdec(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).bdec");
+        LogResult.assertDecimalEqual1((myrecAny as MyRecordHandler).bdec, (myrecAny2 as MyRecordHandler).bdec);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordFlt(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).flt");
+        LogResult.assertFloatEqual1((myrecAny as MyRecordHandler).flt, (myrecAny2 as MyRecordHandler).flt);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordNumb(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).numb");
+        LogResult.assertDecimalEqual1((myrecAny as MyRecordHandler).numb, (myrecAny2 as MyRecordHandler).numb);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordDate(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).datefield");
+        LogResult.assertDateEqual1((myrecAny as MyRecordHandler).datefield, (myrecAny2 as MyRecordHandler).datefield);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordTs(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).ts");
+        LogResult.assertTimestampEqual1((myrecAny as MyRecordHandler).ts, (myrecAny2 as MyRecordHandler).ts);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordTime(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).timefield");
+        LogResult.assertTimeEqual1((myrecAny as MyRecordHandler).timefield, (myrecAny2 as MyRecordHandler).timefield);
+    end
+    
+    function testJSONAnyConversionPrimitiveRecordBool(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).bool");
+        LogResult.assertTrue1((myrecAny as MyRecordHandler).bool == (myrecAny2 as MyRecordHandler).bool);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordBool2(){@Test}
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).bool2");
+        LogResult.assertTrue1((myrecAny as MyRecordHandler).bool2 == (myrecAny2 as MyRecordHandler).bool2);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordNStr(){@Test}
+    	(myrecAny as MyRecordHandler).nStr = "abcdef";
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).nStr");
+        LogResult.assertStringEqual1((myrecAny as MyRecordHandler).nStr, (myrecAny2 as MyRecordHandler).nStr);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordNStr2(){@Test}
+    	(myrecAny as MyRecordHandler).nStr2 = "xwr";
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).nStr2");
+        LogResult.assertStringEqual1((myrecAny as MyRecordHandler).nStr2, (myrecAny2 as MyRecordHandler).nStr2);
+    end
+
+    function testJSONAnyConversionPrimitiveRecordNStr2Null(){@Test}
+    	(myrecAny as MyRecordHandler).nStr2 = null;
+        initMyRecAnys(myrecAny, myrecAny2, json);
+
+        LogResult.logStdOut("(MyRecord as any).nStr2==null");
+        //LogResult.assertTrue1((myrecAny2.nStr2 as string?) == null); 
+        LogResult.assertTrue1(((myrecAny2 as MyRecordHandler).nStr2 as string) == null); //change for EDT 0.7
+    end
+    
+//NOBYTES
+//    function testJSONAnyConversionPrimitiveRecordBits1(){@Test}
+//        initMyRecAnys(myrecAny, myrecAny2, json);
+//
+//        LogResult.logStdOut("(MyRecord as any).bits1");
+//        LogResult.assertTrue1((myrecAny as MyRecordHandler).bits1 as bytes(4) == (myrecAny2 as MyRecordHandler).bits1 as bytes(4));
+//    end
+//
+//    function testJSONAnyConversionPrimitiveRecordBits2(){@Test}
+//        initMyRecAnys(myrecAny, myrecAny2, json);
+//
+//        LogResult.logStdOut("(MyRecord as any).bits2");
+//        LogResult.assertTrue1((myrecAny as MyRecordHandler).bits2 == (myrecAny2 as MyRecordHandler).bits2);
+//    end
+
+    myDict Dictionary{itemName = STRING_ITEM1_VAL, items =[STRING_ITEM1_VAL, STRING_ITEM2_VAL], item2 = 5,
+   			litems = [STRING_ITEM2_VAL as string(5)],
+    		litem = STRING_ITEM1_VAL as string(5),
+            //binary=1245.55,
+            //sbinary=45.55,
+            shrt = 1245 as smallint, intt = 1245 as int, lng = 1245 as bigint,
+            //dbl=1245.55,
+            bint = 1245, bdec = 1245.55, flt = 1245.44E20, numb = 245.55, datefield = "03/27/2009" as date, ts = "1809/07/22 14:12:05" as timestamp("yyyyMMddHHmmss"),
+            timefield = "14:12:05" as time, 
+            //hhex ="123456abcdef",
+            bool = true, bool2 = false};
+//NOBYTES            bits1 = 0xAB09357F, bits2 = 0x345678};
+    myDict2 Dictionary{};
+
+    function initMyDicts(myDict Dictionary inout, myDict2 Dictionary inout, json string inout)
+
+        json = JSONConverter.convert2JSON(myDict);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, myDict2);
+    end
+
+    function testJSONConversionDictionaryItemName(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("\"itemname\" found in json dictionary: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"itemname\"") != 0);
+    end
+
+    function testJSONConversionDictionaryItem(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("\"item\" found in json dictionary: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"item\"") == 0);
+    end
+
+    function testJSONConversionDictionaryDictName(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.name");
+        LogResult.assertStringEqual1(myDict.itemName, myDict2.itemName);
+    end
+
+    function testJSONConversionDictionaryDictLItem(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.litem");
+        LogResult.assertStringEqual1(myDict.litem, myDict2.litem);
+    end
+
+    function testJSONConversionDictionaryItemSize(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.items.getSize()");
+        LogResult.assertBigIntEqual1((myDict.items as string[]).getSize(),(myDict2.items as any[]).getSize());
+    end
+
+    function testJSONConversionDictionaryItems(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        i int = 0;
+        sa1 string[] =  myDict.items;
+        sa2 any[] = myDict2.items;
+        while(i <sa1.getSize())
+            i += 1;
+            LogResult.logStdOut("dictionary.items[" + i + "]");
+            LogResult.assertStringEqual("Fail in dictionary.items[" + i + "]", sa1[i], sa2[i]);
+        end
+    end
+
+    function testJSONConversionDictionaryLItemSize(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.litems.getSize()");
+        LogResult.assertBigIntEqual1((myDict.litems as string(5)[]).getSize(),(myDict2.litems as any[]).getSize());
+    end
+
+    function testJSONConversionDictionaryLItems(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        i int = 0;
+        sa1 string(5)[] =  myDict.litems;
+        sa2 any[] = myDict2.litems;
+        while(i <sa1.getSize())
+            i += 1;
+            LogResult.logStdOut("dictionary.litems[" + i + "]");
+            LogResult.assertStringEqual("Fail in dictionary.litems[" + i + "]", sa1[i], sa2[i]);
+        end
+    end
+
+    function testJSONConversionDictionaryItem2(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.item2");
+        LogResult.assertBigIntEqual1(myDict.item2, myDict2.item2);
+    end
+
+    function testJSONConversionDictionaryDictShrt(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.shrt");
+        LogResult.assertBigIntEqual1(myDict.shrt, myDict2.shrt);
+    end
+
+    function testJSONConversionDictionaryDictIntt(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.intt");
+        LogResult.assertBigIntEqual1(myDict.intt, myDict2.intt);
+    end
+
+    function testJSONConversionDictionaryDictLng(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.lng");
+        LogResult.assertBigIntEqual1(myDict.lng, myDict2.lng);
+    end
+
+    function testJSONConversionDictionaryDictBint(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.bint");
+        LogResult.assertBigIntEqual1(myDict.bint, myDict2.bint);
+    end
+
+    function testJSONConversionDictionaryDictBdec(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.bdec");
+        LogResult.assertDecimalEqual1(myDict.bdec, myDict2.bdec);
+    end
+
+    function testJSONConversionDictionaryDictFlt(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.flt");
+        LogResult.assertFloatEqual1(myDict.flt, myDict2.flt);
+    end
+
+    function testJSONConversionDictionaryDictNumb(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.numb");
+        LogResult.assertDecimalEqual1(myDict.numb, myDict2.numb);
+    end
+
+    function testJSONConversionDictionaryDictDate(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.datefield");
+        LogResult.assertStringEqual1(stringlib.format(myDict.datefield as date, "yyyy-MM-dd"),  myDict2.datefield);
+    end
+
+    function testJSONConversionDictionaryDictTs(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.ts");
+        str string = myDict2.ts;
+        LogResult.assertTimestampEqual1(myDict.ts as timestamp("yyyyMMddHHmmss"), str as timestamp("yyyyMMddHHmmss"));
+    end
+
+    function testJSONConversionDictionaryDictTime(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.timefield");
+        LogResult.assertTimeEqual1(myDict.timefield, myDict2.timefield as time);
+    end
+    
+    function testJSONConversionDictionaryDictBool(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.bool");
+        LogResult.assertTrue1(myDict.bool == myDict2.bool);
+    end
+
+    function testJSONConversionDictionaryDictBool2(){@Test}
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.bool2");
+        LogResult.assertTrue1(myDict.bool2 == myDict2.bool2);
+    end
+
+    function testJSONConversionDictionaryDictNStr(){@Test}
+        myDict.nStr2 = null;
+       	initMyDicts(myDict, myDict2, json);
+
+       	LogResult.logStdOut("dictionary.nStr");
+    	LogResult.assertTrue1(myDict2.nStr2 == null);
+    end
+
+    function testJSONConversionDictionaryDictNStr2(){@Test}
+        myDict.removeElement("nStr2");
+        initMyDicts(myDict, myDict2, json);
+
+        LogResult.logStdOut("dictionary.nStr2");
+        LogResult.assertTrue1(!myDict2.containsKey("nStr2"));
+    end
+    
+//NOBYTES
+//    function testJSONConversionDictionaryDictBits1(){@Test}
+//        initMyDicts(myDict, myDict2, json);
+//
+//        LogResult.logStdOut("dictionary.bits1");
+//        LogResult.assertTrue1(myDict.bits1 as bytes(4) == myDict2.bits1 as bytes(4));
+//    end
+//
+//    function testJSONConversionDictionaryDictBits2(){@Test}
+//        initMyDicts(myDict, myDict2, json);
+//
+//        LogResult.logStdOut("dictionary.bits2");
+//        LogResult.assertTrue1(myDict.bits2 == myDict2.bits2);
+//    end
+
+    myDictAny any = new Dictionary{itemName = STRING_ITEM1_VAL, items =[STRING_ITEM1_VAL, STRING_ITEM2_VAL
+                    //], item2 = 5, shrt = 1245, intt = 1245, lng = 1245, bint = 1245, bdec = 1245.55, flt = 1245.44E20, numb = 245.55, datefield = "03/27/2009", ts = "2009/03/27 14:12:05", timefield = "14:12:05", bool = true, bool2 = false};
+                    ], 
+                    litems = [STRING_ITEM2_VAL as string(5)],
+                    litem = STRING_ITEM1_VAL as string(5), 
+                    item2 = 5, shrt = 1245 as smallint, intt = 1245 as int, lng = 1245 as bigint, bint = 1245 as int, bdec = 1245.55 as decimal(10,2), flt = 1245.44E20 as float, numb = 245.55 as decimal(10,2), datefield = "03/27/2009" as date, ts = "1809/07/22 14:12:05" as timestamp("yyyyMMddHHmmss"), 
+                    timefield = "14:12:05", 
+                    bool = true, bool2 = false};
+//NOBYTES                    bits1 = 0xAB09357F, bits2 = 0x345678}; 
+    myDictAny2 any = new Dictionary{};
+
+    function initMyDictAnys(myDictAny any inout, myDictAny2 any inout, json string inout)
+    
+        json = JSONConverter.convert2JSON(myDictAny);
+        LogResult.logStdOut(json);
+
+        JSONConverter.convert2EGL(json, myDictAny2);
+    end
+
+    function testJSONAnyConversionDictionaryItemName(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("\"itemname\" found in json from any dictionary: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"itemname\"") != 0);
+    end
+
+    function testJSONAnyConversionDictionaryItem(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("\"item\" found in json from any dictionary: ");
+        LogResult.assertTrue1(strlib.indexOf(json, "\"item\"") == 0);
+    end
+
+    function testJSONAnyConversionDictionaryDictName(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).name");
+        LogResult.assertStringEqual1(myDictAny.itemName, myDictAny2.itemName);
+    end
+
+    function testJSONAnyConversionDictionaryDictlitem(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).litem");
+        LogResult.assertStringEqual1(myDictAny.litem, myDictAny2.litem);
+    end
+
+    function testJSONAnyConversionDictionaryDictItemSize(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).items.getSize()");
+        LogResult.assertBigIntEqual1((myDictAny.items as string[]).getSize(),(myDictAny2.items as any[]).getSize());
+    end
+
+    function testJSONAnyConversionDictionaryDictItems(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        i int = 0;
+        sa1 string[] = myDictAny.items;
+        sa2 any[] = myDictAny2.items;
+        while(i <sa1.getSize())
+            i += 1;
+            LogResult.logStdOut("(dictionary as any).items[" + i + "]");
+            LogResult.assertStringEqual("Fail in (dictionary as any).items[" + i + "]", sa1[i], sa2[i]);
+        end
+    end
+
+    function testJSONAnyConversionDictionaryDictLItemSize(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).litems.getSize()");
+        LogResult.assertBigIntEqual1((myDictAny.litems as string(5)[]).getSize(),(myDictAny2.litems as any[]).getSize());
+    end
+
+    function testJSONAnyConversionDictionaryDictLItems(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        i int = 0;
+        sa1 string(5)[] = myDictAny.litems;
+        sa2 any[] = myDictAny2.litems;
+        while(i <sa1.getSize())
+            i += 1;
+            LogResult.logStdOut("(dictionary as any).litems[" + i + "]");
+            LogResult.assertStringEqual("Fail in (dictionary as any).litems[" + i + "]", sa1[i], sa2[i]);
+        end
+    end
+
+    function testJSONAnyConversionDictionaryDictItem2(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).item2");
+        LogResult.assertBigIntEqual1(myDictAny.item2, myDictAny2.item2);
+    end
+
+    function testJSONAnyConversionDictionaryDictShrt(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).shrt");
+        LogResult.assertBigIntEqual1(myDictAny.shrt, myDictAny2.shrt);
+    end
+
+    function testJSONAnyConversionDictionaryDictIntt(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).intt");
+        LogResult.assertBigIntEqual1(myDictAny.intt, myDictAny2.intt);
+    end
+
+    function testJSONAnyConversionDictionaryDictLng(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).lng");
+        LogResult.assertBigIntEqual1(myDictAny.lng, myDictAny2.lng);
+    end
+
+    function testJSONAnyConversionDictionaryDictBint(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).bint");
+        LogResult.assertBigIntEqual1(myDictAny.bint, myDictAny2.bint);
+    end
+
+    function testJSONAnyConversionDictionaryDictBdec(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).bdec");
+        LogResult.assertDecimalEqual1(myDictAny.bdec, myDictAny2.bdec);
+    end
+
+    function testJSONAnyConversionDictionaryDictFlt(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).flt");
+        LogResult.assertFloatEqual1(myDictAny.flt, myDictAny2.flt);
+    end
+
+    function testJSONAnyConversionDictionaryDictNumb(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).numb");
+        LogResult.assertDecimalEqual1(myDictAny.numb, myDictAny2.numb);
+    end
+
+    function testJSONAnyConversionDictionaryDictDate(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).datefield");
+        LogResult.assertStringEqual1(stringlib.format(myDictAny.datefield as date, "yyyy-MM-dd"), myDictAny2.datefield);
+    end
+
+    function testJSONAnyConversionDictionaryDictTS(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).ts");
+        str string =  myDictAny2.ts;
+        LogResult.assertTimestampEqual1(myDictAny.ts as timestamp("yyyyMMddHHmmss"),  str as timestamp("yyyyMMddHHmmss"));
+    end
+
+    function testJSONAnyConversionDictionaryDictTime(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).timefield");
+        LogResult.assertTimeEqual1(myDictAny.timefield, myDictAny2.timefield as time);
+    end
+    
+    function testJSONAnyConversionDictionaryDictBool(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).bool");
+        LogResult.assertTrue1(myDictAny2.bool == myDictAny.bool);
+    end
+
+    function testJSONAnyConversionDictionaryDictBool2(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).bool2");
+        LogResult.assertTrue1(myDictAny2.bool2 == myDictAny.bool2);
+    end
+
+    function testJSONAnyConversionDictionaryDictNStr(){@Test}
+		myDictAny.nStr = null;
+       	initMyDictAnys(myDictAny, myDictAny2, json);
+
+       	LogResult.logStdOut("(dictionary as any).nStr");
+    	LogResult.assertTrue1(myDictAny2.nStr == null);
+    end
+
+    function testJSONAnyConversionDictionaryDictNStr2(){@Test}
+        initMyDictAnys(myDictAny, myDictAny2, json);
+
+        LogResult.logStdOut("(dictionary as any).nStr2");
+        pass boolean = false;
+        try
+            str string = myDictAny2.nStr2;
+        onException(exception AnyException)
+        	pass = true;
+        end
+        LogResult.assertTrue1(pass);
+
+    end
+    
+//NOBYTES
+//    function testJSONAnyConversionDictionaryDictBits1(){@Test}
+//        initMyDictAnys(myDictAny, myDictAny2, json);
+//
+//        LogResult.logStdOut("(dictionary as any).bits1");
+//        LogResult.assertTrue1(myDictAny2.bits1 == myDictAny.bits1);
+//    end
+//
+//    function testJSONAnyConversionDictionaryDictBits2(){@Test}
+//        initMyDictAnys(myDictAny, myDictAny2, json);
+//
+//        LogResult.logStdOut("(dictionary as any).bits2");
+//        LogResult.assertTrue1(myDictAny2.bits2 as bytes(4) == myDictAny.bits2 as bytes(4));
+//    end
+
+    function testNestedJSONtoDictionary(){@Test}
+        json string = "{" + "\"matches\":36284," + "\"tokens\":" + "[" + "{\"ignored\":false,\"count\":36284,\"value\":\"tom\"}" + "]," +
+                        "\"persons\":" + "[" + "{\"reports\":" + "[" + "{" + "\"id\":6," + "\"uid\":\"02+107897\"," + "\"is-employee\":true" + "}" +
+                        "]," + "\"person\":" + "{" + "\"office\":\"HOME\"," + "\"uid\":\"586351897\"," + "\"building\":\"6971\"," +
+                        "\"location\":\"Southfield, MI, US\"" + "}," + "\"chain\":" + "[" + "{" + "\"id\":288," + "\"uid\":\"670027897\"," +
+                        "\"is-employee\":true" + "}" + "]," + "\"peers\":" + "[" + "{" + "\"id\":262," + "\"uid\":\"020169897\"" + "}" + "]," +
+                        "\"score\":600," + "\"bosses\":[{}]" + "}" + "]" + "}";
+
+        NewDictionary Dictionary{};
+        JSONConverter.convert2EGL(json, NewDictionary);
+
+        LogResult.logStdOut("Check Nested dictionary");
+            ad1 any[] = NewDictionary["persons"];
+            d1 dictionary? = ad1[1];
+            d2 dictionary = d1["person"];
+            office string = d2["office"];
+            LogResult.assertStringEqual1("HOME", office);
+    end
+
+    function test_ZeroSizeArray(){@Test}
+
+        testRecord Dictionary{f1 = new any[0]};
+        json = JsonLib.convertToJSON(testRecord);
+        testDict Dictionary = new Dictionary{};
+        LogResult.logStdOut("testing array[0] convert from json");
+        try
+            JsonLib.convertFromJSON(json, testDict);
+
+            LogResult.logStdOut("check array size");
+            LogResult.assertBigIntEqual1(((testRecord.f1) as any[]).getSize(),((testDict.f1) as any[]).getSize());
+        onException(exception AnyException)
+            LogResult.assertTrue1(false);
+        end
+    end
+
+    function test_NullArray(){@Test}
+		testRecord Dictionary;
+        testRecord = new Dictionary{f1 = null};
+    	ary any[]?;
+    	testRecord.f2 = ary;
+    	json = JsonLib.convertToJSON(testRecord);
+    	testDict Dictionary = new Dictionary{};
+    	LogResult.logStdOut("testing null convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("testing null value");
+        LogResult.assertTrue("Fail in null value", testDict.f1 == null);
+	    LogResult.logStdOut("testing null array");
+    	LogResult.assertTrue("Fail in null array", testDict.f2 == null);
+    end
+
+    testRecord Dictionary{f1 = new any[0]};
+    //rec Dictionary{f1 = new string?[2]{STRING_VAL, null}, f2 = new num(30)?[3]{SMALLINT_VAL, null, NUM30_VAL}};
+    //rec Dictionary{f1 = new string?[2]{STRING_VAL, null}, f2 = new decimal(30)?[3]{SMALLINT_VAL, null, NUM30_VAL}}; //change for EDT 0.7
+    rec Dictionary{f1 = new string?[]{STRING_VAL, null}, f2 = new decimal(30)?[]{SMALLINT_VAL, null, NUM30_VAL}}; //change for EDT 0.8
+    
+    testDict Dictionary = new Dictionary{};
+    idx int;
+    testValue boolean;
+    typeIsa boolean;
+
+    function initArray(testRecord Dictionary inout, rec Dictionary inout, json string inout)
+
+		a1 any?[] = new any?[];
+        a1.appendElement(null);//1
+        a1.appendElement(SMALLINT_VAL);//2
+        a1.appendElement(INT_VAL);//3
+        a1.appendElement(BIGINT_VAL);//4
+        a1.appendElement(NUM20_VAL);//5
+        a1.appendElement(NUM25_VAL);//6
+        a1.appendElement(NUM30_VAL);//7
+        a1.appendElement(DEC314_VAL);//8
+        a1.appendElement(DEC3215_VAL);//9
+        a1.appendElement(STRING_VAL);//10
+        a1.appendElement(FLOAT_VAL);//11
+        a1.appendElement(DOUBLE_VAL);//12
+        a1.appendElement(BOOL_VAL);//13
+        a1.appendElement(rec);//14
+        a1.appendElement(DEC324_VAL);//15
+        a1.appendElement(STRING_VAL as string(8));//16
+        a1.appendElement(DATE_VAL);//17
+        a1.appendElement(TIME_VAL);//18
+        a1.appendElement(TIMESTAMP_VAL);//19
+//NOBYTES        a1.appendElement(BYTES_VAL);//20
+        
+		testRecord.f1 = a1;
+        
+        json = JsonLib.convertToJSON(testRecord);
+        LogResult.logStdOut("test_ArrayWithValues:" + json);
+    end
+
+    function test_ArrayWithValuesArrSize(){@Test}
+        initArray(testRecord, rec, json);
+        LogResult.logStdOut("testing array[] convert from json");
+        JsonLib.convertFromJSON(json, testDict);
+
+        LogResult.logStdOut("check array size");
+        LogResult.assertBigIntEqual1(((testRecord.f1) as any?[]).getSize(),((testDict.f1) as any[]).getSize());
+    end
+
+    function test_ArrayWithValuesArr1(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 1;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] null");
+        ary any[] = testDict.f1;
+        LogResult.assertTrue1(ary[idx] == null);
+    end
+
+    function test_ArrayWithValuesArr2(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 2;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertBigIntEqual("Fail in ary[" +(idx as string) + "]", SMALLINT_VAL, ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr3(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 3;
+        ary any[] = testDict.f1;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        LogResult.assertBigIntEqual("Fail in ary[" +(idx as string) + "]", INT_VAL, ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr4(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 4;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        sa1 any[] = testDict.f1;
+        LogResult.assertBigIntEqual("Fail in ary[" +(idx as string) + "]", BIGINT_VAL, sa1[idx]);
+    end
+
+    function test_ArrayWithValuesArr5(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 5;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", NUM20_VAL, ary[idx] as decimal(20));
+    end
+
+    function test_ArrayWithValuesArr6(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 6;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", NUM25_VAL, ary[idx] as decimal(25));
+    end
+
+    function test_ArrayWithValuesArr7(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 7;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", NUM30_VAL, ary[idx] as decimal(30));
+    end
+
+    function test_ArrayWithValuesArr8(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 8;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", DEC314_VAL, ary[idx] as decimal(31,4));
+    end
+
+    function test_ArrayWithValuesArr9(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 9;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", DEC3215_VAL, ary[idx] as decimal(32,15));
+    end
+
+    function test_ArrayWithValuesArr10(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 10;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "]", STRING_VAL, ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr11(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 11;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertSmallFloatEqual("Fail in ary[" +(idx as string) + "]", FLOAT_VAL, ary[idx] as smallfloat);
+    end
+
+    function test_ArrayWithValuesArr12(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 12;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertFloatEqual("Fail in ary[" +(idx as string) + "]", DOUBLE_VAL, ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr13(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 13;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertTrue("Fail in ary[" +(idx as string) + "]", ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr14(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+        LogResult.assertTrue1(true);
+	end
+
+    function test_ArrayWithValuesArr14_f1_1(){@Test}
+        idx = 14;
+        actualAry any[] = testDict.f1;
+		expectedAry any?[] = testRecord.f1;
+        sa1 string?[] = expectedAry[idx].f1;
+        sa2 any[] = actualAry[idx].f1;
+        LogResult.assertBigIntEqual("Fail in ary[" +(idx as string) + "].f1 check string[].size",sa1.getSize(),sa2.getSize());
+	end
+	
+    function test_ArrayWithValuesArr14_f1_2(){@Test}
+        idx = 14;
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f1;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f1[1] value");
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "].f1[1] value", STRING_VAL, sa2[1]);
+	end
+	
+    function test_ArrayWithValuesArr14_f1_3(){@Test}
+        idx = 14;
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f1;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f1[2] null");
+        LogResult.assertTrue("Fail in ary[" +(idx as string) + "].f1[2] null", sa2[2] == null);
+	end
+	
+    function test_ArrayWithValuesArr14_f2_1(){@Test}
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f2;
+		expectedAry any?[] = testRecord.f1;
+        sa1 decimal(30)?[] = expectedAry[idx].f2;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f2 check decimal(30)[].size");
+        LogResult.assertBigIntEqual("Fail in ary[" +(idx as string) + "].f2 check any[].size",sa1.getSize(),sa2.getSize());
+    end
+
+    function test_ArrayWithValuesArr14_f2_2(){@Test}
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f2;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f2[1] value");
+        LogResult.assertBigintEqual("Fail in ary[" +(idx as string) + "].f2[1] value", SMALLINT_VAL, sa2[1]);
+    end
+
+    function test_ArrayWithValuesArr14_f2_3(){@Test}
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f2;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f2[2] null");
+        LogResult.assertTrue("Fail in ary[" +(idx as string) + "].f2[2] null", sa2[2] == null);
+    end
+
+    function test_ArrayWithValuesArr14_f2_4(){@Test}
+        actualAry any[] = testDict.f1;
+        sa2 any[] = actualAry[idx].f2;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "].f2[3] value");
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "].f2[3] value", NUM30_VAL, sa2[3] as decimal(30));
+    end
+
+    function test_ArrayWithValuesArr15(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 15;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertDecimalEqual("Fail in ary[" +(idx as string) + "]", DEC324_VAL, ary[idx] as decimal(32,4));
+    end
+
+    function test_ArrayWithValuesArr16(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 16;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "]", STRING_VAL as string(8), ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr17(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 17;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "]", StringLib.format(DATE_VAL,"yyyy-MM-dd"), ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr18(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 18;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "]", TIME_VAL as string, ary[idx]);
+    end
+
+    function test_ArrayWithValuesArr19(){@Test}
+        initArray(testRecord, rec, json);
+        JsonLib.convertFromJSON(json, testDict);
+
+        idx = 19;
+        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+        ary any[] = testDict.f1;
+        LogResult.assertStringEqual("Fail in ary[" +(idx as string) + "]", TIMESTAMP_VAL as string, ary[idx]);
+    end
+
+//NOBYTES
+//    function test_ArrayWithValuesArr20(){@Test}
+//        initArray(testRecord, rec, json);
+//        JsonLib.convertFromJSON(json, testDict);
+//
+//        idx = 20;
+//        LogResult.logStdOut("testing ary[" +(idx as string) + "] value");
+//        ary any[] = testDict.f1;
+//        LogResult.assertTrue("Fail in ary[" +(idx as string) + "]", BYTES_VAL == ary[idx] as bytes(5));
+//    end
+    
+ end

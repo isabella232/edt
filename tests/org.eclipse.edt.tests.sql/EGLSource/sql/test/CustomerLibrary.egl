@@ -1,0 +1,96 @@
+package sql.test;
+
+import eglx.lang.SysLib;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+
+// basic library
+library CustomerLibrary
+
+	use dataSourceLibrary ;
+	use commonFunctionLibrary ;
+	use OrderLibrary ;
+	
+	customer Customer? = new customer ;
+	customerTwin Customer? = new customer ; 
+	emptyCustomer Customer? = new customer ;
+		
+	function createCustomerTable ( )
+		dropCustomerTable();
+		execute from ds with #sql{
+			CREATE TABLE CUSTOMER_TABLE
+			   (
+			      CUST_ID INTEGER NOT NULL,
+			      CUST_NAME VARCHAR(50)
+			   )
+		};
+		
+//			      id INTEGER NOT NULL,
+//			      name VARCHAR(50)			
+		
+		execute from ds with #sql{	
+			ALTER TABLE CUSTOMER_TABLE
+			   ADD CONSTRAINT CUSTOMER_TABLE_PK Primary Key (
+			      CUST_ID ) 
+		};
+	end
+	
+	function dropCustomerTable ( ) 
+		try 
+			execute with #sql{ drop table CUSTOMER_TABLE } from ds ;
+		onException ( ex SQLException )
+			Syslib.writeStdOut ( " drop table exception, sqlstate = " + ex.SQLSTATE ) ;
+			Syslib.writeStdOut ( " exception message = " + ex.message ) ;
+		end
+	end 
+	
+	function verifyCustomer ( id int in )	
+		setEmpty ( ) ;	
+		customer.cust_id = id ;		
+		get customer from ds ;
+		checkCustomer ( customer, id ) ;
+	end	
+	
+	function verifyCustomerAndOrders ( id int in )	
+		setEmpty ( ) ;
+//		customer.getCustomerWithOrders ( id ) ;	
+		checkCustomerAndOrders ( customer, id ) ;
+	end
+	
+	function verifyNotCustomer ( id int in )	
+		setEmpty ( ) ;	
+		customer.cust_id = id ;		
+		get customer from ds ;
+		compareRow ( emptyCustomer, customer ) ;
+	end
+	
+	private function setEmpty ( )
+		customer = emptyCustomer ;
+	end
+	
+	function checkCustomerAndOrders ( actualCustomer Customer, id int )
+		checkCustomer ( actualCustomer, id ) ; 
+		checkOrders ( actualCustomer, id ) ; 		
+	end	
+	
+	function checkCustomer ( actualCustomer Customer, id int in)
+		customerTwin.initializeCustomer ( id ) ;
+		compareRow ( customerTwin, actualCustomer ) ;
+	end
+	
+	function checkOrders ( actualCustomer Customer, id int in)
+		i int ;
+		order_id int = ( id - 1 ) * orderCount + 1 ;
+		order_id_end int = order_id + orderCount - 1 ;
+		checkValue ( "customer order count", orderCount, actualCustomer.orders.getSize() ) ;
+		for ( i from 1 to orderCount )
+			checkOrder ( actualCustomer.orders[i], order_id + i - 1, id ) ; 
+		end		
+	end
+	
+	function compareRow ( expectedRow Customer, actualRow Customer )
+		checkColumnValue ( "cust_id", expectedRow.cust_id, actualRow.cust_id ) ;
+		checkColumnValue ( "cust_name", expectedRow.cust_name, actualRow.cust_name ) ;
+	end
+	
+end

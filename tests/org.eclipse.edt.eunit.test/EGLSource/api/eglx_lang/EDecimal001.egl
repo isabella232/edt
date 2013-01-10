@@ -1,0 +1,256 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EDecimal001
+  * @title EDecimal001 - runAssignmentFunction
+  * @description testing decimal assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction29
+  * @sources EDecimal001.egl
+  * @keywords decimal, assignment, initialization
+ **/
+library EDecimal001 {}
+
+	// Constant Declarations
+	const constDec decimal(5,2) = 123.45;
+	
+	// Variable Declarations
+	dec1 decimal?;
+	dec2 decimal = 375.75;
+	nullableDec1 decimal?;
+	nullableDec2 decimal? = -981.34;
+	variation string;
+	 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+	
+	function runAssignmentFunction01(){@Test}
+		variation = "constant initialization";
+		LogResult.assertDecimalEqual1(123.45, constDec);
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		variation = "variable default initialization";
+		LogResult.assertTrue1((dec1 == null) );
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		variation = "variable initialization";
+		LogResult.assertDecimalEqual1(375.75, dec2);
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		variation = "nullable variable default initialization";
+		LogResult.assertTrue1( (nullableDec1 == null) );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		variation = "nullable variable initialization";
+		LogResult.assertDecimalEqual1(-981.34, nullableDec2);
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		variation = "decimal assignment";
+		dec1 = 323.55;
+		LogResult.assertDecimalEqual1(323.55, dec1);
+	end
+	
+	function runAssignmentFunction07(){@Test}
+		variation = "decimal assignment overflow ";
+		try
+	    	dec1 = 3323.55;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.passed(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed(variation);
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+	
+	function runAssignmentFunction08(){@Test}
+		myDec decimal(5,2)?;
+		myDec = dec2;
+		myDec = null;
+		variation = "nullable reset to null";
+		LogResult.assertTrue1( myDec == null );
+	end
+		
+	function runAssignmentFunction09(){@Test}
+		localDec, another decimal(5,2)?;
+		localDec = dec2;
+		localDec = another;
+		variation = "nullable indirectly set to null";
+		LogResult.assertTrue1( localDec == null  );
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		variation = "assignment w/ addition";
+		localDec decimal(5,2) = dec2;
+		localDec += 5.5;
+		LogResult.assertDecimalEqual1(381.25, localDec);
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		variation = "assignment w/ subtraction";
+		localDec decimal(5,2) = dec2;
+		localDec -= 5.5;
+		LogResult.assertDecimalEqual1(370.25, localDec);
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		variation = "assignment w/ negative subtraction";
+		localDec decimal(5,2) = dec2;
+		localDec -= -5.5;
+		LogResult.assertDecimalEqual1(381.25, localDec);
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		variation = "assignment w/ negative multiplication";
+		localDec decimal(5,2) = dec2;
+		localDec *= -1;
+		LogResult.assertDecimalEqual1(-375.75, localDec);
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		variation = "assignment w/ division";
+		localDec decimal(5,2) = dec2;
+		localDec /= 5;
+		LogResult.assertDecimalEqual1(75.15, localDec);
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		variation = "assignment w/ modulous";
+		localDec decimal(5,2) = dec2;
+		localDec %= 4;
+		LogResult.assertDecimalEqual1(3.75, localDec);
+	end
+ 
+	function runAssignmentFunction16(){@Test}
+		localDec decimal(10,5) = 5.5;
+		localDec **= 3;
+		variation = "assignment w/ power";
+		LogResult.assertDecimalEqual1(166.375, localDec);
+	end
+
+	function runAssignmentFunction17(){@Test}
+		localDec decimal(5,2) = dec2;
+		operand decimal(2,1) = 5.5;
+		localDec += operand;
+		variation = "assignment w/ addition var";
+		LogResult.assertDecimalEqual1(381.25, localDec);
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		localDec decimal(5,2) = dec2;
+		operand decimal(2,1) = 5.5;
+		localDec -= operand;
+		variation = "assignment w/ subtraction var";
+		LogResult.assertDecimalEqual1(370.25, localDec);
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		localDec decimal(5,2)= dec2;
+		operand decimal(2,1) = -5.5;
+		localDec -= operand;
+		variation = "assignment w/ negative subtraction var";
+		LogResult.assertDecimalEqual1(381.25, localDec);
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		localDec decimal(5,2) = dec2;
+		operand decimal(2,1) = -1;
+		localDec *= operand;
+		variation = "assignment w/ negative multiplication var";
+		LogResult.assertDecimalEqual1(-375.75, localDec);
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		localDec decimal(5,2) = dec2;
+		operand decimal(2,1) = 5;
+		localDec /= operand;
+		variation = "assignment w/ division var";
+		LogResult.assertDecimalEqual1(75.15, localDec);
+	end
+	
+	function runAssignmentFunction22(){@Test}
+		localDec decimal(5,2) = dec2;
+		operand decimal(2,1) = 4;
+		localDec %= operand;
+		variation = "assignment w/ modulous var";
+		LogResult.assertDecimalEqual1(3.75, localDec);
+	end
+	
+	function runAssignmentFunction23(){@Test}
+		variation = "assignment w/ power var";
+		localDec decimal(10,5) = 5.5;
+		operand decimal(2,1) = 3;
+		localDec **= operand;
+		LogResult.assertDecimalEqual1(166.375, localDec);
+	end
+	
+	function runAssignmentFunction24(){@Test}
+		variation = "assignment w/ uninary +";
+		localDec decimal(5,2) = +145.34;
+		LogResult.assertDecimalEqual1(145.34, localDec);
+	end
+	
+	function runAssignmentFunction25(){@Test}
+		variation = "assignment w/ uninary -";
+		localDec decimal(5,2) = -145.34;
+		LogResult.assertDecimalEqual1(-145.34, localDec);
+	end
+		
+	function runAssignmentFunction26(){@Test}
+		variation = "assignment w/ uninary + zero";
+		localDec decimal(5,2) = +0;
+		LogResult.assertTrue("assignment w/ uninary + zero", (localDec == 0));
+		LogResult.assertDecimalEqual1(0, localDec);
+	end
+	
+	function runAssignmentFunction27(){@Test}
+		localDec decimal(5,2) = -0;
+		LogResult.assertTrue("assignment w/ uninary - zero", (localDec == 0));
+	end
+	
+	function runAssignmentFunction28() {@Test}
+		variation = "decimal assignment overflow ";
+		try
+			overflow decimal(5,2) = 1234.56;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed("OK");
+			else
+				variation += " wrong exception. Bug 356228 - EDT 1.0";
+				LogResult.skipped(variation);
+			end
+		end
+	end
+ 
+ 	function runAssignmentFunction29() {@Test}
+	 	variation string = "operation into overflow";
+		try
+			overflow decimal(5,2) = 123.45;
+			overflow = overflow + 1000.25;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException (oops AnyException)
+			if (oops isa NumericOverflowException)
+				LogResult.passed("OK");
+			else
+				variation += " wrong exception. Bug 356228 - EDT 1.0";
+				LogResult.skipped(variation);
+			end
+		end
+	end
+
+end  // EDecimal001 library

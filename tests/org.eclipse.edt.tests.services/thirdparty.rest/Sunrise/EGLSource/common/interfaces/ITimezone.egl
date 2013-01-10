@@ -1,0 +1,31 @@
+/*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
+
+
+
+//Put EGL Source File Contents Here
+Library ITimezone    
+  function GetTimezoneInfo(latitude string in, longitude string in) returns(TimezoneData) 
+   	{
+   		@Rest {
+   			method = HttpMethod._GET, 
+   			uriTemplate="http://www.earthtools.org/timezone/{latitude}/{longitude}"
+   		}
+   	}
+  end
+end 
+
+
+
+

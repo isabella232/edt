@@ -1,0 +1,4 @@
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.tests.sql/EGLSource/test_edt_sql_test.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=

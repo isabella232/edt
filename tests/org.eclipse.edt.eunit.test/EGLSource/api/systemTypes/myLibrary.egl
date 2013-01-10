@@ -1,0 +1,8 @@
+package api.systemTypes; 
+
+library myLibrary
+
+	function functionName()
+	end
+	
+end

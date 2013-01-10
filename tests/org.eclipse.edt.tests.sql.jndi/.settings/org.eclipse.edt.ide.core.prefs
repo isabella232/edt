@@ -1,0 +1,7 @@
+#Thu Feb 16 15:26:21 EST 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.tests.sql.jndi/EGLSource/org_eclipse_edt_tests_sql_jndi.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds//EGLSource/test/client=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+generatorIds//EGLSource/test/server=org.eclipse.edt.ide.gen.JavaGenProvider
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

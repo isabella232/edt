@@ -1,0 +1,73 @@
+package client;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.GridLayoutLib;
+import common.CUST;
+import eglx.ui.rui.event;
+import server.CustomerPgm;
+
+//
+//
+
+handler StatefulTest type RUIhandler{initialUI =[ui
+            ], onConstructionFunction = start, cssFile = "css/thirdparty.stateful.css", title = "StatefulTest"}
+
+    ui GridLayout{columns = 2, rows = 3, cellPadding = 4, children = [ NextBtn, killSessionBtn, custs_ui ]};
+	
+	custs_ui DataGrid { layoutData = new GridLayoutData{ row = 1, column = 1,
+		horizontalAlignment = GridLayoutLib.ALIGN_CENTER,
+		horizontalSpan = 2 },
+		columns = [
+			new DataGridColumn {name = "CUSTNO", displayName = "CUSTNO", width = 120},
+			new DataGridColumn {name = "CUSTNA", displayName = "CUSTNA", width = 120},
+			new DataGridColumn {name = "REPNO", displayName = "REPNO", width = 120},
+			new DataGridColumn {name = "CONTAC", displayName = "CONTAC", width = 120},
+			new DataGridColumn {name = "CPHONE", displayName = "CPHONE", width = 120},
+			new DataGridColumn {name = "CFAX", displayName = "CFAX", width = 120},
+			new DataGridColumn {name = "CADDR", displayName = "CADDR", width = 120},
+			new DataGridColumn {name = "CCITY", displayName = "CCITY", width = 120},
+			new DataGridColumn {name = "CCOUNT", displayName = "CCOUNT", width = 120},
+			new DataGridColumn {name = "CZIP", displayName = "CZIP", width = 120},
+			new DataGridColumn {name = "CZIPLO", displayName = "CZIPLO", width = 120}
+		],
+		data = new any[0]
+	};
+	NextBtn Button{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Next", onclick ::= getCusts };
+	killSessionBtn Button{ layoutData = new GridLayoutData{ row = 3, column = 1 }, text = "Kill Session", onclick ::= killSession };
+	
+    function start()
+    end
+    
+    function getCusts(e Event in) 
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to handleCustomersResponse onException handleException;
+    end
+    
+    function killSession(e Event in) 
+    	call CustomerPgm.killSession() using new HttpProxy returning to handleKillSessionResponse onException handleException;
+    end
+    
+    function handleException(exp AnyException in, http IHTTP)
+    	SysLib.writeStdout(exp.message);
+    	if(http != null && http.getResponse() != null && http.getResponse().body != null)
+    		SysLib.writeStdout(http.getResponse().body);
+    	end
+    end
+    
+    function handleCustomersResponse(retResult CUST[] in)
+    	custs_ui.data = retResult as any[];
+    end
+    
+    function handleKillSessionResponse()
+    	//Auto-generated method stub
+    end
+    
+    
+    
+end

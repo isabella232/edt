@@ -1,0 +1,44 @@
+package fvt.functionInvocation;
+
+
+
+/*
+* @name TestConstParametersOtherLib
+* @title The function test program for the EGL Const Parameters
+* @keywords EGL Const Parameters
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Const Parameters
+*/
+
+library TestConstParametersOtherLib
+
+    cb boolean = false;
+    ci int = 27;
+    cmy int = 103;
+    cs string = "I am a string constant";
+    //const ct time = "10:12:13";
+    
+    //const cab boolean[2] =[false, true];
+    //const cai int[2] =[-27, 54];
+    //const camy int[2] =[555, 777];
+    //const cas string[2] =["flip", "flop"];
+    //const cat time[2] =["07:35:53", "22:42:19"];
+    cab boolean[] =[false, true];// Change for EDT 0.7
+    cai int[] =[-27, 54];// Change for EDT 0.7
+    camy int[] =[555, 777];// Change for EDT 0.7
+    cas string[] =["flip", "flop"];// Change for EDT 0.7
+    
+    //    function fctIN(ct time const in, expected time in)
+    //        LogResult.assertTimestampEqual1(expected, ct);
+    //    end
+    //
+    //    function fctINOUT(ct time const inOut, expected time in)
+    //        LogResult.assertTimestampEqual1(expected, ct);
+    //    end
+    //
+    //    function fctNonConstIN(ct time in, expected time in)
+    //        LogResult.assertTimestampEqual1(expected, ct);
+    //    end
+end

@@ -1,0 +1,129 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import api.eglx_lang.ExceptionState;
+import api.eglx_lang.TestDefaultedRec;
+import api.eglx_lang.TestRec;
+
+// basic library
+library ObjectInitialization003
+	
+	function setValuesOnNullableRecordWithInit1() { @Test }
+//		state ExceptionState = ExceptionState.noException;
+//		try
+//			// The record is nullable and not initialized, so it's null.
+//			// The assignment to s should fail.
+//			tr TestDefaultedRec?{ s = "a value for field s" };
+//		onException ( nvx NullValueException )
+//			state = ExceptionState.correct;
+//		onException ( ax AnyException )
+//			state = ExceptionState.wrongException;
+//		end
+//		LogResult.assertTrue1( state == ExceptionState.correct );
+		LogResult.passed("Validation error OK");
+	end
+
+	function setValuesOnNullableRecordWithInit2() { @Test }
+		tr TestDefaultedRec? = new TestDefaultedRec;
+		LogResult.assertStringEqual1( "Defaulted value", tr.s );
+	end
+
+	function setValuesOnNullableRecordWithInit3() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The record is nullable and not initialized, so it's null.
+			// The assignment to s should fail.
+			tr TestDefaultedRec?;			
+			tr{ s = "a value for field s" };
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+		end
+		LogResult.assertTrue1( state == ExceptionState.correct );
+	end
+
+	function setValuesOnNullableRecordWithInit4() { @Test }
+		tr TestDefaultedRec? = new TestDefaultedRec;			
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+
+	function setValuesOnNonNullableRecordWithInit1() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The record is nullable and not initialized, so it's null.
+			// The assignment to s should fail.
+			tr TestDefaultedRec{ s = "a value for field s" };
+			LogResult.assertStringEqual1( "a value for field s", tr.s );
+		onException ( ax AnyException )
+			LogResult.failed("exception");
+		end
+		
+	end
+
+	function setValuesOnNonNullableRecordWithInit2() { @Test }
+		tr TestDefaultedRec = new TestDefaultedRec{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+	
+	function setValuesOnNonNullableRecordWithInit3() { @Test }
+		tr TestDefaultedRec;			
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+
+	function setValuesOnNonNullableRecordWithInit4() { @Test }
+		tr TestDefaultedRec = new TestDefaultedRec;			
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+ 
+	function setValuesOnNonNullableRecord1() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The record is nullable and not initialized, so it's null.
+			// The assignment to s should fail.
+			tr TestRec{ s = "a value for field s" };
+			LogResult.assertStringEqual1( "a value for field s", tr.s );
+		onException ( ax AnyException )
+			LogResult.failed("exception");
+		end
+		
+	end
+ 
+	function setValuesOnNonNullableRecord2() { @Test }
+		tr TestRec = new TestRec{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+ 
+	function setValuesOnNonNullableRecord3() { @Test }
+		tr TestRec;			
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+ 
+	function setValuesOnNonNullableRecord4() { @Test }
+		tr TestRec = new TestRec;			
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+	
+	function setValuesIntoAnyArray() {@Test}
+		objects any[];
+		objects.appendElement(1);
+		today timestamp("yyyyMMddHHmmss");
+		rec TestDefaultedRec;
+		objects.appendElement(today);
+		objects.appendElement(rec);
+		LogResult.assertBigIntEqual1( 3, objects.getSize() );
+	end
+	
+	function recordArrayDeclaration() {@Test}
+		recs TestDefaultedRec[]? = new TestDefaultedRec[ 2 ];
+		LogResult.assertTrue1( recs.getSize() == 2 && recs[ 1 ].d == 123.45 
+			&& recs[ 2 ].d == 123.45 && recs[ 2 ].s == "Defaulted value" && recs[ 2 ].s == "Defaulted value" );
+	end
+	
+end

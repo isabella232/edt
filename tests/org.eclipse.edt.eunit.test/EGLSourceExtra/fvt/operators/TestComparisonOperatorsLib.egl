@@ -1,0 +1,1079 @@
+package fvt.operators;
+
+import FVT.operators.exFlexRecord;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestComparisonOperatorsLib
+* @title The function test program for the EGL Comparison Operators
+* @keywords Comparison Operators
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Comparison Operators, include:
+* <br/>
+* <ul>
+*   <li>Equal</li>
+*   <li>Not Equal</li>
+*   <li>Less Than</li>
+*   <li>Less Than Equal</li>
+*   <li>Greater Than</li>
+*   <li>Greater Than Equal</li>
+* <ul>
+*/
+
+library TestComparisonOperatorsLib
+
+    anInt int;
+    int0 int = 0;
+    intm0 int = -0;
+    intm9999 int = -9999;
+    int9999 int = 9999;
+    int10000 int = 10000;
+    intm50 int = -50;
+    afloat1 float = 9999.4;
+    afloat2 float = 9999.6;
+    aDecimal1 decimal(6, 2) = 9999.4;
+    aDecimal2 decimal(6, 2) = 9999.6;
+    aRec exFlexRecord{aString = "abc", aMoney = 15, aChar = "abc"};
+    cRec exFlexRecord;
+    aString string;
+    cString1 string = "A barn burner";
+
+    function testEqualInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestEqual - Integer == constant(0) - 1a");
+        LogResult.assertTrue1(anInt == 0);
+    end
+
+    function testEqualInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestEqual - Integer == Integer(0) - 1b");
+        LogResult.assertTrue1(anInt == int0);
+    end
+
+    function testEqualInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestEqual - Integer == Integer(-0) - 1c");
+        LogResult.assertTrue1(anInt == intm0);
+    end
+
+    function testEqualInteger2a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 2a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger2b(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 2b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger3a(){@Test}
+        anInt = 9999.4;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 3a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger3b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 3b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger4a(){@Test}
+        anInt = 9999.6;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 4a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger4b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 4b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger4c(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(10000) - 4c");
+        //  LogResult.assertTrue1((anInt == int10000, false));
+        LogResult.assertTrue1(!(anInt == int10000));
+    end
+
+    function testEqualInteger5a(){@Test}
+        anInt = afloat1;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 5a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger5b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 5b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger6a(){@Test}
+        anInt = afloat2;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 6a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger6b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(10000) - 6b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger6c(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 6c");
+        LogResult.assertTrue1(!(anInt == int10000));
+    end
+
+    function testEqualSmallFloat4a(){@Test}
+        asfloat smallFloat = 9999.6;
+        anInt = 9999.6;
+        LogResult.logStdOut("TestEqual - smallfloat == constant(9999.6) - 4a");
+        LogResult.assertTrue1(asfloat == 9999.6);
+    end
+
+    function testEqualInteger7a(){@Test}
+        anInt = aDecimal1;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 7a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger7b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 7b");
+        LogResult.assertTrue1(anInt == int9999);
+    end
+
+    function testEqualInteger8a(){@Test}
+        anInt = aDecimal2;
+        LogResult.logStdOut("TestEqual - Integer == constant(9999) - 8a");
+        LogResult.assertTrue1(anInt == 9999);
+    end
+
+    function testEqualInteger8b(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(9999) - 8b");
+        LogResult.assertTrue1((anInt == int9999));
+    end
+
+    function testEqualInteger8b_1(){@Test}
+        LogResult.logStdOut("TestEqual - Integer == Integer(10000) - 8b");
+        LogResult.assertTrue1(!(anInt == int10000));
+    end
+
+    function testEqualString0a(){@Test}
+        LogResult.logStdOut("TestEqual - String == null - 0a");
+        LogResult.assertTrue1(!(aString == null));
+    end
+
+    function testEqualString1a(){@Test}
+        aString = "A barn burner";
+        LogResult.logStdOut("TestEqual - String == constant - 1a");
+        LogResult.assertTrue1((aString == "A barn burner"));
+    end
+
+    function testEqualString1b(){@Test}
+        LogResult.logStdOut("TestEqual - String == String - 1b");
+        LogResult.assertTrue1((aString == cString1));
+    end
+
+    function testEqualString1a_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestEqual - String == constant(9999) - 1a");
+        LogResult.assertTrue1((aString == 9999));
+    end
+
+    function testEqualString1b_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestEqual - String == Integer(9999) - 1b");
+        LogResult.assertTrue1((aString == int9999));
+    end
+
+    function testEqualString2a(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestEqual - String == constant(9999) - 2a");
+        LogResult.assertTrue1((9999 == aString));
+    end
+
+    function testEqualString2b(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestEqual - String == Integer(9999) - 2b");
+        LogResult.assertTrue1((int9999 == aString));
+    end
+
+    function testEqualString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestEqual - String == constant(0) - 3a");
+        LogResult.assertTrue1((aString == 0));
+    end
+
+    function testEqualString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestEqual - String == Integer(0) - 3b");
+        LogResult.assertTrue1((aString == int0));
+    end
+
+    function testEqualRecord1a(){@Test}
+        LogResult.logStdOut("TestEqual - Record - 1a");
+        LogResult.assertTrue1((aRec.aString == "abc"));
+    end
+
+    function testEqualRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "abc";
+        bRec.aMoney = 15;
+        bRec.aChar = "abc";
+        LogResult.logStdOut("TestEqual - Record - 2a");
+        LogResult.assertTrue1((aRec.aString == bRec.aString));
+    end
+
+    function testEqualRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestEqual - Record - 3a");
+        LogResult.assertTrue1((aRec.aString == cRec.aString));
+    end
+
+    function testEqualRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestEqual - Record - 3b");
+        LogResult.assertTrue1((aRec.aChar == cRec.aChar));
+    end
+
+    function testEqualRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestEqual - Record - 3c");
+        LogResult.assertTrue1((aRec.aMoney == cRec.aMoney));
+    end
+
+    function testEqualRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 10;
+        LogResult.logStdOut("TestEqual - Record - 4a");
+        LogResult.assertTrue1(!(aRec.aString == cRec.aString));
+    end
+
+    function testEqualRecord4b(){@Test}
+        LogResult.logStdOut("TestEqual - Record - 4b");
+        LogResult.assertTrue1(!(aRec.aChar == cRec.aChar));
+    end
+
+    function testEqualRecord4c(){@Test}
+        LogResult.logStdOut("TestEqual - Record - 4c");
+        LogResult.assertTrue1(!(aRec.aMoney == cRec.aMoney));
+    end
+
+    function testNotEqualInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(0) - 1a");
+        LogResult.assertTrue1(!(anInt != 0));
+    end
+
+    function testNotEqualInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(0) - 1b");
+        LogResult.assertTrue1(!(anInt != int0));
+    end
+
+    function testNotEqualInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(-0) - 1c");
+        LogResult.assertTrue1(!(anInt != intm0));
+    end
+
+    function testNotEqualInteger2a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 2a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger2b(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 2b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger3a(){@Test}
+        anInt = 9999.4;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 3a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger3b(){@Test}
+        anInt = 9999.4;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 3b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger4a(){@Test}
+        anInt = 9999.6;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 4a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger4b(){@Test}
+        anInt = 9999.6;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 4b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger4c(){@Test}
+        anInt = 9999.6;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(10000) - 4c");
+        LogResult.assertTrue1((anInt != int10000));
+    end
+
+    function testNotEqualInteger5a(){@Test}
+        anInt = afloat1;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 5a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger5b(){@Test}
+        anInt = afloat1;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 5b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger6a(){@Test}
+        anInt = afloat2;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 6a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger6b(){@Test}
+        anInt = afloat2;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(10000) - 6b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger6c(){@Test}
+        anInt = afloat2;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 6c");
+        LogResult.assertTrue1((anInt != int10000));
+    end
+
+    function testNotEqualInteger7a(){@Test}
+        anInt = aDecimal1;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 7a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger7b(){@Test}
+        anInt = aDecimal1;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 7b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger8a(){@Test}
+        anInt = aDecimal2;
+        LogResult.logStdOut("TestNotEqual - Integer != constant(9999) - 8a");
+        LogResult.assertTrue1(!(anInt != 9999));
+    end
+
+    function testNotEqualInteger8b(){@Test}
+        anInt = aDecimal2;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(9999) - 8b");
+        LogResult.assertTrue1(!(anInt != int9999));
+    end
+
+    function testNotEqualInteger8b_1(){@Test}
+        anInt = aDecimal2;
+        LogResult.logStdOut("TestNotEqual - Integer != Integer(10000) - 8b");
+        LogResult.assertTrue1((anInt != int10000));
+    end
+
+    function testNotEqualString1a(){@Test}
+        aString = "A barn burner";
+        LogResult.logStdOut("TestNotEqual - String != constant - 1a");
+        LogResult.assertTrue1(!(aString != "A barn burner"));
+    end
+
+    function testNotEqualString1b(){@Test}
+        aString = "A barn burner";
+        LogResult.logStdOut("TestNotEqual - String != String - 1b");
+        LogResult.assertTrue1(!(aString != cString1));
+    end
+
+    function testNotEqualString1a_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestNotEqual - String != constant(9999) - 1a");
+        LogResult.assertTrue1(!(aString != 9999));
+    end
+
+    function testNotEqualString1b_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestNotEqual - String != Integer(9999) - 1b");
+        LogResult.assertTrue1(!(aString != int9999));
+    end
+
+    function testNotEqualString2a(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestNotEqual - String != constant(9999) - 2a");
+        LogResult.assertTrue1(!(9999 != aString));
+    end
+
+    function testNotEqualString2b(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestNotEqual - String != Integer(9999) - 2b");
+        LogResult.assertTrue1(!(int9999 != aString));
+    end
+
+    function testNotEqualString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestNotEqual - String != constant(0) - 3a");
+        LogResult.assertTrue1(!(aString != 0));
+    end
+
+    function testNotEqualString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestNotEqual - String != Integer(0) - 3b");
+        LogResult.assertTrue1(!(aString != int0));
+    end
+
+    function testNotEqualRecord1a(){@Test}
+        aRec.aString = "abc";
+        aRec.aChar = "abc";
+        aRec.aMoney = 15;
+        LogResult.logStdOut("TestNotEqual - Record - 1a");
+        LogResult.assertTrue1(!(aRec.aString != "abc"));
+    end
+
+    function testNotEqualRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "abc";
+        bRec.aMoney = 15;
+        bRec.aChar = "abc";
+        LogResult.logStdOut("TestNotEqual - Record - 2a");
+        LogResult.assertTrue1(!(aRec.aString != bRec.aString));
+    end
+
+    function testNotEqualRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestNotEqual - Record - 3a");
+        LogResult.assertTrue1(!(aRec.aString != cRec.aString));
+    end
+
+    function testNotEqualRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestNotEqual - Record - 3b");
+        LogResult.assertTrue1(!(aRec.aChar != cRec.aChar));
+    end
+
+    function testNotEqualRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestNotEqual - Record - 3c");
+        LogResult.assertTrue1(!(aRec.aMoney != cRec.aMoney));
+    end
+
+    function testNotEqualRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 10;
+        LogResult.logStdOut("TestNotEqual - Record - 4a");
+        LogResult.assertTrue1((aRec.aString != cRec.aString));
+    end
+
+    function testNotEqualRecord4b(){@Test}
+        LogResult.logStdOut("TestNotEqual - Record - 4b");
+        LogResult.assertTrue1((aRec.aChar != cRec.aChar));
+    end
+
+    function testNotEqualRecord4c(){@Test}
+        LogResult.logStdOut("TestNotEqual - Record - 4c");
+        LogResult.assertTrue1((aRec.aMoney != cRec.aMoney));
+    end
+
+    function testLessThanInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThan - Integer < constant(0) - 1a");
+        LogResult.assertTrue1(!(anInt < 0));
+    end
+
+    function testLessThanInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThan - Integer < Integer(0) - 1b");
+        LogResult.assertTrue1(!(anInt < int0));
+    end
+
+    function testLessThanInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThan - Integer < Integer(-0) - 1c");
+        LogResult.assertTrue1(!(anInt < intm0));
+    end
+
+    function testLessThanInteger2a(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThan - Integer < constant(0) - 2a");
+        LogResult.assertTrue1((anInt < 0));
+    end
+
+    function testLessThanInteger2b(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThan - Integer < Integer(0) - 2b");
+        LogResult.assertTrue1((anInt < int0));
+    end
+
+    function testLessThanInteger2c(){@Test}
+        LogResult.logStdOut("TestLessThan - Integer < Integer(-0) - 2c");
+        LogResult.assertTrue1((anInt < intm0));
+    end
+
+    function testLessThanInteger3a(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThan - Integer < constant('-50') - 3a");
+        LogResult.assertTrue1((anInt < "-50"));
+    end
+
+    function testLessThanString1a(){@Test}
+        cString1 = "abc";
+        aString = "ABC";
+        LogResult.logStdOut("TestLessThan - String < constant - 1a");
+        LogResult.assertTrue1((aString < "abc"));
+    end
+
+    function testLessThanString1b(){@Test}
+        cString1 = "abc";
+        LogResult.logStdOut("TestLessThan - String < String - 1b");
+        LogResult.assertTrue1((aString < cString1));
+    end
+
+    function testLessThanString1a_1(){@Test}
+        aString = "9998";
+        LogResult.logStdOut("TestLessThan - String < constant(9999) - 1a");
+        LogResult.assertTrue1((aString < 9999));
+    end
+
+    function testLessThanString1b_1(){@Test}
+        aString = "9998";
+        LogResult.logStdOut("TestLessThan - String < Integer(9999) - 1b");
+        LogResult.assertTrue1((aString < int9999));
+    end
+
+    function testLessThanString2a(){@Test}
+        aString = "9998";
+        LogResult.logStdOut("TestLessThan - String < constant(9999) - 2a");
+        LogResult.assertTrue1(!(9999 < aString));
+    end
+
+    function testLessThanString2b(){@Test}
+        aString = "9998";
+        LogResult.logStdOut("TestLessThan - String < Integer(9999) - 2b");
+        LogResult.assertTrue1(!(int9999 < aString));
+    end
+
+    function testLessThanString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestLessThan - String < constant(0) - 3a");
+        LogResult.assertTrue1((aString < 1));
+    end
+
+    function testLessThanString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestLessThan - String < Integer(0) - 3b");
+        LogResult.assertTrue1(!(aString < int0));
+    end
+
+    function testLessThanRecord1a(){@Test}
+        aRec.aString = "abc";
+        aRec.aChar = "abc";
+        aRec.aMoney = 15;
+        LogResult.logStdOut("TestLessThan - Record - 1a");
+        LogResult.assertTrue1(!(aRec.aString < "abc"));
+    end
+
+    function testLessThanRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "abd";
+        bRec.aMoney = 16;
+        bRec.aChar = "abd";
+        LogResult.logStdOut("TestLessThan - Record - 2a");
+        LogResult.assertTrue1((aRec.aString < bRec.aString));
+    end
+
+    function testLessThanRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestLessThan - Record - 3a");
+        LogResult.assertTrue1(!(aRec.aString < cRec.aString));
+    end
+
+    function testLessThanRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestLessThan - Record - 3b");
+        LogResult.assertTrue1(!(aRec.aChar < cRec.aChar));
+    end
+
+    function testLessThanRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestNotEqual - Record - 3c");
+        LogResult.assertTrue1(!(aRec.aMoney < cRec.aMoney));
+    end
+
+    function testLessThanRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 16;
+        LogResult.logStdOut("TestLessThan - Record - 4a");
+        LogResult.assertTrue1((cRec.aString < aRec.aString));
+    end
+
+    function testLessThanRecord4b(){@Test}
+        LogResult.logStdOut("TestLessThan - Record - 4b");
+        LogResult.assertTrue1((cRec.aChar < aRec.aChar));
+    end
+
+    function testLessThanRecord4c(){@Test}
+        LogResult.logStdOut("TestLessThan - Record - 4c");
+        LogResult.assertTrue1((cRec.aMoney < aRec.aMoney));
+    end
+
+    function testLessThanEqualInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= constant(0) - 1a");
+        LogResult.assertTrue1((anInt <= 0));
+    end
+
+    function testLessThanEqualInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= Integer(0) - 1b");
+        LogResult.assertTrue1((anInt <= int0));
+    end
+
+    function testLessThanEqualInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= Integer(-0) - 1c");
+        LogResult.assertTrue1((anInt <= intm0));
+    end
+
+    function testLessThanEqualInteger2a(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= constant(0) - 2a");
+        LogResult.assertTrue1((anInt <= 0));
+    end
+
+    function testLessThanEqualInteger2b(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= Integer(0) - 2b");
+        LogResult.assertTrue1((anInt <= int0));
+    end
+
+    function testLessThanEqualInteger2c(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= Integer(-0) - 2c");
+        LogResult.assertTrue1((anInt <= intm0));
+    end
+
+    function testLessThanEqualInteger3a(){@Test}
+        anInt = -9999;
+        LogResult.logStdOut("TestLessThanEqual - Integer <= constant('-50') - 3a");
+        LogResult.assertTrue1((anInt <= "-50"));
+    end
+
+    function testLessThanEqualString1a(){@Test}
+        cString1 = "abc";
+        aString = "ABC";
+        LogResult.logStdOut("TestLessThanEqual - String <= constant - 1a");
+        LogResult.assertTrue1((aString <= "abc"));
+    end
+
+    function testLessThanEqualString1b(){@Test}
+        aString = "ABC";
+        LogResult.logStdOut("TestLessThanEqual - String <= constant - 1b");
+        LogResult.assertTrue1((aString <= "ABC"));
+    end
+
+    function testLessThanEqualString1c(){@Test}
+        aString = "ABC";
+        LogResult.logStdOut("TestLessThanEqual - String <= String - 1c");
+        LogResult.assertTrue1((aString <= cString1));
+    end
+
+    function testLessThanEqualString1a_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestLessThanEqual - String <= constant(9999) - 1a");
+        LogResult.assertTrue1((aString <= 9999));
+    end
+
+    function testLessThanEqualString1b_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestLessThanEqual - String <= Integer(9999) - 1b");
+        LogResult.assertTrue1((aString <= int9999));
+    end
+
+    function testLessThanEqualString2a(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestLessThanEqual - String <= constant(9999) - 2a");
+        LogResult.assertTrue1((9999 <= aString));
+    end
+
+    function testLessThanEqualString2b(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestLessThanEqual - String <= Integer(9999) - 2b");
+        LogResult.assertTrue1((int9999 <= aString));
+    end
+
+    function testLessThanEqualString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestLessThanEqual - String <= constant(1) - 3a");
+        LogResult.assertTrue1((aString <= 1));
+    end
+
+    function testLessThanEqualString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestLessThanEqual - String <= Integer(0) - 3b");
+        LogResult.assertTrue1((aString <= int0));
+    end
+
+    function testLessThanEqualRecord1a(){@Test}
+        aRec.aString = "abc";
+        aRec.aChar = "abc";
+        aRec.aMoney = 15;
+        LogResult.logStdOut("TestLessThanEqual - Record - 1a");
+        LogResult.assertTrue1((aRec.aString <= "abc"));
+    end
+
+    function testLessThanEqualRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "abd";
+        bRec.aMoney = 16;
+        bRec.aChar = "abd";
+        LogResult.logStdOut("TestLessThanEqual - Record - 2a");
+        LogResult.assertTrue1((aRec.aString <= bRec.aString));
+    end
+
+    function testLessThanEqualRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestLessThanEqual - Record - 3a");
+        LogResult.assertTrue1((aRec.aString <= cRec.aString));
+    end
+
+    function testLessThanEqualRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestLessThanEqual - Record - 3b");
+        LogResult.assertTrue1((aRec.aChar <= cRec.aChar));
+    end
+
+    function testLessThanEqualRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestLessThanEqual - Record - 3c");
+        LogResult.assertTrue1((aRec.aMoney <= cRec.aMoney));
+    end
+
+    function testLessThanEqualRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 16;
+        LogResult.logStdOut("TestLessThanEqual - Record - 4a");
+        LogResult.assertTrue1((cRec.aString <= aRec.aString));
+    end
+
+    function testLessThanEqualRecord4b(){@Test}
+        LogResult.logStdOut("TestLessThanEqual - Record - 4b");
+        LogResult.assertTrue1((cRec.aChar <= aRec.aChar));
+    end
+
+    function testLessThanEqualRecord4c(){@Test}
+        LogResult.logStdOut("TestLessThanEqual - Record - 4c");
+        LogResult.assertTrue1((cRec.aMoney <= aRec.aMoney));
+    end
+
+    function testGreaterThanInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThan - Integer > constant(0) - 1a");
+        LogResult.assertTrue1(!(anInt > 0));
+    end
+
+    function testGreaterThanInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThan - Integer > Integer(0) - 1b");
+        LogResult.assertTrue1(!(anInt > int0));
+    end
+
+    function testGreaterThanInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThan - Integer > Integer(-0) - 1c");
+        LogResult.assertTrue1(!(anInt > intm0));
+    end
+
+    function testGreaterThanInteger2a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThan - Integer > constant(0) - 2a");
+        LogResult.assertTrue1((anInt > 0));
+    end
+
+    function testGreaterThanInteger2b(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThan - Integer > Integer(0) - 2b");
+        LogResult.assertTrue1((anInt > int0));
+    end
+
+    function testGreaterThanInteger2c(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThan - Integer > Integer(-0) - 2c");
+        LogResult.assertTrue1((anInt > intm0));
+    end
+
+    function testGreaterThanInteger3a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThan - Integer > constant('-50') - 3a");
+        LogResult.assertTrue1((anInt > "-50"));
+    end
+
+    function testGreaterThanString1a(){@Test}
+        cString1 = "ABC";
+        aString = "abc";
+        LogResult.logStdOut("TestGreaterThan - String > constant - 1a");
+        LogResult.assertTrue1((aString > "ABC"));
+    end
+
+    function testGreaterThanString1b(){@Test}
+        aString = "abc";
+        LogResult.logStdOut("TestGreaterThan - String > String - 1b");
+        LogResult.assertTrue1((aString > cString1));
+    end
+
+    function testGreaterThanString1a_1(){@Test}
+        aString = "10000";
+        LogResult.logStdOut("TestGreaterThan - String > constant(9999) - 1a");
+        LogResult.assertTrue1((aString > 9999));
+    end
+
+    function testGreaterThanString1b_1(){@Test}
+        aString = "10000";
+        LogResult.logStdOut("TestGreaterThan - String > Integer(9999) - 1b");
+        LogResult.assertTrue1((aString > int9999));
+    end
+
+    function testGreaterThanString2a(){@Test}
+        aString = "10000";
+        LogResult.logStdOut("TestGreaterThan - String > constant(9999) - 2a");
+        LogResult.assertTrue1(!(9999 > aString));
+    end
+
+    function testGreaterThanString2b(){@Test}
+        aString = "10000";
+        LogResult.logStdOut("TestGreaterThan - String > Integer(9999) - 2b");
+        LogResult.assertTrue1(!(int9999 > aString));
+    end
+
+    function testGreaterThanString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestGreaterThan - String > constant(0) - 3a");
+        LogResult.assertTrue1(!(aString > 0));
+    end
+
+    function testGreaterThanString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestGreaterThan - String > Integer(0) - 3b");
+        LogResult.assertTrue1(!(aString > int0));
+    end
+
+    function testGreaterThanRecord1a(){@Test}
+        aRec.aString = "abc";
+        aRec.aChar = "abc";
+        aRec.aMoney = 15;
+        LogResult.logStdOut("TestGreaterThan - Record - 1a");
+        LogResult.assertTrue1((aRec.aString > "ABC"));
+    end
+
+    function testGreaterThanRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "ABC";
+        bRec.aMoney = 10;
+        bRec.aChar = "ABC";
+        LogResult.logStdOut("TestGreaterThan - Record - 2a");
+        LogResult.assertTrue1((aRec.aString > bRec.aString));
+    end
+
+    function testGreaterThanRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThan - Record - 3a");
+        LogResult.assertTrue1(!(aRec.aString > cRec.aString));
+    end
+
+    function testGreaterThanRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThan - Record - 3b");
+        LogResult.assertTrue1(!(aRec.aChar > cRec.aChar));
+    end
+
+    function testGreaterThanRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThan - Record - 3c");
+        LogResult.assertTrue1(!(aRec.aMoney > cRec.aMoney));
+    end
+
+    function testGreaterThanRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 16;
+        LogResult.logStdOut("TestGreaterThan - Record - 4a");
+        LogResult.assertTrue1((aRec.aString > cRec.aString));
+    end
+
+    function testGreaterThanRecord4b(){@Test}
+        LogResult.logStdOut("TestGreaterThan - Record - 4b");
+        LogResult.assertTrue1((aRec.aChar > cRec.aChar));
+    end
+
+    function testGreaterThanRecord4c(){@Test}
+        LogResult.logStdOut("TestGreaterThan - Record - 4c");
+        LogResult.assertTrue1((aRec.aMoney > cRec.aMoney));
+    end
+
+    function testGreaterThanEqualInteger1a(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= constant(0) - 1a");
+        LogResult.assertTrue1((anInt >= 0));
+    end
+
+    function testGreaterThanEqualInteger1b(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= Integer(0) - 1b");
+        LogResult.assertTrue1((anInt >= int0));
+    end
+
+    function testGreaterThanEqualInteger1c(){@Test}
+        anInt = 0;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= Integer(-0) - 1c");
+        LogResult.assertTrue1((anInt >= intm0));
+    end
+
+    function testGreaterThanEqualInteger2a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= constant(0) - 2a");
+        LogResult.assertTrue1((anInt >= 0));
+    end
+
+    function testGreaterThanEqualInteger2b(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= Integer(0) - 2b");
+        LogResult.assertTrue1((anInt >= int0));
+    end
+
+    function testGreaterThanEqualInteger2c(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= Integer(-0) - 2c");
+        LogResult.assertTrue1((anInt >= intm0));
+    end
+
+    function testGreaterThanEqualInteger3a(){@Test}
+        anInt = 9999;
+        LogResult.logStdOut("TestGreaterThanEqual - Integer >= constant('-50') - 3a");
+        LogResult.assertTrue1((anInt >= "-50"));
+    end
+
+    function testGreaterThanEqualString1a(){@Test}
+        cString1 = "ABC";
+        aString = "abc";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= constant - 1a");
+        LogResult.assertTrue1((aString >= "ABC"));
+    end
+
+    function testGreaterThanEqualString1b(){@Test}
+        aString = "abc";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= constant - 1b");
+        LogResult.assertTrue1((aString >= "abc"));
+    end
+
+    function testGreaterThanEqualString1c(){@Test}
+        aString = "abc";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= String - 1c");
+        LogResult.assertTrue1((aString >= cString1));
+    end
+
+    function testGreaterThanEqualString1a_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= constant(9999) - 1a");
+        LogResult.assertTrue1((aString >= 9999));
+    end
+
+    function testGreaterThanEqualString1b_1(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= Integer(9999) - 1b");
+        LogResult.assertTrue1((aString >= int9999));
+    end
+
+    function testGreaterThanEqualString2a(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= constant(9999) - 2a");
+        LogResult.assertTrue1((9999 >= aString));
+    end
+
+    function testGreaterThanEqualString2b(){@Test}
+        aString = "9999";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= Integer(9999) - 2b");
+        LogResult.assertTrue1((int9999 >= aString));
+    end
+
+    function testGreaterThanEqualString3a(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= constant(0) - 3a");
+        LogResult.assertTrue1((aString >= 0));
+    end
+
+    function testGreaterThanEqualString3b(){@Test}
+        aString = "-0";
+        LogResult.logStdOut("TestGreaterThanEqual - String >= Integer(0) - 3b");
+        LogResult.assertTrue1((aString >= int0));
+    end
+
+    function testGreaterThanEqualRecord1a(){@Test}
+        aRec.aString = "abc";
+        aRec.aChar = "abc";
+        aRec.aMoney = 15;
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 1a");
+        LogResult.assertTrue1((aRec.aString >= "ABC"));
+    end
+
+    function testGreaterThanEqualRecord2a(){@Test}
+        bRec exFlexRecord;
+        bRec.aString = "ABC";
+        bRec.aMoney = 10;
+        bRec.aChar = "ABC";
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 2a");
+        LogResult.assertTrue1((aRec.aString >= bRec.aString));
+    end
+
+    function testGreaterThanEqualRecord3a(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 3a");
+        LogResult.assertTrue1((aRec.aString >= cRec.aString));
+    end
+
+    function testGreaterThanEqualRecord3b(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 3b");
+        LogResult.assertTrue1((aRec.aChar >= cRec.aChar));
+    end
+
+    function testGreaterThanEqualRecord3c(){@Test}
+        cRec = aRec;
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 3c");
+        LogResult.assertTrue1((aRec.aMoney >= cRec.aMoney));
+    end
+
+    function testGreaterThanEqualRecord4a(){@Test}
+        cRec = aRec;
+        aRec.aString = "cde";
+        aRec.aChar = "cde";
+        aRec.aMoney = 16;
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 4a");
+        LogResult.assertTrue1((aRec.aString >= cRec.aString));
+    end
+
+    function testGreaterThanEqualRecord4b(){@Test}
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 4b");
+        LogResult.assertTrue1((aRec.aChar >= cRec.aChar));
+    end
+
+    function testGreaterThanEqualRecord4c(){@Test}
+        LogResult.logStdOut("TestGreaterThanEqual - Record - 4c");
+        LogResult.assertTrue1((aRec.aMoney >= cRec.aMoney));
+    end
+
+end

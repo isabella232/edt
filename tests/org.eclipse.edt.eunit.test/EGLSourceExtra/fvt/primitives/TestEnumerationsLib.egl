@@ -1,0 +1,67 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+
+/* 
+* @name TestEnumerationsLib
+* @title The function test program for Enumeration datatype in EDT for RichUI
+* @keywords Enumeration
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* Test the functionality for Enumeration datatype in EDT, using serviceKind as 
+* an example.
+*/
+
+library TestEnumerationsLib
+
+    rc boolean = false;
+    sk serviceKind?;
+    recd MyRecord;
+
+    function testSystemType1(){@Test}
+        LogResult.logStdOut("Test ServiceKind value in variable");
+        sk = servicekind.WEB;
+        rc =(sk == serviceKind.WEB);
+        LogResult.assertTrue1(rc);
+    end
+
+    function testSystemType2(){@Test}
+        LogResult.logStdOut("Test ServiceKind value in record field");
+        rc =(recd.sKind == ServiceKind.EGL);
+        LogResult.assertTrue1(rc);
+    end
+
+    function testSystemType3(){@Test}
+        LogResult.logStdOut("Test ServiceKind value in exception");
+        try
+            ex ServiceInvocationException = new ServiceInvocationException;
+            ex.source = ServiceKind.NATIVE;
+            throw ex;
+        onException(sie ServiceInvocationException)
+            rc =(sie.source == ServiceKind.NATIVE);
+            LogResult.assertTrue1(rc);
+        onException(ae AnyException)
+            LogResult.logStdOut("ServiceInvocationException not caught");
+            LogResult.assertTrue1(false);
+        end
+    end
+
+    function testSystemType4(){@Test}
+        LogResult.logStdOut("Test ServiceKind reassignment");
+        kind1 serviceKind = serviceKind.EGL;
+        kind2 serviceKind = serviceKind.WEB;
+        kind1 = kind2;
+        rc =(kind1 == ServiceKind.WEB);
+        LogResult.assertTrue1(rc);
+    end
+
+end
+
+record MyRecord
+    name string;
+    sKind ServiceKind = ServiceKind.EGL;
+end

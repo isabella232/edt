@@ -1,0 +1,45 @@
+package fvt.xml;
+
+/* 
+* @name WeatherTable
+* @title The library of Weather XML
+* @keywords Weather XML library
+* @author EDT team
+* @createDate 2011/09/05
+* @description 
+* This is Weather XML data
+*/
+
+library WeatherTable
+    xml string = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + "<WeatherForecasts " + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                    "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " + "xmlns=\"http://www.webservicex.net\"" + ">" +
+                    "<Latitude>35.89493</Latitude>" + "<Longitude>78.7050552</Longitude>" + "<AllocationFactor>0.002944</AllocationFactor>" +
+                    "<FipsCode>37</FipsCode>" + "<PlaceName>RALEIGH</PlaceName>" + "<StateCode>NC</StateCode>" + "<Details>" + "<WeatherData>" +
+                    "<Day>Tuesday, June 02, 2009</Day>" + "<WeatherImage>http://forecast.weather.gov/images/wtf/few.jpg</WeatherImage>" +
+                    "<MaxTemperatureF>92</MaxTemperatureF>" + "<MinTemperatureF>67</MinTemperatureF>" + "<MaxTemperatureC>33</MaxTemperatureC>" +
+                    "<MinTemperatureC>19</MinTemperatureC>" + "</WeatherData>" + "<WeatherData>" + "<Day>Wednesday, June 03, 2009</Day>" +
+                    "<WeatherImage>http://forecast.weather.gov/images/wtf/sct.jpg</WeatherImage>" + "<MaxTemperatureF>91</MaxTemperatureF>" +
+                    "<MinTemperatureF>67</MinTemperatureF>" + "<MaxTemperatureC>33</MaxTemperatureC>" + "<MinTemperatureC>19</MinTemperatureC>" +
+                    "</WeatherData>" + "<WeatherData>" + "<Day>Thursday, June 04, 2009</Day>" +
+                    "<WeatherImage>http://forecast.weather.gov/images/wtf/shra70.jpg</WeatherImage>" + "<MaxTemperatureF>83</MaxTemperatureF>" +
+                    "<MinTemperatureF>62</MinTemperatureF>" + "<MaxTemperatureC>28</MaxTemperatureC>" + "<MinTemperatureC>17</MinTemperatureC>" +
+                    "</WeatherData>" + "<WeatherData>" + "<Day>Friday, June 05, 2009</Day>" +
+                    "<WeatherImage>http://forecast.weather.gov/images/wtf/shra70.jpg</WeatherImage>" + "<MaxTemperatureF>73</MaxTemperatureF>" +
+                    "<MinTemperatureF>60</MinTemperatureF>" + "<MaxTemperatureC>23</MaxTemperatureC>" + "<MinTemperatureC>16</MinTemperatureC>" +
+                    "</WeatherData>" + "<WeatherData>" + "<Day>Saturday, June 06, 2009</Day>" +
+                    "<WeatherImage>http://forecast.weather.gov/images/wtf/tsra20.jpg</WeatherImage>" + "<MaxTemperatureF>83</MaxTemperatureF>" +
+                    "<MinTemperatureF>65</MinTemperatureF>" + "<MaxTemperatureC>28</MaxTemperatureC>" + "<MinTemperatureC>18</MinTemperatureC>" +
+                    "</WeatherData>" + "<WeatherData>" + "<Day>Sunday, June 07, 2009</Day>" +
+                    "<WeatherImage>http://forecast.weather.gov/images/wtf/scttsra20.jpg</WeatherImage>" + "<MaxTemperatureF>89</MaxTemperatureF>" +
+                    "<MinTemperatureF>67</MinTemperatureF>" + "<MaxTemperatureC>32</MaxTemperatureC>" + "<MinTemperatureC>19</MinTemperatureC>" +
+                    "</WeatherData>" + "<WeatherData />" + "</Details>" + "</WeatherForecasts>";
+
+    weatherData WeatherData[] =[
+                    new WeatherData{Day = "Tuesday, June 02, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/few.jpg", MaxTemperatureF = "92", MinTemperatureF = "67", MaxTemperatureC = "33", MinTemperatureC = "19"},
+                    new WeatherData{Day = "Wednesday, June 03, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/sct.jpg", MaxTemperatureF = "91", MinTemperatureF = "67", MaxTemperatureC = "33", MinTemperatureC = "19"},
+                    new WeatherData{Day = "Thursday, June 04, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/shra70.jpg", MaxTemperatureF = "83", MinTemperatureF = "62", MaxTemperatureC = "28", MinTemperatureC = "17"},
+                    new WeatherData{Day = "Friday, June 05, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/shra70.jpg", MaxTemperatureF = "73", MinTemperatureF = "60", MaxTemperatureC = "23", MinTemperatureC = "16"},
+                    new WeatherData{Day = "Saturday, June 06, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/tsra20.jpg", MaxTemperatureF = "83", MinTemperatureF = "65", MaxTemperatureC = "28", MinTemperatureC = "18"},
+                    new WeatherData{Day = "Sunday, June 07, 2009", WeatherImage = "http://forecast.weather.gov/images/wtf/scttsra20.jpg", MaxTemperatureF = "89", MinTemperatureF = "67", MaxTemperatureC = "32", MinTemperatureC = "19"},
+                    new WeatherData{}];
+end

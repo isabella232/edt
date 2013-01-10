@@ -1,0 +1,108 @@
+package fvt.handlers;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+
+/* 
+* @name AllBasicHandlerTestsLib
+* @title The function test function call, field access and exception thrown in basic handler
+* @keywords function call, field access and exception thrown
+* @author EDT team
+* @createDate 2011/08/31
+* @description 
+* Test function call, field access and exception thrown in basic handler.
+*/
+
+library AllBasicHandlerTestsLib
+
+    myHndlr NoSubtypeHandler = new NoSubtypeHandler;
+
+    function testFunctionCalls1(){@Test}
+        LogResult.logStdOut("Test private function call 1");
+        myHndlr.setPrivateField(23);
+        LogResult.assertBigIntEqual1(23, myHndlr.getPrivateField());
+    end
+
+    function testFunctionCalls2(){@Test}
+        LogResult.logStdOut("Test private function call 2");
+        myHndlr.setPrivateField(42);
+        LogResult.assertBigIntEqual1(42, myHndlr.getPrivateField());
+    end
+
+    function testFieldAccess1(){@Test}
+        LogResult.logStdOut("Test field access 1");
+        myHndlr.publicField = 23;
+        LogResult.assertBigIntEqual1(23, myHndlr.publicField);
+    end
+
+    function testFieldAccess2(){@Test}
+        LogResult.logStdOut("Test field access 2");
+        myHndlr.publicField = 42;
+        LogResult.assertBigIntEqual1(42, myHndlr.publicField);
+    end
+
+    function testExceptionFromHandler1(){@Test{targetLang =[JAVA]}}
+        myHndlr = new NoSubtypeHandler;
+        exceptionThrown boolean = no;
+
+        LogResult.logStdOut("Test catch exception from handler 1");
+
+        try
+            myHndlr.throwsException1();
+        onException(exception AnyException)
+            LogResult.passed("Exception1 Thrown");
+            exceptionThrown = yes;
+
+            LogResult.logStdOut("Exceptions: errorCode of InvocationException set correctly.");
+            LogResult.assertStringEqual1("EGL0010E", exception.messageid);
+        end
+
+        if(!exceptionThrown)
+            LogResult.failed("Exception1 didn't thrown");
+        end
+    end
+
+    function testExceptionFromHandler11(){@Test{targetLang =[JAVASCRIPT]}}
+        myHndlr = new NoSubtypeHandler;
+        exceptionThrown boolean = no;
+
+        LogResult.logStdOut("Test catch exception from handler 1");
+
+        try
+            myHndlr.throwsException1();
+        onException(exception AnyException)
+            LogResult.passed("Exception1 Thrown");
+            exceptionThrown = yes;
+
+            LogResult.logStdOut("Exceptions: errorCode of InvocationException set correctly.");
+            LogResult.assertStringEqual1("CRRUI2022E", exception.messageid);
+        end
+
+        if(!exceptionThrown)
+            LogResult.failed("Exception1 didn't thrown");
+        end
+    end
+
+    function testExceptionFromHandler2(){@Test}
+        myHndlr = new NoSubtypeHandler;
+        exceptionThrown boolean = no;
+
+        LogResult.logStdOut("Test catch exception from handler 2");
+
+        try
+            myHndlr.throwsException2();
+        onException(exception AnyException)
+            LogResult.passed("Exception2 Thrown");
+            exceptionThrown = yes;
+
+            LogResult.logStdOut("Exceptions: message of InvocationException set correctly.");
+            LogResult.assertStringEqual1("UserExceptionMessage", exception.message);
+        end
+
+        if(!exceptionThrown)
+            LogResult.failed("Exception2 didn't thrown");
+        end
+    end
+
+end

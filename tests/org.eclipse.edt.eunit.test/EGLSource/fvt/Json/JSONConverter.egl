@@ -1,0 +1,25 @@
+package fvt.Json;
+
+import eglx.json.JsonLib;
+
+/* 
+* @name JSONConverter
+* @title The converter methods library
+* @keywords converter methods
+* @author EDT team
+* @createDate 2011/09/09
+* @description 
+* The converter methods library
+*/
+
+library JSONConverter
+
+    function convert2JSON(rec any const in) returns(string)
+        return(JsonLib.convertToJson(rec));
+    end
+
+    function convert2EGL(json string const in, rec any const in)
+        JsonLib.convertFromJSON(json, rec);
+    end
+
+end

@@ -1,0 +1,57 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes006
+  * @title EBytes006 - runSubstringFunction
+  * @description testing bytes substring functions
+  * @testcases runSubstringFunction01 - runSubstringFunction10
+  * @sources EBytes006.egl
+  * @keywords bytes, substring
+ **/
+library EBytes006
+	big bytes(10) = 0x112233445566778899AA;
+
+	result bytes?;
+	desired bytes?;
+
+	function check(variation string)
+		LogResult.assertTrue(variation, desired == result);
+	end
+	
+	function runSubstringFunction01(){@Test}
+		desired = 0x112233445566778899AA;
+		result = big[1:10];
+		check("big[1:10]");
+	end
+	
+	function runSubstringFunction02(){@Test}
+		desired = 0x22;
+		result = big[2:2];
+		check("big[2:2]");
+	end
+	
+	function runSubstringFunction03(){@Test}
+		desired = 0x445566778899;
+		result = big[4:9];
+		check("big[4:9]");
+	end
+	
+	function runSubstringFunction04(){@Test}
+		nullBytes bytes?;
+		msg string;
+		success boolean = false;
+		try
+			result = nullBytes[2:3];
+			msg = "No exception thrown";
+		onException ( n NullValueException )
+			msg = "OK";
+			success = true;
+		onException ( a AnyException )
+			msg = "Wrong exception thrown";
+		end
+		LogResult.assertTrue(msg, success);
+	end
+end

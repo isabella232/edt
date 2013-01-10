@@ -1,0 +1,14 @@
+package interfaces;
+
+import eglx.rest.EglService;
+
+library IExceptionProducer
+
+	function produceException()
+		{
+			@EglService {serviceName = "services.ExceptionProducer"}
+		}
+	end
+	
+end
+

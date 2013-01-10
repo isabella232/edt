@@ -1,0 +1,285 @@
+package fvt.baseStatements;
+
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+/* 
+* @name 
+* @title The function test program for valid conditional short-circuiting in EDT for RichUI
+* @keywords conditional short-circuiting
+* @author EDT team
+* @createDate 2011/08/03
+* @description In a conditional expression involving &&, if the first operand evaluates
+* to false, the rest of the operands should not be evaluated. Likewise for
+* || when the first operand evaluates to true.
+*/
+Library TestConditionalShortCircuitLib
+
+	total int;
+	
+	private function addAndReturnFalse(parm int in) returns (boolean)
+		total += parm;
+		return(false);
+	end
+	
+	private function addAndReturnFalseInOut(parm int inout) returns (boolean)
+		total += parm;
+		return(false);
+	end
+	
+	private function addAndReturnTrue(parm int in) returns (boolean)
+		total += parm;
+		return(true);
+	end
+	
+	private function addAndReturnTrueInOut(parm int inout) returns (boolean)
+		total += parm;
+		return(true);
+	end
+	
+	Function testIfCondition1(){@Test}
+		result boolean = false;
+		
+		result = false;
+		total = 0;
+		if(addAndReturnFalse(1) && addAndReturnFalse(2))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, false && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		if(addAndReturnFalse(1) && addAndReturnTrue(2))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, false && true ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		if(addAndReturnTrue(1) && addAndReturnFalse(2))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was not short-circuited for true && false");
+		LogResult.assertTrue1(total == 3);
+		
+		result = false;
+		total = 0;
+		if(addAndReturnTrue(1) && addAndReturnTrue(2))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, true && true ==> true");
+		LogResult.assertTrue1(result == true);
+		LogResult.logStdOut("Short-circuit && in if, logic was not short-circuited for true && true");
+		LogResult.assertTrue1(total == 3);
+		
+//		result = false;
+//		total = 0;
+//		if(addAndReturnFalseInOut(1) && addAndReturnFalseInOut(2))
+//			result = true;
+//		end
+//		LogResult.logStdOut("Short-circuit && in if w/ inout func, false && false ==> false");
+//		LogResult.assertTrue1(result == false);
+//		LogResult.logStdOut("Short-circuit && in if w/ inout func, logic was short-circuited for false && false");
+//		LogResult.assertTrue1(total == 1);
+		
+//		result = false;
+//		total = 0;
+//		if(addAndReturnTrueInOut(1) && addAndReturnTrueInOut(2))
+//			result = true;
+//		end
+//		LogResult.logStdOut("Short-circuit && in if w/ inout, true && true ==> true");
+//		LogResult.assertTrue1(result == true);
+//		LogResult.logStdOut("Short-circuit && in if w/ inout, logic was not short-circuited for true && true");
+//		LogResult.assertTrue1(total == 3);
+		
+		
+		result = false;
+		total = 0;
+		if(addAndReturnFalse(1) && addAndReturnTrue(2) && addAndReturnFalse(3))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, false && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was short-circuited for false && true && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		if(addAndReturnTrue(1) && addAndReturnTrue(2) && addAndReturnFalse(3))
+			result = true;
+		end
+		LogResult.logStdOut("Short-circuit && in if, true && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was not short-circuited for true && true && false");
+		LogResult.assertTrue1(total == 6);
+	end	
+	
+	Function testWhileCondition(){@Test}
+		result boolean = false;
+		
+		result = false;
+		total = 0;
+		while(addAndReturnFalse(1) && addAndReturnFalse(2))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, false && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in while, logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		while(addAndReturnFalse(1) && addAndReturnTrue(2))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, false && true ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in while, logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		while(addAndReturnTrue(1) && addAndReturnFalse(2))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in while, logic was not short-circuited for true && false");
+		LogResult.assertTrue1(total == 3);
+		
+		result = false;
+		total = 0;
+		while(addAndReturnTrue(1) && addAndReturnTrue(2))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, true && true ==> true");
+		LogResult.assertTrue1(result == true);
+		LogResult.logStdOut("Short-circuit && in while, logic was not short-circuited for true && true");
+		LogResult.assertTrue1(total == 3);
+		
+//		result = false;
+//		total = 0;
+//		while(addAndReturnFalseInOut(1) && addAndReturnFalseInOut(2))
+//			result = true;
+//			exit while;
+//		end
+//		LogResult.logStdOut("Short-circuit && in while w/ inout func, false && false ==> false");
+//		LogResult.assertTrue1(result == false);
+//		LogResult.logStdOut("Short-circuit && in while w/ inout func, logic was short-circuited for false && false");
+//		LogResult.assertTrue1(total == 1);
+		
+//		result = false;
+//		total = 0;
+//		while(addAndReturnTrueInOut(1) && addAndReturnTrueInOut(2))
+//			result = true;
+//			exit while;
+//		end
+//		LogResult.logStdOut("Short-circuit && in while w/ inout, true && true ==> true");
+//		LogResult.assertTrue1(result == true);
+//		LogResult.logStdOut("Short-circuit && in while w/ inout, logic was not short-circuited for true && true");
+//		LogResult.assertTrue1(total == 3);
+		
+		result = false;
+		total = 0;
+		while(addAndReturnFalse(1) && addAndReturnTrue(2) && addAndReturnFalse(3))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, false && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in while, logic was short-circuited for false && true && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		while(addAndReturnTrue(1) && addAndReturnTrue(2) && addAndReturnFalse(3))
+			result = true;
+			exit while;
+		end
+		LogResult.logStdOut("Short-circuit && in while, true && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in while, logic was not short-circuited for true && true && false");
+		LogResult.assertTrue1(total == 6);		
+	end
+	
+	Function testExpressionCondition(){@Test}
+		result boolean = false;
+		
+		result = false;
+		total = 0;
+		result = addAndReturnFalse(1) && addAndReturnFalse(2);
+		LogResult.logStdOut("Short-circuit && in expr., false && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in expr., logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		result = addAndReturnFalse(1) && addAndReturnTrue(2);
+		LogResult.logStdOut("Short-circuit && in expr., false && true ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in expr., logic was short-circuited for false && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		result = addAndReturnTrue(1) && addAndReturnFalse(2);
+		LogResult.logStdOut("Short-circuit && in expr., true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in expr., logic was not short-circuited for true && false");
+		LogResult.assertTrue1(total == 3);
+		
+		result = false;
+		total = 0;
+		result = addAndReturnTrue(1) && addAndReturnTrue(2);
+		LogResult.logStdOut("Short-circuit && in expr., true && true ==> true");
+		LogResult.assertTrue1(result == true);
+		LogResult.logStdOut("Short-circuit && in expr., logic was not short-circuited for true && true");
+		LogResult.assertTrue1(total == 3);
+		
+//		result = false;
+//		total = 0;
+//		result = addAndReturnFalseInOut(1) && addAndReturnFalseInOut(2);
+//		LogResult.logStdOut("Short-circuit && in expr. w/ inout func, false && false ==> false");
+//		LogResult.assertTrue1(result == false);
+//		LogResult.logStdOut("Short-circuit && in expr. w/ inout func, logic was short-circuited for false && false");
+//		LogResult.assertTrue1(total == 1);
+		
+//		result = false;
+//		total = 0;
+//		result = addAndReturnTrueInOut(1) && addAndReturnTrueInOut(2);
+//		LogResult.logStdOut("Short-circuit && in expr. w/ inout, true && true ==> true");
+//		LogResult.assertTrue1(result == true);
+//		LogResult.logStdOut("Short-circuit && in expr. w/ inout, logic was not short-circuited for true && true");
+//		LogResult.assertTrue1(total == 3);
+		
+		result = false;
+		total = 0;
+		result = addAndReturnFalse(1) && addAndReturnTrue(2) && addAndReturnFalse(3);
+		LogResult.logStdOut("Short-circuit && in expr., false && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in expr., logic was short-circuited for false && true && false");
+		LogResult.assertTrue1(total == 1);
+		
+		result = false;
+		total = 0;
+		result = addAndReturnTrue(1) && addAndReturnTrue(2) && addAndReturnFalse(3);
+		LogResult.logStdOut("Short-circuit && in expr., true && true && false ==> false");
+		LogResult.assertTrue1(result == false);
+		LogResult.logStdOut("Short-circuit && in if, logic was not short-circuited for true && true && false");
+		LogResult.assertTrue1(total == 6);
+	end
+end

@@ -1,0 +1,115 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Field intialization of NUMBERs based on default constructor rules Enhancement 372125
+* @keywords default constructor number
+* @author EDT team
+* @createDate 2012/03/09
+* @description 
+*  Field intialization of NUMBERs based on default constructor rules Enhancement 372125
+*/
+library defaultConstructorNumber
+	
+	function testNumber() {@Test}
+		n1 number;
+		try 
+			temp boolean = n1 == 0;
+		onException (oops AnyException)
+			LogResult.logStdOut("Bug 373781 Number variable using default contructor abends using ==");
+		end
+		LogResult.assertTrue("Bug 373781 ", n1 == 0);
+	end
+	
+	function testNumberNotEqual() {@Test}
+		n1 number;
+		
+		LogResult.assertTrue1(!(n1 != 0));
+	end
+	
+	function testNullableNumber() {@Test}
+		n2 number?;
+		
+		LogResult.assertTrue1(n2 == null);
+	end
+	
+	function testNumberArray() {@Test}
+		n3 number[];
+		
+		LogResult.assertTrue1(n3 isa number[] && n3.getSize() == 0);
+	end
+	
+	function testNullableNumberArray() {@Test}
+		n4 number?[];
+		
+		LogResult.assertTrue1(n4 isa number?[] && n4.getSize() == 0);
+	end
+	
+	function testNumberArrayWithNew() {@Test}
+		n5 number[] = new number[];
+		
+		LogResult.assertTrue1(n5 isa number[] && n5.getSize() == 0);
+	end
+	
+	function testNumberArrayWithNewParameter() {@Test}
+		n6 number[] = new number[4];
+
+		// 373781 LogResult.assertTrue1(n6 isa number[] && n6.getSize() == 4  && n6[1] == 0);
+		LogResult.assertTrue1(n6 isa number[] && n6.getSize() == 4  && !(n6[1] != 0));
+	end
+	
+	function testNullableNumberArrayWithNew() {@Test}
+		n7 number?[] = new number?[];
+		
+		LogResult.assertTrue1(n7 isa number?[] && n7.getSize() == 0);
+	end
+	
+	function testNullableNumberArrayWithNewParameter() {@Test}
+		n8 number?[] = new number?[4];
+		
+		LogResult.assertTrue1(n8 isa number?[] && n8.getSize() == 4 && n8[1] == null);
+	end
+	
+	function testNumberNullableArray() {@Test}
+		n9 number[]?;
+
+		LogResult.assertTrue1(n9 == null);
+	end
+	
+	function testNumberNullableArrayWithNew() {@Test}
+		n10 number[]? = new number[];
+
+		LogResult.assertTrue1(n10 isa number[] && n10.getSize() == 0);
+	end
+	
+	function testNumberNullableArrayWithNewParameter() {@Test}
+		n11 number[]? = new number[4];
+
+		// 373781 LogResult.assertTrue1(n11 isa number[] && n11.getSize() == 4 && n11[1] == 0);
+		LogResult.assertTrue1(n11 isa number[] && n11.getSize() == 4 && !(n11[1] != 0));
+	end
+	
+	function testNullableNumberNullableArray() {@Test}
+		n13 number?[]?;
+
+		LogResult.assertTrue1(n13 == null);
+	end
+	
+	function testNullableNumberNullableArrayWithNew() {@Test}
+		n14 number?[]? = new number?[];
+
+		LogResult.assertTrue1(n14 isa number?[] && n14.getSize() == 0);
+	end
+	
+	function testNullableNumberNullableArrayWithNewParameter() {@Test}
+		n15 number?[]? = new number?[4];
+
+		LogResult.assertTrue1(n15 isa number?[] && n15.getSize() == 4 && n15[1] == null);
+	end
+end
+
+		
+	

@@ -1,0 +1,649 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EString016
+  * @title EString016
+  * @description testing functions on string variables
+  * @sources EString016.egl
+  * @keywords string, limited
+ **/
+library EString016
+
+	function testIsEmpty01() {@Test}
+		LogResult.assertTrue( "IsEmpty01", "".isEmpty() );
+	end
+
+	function testIsEmpty02() {@Test}
+		str string = "";
+		LogResult.assertTrue( "IsEmpty02", str.isEmpty() );
+	end
+
+	function testIsEmpty03() {@Test}
+		str string(5) = "";
+		LogResult.assertTrue( "IsEmpty03", str.isEmpty() );
+	end
+
+	function testIsEmpty04() {@Test}
+		LogResult.assertTrue( "IsEmpty04", !"hello".isEmpty() );
+	end
+
+	function testIsEmpty05() {@Test}
+		str string = "hello";
+		LogResult.assertTrue( "IsEmpty05", !str.isEmpty() );
+	end
+
+	function testIsEmpty06() {@Test}
+		str string(5) = "hello";
+		LogResult.assertTrue( "IsEmpty06", !str.isEmpty() );
+	end
+
+	function testReverse01() {@Test}
+		str string = "";
+		LogResult.assertStringEqual( "Reverse01", "", str.reverse() );
+	end
+
+	function testReverse02() {@Test}
+		LogResult.assertStringEqual( "Reverse02", "a", "a".reverse() );
+	end
+
+	function testReverse03() {@Test}
+		str string = "aBcDeFGhIj";
+		LogResult.assertStringEqual( "Reverse03", "jIhGFeDcBa", str.reverse() );
+	end
+
+	function testReverse04() {@Test}
+		str string(15) = "aBcDeFGhIj";
+		LogResult.assertStringEqual( "Reverse03", "jIhGFeDcBa", str.reverse() );
+	end
+
+	function testCompareIgnoreCase01() {@Test}
+		str string = "";
+		LogResult.assertTrue( "CompareIgnoreCase01", str.compareIgnoreCase( "" ) == 0 );
+	end
+
+	function testCompareIgnoreCase02() {@Test}
+		str string = "aAaAaA";
+		LogResult.assertTrue( "CompareIgnoreCase02", str.compareIgnoreCase( "AAaaaa" ) == 0 );
+	end
+
+	function testCompareIgnoreCase03() {@Test}
+		str string(10) = "aAaAaA";
+		LogResult.assertTrue( "CompareIgnoreCase03", str.compareIgnoreCase( "aaa" ) > 0 );
+	end
+
+	function testCompareIgnoreCase04() {@Test}
+		str string = "aaa";
+		LogResult.assertTrue( "CompareIgnoreCase04", str.compareIgnoreCase( "aAaAaA" ) < 0 );
+	end
+
+	function testCompareIgnoreCase05() {@Test}
+		str string(8) = "big bird";
+		LogResult.assertTrue( "CompareIgnoreCase05", str.compareIgnoreCase( "BIG BIRD" ) == 0 );
+	end
+
+	function testCompareIgnoreCase06() {@Test}
+		str string = "BIG BIRD";
+		LogResult.assertTrue( "CompareIgnoreCase06", str.compareIgnoreCase( "big bird" ) == 0 );
+	end
+
+	function testCompareIgnoreCase07() {@Test}
+		str string = "bug bird";
+		LogResult.assertTrue( "CompareIgnoreCase07", str.compareIgnoreCase( "BIG BIRD" ) > 0 );
+	end
+
+	function testCompareIgnoreCase08() {@Test}
+		str string = "BIG BIRD";
+		LogResult.assertTrue( "CompareIgnoreCase08", str.compareIgnoreCase( "bug bird" ) < 0 );
+	end
+
+	function testCompareIgnoreCase09() {@Test}
+		str string(8) = "BUG BIRD";
+		LogResult.assertTrue( "CompareIgnoreCase09", str.compareIgnoreCase( "big bird" ) > 0 );
+	end
+
+	function testCompareIgnoreCase10() {@Test}
+		str string = "big bird";
+		LogResult.assertTrue( "CompareIgnoreCase10", str.compareIgnoreCase( "BUG BIRD" ) < 0 );
+	end
+
+	function testJoin01() {@Test}
+		str string = "%%%";
+		strs string[] = [];
+		LogResult.assertStringEqual( "Join01", "", EString.join( str, strs ) );
+	end
+
+	function testJoin02() {@Test}
+		str string = "%%%";
+		strs string[] = [ "one" ];
+		LogResult.assertStringEqual( "Join02", "one", EString.join( str, strs ) );
+	end
+
+	function testJoin03() {@Test}
+		str string = "%%%";
+		strs string[] = [ "one", "two" ];
+		LogResult.assertStringEqual( "Join03", "one%%%two", EString.join( str, strs ) );
+	end
+
+	function testJoin04() {@Test}
+		str string = "%%%";
+		strs string[] = [ "one", "two", "three" ];
+		LogResult.assertStringEqual( "Join04", "one%%%two%%%three", EString.join( str, strs ) );
+	end
+
+	function testJoin05() {@Test}
+		str string = "%%%";
+		strs string[] = [ "one", "two", "three", "FOUR" ];
+		LogResult.assertStringEqual( "Join05", "one%%%two%%%three%%%FOUR", EString.join( str, strs ) );
+	end
+
+	function testSplit01() {@Test}
+		str string = "ABCD";
+		checkList( "Split01", [ "ABCD" ], str.split( "_" ) );
+	end
+
+	function testSplit02() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "Split02", [ "Aa", "Bbb", "Cccc", "Ddddd" ], str.split( "_" ) );
+	end
+
+	function testSplit03() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd_";
+		checkList( "Split03", [ "Aa", "Bbb", "Cccc", "Ddddd", "" ], str.split( "_" ) );
+	end
+
+	function testSplit04() {@Test}
+		str string = "_Aa__Bbb__Cccc___Ddddd";
+		checkList( "Split04", [ "", "Aa", "", "Bbb", "", "Cccc", "", "", "Ddddd" ], str.split( "_" ) );
+	end
+
+	function testSplit05() {@Test}
+		str string = "__Aa___Bbb___Cccc____Ddddd";
+		checkList( "Split05", [ "__Aa", "Bbb", "Cccc", "_Ddddd" ], str.split( "___" ) );
+	end
+	
+	function testSplit06() {@Test}
+		str string = "ABCD";
+		checkList( "Split06", new string[ 0 ], str.split( "_", 0 ) );
+	end
+	
+	function testSplit07() {@Test}
+		str string = "A_B_C_D";
+		checkList( "Split07", new string[ 0 ], str.split( "_", 0 ) );
+	end
+	
+	function testSplit08() {@Test}
+		str string = "A_B_C_D";
+		checkList( "Split08", new string[ 0 ], str.split( "_", -100 ) );
+	end
+
+	function testSplit09() {@Test}
+		str string(6) = "ABCD";
+		checkList( "Split09", [ "ABCD" ], str.split( "_", 1 ) );
+	end
+
+	function testSplit10() {@Test}
+		checkList( "Split10", [ "ABCD" ], "ABCD".split( "_", 10 ) );
+	end
+
+	function testSplit11() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "Split11", [ "Aa" ], str.split( "==", 1 ) );
+	end
+
+	function testSplit12() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "Split12", [ "Aa", "Bbb" ], str.split( "==", 2 ) );
+	end
+
+	function testSplit13() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "Split13", [ "Aa", "Bbb", "CD" ], str.split( "==", 3 ) );
+	end
+
+	function testSplit14() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "Split14", [ "Aa", "Bbb", "CD" ], str.split( "==", 10 ) );
+	end
+
+	function testSplit15() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "Split15", [ "Aa" ], str.split( "==", 1 ) );
+	end
+	
+	function testSplit16() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "Split16", [ "Aa", "Bbb" ], str.split( "==", 2 ) );
+	end
+	
+	function testSplit17() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "Split17", [ "Aa", "Bbb", "CD" ], str.split( "==", 3 ) );
+	end
+	
+	function testSplit18() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "Split18", [ "Aa", "Bbb", "CD", "", "" ], str.split( "==", 10 ) );
+	end
+
+	function testInsertStr01() {@Test}
+		str string = "123456";
+		LogResult.assertStringEqual( "InsertStr01", "##123456", str.insertStr( 1, "##" ) );
+	end
+
+	function testInsertStr02() {@Test}
+		str string? = "123456";
+		LogResult.assertStringEqual( "InsertStr02", "1##23456", str.insertStr( 2, "##" ) );
+	end
+
+	function testInsertStr03() {@Test}
+		str string = "123456";
+		LogResult.assertStringEqual( "InsertStr03", "12##3456", str.insertStr( 3, "##" ) );
+	end
+
+	function testInsertStr04() {@Test}
+		str string = "123456";
+		LogResult.assertStringEqual( "InsertStr04", "123##456", str.insertStr( 4, "##" ) );
+	end
+
+	function testInsertStr05() {@Test}
+		str string = "123456";
+		LogResult.assertStringEqual( "InsertStr05", "1234##56", str.insertStr( 5, "##" ) );
+	end
+
+	function testInsertStr06() {@Test}
+		str string = "123456";
+		LogResult.assertStringEqual( "InsertStr06", "12345##6", str.insertStr( 6, "##" ) );
+	end
+
+	function testInsertStr07() {@Test}
+		str string = "123456";
+		try
+			str = str.insertStr( 0, "##" );
+			LogResult.failed( "InsertStr07" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "InsertStr07" );
+		end
+	end
+
+	function testInsertStr08() {@Test}
+		str string = "123456";
+		try
+			str = str.insertStr( 7, "##" );
+			LogResult.failed( "InsertStr08" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "InsertStr08" );
+		end
+	end
+
+	function testReplaceStrAt01() {@Test}
+		str string = "The duck swims.";
+		LogResult.assertStringEqual( "ReplaceStrAt01", "The duck swims quickly.", str.replaceStrAt( 15, 15, " quickly" ) );
+	end
+
+	function testReplaceStrAt02() {@Test}
+		str string = "The duck swims.";
+		LogResult.assertStringEqual( "ReplaceStrAt02", "The dog barks.", str.replaceStrAt( 5, 15, "dog barks" ) );
+	end
+
+	function testReplaceStrAt03() {@Test}
+		str string = "KEEP_LAST_CHARACTER";
+		LogResult.assertStringEqual( "ReplaceStrAt03", "staR", str.replaceStrAt( 1, 19, "sta" ) );
+	end
+
+	function testReplaceStrAt04() {@Test}
+		str string = "1234";
+		try
+			str = str.replaceStrAt( 0, 3, "##" );
+			LogResult.failed( "ReplaceStrAt04" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "ReplaceStrAt04" );
+		end
+	end
+
+	function testReplaceStrAt05() {@Test}
+		str string = "1234";
+		try
+			str = str.replaceStrAt( 5, 3, "##" );
+			LogResult.failed( "ReplaceStrAt05" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "ReplaceStrAt05" );
+		end
+	end
+
+	function testReplaceStrAt06() {@Test}
+		str string = "1234";
+		try
+			str = str.replaceStrAt( 2, 13, "##" );
+			LogResult.failed( "ReplaceStrAt06" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "ReplaceStrAt06" );
+		end
+	end
+
+	function testReplaceStrAt07() {@Test}
+		str string = "1234";
+		try
+			str = str.replaceStrAt( 3, 1, "##" );
+			LogResult.failed( "ReplaceStrAt07" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "ReplaceStrAt07" );
+		end
+	end
+
+	function testReplacePattern01() {@Test}
+		str string = "this is my string. it is crisp.";
+		LogResult.assertStringEqual( "ReplacePattern01", "this is my string. it is crisp.", str.replacePattern( "JJ", "$1$1", true ) );
+	end
+
+	function testReplacePattern02() {@Test}
+		str string = "this is my string. it is crisp.";
+		LogResult.assertStringEqual( "ReplacePattern02", "this is my string. it is crisp.", str.replacePattern( "JJ", "$1$1", false ) );
+	end
+
+	function testReplacePattern03() {@Test}
+		str string = "this is my string. it is crisp.";
+		LogResult.assertStringEqual( "ReplacePattern03", "th$1$1 $1$1 my string. it $1$1 cr$1$1p.", str.replacePattern( "is", "$1$1", true ) );
+	end
+
+	function testReplacePattern04() {@Test}
+		str string = "this is my string. it is crisp.";
+		LogResult.assertStringEqual( "ReplacePattern04", "th$1$1 is my string. it is crisp.", str.replacePattern( "is", "$1$1", false ) );
+	end
+
+	function testReplacePattern05() {@Test}
+		str string = "this is my string.?that is not it.";
+		LogResult.assertStringEqual( "ReplacePattern05", "\\\\*.?that is not it.", str.replacePattern( "this*string", "\\\\*", true ) );
+	end
+
+	function testReplacePattern06() {@Test}
+		str string = "this is my string.?that is not it.";
+		LogResult.assertStringEqual( "ReplacePattern06", "\\\\*.?that is not it.", str.replacePattern( "this*string", "\\\\*", false ) );
+	end
+
+	function testReplacePattern07() {@Test}
+		str string = "1 + 4 * (3.4 + 2.6) = 25";
+		LogResult.assertStringEqual( "ReplacePattern07", "99 + 4 * (99.4 + 99.6) = 995", str.replacePattern( "[0-3]", "99", true ) );
+	end
+
+	function testReplacePattern08() {@Test}
+		str string = "1 + 4 * (3.4 + 2.6) = 25";
+		LogResult.assertStringEqual( "ReplacePattern08", "99 + 4 * (3.4 + 2.6) = 25", str.replacePattern( "[0-3]", "99", false ) );
+	end
+
+	function testReplacePattern09() {@Test}
+		str string = "Brian Sam Bob Freddy Louis Barry Rocky Al Tim";
+		LogResult.assertStringEqual( "ReplacePattern09", "$void$ Sam $void$reddy Louis $void$ Rocky Al Tim", str.replacePattern( "B????", "$void$", true ) );
+	end
+	
+	function testReplacePattern10() {@Test}
+		str string = "Brian Sam Bob Freddy Louis Barry Rocky Al Tim";
+		LogResult.assertStringEqual( "ReplacePattern10", "$void$ Sam Bob Freddy Louis Barry Rocky Al Tim", str.replacePattern( "B????", "$void$", false ) );
+	end
+
+	function testReplacePattern11() {@Test}
+		str string = "who? what? when? how? why?";
+		LogResult.assertStringEqual( "ReplacePattern11", "[3] what? when? how? [3]", str.replacePattern( "w[jhqwx]?\\?", "[3]", true ) );
+	end
+
+	function testReplacePattern12() {@Test}
+		str string = "who? what? when? how? why?";
+		LogResult.assertStringEqual( "ReplacePattern12", "[3] what? when? how? why?", str.replacePattern( "w[jhqwx]?\\?", "[3]", false ) );
+	end
+
+	function testReplacePattern13() {@Test}
+		str string = "who? what? when? how? why?";
+		LogResult.assertStringEqual( "ReplacePattern13", "[3] what? when? how? [3]", str.replacePattern( "w[jhqwx]?{?", "{", "[3]", true ) );
+	end
+
+	function testReplacePattern14() {@Test}
+		str string = "who? what? when? how? why?";
+		LogResult.assertStringEqual( "ReplacePattern14", "[3] what? when? how? why?", str.replacePattern( "w[jhqwx]?{?", "{", "[3]", false ) );
+	end
+
+	function testIndexOfPattern01() {@Test}
+		str string = "la la la";
+		LogResult.assertBigintEqual( "IndexOfPattern01", 0, str.indexOfPattern( "foo" ) );
+	end
+
+	function testIndexOfPattern02() {@Test}
+		str string = "la la la";
+		LogResult.assertBigintEqual( "IndexOfPattern02", 1, str.indexOfPattern( "la" ) );
+	end
+
+	function testIndexOfPattern03() {@Test}
+		str string = "la la la";
+		LogResult.assertBigintEqual( "IndexOfPattern03", 7, str.indexOfPattern( "la", 5 ) );
+	end
+
+	function testIndexOfPattern04() {@Test}
+		str string = "lw lw lw";
+		LogResult.assertBigintEqual( "IndexOfPattern04", 7, str.indexOfPattern( "l[a-x]", 5 ) );
+	end
+
+	function testIndexOfPattern05() {@Test}
+		str string = "lz lz lz";
+		LogResult.assertBigintEqual( "IndexOfPattern05", 0, str.indexOfPattern( "l[a-x]", 5 ) );
+	end
+
+	function testIndexOfPattern06() {@Test}
+		str string = "la*x la*x la*x";
+		LogResult.assertBigintEqual( "IndexOfPattern06", 1, str.indexOfPattern( "la[*x ", "[" ) );
+	end
+
+	function testIndexOfPattern07() {@Test}
+		str string = "la*x la*x la*x";
+		LogResult.assertBigintEqual( "IndexOfPattern07", 6, str.indexOfPattern( "la[*x ", "[", 4 ) );
+	end
+
+	function testIndexOfPattern08() {@Test}
+		str string = "la*x la*x la*x";
+		try
+			i int = str.indexOfPattern( "la[*x ", "[", -40 );
+			LogResult.failed( "IndexOfPattern08" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "IndexOfPattern08" );
+		end
+	end
+
+	function testIndexOfPattern09() {@Test}
+		str string = "la*x la*x la*x";
+		try
+			i int = str.indexOfPattern( "la[*x ", "[", 40 );
+			LogResult.failed( "IndexOfPattern09" );
+		onException ( iix InvalidIndexException )
+			LogResult.passed( "IndexOfPattern09" );
+		end
+	end
+		
+	function testSplitOnPattern01() {@Test}
+		str string = "ABCD";
+		checkList( "SplitOnPattern01", [ "ABCD" ], str.splitOnPattern( "_" ) );
+	end
+
+	function testSplitOnPattern02() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "SplitOnPattern02", [ "Aa", "Bbb", "Cccc", "Ddddd" ], str.splitOnPattern( "_" ) );
+	end
+
+	function testSplitOnPattern03() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd_";
+		checkList( "SplitOnPattern03", [ "Aa", "Bbb", "Cccc", "Ddddd", "" ], str.splitOnPattern( "_" ) );
+	end
+
+	function testSplitOnPattern04() {@Test}
+		str string = "_Aa__Bbb__Cccc___Ddddd";
+		checkList( "SplitOnPattern04", [ "", "Aa", "", "Bbb", "", "Cccc", "", "", "Ddddd" ], str.splitOnPattern( "_" ) );
+	end
+
+	function testSplitOnPattern05() {@Test}
+		str string = "__Aa___Bbb___Cccc____Ddddd";
+		checkList( "SplitOnPattern05", [ "__Aa", "Bbb", "Cccc", "_Ddddd" ], str.splitOnPattern( "___" ) );
+	end
+	
+	function testSplitOnPattern06() {@Test}
+		str string = "ABCD";
+		checkList( "SplitOnPattern06", new string[ 0 ], str.splitOnPattern( "_", 0 ) );
+	end
+	
+	function testSplitOnPattern07() {@Test}
+		str string = "A_B_C_D";
+		checkList( "SplitOnPattern07", new string[ 0 ], str.splitOnPattern( "_", 0 ) );
+	end
+	
+	function testSplitOnPattern08() {@Test}
+		str string = "A_B_C_D";
+		checkList( "SplitOnPattern08", new string[ 0 ], str.splitOnPattern( "_", -100 ) );
+	end
+
+	function testSplitOnPattern09() {@Test}
+		str string(6) = "ABCD";
+		checkList( "SplitOnPattern09", [ "ABCD" ], str.splitOnPattern( "_", 1 ) );
+	end
+
+	function testSplitOnPattern10() {@Test}
+		checkList( "SplitOnPattern10", [ "ABCD" ], "ABCD".splitOnPattern( "_", 10 ) );
+	end
+
+	function testSplitOnPattern11() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "SplitOnPattern11", [ "Aa" ], str.splitOnPattern( "==", 1 ) );
+	end
+
+	function testSplitOnPattern12() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "SplitOnPattern12", [ "Aa", "Bbb" ], str.splitOnPattern( "==", 2 ) );
+	end
+
+	function testSplitOnPattern13() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "SplitOnPattern13", [ "Aa", "Bbb", "CD" ], str.splitOnPattern( "==", 3 ) );
+	end
+
+	function testSplitOnPattern14() {@Test}
+		str string = "Aa==Bbb==CD";
+		checkList( "SplitOnPattern14", [ "Aa", "Bbb", "CD" ], str.splitOnPattern( "==", 10 ) );
+	end
+
+	function testSplitOnPattern15() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "SplitOnPattern15", [ "Aa" ], str.splitOnPattern( "==", 1 ) );
+	end
+	
+	function testSplitOnPattern16() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "SplitOnPattern16", [ "Aa", "Bbb" ], str.splitOnPattern( "==", 2 ) );
+	end
+	
+	function testSplitOnPattern17() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "SplitOnPattern17", [ "Aa", "Bbb", "CD" ], str.splitOnPattern( "==", 3 ) );
+	end
+	
+	function testSplitOnPattern18() {@Test}
+		str string = "Aa==Bbb==CD====";
+		checkList( "SplitOnPattern18", [ "Aa", "Bbb", "CD", "", "" ], str.splitOnPattern( "==", 10 ) );
+	end
+	
+	function testSplitOnPattern19() {@Test}
+		str string = "ABCDEFG";
+		checkList( "SplitOnPattern19", [ "", "DEFG" ], str.splitOnPattern( "*C" ) );
+	end
+	
+	function testSplitOnPattern20() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "SplitOnPattern20", [ "Aa", "Bbb", "Cccc", "Ddddd" ], str.splitOnPattern( "[_^*$.]" ) );
+	end
+	
+	function testSplitOnPattern21() {@Test}
+		str string = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "SplitOnPattern21", [ "Aa_B", "_C", "c_D", "", "" ], str.splitOnPattern( "[a-z][a-z]" ) );
+	end
+	
+	function testSplitOnPattern22() {@Test}
+		str string = "ABCDEFG";
+		checkList( "SplitOnPattern22", [ "", "DEFG" ], str.splitOnPattern( "*C", 9 ) );
+	end
+	
+	function testSplitOnPattern23() {@Test}
+		str string(25)? = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "SplitOnPattern23", [ "Aa", "Bbb", "Cccc", "Ddddd" ], str.splitOnPattern( "[_^*$.]", 9 ) );
+	end
+	
+	function testSplitOnPattern24() {@Test}
+		str string? = "Aa_Bbb_Cccc_Ddddd";
+		checkList( "SplitOnPattern24", [ "Aa_B", "_C", "c_D", "", "" ], str.splitOnPattern( "[a-z][a-z]", 9 ) );
+	end
+	
+	function testSplitOnPattern25() {@Test}
+		checkList( "SplitOnPattern25", [ "Aa_B", "_C", "c_D" ], "Aa_Bbb_Cccc_Ddddd".splitOnPattern( "[a-z][a-z]", 3 ) );
+	end
+
+	private function checkList( variation string, expected string[], actual string[] )
+		if ( listsEqual( expected, actual ) )
+			LogResult.passed( variation );
+			return;
+		end
+		
+		LogResult.logStdOut( variation :: ": lists are not the same" );
+		if ( actual.getSize() == expected.getSize() )
+			LogResult.logStdOut( "..actual list's size is correct" );
+			for ( i int to actual.getSize() )
+				ac string = actual[ i ];
+				ex string = expected[ i ];
+				if ( ac == ex )
+					LogResult.logStdOut( "...actual element[" + i + "]='" + ac + "' is correct" );
+				else
+					LogResult.logStdOut( "...actual element[" + i + "]='" + ac + "' expected element[" + i + "]='" + ex + "'" );
+				end
+			end
+		else
+			minSize int = MathLib.min( actual.getSize(), expected.getSize() );
+			LogResult.logStdOut( "..actual size=" + actual.getSize() + " expected size=" + expected.getSize() );
+			if ( minSize > 0 )
+				LogResult.logStdOut( "..showing the first " + minSize + " element(s) of the lists" );
+				for ( i int to minSize )
+					ac string = actual[ i ];
+					ex string = expected[ i ];
+					if ( ac == ex )
+						LogResult.logStdOut( "...actual element[" + i + "]='" + ac + "' is correct" );
+					else
+						LogResult.logStdOut( "...actual element[" + i + "]='" + ac + "' expected element[" + i + "]='" + ex + "'" );
+					end
+				end
+			end
+
+			if ( actual.getSize() > expected.getSize() )
+				LogResult.logStdOut( "..showing the extra " + (actual.getSize() - expected.getSize()) + " element(s)" );
+				for ( i int from minSize + 1 to actual.getSize() )
+					LogResult.logStdOut( "...actual element[" + i + "]='" + actual[ i ] + "'" );
+				end
+			else
+				LogResult.logStdOut( "..showing the missing " + (expected.getSize() - actual.getSize()) + " element(s)" );
+				for ( i int from minSize + 1 to expected.getSize() )
+					LogResult.logStdOut( "...expected element[" + i + "]='" + expected[ i ] + "'" );
+				end
+			end
+		end
+		
+		LogResult.failed( variation );
+	end
+
+	private function listsEqual( expected string[], actual string[] ) returns( boolean )
+		if ( actual.getSize() == expected.getSize() )
+			for ( i int to actual.getSize() )
+				ac string = actual[ i ];
+				ex string = expected[ i ];
+				if ( ac != ex )
+					return false;
+				end
+			end
+			return true;
+		end
+		
+		return false;
+	end
+
+end

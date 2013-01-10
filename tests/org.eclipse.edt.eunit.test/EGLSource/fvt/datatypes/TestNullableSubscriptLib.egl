@@ -1,0 +1,129 @@
+package fvt.datatypes;
+
+
+
+/**
+  * @name TestNullableSubscriptLib
+  * @title TestNullableSubscriptLib - RunNullableSubscriptFunctions
+  * @description test case for Nullable Subscript behavior
+  * @testcases runTestNullableSubscriptLib
+  * @sources TestNullableSubscriptLib.egl
+  * @keywords Nullable Subscript functions
+ **/
+
+library TestNullableSubscriptLib
+
+    aFlexRec FlxFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    const actualValue string = "Actual value = ";
+    const expectedValue string = "Expected value = ";
+
+    //    function runTestNullableSubscriptLib01(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        aString.appendElement("anElement");
+    //        nInt int = aString.getSize();
+    //        LogResult.logStdOut("array String");
+    //        LogResult.assertTrue1(nInt == 1);
+    //    end
+    //
+    //    function runTestNullableSubscriptLib02(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        nInt = null;
+    //        aString.appendElement(nInt);
+    //        nInt = aString.getSize();
+    //        LogResult.assertTrue1(nInt == 2);
+    //        LogResult.logStdOut("add null INT? to String array");
+    //        LogResult.assertStringEqual1(aString[2], "");
+    //    end
+    //
+    //    function runTestNullableSubscriptLib03(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        cString string;
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        nInt = null;
+    //        aString.appendElement(nInt);
+    //        nInt = 1;
+    //        cString = aString[nInt];
+    //        LogResult.logStdOut("String = String[non-null INT?]");
+    //        LogResult.assertStringEqual1(cString, "anElement");
+    //    end
+    //
+    //    function runTestNullableSubscriptLib04(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        cString string;
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        nInt = null;
+    //        aString.appendElement(nInt);
+    //        nInt = null;
+    //        cString = aString[nInt];
+    //        LogResult.logStdOut("String = String[null INT?]");
+    //        LogResult.assertStringEqual1(cString, "");
+    //    end
+    //
+    //    function runTestNullableSubscriptLib05(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        nString string?;
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        nInt = null;
+    //        aString.appendElement(nInt);
+    //        nInt = 1;
+    //        nString = aString[nInt];
+    //        LogResult.assertTrue1(nString != null);
+    //        LogResult.logStdOut("String? = String[non-null INT?]");
+    //        LogResult.assertStringEqual1(nString, "anElement");
+    //    end
+    //
+    //    function runTestNullableSubscriptLib06(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        nString string?;
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        nInt = null;
+    //        aString.appendElement(nInt);
+    //        nInt = 1;
+    //        nString = aString[nInt];
+    //        nInt = null;
+    //        nString = aString[nInt];
+    //        LogResult.logStdOut("String? = String[null INT?]");
+    //        LogResult.assertStringEqual1(nString, null);
+    //    end
+    //
+    //    function runTestNullableSubscriptLib07(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        aString.appendElement(nInt);
+    //        nInt = null;
+    //        LogResult.logStdOut("String[null INT?] = string");
+    //        try
+    //            aString[nInt] = "xxx";
+    //            if(systemType is win || systemType is debug)
+    //                LogResult.assertStringEqual1(aString[1], "anElement");
+    //                LogResult.assertStringEqual1(aString[2], "");
+    //            else
+    //                LogResult.assertTrue("false", false);
+    //            end
+    //        onException(exception NullValueException)
+    //            LogResult.assertTrue("true", true);
+    //        end
+    //    end
+    //
+    //    function runTestNullableSubscriptLib08(){@Test}
+    //        aString string[0]{maxSize = 10};
+    //        nInt int?;
+    //        aString.appendElement("anElement");
+    //        aString.appendElement(nInt);
+    //        nInt = 1;
+    //        aString[nInt] = "xxx";
+    //        LogResult.logStdOut("String[null INT?] = string");
+    //        LogResult.assertStringEqual1(aString[1], "xxx");
+    //        LogResult.assertStringEqual1(aString[2], "");
+    //    end
+    
+end

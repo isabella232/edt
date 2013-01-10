@@ -1,0 +1,36 @@
+package fvt.classes;
+
+class Subclass extends ConcreteClass implements classInterface1
+	field1 int = super.field1 + 1;
+	const const1 int = super.const1 + 10; 
+	constructorValue int?;
+	
+	constructor(value int in)
+		constructorValue = value;
+	end
+	
+	function abstractFunc() returns(int)
+		return 20;
+	end
+	
+	function getField1(callSuper boolean in) returns(int)
+		if (callSuper)
+			return super.getField1(callSuper);
+		end
+		return field1;
+	end
+	
+	function getConst1(callSuper boolean in) returns(int)
+		if (callSuper)
+			return super.getConst1(callSuper);
+		end
+		return const1;
+	end
+	
+	function getSuperDotField1() returns(int)
+		return super.field1;
+	end
+end
+
+interface classInterface1
+end

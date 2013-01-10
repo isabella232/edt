@@ -1,0 +1,24 @@
+package interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+import eglx.services.Encoding;
+
+
+
+// interface
+library FedWireSoap
+  
+	function GetParticipantsByLocation(envelope GetParticipantsByLocationEnvelope in) returns (GetParticipantsByLocationResponseEnvelope)
+		{
+			@Rest {
+				method = HttpMethod.POST,
+				requestFormat = Encoding.xml, 
+				responseFormat = Encoding.xml, 
+				uriTemplate = "http://www.webservicex.net/FedWire.asmx",
+				requestContentType = "text/xml"
+			}
+		}
+	end
+
+end

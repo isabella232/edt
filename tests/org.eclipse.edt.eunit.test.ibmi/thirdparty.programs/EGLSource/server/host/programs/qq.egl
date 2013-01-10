@@ -1,0 +1,29 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.jtopen.annotations.StructArray;
+import eglx.jtopen.annotations.StructText;
+import eglx.services.Encoding;
+
+// basic library
+library qq
+	 
+	function primitiveHostProgram(char20 string[] inout, 
+									lchar20 string(20)[] inout, 
+									unicode20 string[] inout,
+									lunicode20 string(20)[] inout,
+									validCount int inout){
+		@IBMiProgram {programName = "/QSYS.LIB/EVANSM.LIB/EDTTSTPA",
+						parameterAnnotations = [
+							@StructArray {elementCount = 4, elementTypeAnnotation = @StructText{length = 20}},
+							@StructArray {elementCount = 4},
+							@StructArray {elementCount = 4, elementTypeAnnotation = @StructText{length = 20, encoding = "UTF-16BE"}},
+							@StructArray {elementCount = 4},
+							null
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+end

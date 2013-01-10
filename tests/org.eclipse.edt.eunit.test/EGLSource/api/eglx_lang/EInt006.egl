@@ -1,0 +1,178 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+import eglx.java.JavaObjectException;
+
+/** @test
+  * @name EInt006
+  * @title EInt006 - runArithmeticFunction
+  * @description testing integer arithmetic opertations and expressions
+  * @testcases runArithmeticFunction01 - runArithmeticFunction18
+  * @sources EInt006.egl
+  * @keywords int, operations, expressions
+ **/
+library EInt006 {}
+	
+	int1 int? = 75;
+	int2 int? = -75;
+	int3 int? = 5;
+	int4 int? = -5;
+	int5 int? = 2;
+	int6 int? = -2;
+	int7 int? = 3;
+	zero int? = 0;
+	intActual int;
+	intExpect int;
+	variation string;
+
+	function runArithmeticFunction01(){@Test}	
+		variation = "operation + with variables";
+		intActual = int1 + int3;
+		intExpect = 80;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction02(){@Test}	
+		variation = "operation + with negative variables";
+		intActual = int1 + int4;
+		intExpect = 70;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction03(){@Test}	
+		variation = "operation - with variables";
+		intActual = int1 - int3;
+		intExpect = 70;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction04(){@Test}	
+		variation = "operation - with negative variables";
+		intActual = int1 - int4;
+		intExpect = 80;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction05(){@Test}	
+		variation = "operation * with variables";
+		intActual = int1 * int3;
+		intExpect = 375;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction06(){@Test}	
+		variation = "operation * with negative variables";
+		intActual = int1 * int4;
+		intExpect = -375;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction07(){@Test}	
+		variation = "operation / with variables";
+		intActual = int1 / int3;
+		intExpect = 15;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+
+	function runArithmeticFunction08(){@Test}	
+		variation = "operation / with negative variables";
+		intActual = int1 / int4;
+		intExpect = -15;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction09(){@Test}	
+		variation = "operation / with variables";
+		intActual = int1 / int5;
+		intExpect = 37;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+
+	function runArithmeticFunction10(){@Test}	
+		variation = "operation / with negative variables";
+		intActual = int1 / int6;
+		intExpect = -37;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+			
+	function runArithmeticFunction11(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and variables";
+		failDetails string;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction12(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and negative variables";
+		failDetails string;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction13(){@Test}	
+		variation = "operation % with variables";
+		intActual = int1 % int5;
+		intExpect = 1;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+
+	function runArithmeticFunction14(){@Test}	
+		variation = "operation % with negative variables";
+		intActual = int1 % int6;
+		intExpect = 1;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction15(){@Test}	
+		variation = "operation ** with variables to float";
+		actual float = int3 ** int7;
+		intActual = actual;
+		intExpect = 125;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+
+	function runArithmeticFunction16(){@Test}	
+		variation = "operation ** with negative variables to float";
+		actual float = int4 ** int7;
+		intActual = actual;
+		intExpect = -125;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction17(){@Test}	
+		variation = "operation ** with variables to int";
+		intActual = int3 ** int7;
+		intExpect = 125;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+	
+	function runArithmeticFunction18(){@Test}	
+		variation = "operation ** with negative variables to int";
+		intActual = int4 ** int7;
+		intExpect = -125;
+		LogResult.assertBigIntEqual1(intExpect, intActual);
+	end
+
+	
+end // EInt006
+

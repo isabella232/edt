@@ -1,0 +1,125 @@
+package aeunit.smoke;
+
+// basic library
+library SmokeLib
+	
+	
+	// Function Declarations
+	function testTrue() {@Test}
+		LogResult.assertTrue1(true);
+	end
+	
+	function testFalse() {@Test}
+		LogResult.assertTrue1(false);
+	end
+	
+	function testIntTrue() {@Test}
+		e, a int = 3;
+		LogResult.assertBigIntEqual1(e, a);
+	end
+	
+	function testIntFalse() {@Test}
+		e int = 3;
+		a int = 4;
+		LogResult.assertBigIntEqual1(e, a);
+	end	
+	
+	function testSmallIntTrue() {@Test}
+		e, a smallint = 3;
+		LogResult.assertBigIntEqual1(e, a);
+	end	
+	
+	function testSmallIntFalse() {@Test}
+		e smallint = 3;
+		a smallint = 4;
+		LogResult.assertBigIntEqual1(e, a);
+	end		
+	
+	function testBigIntTrue() {@Test}
+		e, a bigint = 3;
+		LogResult.assertBigIntEqual1(e, a);
+	end	
+	
+	function testBigIntFalse() {@Test}
+		e bigint = 3;
+		a bigint = 4;
+		LogResult.assertBigIntEqual1(e, a);
+	end		
+	
+	function testDecimalTrue() {@Test}
+		e, a decimal(10, 2) = 3.4;
+		LogResult.assertDecimalEqual1(e, a);
+	end
+	
+	function testDecimalFalse() {@Test}
+		e decimal(10, 2) = 3.4;
+		a decimal(10, 2) = 5.6;
+		LogResult.assertDecimalEqual1(e, a);
+	end
+	
+	function testSmallFloatTrue() {@Test}
+		e, a smallfloat = 3.44;
+		LogResult.assertFloatEqual1(e, a);
+	end
+	
+	function testSmallFloatFalse() {@Test}
+		e smallfloat = 3.44;
+		a smallfloat = 3.445;
+		LogResult.assertFloatEqual1(e, a);
+	end
+	
+	function testFloatTrue() {@Test}
+		e, a float = 3.44;
+		LogResult.assertFloatEqual1(e, a);
+	end
+	
+	function testFloatFalse() {@Test}
+		e float = 3.44;
+		a float = 3.445;
+		LogResult.assertFloatEqual1(e, a);	
+	end
+	
+	function testStringTrue() {@Test}
+		a, e String = "hi";
+		LogResult.assertStringEqual1(e, a);
+	end
+	
+	function testStringFalse() {@Test}
+		e String = "hi";
+		a String = "h8";
+		LogResult.assertStringEqual1(e, a);
+	end	
+	
+	function testStringArrayTrue() {@Test}
+		a, e String[] = ["a", "b", "c"];
+		LogResult.assertStringArrayEqual1(e, a);
+	end
+
+	function testStringArrayFalse() {@Test}
+		e String[] = ["a", "b", "c"];
+		a String[] = ["a", "x", "y"];
+		LogResult.assertStringArrayEqual1(e, a);
+	end
+	
+	function testDateTrue() {@Test}
+		e, a Date;
+		LogResult.assertDateEqual1(e, a);
+	end
+	
+	function testDateFalse() {@Test}
+		e date;
+		a date = "06/02/2003";
+		LogResult.assertDateEqual1(e, a);
+	end
+	
+	function testTimestampTrue() {@Test}
+		e, a timestamp("yyyyMMddHHmmss");
+		LogResult.assertTimestampEqual1(e, a);
+	end
+	
+	function testTimestampFalse() {@Test}
+		e timestamp("yyyyMMddHHmmss");
+		a timestamp("yyyyMMddHHmmss") = "1997/03/04 23:12:08";
+		LogResult.assertTimestampEqual1(e, a);
+	end
+end

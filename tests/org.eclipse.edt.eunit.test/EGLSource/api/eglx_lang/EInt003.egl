@@ -1,0 +1,274 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EInt003
+  * @title EInt003 - runComparisonFunction
+  * @description testing int comparison operators
+  * @testcases runComparisonFunction01 - runComparisonFunction42
+  * @sources EInt003.egl
+  * @keywords int, comparison
+ **/
+library EInt003 {}
+		
+	int1 int;
+	int2 int;
+	int1n int? = null;
+	int2n int? = 328;
+	result boolean;
+		
+	// comparison test with int literals
+	function runComparisonFunction01(){@Test}
+		result = (75 < 328);
+		LogResult.assertTrue("literal comparison < true", result );
+	end
+	
+	function runComparisonFunction02(){@Test}
+		result = (328 < 75);
+		LogResult.assertTrue("literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction03(){@Test}
+		result = (75 < 75);
+		LogResult.assertTrue("equal literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction04(){@Test}	
+		result = (328 > 75);
+		LogResult.assertTrue("literal comparison > true", result );
+	end
+	
+	function runComparisonFunction05(){@Test}
+		result = (75 > 328);
+		LogResult.assertTrue("literal comparison > false", !result );
+	end	
+	
+	function runComparisonFunction06(){@Test}
+		result = (75 > 75);
+		LogResult.assertTrue("equal literal comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction07(){@Test}
+		result = (75 <= 328);
+		LogResult.assertTrue("literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction08(){@Test}
+		result = (328 <= 75);
+		LogResult.assertTrue("literal comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction09(){@Test}
+		result = (75 <= 75);
+		LogResult.assertTrue("equal literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction10(){@Test}
+		result = ("abc   " <= 75);
+		LogResult.assertTrue("equal literal comparison <= false", !result );
+	end
+	
+	function runComparisonFunction11(){@Test}
+		result = (75 >= 328);
+		LogResult.assertTrue("literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction12(){@Test}
+		result = (328 >= 75);
+		LogResult.assertTrue("literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction13(){@Test}
+		result = (75 >= 75);
+		LogResult.assertTrue("equal literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction14(){@Test}
+		result = (75 >= "abc   ");
+		LogResult.assertTrue("equal literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction15(){@Test}
+		result = (75 == 75);
+		LogResult.assertTrue("equal literal comparison == true", result );
+	end
+	
+	function runComparisonFunction16(){@Test}
+		result = (75 == "abc   ");
+		LogResult.assertTrue("equal literal comparison == false", !result );
+	end
+	
+	function runComparisonFunction17(){@Test}
+		result = (75 != "abc  ");
+		LogResult.assertTrue("equal literal comparison != true", result );
+	end
+	
+	function runComparisonFunction18(){@Test}
+		result = (75 != 75);
+		LogResult.assertTrue("equal literal comparison != false", !result );
+	end
+	
+	// comparison test with int variables
+	function runComparisonFunction19(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = ( int1 < int2);
+		LogResult.assertTrue("variable comparison < true", result );
+	end
+	
+	function runComparisonFunction20(){@Test}
+		int1 = 328;
+		int2 = 75;
+		result = (int1 < int2);
+		LogResult.assertTrue("variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction21(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 < int2);
+		LogResult.assertTrue("equal variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction22(){@Test}	
+		int1 = 328;
+		int2 = 75;
+		result = (int1 > int2);
+		LogResult.assertTrue("variable comparison > true", result );
+	end
+	
+	function runComparisonFunction23(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = (int1 > int2);
+		LogResult.assertTrue("variable comparison > false", !result );
+	end	
+	
+	function runComparisonFunction24(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 > int2);
+		LogResult.assertTrue("equal variable comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction25(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = (int1 <= int2);
+		LogResult.assertTrue("variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction26(){@Test}
+		int1 = 328;
+		int2 = 75;
+		result = (int1 <= int2);
+		LogResult.assertTrue("variable comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction27(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 <= int2);
+		LogResult.assertTrue("equal variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction28(){@Test}
+		int1 = 328;
+		int2 = 75;
+		result = (int1 <= int2);
+		LogResult.assertTrue("equal variable comparison <= false", !result );
+	end
+	
+	function runComparisonFunction29(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = (int1 >= int2);
+		LogResult.assertTrue("variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction30(){@Test}
+		int1 = 328;
+		int2 = 75;
+		result = (int1 >= int2);
+		LogResult.assertTrue("variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction31(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 >= int2);
+		LogResult.assertTrue("equal variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction32(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = (int1 >= int2);
+		LogResult.assertTrue("equal variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction33(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 == int2);
+		LogResult.assertTrue("equal variable comparison == true", result );
+	end
+	
+	function runComparisonFunction34(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = ( int1 == int2 );
+		LogResult.assertTrue("equal variable comparison == false", !result );
+	end
+	
+	function runComparisonFunction35(){@Test}
+		int1 = 75;
+		int2 = 328;
+		result = (int1 != int2);
+		LogResult.assertTrue("equal variable comparison != true", result );
+	end
+	
+	function runComparisonFunction36(){@Test}
+		int1 = 75;
+		int2 = 75;
+		result = (int1 != int2);
+		LogResult.assertTrue("equal variable comparison != false", !result );
+	end
+	
+	// comparison with nullable ints and null
+	function runComparisonFunction37(){@Test}
+		result = (int1n == null);
+		LogResult.assertTrue("null variable equals null keyword == true", result );
+	end
+	
+	function runComparisonFunction38(){@Test}
+		result = (int1n != null);
+		LogResult.assertTrue("null variable not equals null keyword != false", !result );
+	end
+	
+	function runComparisonFunction39(){@Test}
+		result = (int2n == null);
+		LogResult.assertTrue("variable equals null keyword == false", !result );
+	end
+	
+	function runComparisonFunction40(){@Test}
+		result = (int2n != null);
+		LogResult.assertTrue("variable not equals null keyword != true", result );
+	end
+	
+	function runComparisonFunction41(){@Test}
+		result = (int1n == int2n);
+		LogResult.assertTrue("null variable equals variable == false", !result );
+	end
+	
+	function runComparisonFunction42(){@Test}
+		int1n = 328;
+		result = (int1n != int2n);
+		int1n = null;
+		LogResult.assertTrue("null variable not equals variable != false", !result );
+	end
+	
+end

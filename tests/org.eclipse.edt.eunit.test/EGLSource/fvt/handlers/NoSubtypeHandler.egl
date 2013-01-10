@@ -1,0 +1,29 @@
+package fvt.handlers;
+
+handler NoSubtypeHandler
+
+    function setPrivateField(value int in)
+        privateField = value;
+    end
+
+    function getPrivateField() returns(int)
+        return(privateField);
+    end
+
+    function getPublicArray() returns(int[])
+        return(publicArray);
+    end
+
+    function throwsException1()
+        ary int[] = new int[10];
+        ary[11] = 8;
+    end
+
+    function throwsException2()
+        throw new AnyException{message = "UserExceptionMessage"};
+    end
+
+    private privateField int;
+    publicField int;
+    publicArray int[] = new int[3];
+end

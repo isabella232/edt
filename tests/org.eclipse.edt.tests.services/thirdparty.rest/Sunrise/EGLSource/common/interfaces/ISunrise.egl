@@ -1,0 +1,29 @@
+/*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
+
+
+
+//Put EGL Source File Contents Here
+Library ISunrise  
+  function GetSunriseInfo(latitude string in, longitude string in, day string in, month string in, timezone int in, dst string in) returns(SunriseData) 
+   	{
+   		@Rest {
+   			method = HttpMethod._GET, 
+   			uriTemplate="http://www.earthtools.org/sun/{latitude}/{longitude}/{day}/{month}/{timezone}/{dst}"
+   		}
+   	}
+  end
+end 
+
+

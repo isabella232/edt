@@ -1,0 +1,311 @@
+package server.test.rpg.handlers.arrays;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import server.host.rpg.programs.ComplexTypeArrays;
+import server.host.rpg.programs.data.handlers.Handler12;
+import server.host.rpg.programs.data.handlers.Handler2;
+
+
+// basic library
+library HandlerFields2
+	
+	rec Handler12[];
+	function test1(){@Test}
+		rec = new Handler12[0];
+		rec.appendElement(createHandler12());
+		rec.appendElement(createHandler12());
+		try
+        	LogResult.logStdOut("call ComplexTypeArrays.primitiveHostProgram5");
+			validCount int;
+			ComplexTypeArrays.primitiveHostProgram5(rec, validCount);
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	private function createHandler12()returns(Handler12)
+		r Handler12{
+					rec = createHandler2(),
+					char20 = ["abcd", "EFG"], 
+					unicode20 = ["xyz", "1234"], 
+					lchar20 = ["ABCD", "efg"],
+					lunicode20 = ["XYZ", "4321"], 
+					bin1sign = [-1,-2],
+					bin2sign = [1,2],
+					bin4sign = [3,4],
+					bin8sign = [4,5],
+					dec174 = [45.67, 64.97],
+					dec8 = [6,7],
+					num150 = [8,9],
+					num112 = [11.61, 56.72],
+					bin1 = [8,9],
+					bin2 = [10,11],
+					bin4  = [12,13],
+					bin8  = [14,15],
+					date1 = ["06/24/2011" ,"03/12/1011"],
+					date2 = ["05/19/1997", "01/02/1947"],
+					date3 = ["04/03/1922", "07/24/1822"],
+					time1 = ["06:24:20" ,"13:12:11"],
+					time2 = ["05:19:19", "11:02:47"],
+					time3 = ["04:03:22", "17:24:22"],
+					timestamp1 = ["2012/02/11 17:54:34", "1812/06/01 08:45:26"],
+					float4 = [14,15],
+					float8 = [16,17],
+					recA = new Handler2[0]
+		};
+		r.recA.appendElement(createHandler2());  
+		r.recA.appendElement(createHandler2());  
+		return(r);
+	end
+	private function createHandler2()returns(Handler2)
+		return(new Handler2{
+							char20 = "abcd", 
+							unicode20 = "xyz", 
+							lchar20 = "defg", 
+							lunicode20 = "abc", 
+							bin1sign = -1,
+							bin2sign = 1,
+							bin4sign = 2,
+							bin8sign = 3,
+							dec174 = 45.67,
+							dec8 = 14,
+							num150 = 5,
+							num112 = 11.61,
+							bin1 = 5,
+							bin2 = 6,
+							bin4  = 7,
+							bin8  = 8,
+							date1 = "06/24/2011",
+							date2 = "05/19/1997",
+							date3 = "04/03/1922",
+							time1 = "17:54:34",
+							time2 = "07:14:03",
+							time3 = "01:45:43",
+							timestamp1 = "2012/02/11 17:54:34",
+							float4 = 8,
+							float8 = 9
+					});
+	end
+	function recsTest(){@Test {}}
+        LogResult.assertBigIntEqual("Fail rec.getSize()", 5, rec.getSize());
+	end
+	function rec_char20Test(){@Test {}}
+		for(idx int from 1 to 2)
+	        LogResult.assertBigIntEqual("Fail rec[" + idx + "].char20.getSize()", 4, rec[idx].char20.getSize());
+	        LogResult.assertStringEqual("Fail rec[" + idx + "].char20[1]", "abcdYYYYY", rec[idx].char20[1]);
+	        LogResult.assertStringEqual("Fail rec[" + idx + "].char20[2]", "EFGYYYYY", rec[idx].char20[2]);
+	    end
+	end
+	function rec_unicode20Test(){@Test {}}
+		for(idx int from 1 to 2)
+	        LogResult.assertBigIntEqual("Fail rec[" + idx + "]unicode20.getSize()", 4, rec[idx].unicode20.getSize());
+	        LogResult.assertStringEqual("Fail rec[" + idx + "]unicode20[1]", "xyz ZZZZZZZZZZ", rec[idx].unicode20[1]);
+	        LogResult.assertStringEqual("Fail rec[" + idx + "]unicode20[2]", "1234ZZZZZZZZZZ", rec[idx].unicode20[2]); 
+		end
+	end
+	function lchar20Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]lchar20.getSize()", 4, rec[idx].lchar20.getSize());
+            LogResult.assertStringEqual("Fail rec[" + idx + "]lchar20[1]", "ABCDYYYYY", rec[idx].lchar20[1]);
+            LogResult.assertStringEqual("Fail rec[" + idx + "]lchar20[2]", "efgYYYYY", rec[idx].lchar20[2]);
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]lunicode20.getSize()", 4, rec[idx].lunicode20.getSize());
+            LogResult.assertStringEqual("Fail rec[" + idx + "]lunicode20[1]", "XYZ ZZZZZZZZZZ", rec[idx].lunicode20[1]);
+            LogResult.assertStringEqual("Fail rec[" + idx + "]lunicode20[2]", "4321ZZZZZZZZZZ", rec[idx].lunicode20[2]); 
+		end
+	end
+	function rec_bin1signTest(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1sign.getSize()", 4, rec[idx].bin1sign.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1sign[1]", 97, rec[idx].bin1sign[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1sign[2]", 96, rec[idx].bin1sign[2]);
+		end
+	end
+	function rec_bin2signTest(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2sign.getSize()", 4, rec[idx].bin2sign.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2sign[1]", 999, rec[idx].bin2sign[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2sign[2]", 1000, rec[idx].bin2sign[2]);
+		end
+	end
+	function rec_bin4signTest(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4sign.getSize()", 4, rec[idx].bin4sign.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4sign[1]", 10001, rec[idx].bin4sign[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4sign[2]", 10002, rec[idx].bin4sign[2]);
+		end
+	end
+	function rec_bin8signTest(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8sign.getSize()", 4, rec[idx].bin8sign.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8sign[1]", 100002, rec[idx].bin8sign[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8sign[2]", 100003, rec[idx].bin8sign[2]);
+		end
+	end
+	function rec_dec174Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]dec174.getSize()", 4, rec[idx].dec174.getSize());
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]dec174[1]", 10043.67, rec[idx].dec174[1]);
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]dec174[2]", 10062.97, rec[idx].dec174[2]);
+		end
+	end
+	function rec_dec8Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]dec8.getSize()", 4, rec[idx].dec8.getSize());
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]dec8[1]", 100004, rec[idx].dec8[1]);
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]dec8[2]", 100005, rec[idx].dec8[2]);
+		end
+	end
+	function num150Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]num150.getSize()", 4, rec[idx].num150.getSize());
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]num150[1]", 1006, rec[idx].num150[1]);
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]num150[2]", 1007, rec[idx].num150[2]);
+		end
+	end
+	function rec_num112Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]num112.getSize()", 4, rec[idx].num112.getSize());
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]num112[1]", 109.61, rec[idx].num112[1]);
+            LogResult.assertDecimalEqual("Fail rec[" + idx + "]num112[2]", 154.72, rec[idx].num112[2]);
+		end
+	end
+	function rec_bin1Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1.getSize()", 4, rec[idx].bin1.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1[1]", 106, rec[idx].bin1[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin1[2]", 107, rec[idx].bin1[2]);
+		end
+	end
+	function rec_bin2Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2.getSize()", 4, rec[idx].bin2.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2[1]", 1008, rec[idx].bin2[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin2[2]", 1009, rec[idx].bin2[2]);
+		end
+	end
+
+	function rec_bin4Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4.getSize()", 4, rec[idx].bin4.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4[1]", 10010, rec[idx].bin4[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin4[2]", 10011, rec[idx].bin4[2]);
+		end
+	end
+	function rec_bin8Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8.getSize()", 4, rec[idx].bin8.getSize());
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8[1]", 100012, rec[idx].bin8[1]);
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]bin8[2]", 100013, rec[idx].bin8[2]);
+		end
+	end
+	function rec_date1Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]date1.getSize()", 4, rec[idx].date1.getSize());
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date1[1]", "11/29/2016", rec[idx].date1[1]);
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date1[2]", "08/17/1016", rec[idx].date1[2]);
+		end
+	end
+	function rec_date2Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]date2.getSize()", 4, rec[idx].date2.getSize());
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date2[1]", "10/24/2002", rec[idx].date2[1]);
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date2[2]", "06/07/1952", rec[idx].date2[2]);
+		end
+	end
+
+	function rec_date3Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]date3.getSize()", 4, rec[idx].date3.getSize());
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date3[1]", "09/08/1927", rec[idx].date3[1]);
+            LogResult.assertDateEqual("Fail rec[" + idx + "]date3[2]", "12/29/1827", rec[idx].date3[2]);
+		end
+	end
+	function time1Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]time1.getSize()", 4, rec[idx].time1.getSize());
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time1[1]", "11:29:25", rec[idx].time1[1]);
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time1[2]", "18:17:16", rec[idx].time1[2]);
+		end
+	end
+	function time2Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]time2.getSize()", 4, rec[idx].time2.getSize());
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time2[1]", "10:24:24", rec[idx].time2[1]);
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time2[2]", "16:07:52", rec[idx].time2[2]);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]time3.getSize()", 4, rec[idx].time3.getSize());
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time3[1]", "09:08:27", rec[idx].time3[1]);
+            LogResult.assertTimeEqual("Fail rec[" + idx + "]time3[2]", "22:29:27", rec[idx].time3[2]);
+		end
+	end
+	function rec_timestamp1Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]timestamp1.getSize()", 4, rec[idx].timestamp1.getSize());
+            LogResult.assertTimestampEqual("Fail rec[" + idx + "]timestamp1[1]", "2017/07/16 22:59:39", rec[idx].timestamp1[1]);
+            LogResult.assertTimestampEqual("Fail rec[" + idx + "]timestamp1[2]", "1817/11/06 13:50:31", rec[idx].timestamp1[2]);
+		end
+	end
+	function rec_float4Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]float4.getSize()", 4, rec[idx].float4.getSize());
+            LogResult.assertFloatEqual("Fail rec[" + idx + "]float4[1]", 14.99 as smallfloat, rec[idx].float4[1]);
+            LogResult.assertFloatEqual("Fail rec[" + idx + "]float4[2]", 15.99 as smallfloat, rec[idx].float4[2]);
+		end
+	end
+	function rec_float8Test(){@Test {}}
+		for(idx int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx + "]float8.getSize()", 4, rec[idx].float8.getSize());
+            LogResult.assertFloatEqual("Fail rec[" + idx + "]float8[1]", 16.99, rec[idx].float8[1]);
+            LogResult.assertFloatEqual("Fail rec[" + idx + "]float8[2]", 17.99, rec[idx].float8[2]);
+		end
+	end
+	function rec_recTest(){@Test {}}
+		for(idx int from 1 to 2)
+			recTest(rec[idx].rec, "rec[" + idx + "].rec");
+		end
+	end
+	function rec_recATest(){@Test {}}
+		for(idx1 int from 1 to 2)
+            LogResult.assertBigIntEqual("Fail rec[" + idx1 + "]recA.getSize()", 4, rec[idx1].recA.getSize());
+			for(idx2 int from 1 to 2)
+				recTest(rec[idx1].recA[idx2], "rec[" + idx1 + "].recA[" + idx2 + "]");
+			end
+		end
+	end
+	private function recTest(rec_rec Handler2 in, name String in)
+        LogResult.assertStringEqual("Fail " + name + ".char20", "abcdYYYYY", rec_rec.char20);
+        LogResult.assertStringEqual("Fail " + name + ".unicode20", "xyz ZZZZZZZZZZ", rec_rec.unicode20);
+        LogResult.assertStringEqual("Fail " + name + ".lchar20", "defgYYYYY", rec_rec.lchar20);
+        LogResult.assertStringEqual("Fail " + name + ".lunicode20", "abc ZZZZZZZZZZ", rec_rec.lunicode20);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin1sign", 97, rec_rec.bin1sign);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin2sign", 999, rec_rec.bin2sign);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin4sign", 10000, rec_rec.bin4sign);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin8sign", 100001, rec_rec.bin8sign);
+        LogResult.assertDecimalEqual("Fail " + name + ".dec174", 10043.67, rec_rec.dec174);
+        LogResult.assertDecimalEqual("Fail " + name + ".dec8", 100012, rec_rec.dec8);
+        LogResult.assertDecimalEqual("Fail " + name + ".num150", 1003, rec_rec.num150);
+        LogResult.assertDecimalEqual("Fail " + name + ".num112", 109.61, rec_rec.num112);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin1", 103, rec_rec.bin1);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin2", 1004, rec_rec.bin2);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin4", 10005, rec_rec.bin4);
+        LogResult.assertBigIntEqual("Fail " + name + ".bin8", 100006, rec_rec.bin8);
+        LogResult.assertDateEqual("Fail " + name + ".date1", "11/29/2016", rec_rec.date1);
+        LogResult.assertDateEqual("Fail " + name + ".date2", "10/24/2002", rec_rec.date2);
+        LogResult.assertDateEqual("Fail " + name + ".date3", "09/08/1927", rec_rec.date3);
+        LogResult.assertTimeEqual("Fail " + name + ".time1", "22:59:39", rec_rec.time1);
+        LogResult.assertTimeEqual("Fail " + name + ".time2", "12:19:08", rec_rec.time2);
+        LogResult.assertTimeEqual("Fail " + name + ".time3", "06:50:48", rec_rec.time3);
+        LogResult.assertTimestampEqual("Fail " + name + ".timestamp1", "2017/07/16 22:59:39", rec_rec.timestamp1);
+        LogResult.assertFloatEqual("Fail " + name + ".float8", 9.99, rec_rec.float8);
+        LogResult.assertFloatEqual("Fail " + name + ".float4", 8.99 as smallfloat, rec_rec.float4);
+	end
+end

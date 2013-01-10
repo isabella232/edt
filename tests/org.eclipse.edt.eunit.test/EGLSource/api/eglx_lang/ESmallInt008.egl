@@ -1,0 +1,236 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+
+/** @test
+  * @name ESmallInt008
+  * @title ESmallInt008 - runISAFunction
+  * @description testing smallInt literal with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources ESmallInt008.egl
+  * @keywords smallInt, isa
+ **/
+library ESmallInt008 {}
+
+	isIt boolean;
+	expected boolean;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "smallint/literal is any";
+		isIt = 44i isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "smallint/literal is bigInt";
+		isIt = 44i isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "smallint/literal is boolean";
+		isIt = 44i isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "smallint/literal is date";
+		isIt = 44i isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "smallint/literal is decimal(4,2)";
+		isIt = 44i isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "smallint/literal is decimal";
+		isIt = 44i isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "smallint/literal is dictionary";
+		isIt = 44i isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "smallint/literal is float";
+		isIt = 44i isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "smallint/literal is int";
+		isIt = 44i isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "smallint/literal is number";
+		isIt = 44i isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "smallint/literal is smallFloat";
+		isIt = 44i isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "smallint/literal is smallInt";
+		isIt = 44i isa smallInt;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "smallint/literal is string";
+		isIt = 44i isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "smallint/literal is timestamp";
+		isIt = 44i isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "smallint/literal is anyexception";
+		isIt = 44i isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "smallint/literal is DynamicAccessException";
+		isIt = 44i isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "smallint/literal is InvalidArgumentException";
+		isIt = 44i isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "smallint/literal is InvalidIndexException";
+		isIt = 44i isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "smallint/literal is InvalidPatternException";
+		isIt = 44i isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "smallint/literal is InvocationException";
+		isIt = 44i isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "smallint/literal is JavaObjectException";
+//		isIt = 44i isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "smallint/literal is JavaScriptObjectException";
+//		isIt = 44i isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "smallint/literal is NullValueException";
+		isIt = 44i isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "smallint/literal is NumericOverflowException";
+		isIt = 44i isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "smallint/literal is ServiceInvocationException";
+		isIt = 44i isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "smallint/literal is SQLException";
+//		isIt = 44i isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "smallint/literal is TypeCastException";
+		isIt = 44i isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "smallint/literal is bytes";
+		isIt = 44i isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "smallint/literal is bytes(8)";
+		isIt = 44i isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // ESmallInt008

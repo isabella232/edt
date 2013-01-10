@@ -1,0 +1,7 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLElement;
+
+handler Details
+    WeatherData WeatherData[]{@XMLElement{namespace = "http://www.webservicex.net"}} = new WeatherData[0];
+end

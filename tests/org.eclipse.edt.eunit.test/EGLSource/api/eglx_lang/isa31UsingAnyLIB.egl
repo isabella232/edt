@@ -1,0 +1,640 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.Test;
+
+library isa31UsingAnyLIB
+	
+	isA_WS isA_WS;
+	use isaLIB;
+	isA31_DEC_D0 isA31_DEC_D0;
+	isA31_DEC_Dx isA31_DEC_Dx;
+	myAny Any?;
+	
+Function runBasicDecimalISAFunction001() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL19D0");
+  isA_WS.RESULT_COMPARE = "!=";  
+  myAny = isA31_DEC_D0.DECIMAL19D0;  
+  if (myAny isa decimal(19,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction002() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL20D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL20D0;  
+  if (myAny isa decimal(20,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction003() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL21D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL21D0;  
+  if (myAny isa decimal(21,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction004() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL22D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL22D0;  
+  if (myAny isa decimal(22,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction005() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL23D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL23D0;  
+  if (myAny isa decimal(23,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction006() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL24D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL24D0;  
+  if (myAny isa decimal(24,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction007() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL25D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL25D0;  
+  if (myAny isa decimal(25,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction008() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL26D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL26D0;  
+  if (myAny isa decimal(26,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction009() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL27D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL27D0;  
+  if (myAny isa decimal(27,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction010() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL28D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL28D0;  
+  if (myAny isa decimal(28,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+  end
+	
+Function runBasicDecimalISAFunction011() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL29D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL29D0;  
+  if (myAny isa decimal(29,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction012() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL30D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL30D0;  
+  if (myAny isa decimal(30,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction013() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL31D0");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_D0.DECIMAL31D0;  
+  if (myAny isa decimal(31,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end // end isA_UsingAnAny_31_DEC
+	
+Function runBasicDecimalISAFunction014() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D00");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D00;  
+  if (myAny isa decimal(31,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction015() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D01");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D01;  
+  if (myAny isa decimal(31,1))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction016() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D02");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D02;  
+  if (myAny isa decimal(31,2))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction017() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D03");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D03;  
+  if (myAny isa decimal(31,3))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction018() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D04");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D04;  
+  if (myAny isa decimal(31,4))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction019() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D05");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D05;  
+  if (myAny isa decimal(31,5))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction020() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D06");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D06;  
+  if (myAny isa decimal(31,6))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction021() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D07");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D07;  
+  if (myAny isa decimal(31,7))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction023() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D08");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D08;  
+  if (myAny isa decimal(31,8))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction024() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D09");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D09;  
+  if (myAny isa decimal(31,9))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction025() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D10");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D10;  
+  if (myAny isa decimal(31,10))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction026() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D11");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D11;  
+  if (myAny isa decimal(31,11))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction027() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D12");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D12;  
+  if (myAny isa decimal(31,12))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction028() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D13");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D13;  
+  if (myAny isa decimal(31,13))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction029() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D14");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D14;  
+  if (myAny isa decimal(31,14))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction030() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D15");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D15;  
+  if (myAny isa decimal(31,15))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction031() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D16");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D16;  
+  if (myAny isa decimal(31,16))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction032() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D17");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D17;  
+  if (myAny isa decimal(31,17))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction033() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D18");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D18;  
+  if (myAny isa decimal(31,18))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction034() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D19");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D19;  
+  if (myAny isa decimal(31,19))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction035() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D20");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D20;  
+  if (myAny isa decimal(31,20))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction036() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D21");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D21;  
+  if (myAny isa decimal(31,21))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction037() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D22");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D22;  
+  if (myAny isa decimal(31,22))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction038() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D23");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D23;  
+  if (myAny isa decimal(31,23))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction039() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D24");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D24;  
+  if (myAny isa decimal(31,24))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction040() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D25");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D25;  
+  if (myAny isa decimal(31,25))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction041() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D216");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D26;  
+  if (myAny isa decimal(31,26))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction042() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D27");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D27;  
+  if (myAny isa decimal(31,27))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction043() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D28");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D28;  
+  if (myAny isa decimal(31,28))
+    isA_WS.RESULT_COMPARE = "==";
+  end 
+ isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction044() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D29");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D29;  
+  if (myAny isa decimal(31,29))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction045() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D30");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D30;  
+  if (myAny isa decimal(31,30))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction046() {@Test}
+  isA_WS.EXPECTED_COMPARE = "==";
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D31");
+  isA_WS.RESULT_COMPARE = "!=";
+  myAny = isA31_DEC_Dx.DECIMAL31D31;  
+  if (myAny isa decimal(31,31))
+    isA_WS.RESULT_COMPARE = "==";
+  end  
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end // end isA_UsingAnAny_31_DEC_D
+	
+Function runBasicDecimalISAFunction047() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL19D0 - is it a decimal(18,0)");
+  isA_WS.EXPECTED_COMPARE = "!=";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL19D0;  
+  if (myAny isa decimal(18,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);	
+end
+	
+Function runBasicDecimalISAFunction048() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL19D0 - is it a decimal(19,0)");
+  isA_WS.EXPECTED_COMPARE = "==";  
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL19D0;  
+  if (myAny isa decimal(19,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction049() {@Test}  
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL19D0 - is it a decimal(20,0)");
+  isA_WS.EXPECTED_COMPARE = "!=";  
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL19D0;  
+  if (myAny isa decimal(20,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+ end
+	
+Function runBasicDecimalISAFunction050() {@Test}     
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL30D0 - is it a decimal(29,0)");
+  isA_WS.EXPECTED_COMPARE = "!=";  
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL30D0;  
+  if (myAny isa decimal(29,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction051() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL30D0 - is it a decimal(30,0)");
+  isA_WS.EXPECTED_COMPARE = "==";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL30D0;  
+  if (myAny isa decimal(30,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction052() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_D0.DECIMAL30D0 - is it a decimal(31,0)");
+  isA_WS.EXPECTED_COMPARE = "!=";  
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_D0.DECIMAL30D0;  
+  if (myAny isa decimal(31,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction053() {@Test}  
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D01 - is it a decimal(31,0)");
+  isA_WS.EXPECTED_COMPARE = "!=";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D01;  
+  if (myAny isa decimal(31,0))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction054() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D01 - is it a decimal(31,1)");
+  isA_WS.EXPECTED_COMPARE = "==";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D01;  
+  if (myAny isa decimal(31,1))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction055() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D01 - is it a decimal(31,2)");
+  isA_WS.EXPECTED_COMPARE = "!=";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D01;  
+  if (myAny isa decimal(31,2))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);  
+end
+	
+Function runBasicDecimalISAFunction056() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D30 - is it a decimal(31,29)");
+  isA_WS.EXPECTED_COMPARE = "!=";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D30;  
+  if (myAny isa decimal(31,29))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE); 
+end
+	
+Function runBasicDecimalISAFunction057() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D30 - is it a decimal(31,30)");
+  isA_WS.EXPECTED_COMPARE = "==";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D30;  
+  if (myAny isa decimal(31,30))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);
+end
+	
+Function runBasicDecimalISAFunction058() {@Test}
+  isaLIB.setVariation("isA - UsingAnAny - isA31_DEC_Dx.DECIMAL31D30 - is it a decimal(31,31)");
+  isA_WS.EXPECTED_COMPARE = "!=";
+  isA_WS.RESULT_COMPARE = "!="; 
+  myAny = isA31_DEC_Dx.DECIMAL31D30;  
+  if (myAny isa decimal(31,31))
+    isA_WS.RESULT_COMPARE = "==";
+  end
+  isaLIB.compareIF(isA_WS.RESULT_COMPARE, isA_WS.EXPECTED_COMPARE);     
+end // end isA_UsingAnAny_31_DEC_BOUNDARY	
+	
+end  // end UsingAny32Library

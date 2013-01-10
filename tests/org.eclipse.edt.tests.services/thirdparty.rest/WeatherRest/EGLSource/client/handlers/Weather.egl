@@ -1,0 +1,226 @@
+ /*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package client.handlers;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.Image;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import common.interfaces.Data;
+import common.interfaces.Dwml;
+import common.interfaces.INOAWeather;
+import common.interfaces.Location;
+import common.interfaces.MoreWeatherInformation;
+import common.interfaces.Temperature;
+import common.interfaces.TimeLayout;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Widget;
+
+handler Weather type RUIHandler { initialUI = [ ui ] }
+
+	
+	serviceType Combo{values=["get weather using REST GET" 
+//								"get weather using REST POST"//, 
+//								"get weather using EGL Soap to REST GET", 
+//								"get weather using EGL Soap to REST POST", 
+//								"get weather using EGL REST to REST GET", 
+//								"get weather using EGL REST to REST POST",
+//								"get weather using private EGL to REST GET",
+//								"get weather using private EGL to REST POST"
+	]};
+	invoke Button{text="invoke Service",onClick ::= invokeService};
+	moreInfo Button{text="complete Weather Info",onClick ::= invokeCompleteWeather, disabled = true};
+	const FARENHEIT String = "Farenheit";
+	const CELSIUS String = "Celsius";
+	const TIMEOUT int = 100000;
+	ui Box { columns=1,
+		background = "blue", width = 2500, padding=11,
+		children = [inputSection, resultsBox] 
+	};
+	resultsBox Box { columns=1, children = [  ] };
+	
+	zipCodeField TextField{ margin=2, text="06712" };
+	unit Combo{ values = [FARENHEIT, CELSIUS] };
+	inputSection Box { columns = 4, children = [
+		new HTML { font = "Verdana", color = "white", text = "Enter any US zip code:", margin = 3, marginTop=5 },
+		  zipCodeField, serviceType, invoke, moreInfo
+	]};
+	temperature HTML{};
+	sourceText HTML { width=600, height=400 };
+	resultsHeader HTML{ margin=3, font = "Verdana", color = "white" };
+	
+	moreWeatherInformationURL string?;
+ 	
+	private function initResultsHeader( loc Location in)
+		resultsHeader.width=ui.pixelWidth - 20;
+		resultsHeader.text = "<HR color=white noshade>Results for longitude:" + loc.point.longitude + ", lattitude:" + loc.point.latitude + 
+			":<HR color=white noshade>";
+	end
+	
+	private function Exceptionhandler( exception AnyException in, http IHttp in)
+		resultsHeader.text = "<br>An exception has occurred<p>";
+		resultsBox.height = 350;
+		resultsHeader.text += "message:" + exception.message + "<p>";
+		if( exception isa ServiceInvocationException )
+			resultsHeader.text += "ServiceKind:" + serviceKind(exception as ServiceInvocationException) + "<p>";
+			resultsHeader.text += "detail1:" + (exception as ServiceInvocationException).detail1 + "<p>";
+			resultsHeader.text += "detail2:" + (exception as ServiceInvocationException).detail2 + "<p>";
+			resultsHeader.text += "detail3:" + (exception as ServiceInvocationException).detail3 + "<p>";
+		end
+		resultsBox.children = [ 
+			resultsHeader,
+			new HTML{text = "http.getResponse().body:" + http.getResponse().body}
+		];
+	end
+	private function serviceKind( sie ServiceInvocationException in)returns(string)
+		case(sie.source)
+			when(eglx.services.ServiceKind.WEB)
+				return("WEB");
+			when(eglx.services.ServiceKind.NATIVE)
+				return("NATIVE");
+			when(eglx.services.ServiceKind.EGL)
+				return("EGL");
+			when(eglx.services.ServiceKind.REST)
+				return("REST");
+			otherwise
+				return("unknown");
+		end
+	end
+	private function populateEmptyWeather()
+			resultsHeader.text = "<br>Sorry. No weather predictions were found for "+zipCodeField.text+"<p>"+
+							"Just wait a few minutes and try again.";
+			resultsBox.children = [ resultsHeader ];
+			resultsBox.height = 350;
+	end
+	private function getTemp(temps Temperature?[] in, tempTypeString string in, tempIdx int in)returns(string)
+		if(temps != null)
+			for(idx int from 1 to temps.getSize())
+				if(tempTypeString == temps[idx].type1)
+					return(temps[idx].value[tempIdx]);
+				end
+			end
+		end
+		return("");
+	end
+	periodIdx int = 1;
+	private function populateDailes( data Data in )
+		timeLayoutKey string = data.parameters.weather.timeLayout;
+   		weatherBox Box{children =[]};
+		times TimeLayout = getTimeLayout(timeLayoutKey, data.timeLayout);
+		weatherPeriod GridLayout[];
+		for(idx int from 1 to times.startValidTimes.getSize())
+			advanceConditions string;
+			if(data.parameters.weather.weatherConditions[idx] != null)
+				if(data.parameters.weather.weatherConditions[idx].value != null)
+					advanceConditions = data.parameters.weather.weatherConditions[idx].value.coverage + ", " + data.parameters.weather.weatherConditions[idx].value.intensity + ", " + data.parameters.weather.weatherConditions[idx].value.weatherType;
+				end
+			    weatherPeriod.appendElement(
+			    	new GridLayout{columns = 1, rows = 6, cellPadding = 0, 
+			    		children =[
+							new HTML {text = times.startValidTimes[idx].periodName, layoutData = new GridLayoutData{ row = 1, column = 1 }},
+							new HTML{ text = times.startValidTimes[idx].egl_value, layoutData = new GridLayoutData{ row = 2, column = 1 }},
+							new Image { src = data.parameters.conditionsIcon.iconLink[idx], layoutData = new GridLayoutData{ row = 3, column = 1 }},
+							new HTML { text = ("percip " + data.parameters.probabilityOfPrecipitation.value[idx] + "%"), layoutData = new GridLayoutData{ row = 4, column = 1 }},
+							new HTML {text = data.parameters.weather.weatherConditions[idx].weatherSummary, layoutData = new GridLayoutData{ row = 5, column = 1 }},
+							new HTML {text = advanceConditions, layoutData = new GridLayoutData{ row = 6, column = 1 }}
+						]
+					}
+				);
+			    
+				if(idx % 2 == 0)
+					dayIdx int = idx/2;
+					period1 int = periodIdx;
+					period2 int = periodIdx;
+					if(weatherPeriod.getSize() > 1)
+						periodIdx = periodIdx + 1;
+						period2 = periodIdx;
+					end
+					periodIdx = periodIdx + 1;
+					addDay(weatherPeriod[period1], weatherPeriod[period2], dayIdx, data.parameters.temperature, weatherBox);
+				end
+			end
+		end		
+		resultsBox.children = [ 
+			resultsHeader, 
+			new Box { children = [weatherBox] }
+		];
+	end
+	
+	private function addDay(am widget in, pm widget in, dayIdx int in, temps Temperature?[], container Box )
+			am.layoutData = new GridLayoutData{ row = 1, column = 1 };
+			pm.layoutData = new GridLayoutData{ row = 1, column = 2 };
+			day GridLayout{columns = 2, rows = 2, cellPadding = 0, children = new widget[], marginRight = 8,
+				children = [am, 
+							pm,
+							new HTML {text = "low " + getTemp(temps, "minimum", dayIdx)+"F", layoutData = new GridLayoutData{ row = 2, column = 1 }},
+							new HTML {text = "hi" + getTemp(temps, "maximum", dayIdx)+"F", layoutData = new GridLayoutData{ row = 2, column = 2 }}
+				]
+			};
+			container.appendChild(day);
+	end
+	private function getTimeLayout(key string in, times TimeLayout[] in)returns(TimeLayout?)
+		if(times != null)
+			for( idx int from 1 to times.getSize())
+				if(key == times[idx].layoutKey)
+					return(times[idx]);
+				end
+			end
+		end
+		return(null);
+	end
+	function invokeService( e Event in) 
+		moreInfo.disabled = true;
+		resultsBox.children = [ new TextLabel{text="working"} ];
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHttp = Resources.getResource("binding:srvc");//
+				today date;
+				call INOAWeather.getWeather(zipCodeField.text, 7, today) using http returning to handleReturn onexception Exceptionhandler;
+		end
+	end
+
+	function weatherDetails(moreInfo MoreWeatherInformation in)
+		if(moreInfo != null && moreInfo.egl_value != null)
+			moreWeatherInformationURL = moreInfo.egl_value;
+			this.moreInfo.disabled = false;
+		end
+	end
+	function handleReturn(retResult Dwml in, http IHttp in)
+		resultsBox.children = [ resultsHeader ];
+		
+		if( retResult != null )
+			initResultsHeader( retResult.data.location );
+			
+			weatherDetails(retResult.data.moreWeatherInformation);
+			
+			populateDailes( retResult.data );
+
+		else
+			populateEmptyWeather();
+		end
+	end
+
+	function invokeCompleteWeather( e Event in)
+		moreInfo.disabled = true;
+		resultsBox.children = [ 
+			new Box { children = [new HTML{background = "white", src=moreWeatherInformationURL}] }
+		];
+	end
+
+end

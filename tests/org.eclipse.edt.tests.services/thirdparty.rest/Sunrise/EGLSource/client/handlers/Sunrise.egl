@@ -1,0 +1,176 @@
+ /*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package client.handlers;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import common.interfaces.ISunrise;
+import common.interfaces.ITimezone;
+import common.interfaces.RDF;
+import common.interfaces.SunriseData;
+import common.interfaces.TimezoneData;
+import common.interfaces.geocodeInterface;
+import eglx.http.HttpRest;
+import eglx.http.IHttp;
+import eglx.http.Request;
+import eglx.rbd.StrLib;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import java.net.URI;
+
+
+handler Sunrise type RUIHandler { initialUI = [ ui], onConstructionFunction = start }
+	
+	serviceType Combo{values=["get sunrise using REST GET"]};
+	invoke Button{text="invoke Service",onClick ::= UseRestRec};
+	
+	ui Box { columns=1,
+		background = "blue", width = 770, padding=11,
+		children = [inputSection, resultsBox] 
+	};
+	
+	address TextField{ margin=3, style="width:225", text = "4205 South Miami, Durham, NC"};
+	month TextField{ margin=3, style="width:225", text = ""};
+	day TextField{ margin=3, style="width:225", text = ""};
+	inputSection Box { columns = 1, children = [
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Address: ", margin = 3, marginTop=5 },address]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Month(1-12): ", margin = 3, marginTop=5 },month]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Day(1-31): ", margin = 3, marginTop=5 },day]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Select the service call type:", margin = 3, marginTop=5 },serviceType]}, 
+		new Box { children = [invoke]}
+	]};
+	resultsHeader HTML{ margin=3, font = "Verdana", color = "white", text = "Results:"};
+	resultsField Box{ columns=1, children = [
+		new Box { columns=2, children = [
+			new HTML { font = "Verdana", color = "white", text = "Location description: ", margin = 3, marginTop=5 },loc, 
+			new HTML { font = "Verdana", color = "white", text = "Longitude: ", margin = 3, marginTop=5 },longitude, 
+			new HTML { font = "Verdana", color = "white", text = "Latitude: ", margin = 3, marginTop=5 },latutude, 
+			new HTML { font = "Verdana", color = "white", text = "Timezone: ", margin = 3, marginTop=5 },timezone, 
+			new HTML { font = "Verdana", color = "white", text = "Daylight savings time: ", margin = 3, marginTop=5 },dlst, 
+			new HTML { font = "Verdana", color = "white", text = "Sunrise twighlight: ", margin = 3, marginTop=5 },sunriseTwightlight, 
+			new HTML { font = "Verdana", color = "white", text = "Sunrise: ", margin = 3, marginTop=5 },sunrise,
+			new HTML { font = "Verdana", color = "white", text = "Sunset: ", margin = 3, marginTop=5 },sunset,
+			new HTML { font = "Verdana", color = "white", text = "Sunset twighlight: ", margin = 3, marginTop=5 }, sunsetTwightlight
+		]} 
+	] };
+	loc TextField{ margin=3, style="width:225", text=""};
+	longitude TextField{ margin=3, style="width:225", text=""};
+	latutude TextField{ margin=3, style="width:225", text=""};
+	timezone TextField{ margin=3, style="width:225", text=""};
+	dlst TextField{ margin=3, style="width:225", text=""};
+	sunriseTwightlight TextField{ margin=3, style="width:225", text=""};
+	sunrise TextField{ margin=3, style="width:225", text=""};
+	sunsetTwightlight TextField{ margin=3, style="width:225", text=""};
+	sunset TextField{ margin=3, style="width:225", text=""};
+	
+	originalXML TextField{ margin=2, text="", width = 700};
+	resultsBox Box { columns=1, children = [
+		new Box { columns=1, children = [resultsHeader, resultsField]}, 
+		originalXML
+	]};
+	
+	private function start()
+		today date;
+		day.text = strlib.formatDate(today, "dd");
+		month.text = strlib.formatDate(today, "MM");
+	end
+	private function Exceptionhandler( exception AnyException in)
+		handleException(exception, null);
+	end
+	private function handleException( exception AnyException in, srvc string? in)
+//		originalXML.text = serviceLib.getCurrentCallbackResponse().body;
+		resultsHeader.text = "<br>An exception has occurred<p>";
+		if( srvc != null )
+			resultsHeader.text += "<br>   in the " + srvc + " service<p>";
+		end
+		resultsBox.height = 350;
+		resultsHeader.text += "message:" + exception.message + "<p>";
+		if( exception isa ServiceInvocationException )
+			resultsHeader.text += "ServiceKind:" + serviceKind(exception as ServiceInvocationException) + "<p>";
+			resultsHeader.text += "detail1:" + (exception as ServiceInvocationException).detail1 + "<p>";
+			resultsHeader.text += "detail2:" + (exception as ServiceInvocationException).detail2 + "<p>";
+			resultsHeader.text += "detail3:" + (exception as ServiceInvocationException).detail3 + "<p>";
+		end
+		resultsBox.children = [ 
+			resultsHeader
+		];
+	end
+	private function serviceKind( sie ServiceInvocationException in)returns(string)
+		case(sie.source)
+			when(eglx.services.ServiceKind.WEB)
+				return("WEB");
+			when(eglx.services.ServiceKind.NATIVE)
+				return("NATIVE");
+			when(eglx.services.ServiceKind.EGL)
+				return("EGL");
+			when(eglx.services.ServiceKind.REST)
+				return("REST");
+			otherwise
+				return("unknown");
+		end
+	end
+    function UseRestRec(e Event in)
+		loc.text ="";
+		longitude.text ="";
+		latutude.text ="";
+		timezone.text ="";
+		dlst.text ="";
+		sunriseTwightlight.text ="";
+		sunrise.text ="";
+		sunsetTwightlight.text ="";
+		sunset.text ="";
+		http HttpRest{request.uri = "http://geocoder.us/service/rest"};
+ 		call geocodeInterface.GetXMLRecForAddress(address.text) using http returning to geoCoderXMLRecCallback onexception Exceptionhandler;
+    end
+    
+    function geoCoderXMLRecCallback (rec RDF in)
+		loc.text = rec.Point._description;
+		latutude.text = rec.Point._lat;
+		longitude.text = rec.Point._long;
+		invokeTimezoneService( rec.Point._lat, rec.Point._long );
+	end
+    
+	function invokeTimezoneService( lat string in, long string in)
+		call ITimezone.GetTimezoneInfo(lat, long) using Resources.getResource("binding:srvcITimezone") as IHTTP returning to handleTZReturn onexception Exceptionhandler;
+	end
+	function handleTZReturn(resultRecord TimezoneData in, http Ihttp in)
+		SysLib.writeStdout(http.getResponse().body);
+		dlst.text = resultRecord.dst;
+		timezone.text = resultRecord.offset;
+		invokeService( resultRecord.location.latitude, resultRecord.location.longitude, day.text, month.text, resultRecord.offset, resultRecord.dst);
+	end
+    
+	function invokeService( lat string in, long string in, day string in, month string in, timezone int in, dst string in)
+		dstValue string = "0";
+		if("true" == dst.toLowerCase())
+			dstValue = "1";
+		end
+		case( serviceType.getSelection())
+			when( 1 )
+				call ISunrise.GetSunriseInfo(lat, long, day, month, timezone, dstValue) using Resources.getResource("binding:srvcISunrise") as IHTTP returning to handleReturn onexception Exceptionhandler;
+		end
+	end
+
+	function handleReturn(resultRecord SunriseData in, http Ihttp in)
+		SysLib.writeStdout(http.getResponse().body);
+		sunrise.text = resultRecord.morning.sunrise;
+		sunriseTwightlight.text = resultRecord.morning.twilight.civil;
+		sunset.text = resultRecord.evening.sunset;
+		sunsetTwightlight.text = resultRecord.evening.twilight.civil;
+		resultsBox.children = [ 
+			resultsHeader, resultsField
+		];
+	end
+
+end

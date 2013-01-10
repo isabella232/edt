@@ -1,0 +1,274 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString004
+  * @title EdtString004 - runComparisonFunction
+  * @description testing string comparison operators
+  * @testcases runComparisonFunction01 - runComparisonFunction42
+  * @sources EdtString004.egl
+  * @keywords string, comparison
+ **/
+library EString004 {}
+		
+	s1 string;
+	s2 string;
+	nS1 string? = null;
+	nS2 string? = "abcdef";
+	result boolean;
+		
+	// comparison test with string literals
+	function runComparisonFunction01(){@Test}
+		result = ("abc" < "xyz");
+		LogResult.assertTrue("literal comparison < true", result );
+	end
+	
+	function runComparisonFunction02(){@Test}
+		result = ("xyz" < "abc");
+		LogResult.assertTrue("literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction03(){@Test}
+		result = ("abc" < "abc");
+		LogResult.assertTrue("equal literal comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction04(){@Test}	
+		result = ("xyz" > "abc");
+		LogResult.assertTrue("literal comparison > true", result );
+	end
+	
+	function runComparisonFunction05(){@Test}
+		result = ("abc" > "xyz");
+		LogResult.assertTrue("literal comparison > false", !result );
+	end	
+	
+	function runComparisonFunction06(){@Test}
+		result = ("abc" > "abc");
+		LogResult.assertTrue("equal literal comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction07(){@Test}
+		result = ("abc" <= "xyz");
+		LogResult.assertTrue("literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction08(){@Test}
+		result = ("xyz" <= "abc");
+		LogResult.assertTrue("literal comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction09(){@Test}
+		result = ("abc" <= "abc");
+		LogResult.assertTrue("equal literal comparison <= true", result );
+	end
+	
+	function runComparisonFunction10(){@Test}
+		result = ("abc   " <= "abc");
+		LogResult.assertTrue("equal literal comparison <= false", !result );
+	end
+	
+	function runComparisonFunction11(){@Test}
+		result = ("abc" >= "xyz");
+		LogResult.assertTrue("literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction12(){@Test}
+		result = ("xyz" >= "abc");
+		LogResult.assertTrue("literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction13(){@Test}
+		result = ("abc" >= "abc");
+		LogResult.assertTrue("equal literal comparison >= true", result );
+	end
+	
+	function runComparisonFunction14(){@Test}
+		result = ("abc" >= "abc   ");
+		LogResult.assertTrue("equal literal comparison >= false", !result );
+	end
+	
+	function runComparisonFunction15(){@Test}
+		result = ("abc" == "abc");
+		LogResult.assertTrue("equal literal comparison == true", result );
+	end
+	
+	function runComparisonFunction16(){@Test}
+		result = ("abc" == "abc   ");
+		LogResult.assertTrue("equal literal comparison == false", !result );
+	end
+	
+	function runComparisonFunction17(){@Test}
+		result = ("abc" != "abc  ");
+		LogResult.assertTrue("equal literal comparison != true", result );
+	end
+	
+	function runComparisonFunction18(){@Test}
+		result = ("abc" != "abc");
+		LogResult.assertTrue("equal literal comparison != false", !result );
+	end
+	
+	// comparison test with string variables
+	function runComparisonFunction19(){@Test}
+		s1 = "abc";
+		s2 = "xyz";
+		result = ( s1 < s2);
+		LogResult.assertTrue("variable comparison < true", result );
+	end
+	
+	function runComparisonFunction20(){@Test}
+		s1 = "xyz";
+		s2 = "abc";
+		result = (s1 < s2);
+		LogResult.assertTrue("variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction21(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 < s2);
+		LogResult.assertTrue("equal variable comparison < false", (!result) );
+	end
+	
+	function runComparisonFunction22(){@Test}	
+		s1 = "xyz";
+		s2 = "abc";
+		result = (s1 > s2);
+		LogResult.assertTrue("variable comparison > true", result );
+	end
+	
+	function runComparisonFunction23(){@Test}
+		s1 = "abc";
+		s2 = "xyz";
+		result = (s1 > s2);
+		LogResult.assertTrue("variable comparison > false", !result );
+	end	
+	
+	function runComparisonFunction24(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 > s2);
+		LogResult.assertTrue("equal variable comparison > false", (!result) );
+	end
+	
+	function runComparisonFunction25(){@Test}
+		s1 = "abc";
+		s2 = "xyz";
+		result = (s1 <= s2);
+		LogResult.assertTrue("variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction26(){@Test}
+		s1 = "xyz";
+		s2 = "abc";
+		result = (s1 <= s2);
+		LogResult.assertTrue("variable comparison <= false", (!result) );
+	end
+	
+	function runComparisonFunction27(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 <= s2);
+		LogResult.assertTrue("equal variable comparison <= true", result );
+	end
+	
+	function runComparisonFunction28(){@Test}
+		s1 = "abc   ";
+		s2 = "abc";
+		result = (s1 <= s2);
+		LogResult.assertTrue("equal variable comparison <= false", !result );
+	end
+	
+	function runComparisonFunction29(){@Test}
+		s1 = "abc";
+		s2 = "xyz";
+		result = (s1 >= s2);
+		LogResult.assertTrue("variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction30(){@Test}
+		s1 = "xyz";
+		s2 = "abc";
+		result = (s1 >= s2);
+		LogResult.assertTrue("variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction31(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 >= s2);
+		LogResult.assertTrue("equal variable comparison >= true", result );
+	end
+	
+	function runComparisonFunction32(){@Test}
+		s1 = "abc";
+		s2 = "abc   ";
+		result = (s1 >= s2);
+		LogResult.assertTrue("equal variable comparison >= false", !result );
+	end
+	
+	function runComparisonFunction33(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 == s2);
+		LogResult.assertTrue("equal variable comparison == true", result );
+	end
+	
+	function runComparisonFunction34(){@Test}
+		s1 = "abc";
+		s2 = "abc   ";
+		result = ( s1 == s2 );
+		LogResult.assertTrue("equal variable comparison == false", !result );
+	end
+	
+	function runComparisonFunction35(){@Test}
+		s1 = "abc";
+		s2 = "abc  ";
+		result = (s1 != s2);
+		LogResult.assertTrue("equal variable comparison != true", result );
+	end
+	
+	function runComparisonFunction36(){@Test}
+		s1 = "abc";
+		s2 = "abc";
+		result = (s1 != s2);
+		LogResult.assertTrue("equal variable comparison != false", !result );
+	end
+	
+	// comparison with nullable strings and null
+	function runComparisonFunction37(){@Test}
+		result = (nS1 == null);
+		LogResult.assertTrue("null variable equals null keyword == true", result );
+	end
+	
+	function runComparisonFunction38(){@Test}
+		result = (nS1 != null);
+		LogResult.assertTrue("null variable not equals null keyword != false", !result );
+	end
+	
+	function runComparisonFunction39(){@Test}
+		result = (nS2 == null);
+		LogResult.assertTrue("variable equals null keyword == false", !result );
+	end
+	
+	function runComparisonFunction40(){@Test}
+		result = (nS2 != null);
+		LogResult.assertTrue("variable not equals null keyword != true", result );
+	end
+	
+	function runComparisonFunction41(){@Test}
+		result = (nS1 == nS2);
+		LogResult.assertTrue("null variable equals variable == false", !result );
+	end
+	
+	function runComparisonFunction42(){@Test}
+		nS1 = "abcdef";
+		result = (nS1 != nS2);
+		nS1 = null;
+		LogResult.assertTrue("null variable not equals variable != false", !result );
+	end
+	
+end

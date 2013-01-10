@@ -1,0 +1,14 @@
+package fvt.datatypes;
+  
+Record myFlexRecord
+	s String;
+	i int;
+	empty myEmptyRecord?; 
+end
+
+Record myEmptyRecord
+end
+
+record MyException type Exception
+	foo int;
+end 

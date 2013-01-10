@@ -1,0 +1,78 @@
+package common;
+// basic library
+library clientlocal
+	use utilities;
+	
+	function InitTestLibary(i int in)
+		TestListMgr.testLibName = ArrayCase[i];
+	end
+	
+	function testService( tests string in, serviceBinding ServiceBindingType in)
+		TestListMgr.bindingType = serviceBinding;
+			case( tests )
+				when("Array")
+					InitTestMethod("Array");
+					InitrunTestMethod("Array");
+				when("ArraysMultiDim")
+					InitTestMethod("ArraysMultiDim");
+					InitrunTestMethod("ArraysMultiDim");
+				when("ExceptionProducer")
+					InitTestMethod("ExceptionProducer");
+					InitrunTestMethod("ExceptionProducer");
+				when("Handlers")
+					InitTestMethod("Handlers");
+					InitrunTestMethod("Handlers");
+				when("Nulls")
+					InitTestMethod("Nulls");
+					InitrunTestMethod("Nulls");
+				when("Primitives")
+					InitTestMethod("Primitives");
+					InitrunTestMethod("Primitives");
+				when("RecordsFlex")
+					InitTestMethod("RecordsFlex");
+					InitrunTestMethod("RecordsFlex");
+			end
+			TestListMgr.runTestMtds[1]();
+	end
+	
+	
+	function InitTestMethod(lib string)
+		TestListMgr.testMethodNames.removeAll();
+		case( lib )
+			when("Array")
+				TestListMgr.testMethodNames.appendAll(ArrayCase);
+			when("ArraysMultiDim")
+				TestListMgr.testMethodNames.appendAll(ArrayMul);
+			when("ExceptionProducer")
+				TestListMgr.testMethodNames.appendAll(Exp);
+			when("Handlers")
+				TestListMgr.testMethodNames.appendAll(hdl);
+			when("Nulls")
+				TestListMgr.testMethodNames.appendAll(nul);
+			when("Primitives")
+				TestListMgr.testMethodNames.appendAll(pri);
+			when("RecordsFlex")
+				TestListMgr.testMethodNames.appendAll(rcd);
+		end
+	end
+	
+	function InitrunTestMethod(lib string)
+		TestListMgr.runTestMtds.removeAll();
+		case (lib)
+			when ("Array")
+				TestListMgr.runTestMtds.appendAll(runTestArray);
+			when("ArraysMultiDim")
+				TestListMgr.runTestMtds.appendAll(runTestArrayMul);
+			when("ExceptionProducer")
+				TestListMgr.runTestMtds.appendAll(runTestExp);
+			when("Handlers")
+				TestListMgr.runTestMtds.appendAll(runTesthdl);
+			when("Nulls")
+				TestListMgr.runTestMtds.appendAll(runTestnull);
+			when("Primitives")
+				TestListMgr.runTestMtds.appendAll(runTestpri);
+			when("RecordsFlex")
+				TestListMgr.runTestMtds.appendAll(runTestrcd);
+		end
+	end
+end

@@ -1,0 +1,55 @@
+package interfaces;
+
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+
+record FedWireList{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+//    fedWires FedWireData[]{@XMLElement{name = "FedWires", namespace = "http://www.webservicex.net/"}};
+    fedWires FedWire{@XMLElement{name = "FedWires", namespace = "http://www.webservicex.net/"}};
+    totalRecords int{@XMLElement{name = "TotalRecords", namespace = "http://www.webservicex.net/"}};
+end
+
+record FedWire{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    fedWires FedWireData[]{@XMLElement{name = "FedWireData", namespace = "http://www.webservicex.net/"}};
+end
+
+record FedWireData{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    routingNumber string?{@XMLElement{name = "RoutingNumber", namespace = "http://www.webservicex.net/"}};
+    telegraphicName string?{@XMLElement{name = "TelegraphicName", namespace = "http://www.webservicex.net/"}};
+    customerName string?{@XMLElement{name = "CustomerName", namespace = "http://www.webservicex.net/"}};
+    state string?{@XMLElement{name = "State", namespace = "http://www.webservicex.net/"}};
+    city string?{@XMLElement{name = "City", namespace = "http://www.webservicex.net/"}};
+    fundsTransferStatus string?{@XMLElement{name = "FundsTransferStatus", namespace = "http://www.webservicex.net/"}};
+    fundsSettlementOnlyStatus string?{@XMLElement{name = "FundsSettlementOnlyStatus", namespace = "http://www.webservicex.net/"}};
+    bookEntrySecuritiesTransferStatus string?{@XMLElement{name = "BookEntrySecuritiesTransferStatus", namespace = "http://www.webservicex.net/"}};
+    dateOfLastRevision string?{@XMLElement{name = "DateOfLastRevision", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByLocationResponse{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    getParticipantsByLocationResult boolean{@XMLElement{name = "GetParticipantsByLocationResult", namespace = "http://www.webservicex.net/"}};
+    fedWireLists FedWireList{@XMLElement{name = "FedWireLists", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByRoutingNumber{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    routingNumber string?{@XMLElement{name = "RoutingNumber", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByLocation{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    city string?{@XMLElement{name = "City", namespace = "http://www.webservicex.net/"}};
+    stateCode string?{@XMLElement{name = "StateCode", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByNameResponse{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    getParticipantsByNameResult boolean{@XMLElement{name = "GetParticipantsByNameResult", namespace = "http://www.webservicex.net/"}};
+    fedWireLists FedWireList{@XMLElement{name = "FedWireLists", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByName{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    name string?{@XMLElement{name = "Name", namespace = "http://www.webservicex.net/"}};
+end
+
+record GetParticipantsByRoutingNumberResponse{@XMLRootElement{namespace = "http://www.webservicex.net/"}}
+    getParticipantsByRoutingNumberResult boolean{@XMLElement{name = "GetParticipantsByRoutingNumberResult", namespace = "http://www.webservicex.net/"}};
+    fedWireLists FedWireList{@XMLElement{name = "FedWireLists", namespace = "http://www.webservicex.net/"}};
+end

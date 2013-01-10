@@ -1,0 +1,49 @@
+package interfaces;
+
+import data.OuterFlexibleRecordMultiDim;
+import eglx.rest.EglService;
+
+library IArrayPassingMultiDim
+
+	function doubleIn(_array string[][] in) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function doubleInout(_array string[][] inOut)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function doubleOut(_array string[][] out)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function doubleAll(_array1 string[][] in, _array2 string[][] inOut, _array3 string[][] out) returns (string[][])
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function outerFlexibleRecordMultiDimIn(flex data.OuterFlexibleRecordMultiDim in) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function outerFlexibleRecordMultiDimInout(flex data.OuterFlexibleRecordMultiDim inOut)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function outerFlexibleRecordMultiDimOut(flex data.OuterFlexibleRecordMultiDim out)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+	function outerFlexibleRecordMultiDimAll(flex1 OuterFlexibleRecordMultiDim in, flex2 data.OuterFlexibleRecordMultiDim inOut, flex3 data.OuterFlexibleRecordMultiDim out) returns (string)
+		{
+			@EglService {serviceName = "services.ArrayPassingMultiDim"}
+		}
+	end
+end
+

@@ -1,0 +1,197 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.java.JavaObjectException;
+
+/** @test
+  * @name ESmallFloat005
+  * @title ESmallFloat005 - runArithmeticFunction
+  * @description testing smallFloat arithmetic opertations and expressions
+  * @testcases runArithmeticFunction01 - runArithmeticFunction18
+  * @sources ESmallFloat005.egl
+  * @keywords smallFloat, operations, expressions
+ **/
+library ESmallFloat005 {}
+	
+	smallFloat1 smallFloat = 2.539E7;
+	smallFloat2 smallFloat = -2.539E7;
+	smallFloat3 smallFloat = 1.3E2;
+	smallFloat4 smallFloat = -1.3E2;
+	smallFloat5 smallFloat = 2;
+	smallFloat6 smallFloat = -2;
+	int7 smallFloat = 3;
+	zero smallFloat = 0;
+	floatActual smallFloat;
+	floatExpect smallFloat;
+	variation string;
+	
+	function compileError()
+ 		compileError("");
+ 	end
+ 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+ 	function assertTrue()
+	 	success boolean = (floatExpect == floatActual);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + floatActual);
+	 		SysLib.writeStdOut(" expect " + floatExpect);
+	 	end
+	 	// revert();
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runArithmeticFunction01(){@Test}	
+		variation = "operation + with literals";
+		floatActual = smallFloat1 + smallFloat3;
+		floatExpect = 2.539013E7;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction02(){@Test}	
+		variation = "operation + with negative literals";
+		floatActual = smallFloat1 + smallFloat4;
+		floatExpect = 2.538987E7;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction03(){@Test}	
+		variation = "operation - with literals";
+		floatActual = smallFloat1 - smallFloat3;
+		floatExpect = 2.538987E7;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction04(){@Test}	
+		variation = "operation - with negative literals";
+		floatActual = smallFloat1 - smallFloat4;
+		floatExpect = 2.539013E7;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction05(){@Test}	
+		variation = "operation * with literals";
+		floatActual = smallFloat1 * smallFloat3;
+		floatExpect = 3.3007E9;
+		LogResult.assertFloatEqual1(floatExpect, floatActual);
+	end
+	
+	function runArithmeticFunction06(){@Test}	
+		variation = "operation * with negative literals";
+		floatActual = smallFloat1 * smallFloat4;
+		floatExpect = -3.3007E9;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction07(){@Test}	
+		variation = "operation / with literals";
+		floatActual = smallFloat1 / smallFloat3;
+		floatExpect = 195307.6923076923;
+		assertTrue();
+	end
+
+	function runArithmeticFunction08(){@Test}	
+		variation = "operation / with negative literals";
+		floatActual = smallFloat1 / smallFloat4;
+		floatExpect = -195307.6923076923;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction09(){@Test}	
+		variation = "operation / with literals";
+		floatActual = smallFloat1 / smallFloat5;
+		floatExpect = 1.2695E7;
+		assertTrue();
+	end
+
+	function runArithmeticFunction10(){@Test}	
+		variation = "operation / with negative literals";
+		floatActual = smallFloat1 / smallFloat6;
+		floatExpect = -1.2695E7;
+		assertTrue();
+	end
+			
+	function runArithmeticFunction11(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and literals";
+		failDetails string;
+		try
+			floatActual = smallFloat1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction12(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and negative literals";
+		failDetails string;
+		try
+			floatActual = smallFloat2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction13(){@Test}	
+		variation = "operation % with literals";
+		floatActual = smallFloat1 % ( smallFloat5 + 12 );
+		floatExpect = 6;
+		assertTrue();
+	end
+
+	function runArithmeticFunction14(){@Test}	
+		variation = "operation % with negative literals";
+		floatActual = smallFloat1 % ( smallFloat6 - 12 );
+		floatExpect = 6;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction15(){@Test}	
+		variation = "operation ** with literals to smallFloat";
+		actual smallFloat = smallFloat3 ** int7;
+		floatActual = actual;
+		floatExpect = 2197000.0;
+		assertTrue();
+	end
+
+	function runArithmeticFunction16(){@Test}	
+		variation = "operation ** with negative literals to smallFloat";
+		actual smallFloat = smallFloat4 ** int7;
+		floatActual = actual;
+		floatExpect = -2197000.0;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction17(){@Test}	
+		variation = "operation ** with literals to smallFloat";
+    	floatActual = smallFloat3 ** int7;
+		floatExpect = 2197000.0;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction18(){@Test}	
+		variation = "operation ** with negative literals to smallFloat";
+		floatActual = smallFloat4 ** int7;
+		floatExpect = -2197000.0;
+		assertTrue();
+	end
+
+	
+end // ESmallFloat005
+

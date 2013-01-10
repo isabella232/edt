@@ -1,0 +1,236 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EDecimal008
+  * @title EDecimal008 - runISAFunction
+  * @description testing decimal literal with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EDecimal008.egl
+  * @keywords decimal, isa
+ **/
+library EDecimal008 {}
+
+	isIt boolean;
+	expected boolean;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+ 	
+	function runISAFunction01(){@Test}
+		variation = "decimal/literal is any";
+		isIt = 123.45 isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "decimal/literal is bigInt";
+		isIt = 123.45 isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "decimal/literal is boolean";
+		isIt = 123.45 isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "decimal/literal is date";
+		isIt = 123.45 isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "decimal/literal is decimal(4,2)";
+		isIt = 123.45 isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "decimal/literal is decimal";
+		isIt = 123.45 isa decimal;
+		expected = true;
+		variation = "JS Bug 360462";
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "decimal/literal is dictionary";
+		isIt = 123.45 isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "decimal/literal is float";
+		isIt = 123.45 isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "decimal/literal is int";
+		isIt = 123.45 isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "decimal/literal is number";
+		isIt = 123.45 isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "decimal/literal is smallFloat";
+		isIt = 123.45 isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "decimal/literal is smallInt";
+		isIt = 123.45 isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "decimal/literal is string";
+		isIt = 123.45 isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "decimal/literal is timestamp";
+		isIt = 123.45 isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "decimal/literal is anyexception";
+		isIt = 123.45 isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "decimal/literal is DynamicAccessException";
+		isIt = 123.45 isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "decimal/literal is InvalidArgumentException";
+		isIt = 123.45 isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "decimal/literal is InvalidIndexException";
+		isIt = 123.45 isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "decimal/literal is InvalidPatternException";
+		isIt = 123.45 isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "decimal/literal is InvocationException";
+		isIt = 123.45 isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "decimal/literal is JavaObjectException";
+//		isIt = 123.45 isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "decimal/literal is JavaScriptObjectException";
+//		isIt = 123.45 isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "decimal/literal is NullValueException";
+		isIt = 123.45 isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "decimal/literal is NumericOverflowException";
+		isIt = 123.45 isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end	
+
+	function runISAFunction26(){@Test}
+		variation = "decimal/literal is ServiceInvocationException";
+		isIt = 123.45 isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "decimal/literal is SQLException";
+//		isIt = 123.45 isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "decimal/literal is TypeCastException";
+		isIt = 123.45 isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "decimal/literal is bytes";
+		isIt = 123.45 isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "decimal/literal is bytes(8)";
+		isIt = 123.45 isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // EDecimal008

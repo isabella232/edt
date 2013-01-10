@@ -1,0 +1,46 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+
+/** @test
+  * @name EdtBoolean003
+  * @title EdtBoolean003 - RunTestAssignment
+  * @description testing boolean conversion
+  * @testcases runTestConversions01 - runTestConversions04
+  * @sources EdtBoolean002.egl
+  * @keywords boolean, conversions
+ **/
+library EBoolean003 {}
+
+	myT boolean = true;
+	myF boolean = false;
+	
+	function runTestConversions01(){@Test}
+		builtString String;
+		builtString = "myT " + myT;	
+		LogResult.assertTrue("", (builtString == "myT true") );
+	end
+	
+	function runTestConversions02(){@Test}
+		builtString String;
+		builtString = "myF " + myF;
+		LogResult.assertTrue("", (builtString == "myF false") );
+	end
+
+	function runTestConversions03(){@Test}
+		explicitValue String;
+		explicitValue = myT;	
+		LogResult.assertTrue("booleanAsString(myT)", (explicitValue == "true"));
+	end
+	
+	function runTestConversions04(){@Test}
+		explicitValue String;
+		explicitValue = myF;
+		LogResult.assertTrue("booleanAsString(myF)", (explicitValue == "false"));
+	end
+
+end
+

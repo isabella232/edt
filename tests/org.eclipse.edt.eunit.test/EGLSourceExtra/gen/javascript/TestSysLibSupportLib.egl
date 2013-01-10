@@ -1,0 +1,130 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+/*
+* @name System Library Support
+* @title The function test program for System Library Support in EDT
+* @keywords System Library
+* @author EDT team
+* @createDate 2011/09/01
+* @description 
+* Test the System Library Support
+*/
+
+library TestSysLibSupportLib{}
+
+    num1 int;
+    num2 int;
+    rc boolean;
+    msg string;
+    inserts string[];
+    b boolean = true;
+
+    // conditionAsInt
+    
+    //    function testConditionAsInt1(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, true");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(true) == 1);
+    //    end
+    //
+    //    function testConditionAsInt2(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, false");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(false) == 0);
+    //    end
+    //
+    //    function testConditionAsInt3(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, boolean(true)");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(b) == 1);
+    //    end
+    //
+    //    function testConditionAsInt4(){@Test}
+    //        b = false;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, boolean(false)");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(b) == 0);
+    //    end
+    //
+    //    function testConditionAsInt5(){@Test}
+    //        num1 = 247;
+    //        num2 = 247;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, num1 == num2");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(num1 == num2) == 1);
+    //    end
+    //
+    //    function testConditionAsInt6(){@Test}
+    //        num1 = 247;
+    //        num2 = 419;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, num1 != num2");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(num1 == num2) == 0);
+    //    end
+    
+    //convert
+    
+    //    function testGetMessage2(){@Test}
+    //        rc = false;
+    //        msg = "";
+    //        if(runningInEnglish())
+    //            LogResult.logStdOut("Retrieve message 2004 ");
+    //            inserts =["insert1"];
+    //            msg = Syslib.getMessage("CRRUI2004E", inserts);
+    //            LogResult.assertTrue1((msg == "[CRRUI2004E] The insert1 history contains an illegal argument."));
+    //        end
+    //    end
+    
+    //    function testGetMessage3(){@Test}
+    //        if(runningInEnglish())
+    //            LogResult.logStdOut("Retrieve message 2062 ");
+    //            inserts =[-4];
+    //            msg = Syslib.getMessage("CRRUI2062E", inserts);
+    //            LogResult.assertTrue1((msg == "[CRRUI2062E] Math error: pow() - Negative power, -4"));
+    //        end
+    //    end
+    
+    //    function testGetMessage4(){@Test}
+    //        if(runningInEnglish())
+    //            LogResult.logStdOut("Retrieve message 1150 ");
+    //            inserts =["insert1"];
+    //            msg = Syslib.getMessage("CRRUI1150E", inserts);
+    //            LogResult.assertTrue1((msg == "[CRRUI1150E] An attempt to remove \"null\" from a insert1 variable failed."));
+    //        end
+    //    end
+    
+    //    function testGetMessage5(){@Test}
+    //        if(runningInEnglish())
+    //            LogResult.logStdOut("Retrieve message 3650 ");
+    //            inserts =["insert1"];
+    //            msg = Syslib.getMessage("CRRUI3650E", inserts);
+    //            LogResult.assertTrue1((msg == "[CRRUI3650E] Cannot find deployment descriptor file : 'insert1'"));
+    //        end
+    //    end
+    
+    private function runningInEnglish() returns(boolean)
+        return((new NlsCode).getter() == "ENU");
+    end
+
+    // writeStderr
+    
+    function testWriteStderr(){@Test{targetLang = [JAVASCRIPT]}}
+        if(runningInEnglish())
+            LogResult.logStdOut("SysLib - writeStderr, visually verify output, \"This goes to stderr\"");
+            SysLib.writestderr("This goes to stderr");
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    // writeStdout
+    
+    function testWriteStdout(){@Test{targetLang = [JAVASCRIPT]}}
+        if(runningInEnglish())
+            LogResult.logStdOut("SysLib - writeStdout, visually verify output, \"This goes to stdout\"");
+            SysLib.writestderr("This goes to stdout");
+            LogResult.assertTrue1(true);
+        end
+    end
+end
+
+externalType NlsCode type JavaScriptObject{relativePath = "FVT/librarySupport"}
+
+    function getter() returns(string);
+
+end

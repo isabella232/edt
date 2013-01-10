@@ -1,0 +1,91 @@
+package lang.expressions;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+
+
+library LiteralArray1
+	
+	function TestStringLiteralArray1() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertTrue1(5 == limStringArr[1].length());
+		
+	end
+
+	function TestStringLiteralArray2() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertTrue1(5 == limStringArr[2].length());
+		
+	end
+	
+	function TestStringLiteralArray3() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertTrue1(5 == limStringArr[3].length());
+		
+	end
+	function TestStringLiteralArray4() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertTrue1(3 == limStringArr[4].length());
+		
+	end
+	function TestStringLiteralArray5() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertStringEqual1(limStringArr[1], "abcde");
+		
+	end
+	function TestStringLiteralArray6() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertStringEqual1(limStringArr[2], "12345");
+		
+	end
+	function TestStringLiteralArray7() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertStringEqual1(limStringArr[3], "now i");
+		
+	end
+	function TestStringLiteralArray8() {@Test}
+		temp string = "now is the time";
+		limStringArr String(5)[] = ["abcdefghi", 12345678, temp, "abc"];
+		
+		LogResult.assertStringEqual1(limStringArr[4], "abc");
+		
+	end
+
+	function TestDecimalLiteralArray1() {@Test}
+		temp decimal = 3.14159265;
+		decimalArr decimal(5, 2)[] = [123.456789, 1.2, temp];
+		
+		LogResult.assertDecimalEqual1(decimalArr[1], 123.45);
+		
+	end
+	function TestDecimalLiteralArray2() {@Test}
+		temp decimal = 3.14159265;
+		decimalArr decimal(5, 2)[] = [123.456789, 1.2, temp];
+		
+		LogResult.assertDecimalEqual1(decimalArr[2], 1.2);
+		
+	end
+	function TestDecimalLiteralArray3() {@Test}
+		temp decimal = 3.14159265;
+		decimalArr decimal(5, 2)[] = [123.456789, 1.2, temp];
+		
+		LogResult.assertDecimalEqual1(decimalArr[3], 3.14);
+		
+	end
+	
+end

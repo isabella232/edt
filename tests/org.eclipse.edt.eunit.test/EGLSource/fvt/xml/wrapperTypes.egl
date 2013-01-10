@@ -1,0 +1,81 @@
+package fvt.xml;
+
+import eglx.xml.binding.annotation.XMLSchemaType;
+
+/* 
+* @name wrapperTypes
+* @title Record wrappers
+* @keywords Wrapper
+* @author EDT team
+* @createDate 2011/08/25
+* @description 
+* This is a wrapper records file
+*/
+
+record masterFlex
+    mf3 simpleFlex[][];
+    mf4 primitiveAndNestedFlex[];
+    mf5 primitive2dArrayFlex[];
+end
+
+record simpleFlex
+    i int;
+end
+
+record primitiveAndNestedFlex
+    panf1 bigInt;
+    panf2 int;
+    panf3 smallInt;
+    panf4 float;
+    panf5 smallFloat;
+    panf9 decimal(4);
+    panf10 decimal(10);
+    panf11 decimal(20);
+    panf12 decimal(6, 2);
+    panf13 string;
+    panf14 string(7);
+    panf19 date;
+    panf20 time;
+    panf21 timeStamp?;
+    panf25 boolean;
+    panf26 bytes(3){@XMLSchemaType{name="hexBinary"}};
+    panf27 primitiveArrayFlex;
+end
+
+record primitiveArrayFlex
+    paf1 bigInt[];
+    paf2 int[];
+    paf3 smallInt[];
+    paf4 float[];
+    paf5 smallFloat[];
+    paf9 decimal(4)[];
+    paf10 decimal(10)[];
+    paf11 decimal(20)[];
+    paf12 decimal(6, 2)[];
+    paf13 string[];
+    paf14 string(6)[];
+    paf19 date[];
+    paf20 time[]; 
+    paf21 timeStamp[];
+    paf25 boolean[];
+    paf26 bytes(3)[]{@XMLSchemaType{name="hexBinary"}};
+end
+
+record primitive2dArrayFlex
+    md_paf1 bigInt[][];
+    md_paf2 int[][];
+    md_paf3 smallInt[][];
+    md_paf4 float[][];
+    md_paf5 smallFloat[][];
+    md_paf9 decimal(4)[][];
+    md_paf10 decimal(10)[][];
+    md_paf11 decimal(20)[][];
+    md_paf12 decimal(6, 2)[][];
+    md_paf13 string[][];
+    md_paf14 string(3)[][];
+    md_paf19 date[][];
+    md_paf20 time[][];
+    md_paf21 timeStamp[][];
+    md_paf25 boolean[][];
+    md_paf26 bytes(3)[][]{@XMLSchemaType{name="hexBinary"}};
+end

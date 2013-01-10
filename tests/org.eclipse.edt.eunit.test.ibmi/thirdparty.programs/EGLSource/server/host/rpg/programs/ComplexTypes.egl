@@ -1,0 +1,75 @@
+package server.host.rpg.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+import server.host.rpg.programs.data.handlers.Handler1;
+import server.host.rpg.programs.data.handlers.Handler2;
+import server.host.rpg.programs.data.handlers.Handler3;
+import server.host.rpg.programs.data.records.Record1;
+import server.host.rpg.programs.data.records.Record2;
+import server.host.rpg.programs.data.records.Record3;
+
+
+/// basic library
+library ComplexTypes
+	
+	function primitiveHostProgram(rec1 Record1 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgram2(rec1 Record2 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						libraryName = "this would cause an error",
+						isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgram3(rec1 Record3 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						libraryName = "/QSYS.LIB/EVANSM.LIB",
+						isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgram11(rec1 Handler1 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/",
+						isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgram12(rec1 Handler2 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						libraryName = "/QSYS.LIB/EVANSM.LIB",
+						isServiceProgram = true
+		}
+	}
+	end
+	function primitiveHostProgram13(rec1 Handler3 inout){
+		@ExternalName {value="PREC"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn4"},
+		@IBMiProgram {programName = "EDTRECSRV",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/",
+						isServiceProgram = true
+		}
+	}
+	end
+	
+	
+end
+

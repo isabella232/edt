@@ -1,0 +1,607 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestExternalTypeLib
+* @title The function test program for External Types
+* @keywords ExternalType
+* @author EDT team
+* @createDate 2011/08/10
+* @description 
+* Verify constructors, variables, functions, delegates in JavaScriptObject external type could be setting correctly.
+* Instruction: These test cases could only be run in JavaScript mode. In order to run it in RBD, you need to change back the annotation from
+* 'Property' to 'JavaScriptProperty' in jsObject.egl. You might also copy the folder com.ibm.etools.egl.rui.tests/WebContent/FVT into
+* the EDT generated org.eclipse.edt.eck.test.eunit.javascript/WebContent. Open the generated RUI handler TestExternalTypeLib_rui.egl in 
+* org.eclipse.edt.eck.test.eunit.javascript with EGL RUI editor to run.
+*/
+
+library TestExternalTypeLib
+
+    jso jsObject;
+
+    function testJSOConstructorsNull(){@Test{targetLang =[JAVASCRIPT]}}
+        other jsObject;
+        LogResult.logStdOut("JavaScriptObject declaration is null");
+        LogResult.assertTrue1(other == null);
+    end
+
+    function testJSOConstructorsCalled(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject;
+        LogResult.logStdOut("new object created and constructor called implicitly");
+        LogResult.assertTrue("Fail in jso != null", jso != null);
+        LogResult.assertStringEqual("Fail in jso.name", "", jso.name);
+        LogResult.assertBigIntEqual("Fail in jso.id", 0, jso.id);
+    end
+
+    function testJSOConstructorsCalled1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject();
+        LogResult.logStdOut("new object created and constructor called explicitly 1");
+        LogResult.assertTrue("Fail in jso != null", jso != null);
+        LogResult.assertStringEqual("Fail in jso.name", "", jso.name);
+        LogResult.assertBigIntEqual("Fail in jso.id", 0, jso.id);
+    end
+
+    function testJSOConstructorsCalled2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("jsoName");
+        LogResult.logStdOut("new object created and constructor called explicitly 2");
+        LogResult.assertTrue("Fail in jso != null", jso != null);
+        LogResult.assertStringEqual("Fail in jso.name", "jsoName", jso.name);
+        LogResult.assertBigIntEqual("Fail in jso.id", 0, jso.id);
+    end
+
+    function testJSOConstructorsCalled3(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("jsoName", 247);
+        LogResult.logStdOut("new object created and constructor called explicitly 3");
+        LogResult.assertTrue("Fail in jso != unll", jso != null);
+        LogResult.assertStringEqual("Fail in jso.name", "jsoName", jso.name);
+        LogResult.assertBigIntEqual("Fail in jso.id", 247, jso.id);
+    end
+
+    function testJSOConstructorsSetValues(){@Test{targetLang =[JAVASCRIPT]}}
+        //        jso{name = "newName", id = 99};
+        //        LogResult.logStdOut("setValuesStatement");
+        //        LogResult.assertTrue("Fail in jso != unll", jso != null);
+        //        LogResult.assertStringEqual("Fail in jso.name", "newName", jso.name);
+        //        LogResult.assertBigIntEqual("Fail in jso.id", 99, jso.id);
+        LogResult.skipped("BUG: The generated JS code contains error");
+    end
+
+    function testJSOFieldsInt1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.int1 = 1;
+        LogResult.logStdOut("set and get int1, no properties");
+        LogResult.assertBigIntEqual1(1, jso.int1);
+    end
+
+    function testJSOFieldsInt2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.int2 = 100;
+        LogResult.logStdOut("set and get int2, @Property");
+        LogResult.assertBigIntEqual1(100, jso.int2);
+    end
+
+    function testJSOFieldsInt5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.int5 = 24700;
+        LogResult.logStdOut("set int5, set and get explicit");
+        LogResult.assertBigIntEqual1(24700, jso.int5);
+    end
+
+    function testJSOFieldsInt6(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.int6 = -88;
+        LogResult.logStdOut("set int6, set and get explicit");
+        LogResult.assertBigIntEqual1(-88, jso.int6);
+    end
+
+    function testJSOFieldsFloat1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.float1 = 1.0;
+        LogResult.logStdOut("set and get float1, no properties");
+        LogResult.assertFloatEqual1(1.0, jso.float1);
+    end
+
+    function testJSOFieldsFloat2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.float2 = 0.12345;
+        LogResult.logStdOut("set and get float2, @Property");
+        LogResult.assertFloatEqual1(0.12345, jso.float2);
+    end
+
+    function testJSOFieldsFloat5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.float5 = 24699.99;
+        LogResult.logStdOut("set float5, set and get explicit");
+        LogResult.assertFloatEqual1(24699.99, jso.float5);
+    end
+
+    function testJSOFieldsFloat6(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.float6 = -3.14159;
+        LogResult.logStdOut("set float6, set and get explicit");
+        LogResult.assertFloatEqual1(-3.14159, jso.float6);
+    end
+
+    function testJSOFieldsString1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.string1 = "string";
+        LogResult.logStdOut("set and get string1, no properties");
+        LogResult.assertStringEqual1("string", jso.string1);
+    end
+
+    function testJSOFieldsString2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.string2 = "other";
+        LogResult.logStdOut("set and get string2, @Property");
+        LogResult.assertStringEqual1("other", jso.string2);
+    end
+
+    function testJSOFieldsString5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.string5 = "teehee";
+        LogResult.logStdOut("set string5, set and get explicit");
+        LogResult.assertStringEqual1("teehee", jso.string5);
+    end
+
+    function testJSOFieldsString6(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.string6 = "whoa man";
+        LogResult.logStdOut("set string6, set and get explicit");
+        LogResult.assertStringEqual1("whoa man", jso.string6);
+    end
+
+    function testJSOFieldsBoolean1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.boolean1 = true;
+        LogResult.logStdOut("set and get boolean1, no properties");
+        LogResult.assertTrue1(jso.boolean1 == true);
+    end
+
+    function testJSOFieldsBoolean2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.boolean2 = true;
+        LogResult.logStdOut("set and get boolean2, @Property");
+        LogResult.assertTrue1(jso.boolean2 == true);
+    end
+
+    function testJSOFieldsBoolean5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.boolean5 = true;
+        LogResult.logStdOut("set boolean5, set and get explicit");
+        LogResult.assertTrue1(jso.boolean5 == true);
+    end
+
+    function testJSOFieldsBoolean6(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        jso.boolean6 = true;
+        LogResult.logStdOut("set boolean6, set and get explicit");
+        LogResult.assertTrue1(jso.boolean6 == true);
+    end
+
+    function testJSOFieldsTimestamp1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        //temp timeStamp = currentTimeStamp();
+        temp timeStamp?;
+        jso.timestamp1 = temp;
+        LogResult.logStdOut("set and get timestamp1, no properties");
+        LogResult.assertTimestampEqual1(temp, jso.timestamp1);
+    end
+
+    function testJSOFieldsTimestamp2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        //temp timeStamp = currentTimeStamp();
+        temp timeStamp?;
+        jso.timestamp2 = temp;
+        LogResult.logStdOut("set and get timestamp2, @Property");
+        LogResult.assertTimestampEqual1(temp, jso.timestamp2);
+    end
+
+    function testJSOFieldsTimestamp5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        //temp timeStamp = currentTimeStamp();
+        temp timeStamp?;
+        jso.timestamp5 = temp;
+        LogResult.logStdOut("set timestamp5, set and get explicit");
+        LogResult.assertTimestampEqual1(temp, jso.timestamp5);
+    end
+
+    function testJSOFieldsTimestamp6(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("variable time");
+        //temp timeStamp = currentTimeStamp();
+        temp timeStamp?;
+        jso.timestamp6 = temp;
+        LogResult.logStdOut("set timestamp6, set and get explicit");
+        LogResult.assertTimestampEqual1(temp, jso.timestamp6);
+    end
+
+    function testJSOFunctionsF1(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("func time");
+        answer boolean;
+        //note: each function calls the testing framework from the inside        
+        jso.f1();
+        LogResult.logStdOut("returned from function f1");
+        LogResult.assertTrue1(true);
+    end
+
+    function testJSOFunctionsF2(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("func time");
+        answer boolean;
+        //note: each function calls the testing framework from the inside        	
+        jso.f2("test");
+        LogResult.logStdOut("returned from function f2");
+        LogResult.assertTrue1(true);
+    end
+
+    function testJSOFunctionsF3(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("func time");
+        answer boolean;
+        //note: each function calls the testing framework from the inside        
+        answer = jso.f3();
+        LogResult.logStdOut("returned from function f3 (with boolean)");
+        LogResult.assertTrue1(answer);
+    end
+
+    function testJSOFunctionsF4(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("func time");
+        answer boolean;
+        //note: each function calls the testing framework from the inside        	
+        answer = jso.f4("test");
+        LogResult.logStdOut("returned from function f4 (with boolean)");
+        LogResult.assertTrue1(answer);
+    end
+
+    function testJSOFunctionsF5(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("func time");
+        answer boolean;
+        //note: each function calls the testing framework from the inside        	
+        answer = jso.f5("test", 247);
+        LogResult.logStdOut("returned from function f5 (with boolean)");
+        LogResult.assertTrue1(answer);
+    end
+
+    visited boolean = false;
+
+    function testJSODelegatesBasic(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("delegation");
+        visited = false;
+        jso.delegate1 = del1;
+        jso.delegate1();
+        LogResult.logStdOut("basic delegate");
+        LogResult.assertTrue1(visited);
+    end
+
+    function testJSODelegatesWithArg(){@Test{targetLang =[JAVASCRIPT]}}
+        jso = new jsObject("delegation");
+        visited = false;
+        jso.delegate2 = del2;
+        answer boolean = jso.delegate2("delegatin");
+        LogResult.logStdOut("delegate with arguments and return value");
+        LogResult.assertTrue("Fail in visited", visited);
+        LogResult.assertTrue("Fail in answer", answer);
+    end
+
+    function del1()
+        visited = true;
+    end
+
+    function del2(str string in) returns(boolean)
+        visited = true;
+        LogResult.logStdOut("check argument in delegate");
+        LogResult.assertTrue1(str == "delegatin");
+        return(true);
+    end
+
+    function testJSOReferencesArray(){@Test{targetLang =[JAVASCRIPT]}}
+        //jsoArray jsObject[3];
+        jsoArray jsObject[] = new jsObject[3];
+        LogResult.logStdOut("create an array of 3 JavaScriptObjects");
+        LogResult.assertTrue("Fail in jsoArray[1] != null", jsoArray[1] != null);
+        LogResult.assertTrue("Fail in jsoArray[2] != null", jsoArray[2] != null);
+        LogResult.assertTrue("Fail in jsoArray[3] != null", jsoArray[3] != null);
+    end
+
+    //    jsoArray jsObject[3];
+    jsoArray jsObject[] = new jsObject[3];
+
+    function testJSOReferencesArrayField(){@Test{targetLang =[JAVASCRIPT]}}
+        jsoArray[2].int2 = 100;
+        LogResult.logStdOut("array access - set and get @Property field");
+        LogResult.assertBigIntEqual1(100, jsoArray[2].int2);
+    end
+
+    function testJSOReferencesArrayStr(){@Test{targetLang =[JAVASCRIPT]}}
+        jsoArray[2].string5 = "teehee";
+        LogResult.logStdOut("array access - set and get explicit");
+        LogResult.assertStringEqual1("teehee", jsoArray[2].string5);
+    end
+
+    function testJSOReferencesObj(){@Test{targetLang =[JAVASCRIPT]}}
+        //        jsoRef any;
+        jsoRef any?;
+        jso = new jsObject();
+        jsoRef = jso;
+        LogResult.logStdOut("set any to external type object");
+        LogResult.assertTrue1(jsoRef == jso); //jsoRef as jsObject == jso ;
+    end
+
+    function testJSOReferencesField(){@Test{targetLang =[JAVASCRIPT]}}
+        //jsoRef any;
+        jsoRef any?;
+        jso = new jsObject();
+        jsoRef = jso;
+        (
+        jsoRef as jsObject).int2 = 5;
+        LogResult.logStdOut("set field in any");
+        LogResult.assertBigIntEqual1(5, jso.int2);
+    end
+
+    j jsObject{};
+    success boolean;
+
+    function testJSOExceptionsJSObject(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("new JavaScriptObjectException");
+        try
+            throw new JavaScriptObjectException{messageID = "zip", name = "zop", message = "zap"};
+        onException(x JavaScriptObjectException)
+            success = x.messageID == "zip" && x.name == "zop" && x.message == "zap";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsNotJSObject1(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("except that's not a JavaScriptObjectException - 1");
+        try
+            throw new NullValueException;
+        onException(x NullValueException)
+            success = true;
+        onException(x JavaScriptObjectException)
+        onException(x AnyException)
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsNotJSObject2(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("except that's not a JavaScriptObjectException - 2");
+        try
+            throw new NullValueException;
+        onException(x NullValueException)
+            success = true;
+        onException(x JavaScriptObjectException)
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsNotJSObject3(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("except that's not a JavaScriptObjectException - 3");
+        try
+            throw new NullValueException;
+        onException(x NullValueException)
+            success = true;
+        onException(x AnyException)
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsThrowStr1(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws a string - 1");
+        try
+            j.throwString("This is a string thrown from an ET");
+        onException(x JavaScriptObjectException)
+            success = x.name == "" && x.message == "This is a string thrown from an ET";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsThrowStr2(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws a string - 2");
+        try
+            j.throwString("string #2");
+        onException(x AnyException)
+            success = x isa JavaScriptObjectException && x.message == "string #2";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsThrowStr3(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws a string - 3");
+        try
+            j.throwString("string #3");
+        onException(x JavaScriptObjectException)
+            success = x.name == "" && x.message == "string #3";
+        onException(x AnyException)
+            success = false;
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsThrowStr4(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws a string - 4");
+        try
+            j.throwString("string #4");
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "" && x.message == "string #4";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsThrowStr56(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws a string - 5");
+        try
+            j.throwString("string #5");
+        onException(x NullValueException)
+            success = false;
+        onException(x TypeCastException)
+            success = false;
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "" && x.message == "string #5";
+        end
+        LogResult.assertTrue("Fail in external type function throws a string - 5", success);
+
+        LogResult.logStdOut("external type function throws a string - 6");
+        try
+            j.throwString("string #6");
+        end
+        // This is to make sure processing continues when there's no onException block.
+        LogResult.assertTrue("Fail in external type function throws a string - 6", true);
+    end
+
+    function testJSOExceptionsFunc1(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an Error - 1");
+        try
+            j.throwError("msg1", "name1");
+        onException(x JavaScriptObjectException)
+            success = x.name == "name1" && x.message == "msg1";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsFunc2(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an Error - 2");
+        try
+            j.throwError("msg2", "name2");
+        onException(x AnyException)
+            success = x isa JavaScriptObjectException && x.message == "msg2";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsFunc3(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an Error - 3");
+        try
+            j.throwError("msg3", "name3");
+        onException(x JavaScriptObjectException)
+            success = x.name == "name3" && x.message == "msg3";
+        onException(x AnyException)
+            success = false;
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsFunc4(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an Error - 4");
+        try
+            j.throwError("msg4", "name4");
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "name4" && x.message == "msg4";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsFunc56(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an Error - 5");
+        try
+            j.throwError("msg5", "name5");
+        onException(x NullValueException)
+            success = false;
+        onException(x TypeCastException)
+            success = false;
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "name5" && x.message == "msg5";
+        end
+        LogResult.assertTrue("Fail in external type function throws an Error - 5", success);
+
+        LogResult.logStdOut("external type function throws an Error - 6");
+        try
+            j.throwError("msg6", "name6");
+        end
+        // This is to make sure processing continues when there's no onException block.
+        LogResult.assertTrue("Fail in external type function throws an Error - 6", true);
+    end
+
+    function testJSOExceptionsEGL1(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an EGL Exception - 1");
+        try
+            j.throwEGLEx("msg1", "name1");
+        onException(x JavaScriptObjectException)
+            success = x.name == "name1" && x.message == "msg1";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsEGL2(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an EGL Exception - 2");
+        try
+            j.throwEGLEx("msg2", "name2");
+        onException(x AnyException)
+            success = x isa JavaScriptObjectException && x.message == "msg2";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsEGL3(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an EGL Exception - 3");
+        try
+            j.throwEGLEx("msg3", "name3");
+        onException(x JavaScriptObjectException)
+            success = x.name == "name3" && x.message == "msg3";
+        onException(x AnyException)
+            success = false;
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsEGL4(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an EGL Exception - 4");
+        try
+            j.throwEGLEx("msg4", "name4");
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "name4" && x.message == "msg4";
+        end
+        LogResult.assertTrue1(success);
+    end
+
+    function testJSOExceptionsJSObject56(){@Test{targetLang =[JAVASCRIPT]}}
+        success = false;
+        LogResult.logStdOut("external type function throws an EGL Exception - 5");
+        try
+            j.throwEGLEx("msg5", "name5");
+        onException(x NullValueException)
+            success = false;
+        onException(x TypeCastException)
+            success = false;
+        onException(x AnyException)
+            success = false;
+        onException(x JavaScriptObjectException)
+            success = x.name == "name5" && x.message == "msg5";
+        end
+        LogResult.assertTrue("Fail in external type function throws an EGL Exception - 5", success);
+
+        LogResult.logStdOut("external type function throws an EGL Exception - 6");
+        try
+            j.throwEGLEx("msg6", "name6");
+        end
+        // This is to make sure processing continues when there's no onException block.
+        LogResult.assertTrue("Fail in external type function throws an EGL Exception - 6", true);
+    end
+
+end

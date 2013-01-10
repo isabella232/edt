@@ -1,0 +1,345 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library mathLibFunctions
+
+    result decimal(18, 6);
+    resultFloat float;
+    decimalX decimal(18, 6);
+    decimalY decimal(18, 6);
+    decimal31 decimal(31, 3);
+    resultInt int;
+    mySmallInt smallInt = -12345;
+    smallIntX smallInt = -12345;
+    smallIntY smallInt = 23456;
+    myInt int = -345678;
+    intX int = 12345;
+    intY int = 2345;
+    myBigInt bigInt = -98765;
+    bigIntX bigInt = -25;
+    bigIntY bigInt = 25;
+    myDecimal decimal(15, 6) = -4985.88;
+    mySmallFloat smallFloat = -5.0;
+    smallFloatX smallFloat = -5.0;
+    smallFloatY smallFloat = 45;
+    myFloat float = -999.99;
+    floatX float = -999.99;
+    floatY float = 2345;
+    myRandomFloat float;
+    myString string;
+    y float;
+    x, resultSmallFloat smallFloat;
+
+    function random(){@Test}
+        myRandomFloat = mathLib.random();
+        myString = myRandomFloat;
+        LogResult.assertTrue("random", myString.length() > 0);
+    end
+
+    function absSmallInt(){@Test}
+        mySmallInt = mathLib.abs(mySmallInt);
+        LogResult.assertBigIntEqual("absSmallInt", 12345, mySmallInt);
+    end
+
+    function absInt(){@Test}
+        myInt = mathLib.abs(myInt);
+        LogResult.assertBigIntEqual("absInt", 345678, myInt);
+    end
+
+    function absBigInt(){@Test}
+        myBigInt = mathLib.abs(myBigInt);
+        LogResult.assertBigIntEqual("absBigInt", 98765, myBigInt);
+    end
+
+    function absDecimal(){@Test}
+        myDecimal = mathLib.abs(myDecimal);
+        LogResult.assertDecimalEqual("absDecimal", 4985.88, myDecimal);
+    end
+
+    function absSmallFloat(){@Test}
+        mySmallFloat = mathLib.abs(mySmallFloat);
+        LogResult.assertFloatEqual("absSmallFloat", 5.0, mySmallFloat);
+    end
+
+    function absFloat(){@Test}
+        myFloat = mathLib.abs(myFloat);
+        LogResult.assertFloatEqual("absFloat", 999.99, myFloat);
+    end
+
+    function acos(){@Test}
+        decimalX = 000000000000.423486;
+        result = mathLib.acos(decimalX);
+        LogResult.assertDecimalEqual("acos", 1.133506, result);
+    end
+
+    function asin(){@Test}
+        decimalX = 000000000000.523486;
+        result = mathLib.asin(decimalX);
+        LogResult.assertDecimalEqual("asin", .550937, result);
+    end
+
+    function atan(){@Test}
+        decimalX = 000000000223.523486;
+        resultFloat = mathLib.atan(decimalX);
+        LogResult.assertFloatEqual("atan", 1.5663225538310885, resultFloat);
+    end
+
+    function atan2(){@Test}
+        decimalX = 000000000005.593919;
+        decimalY = 000000000000.490412;
+        result = mathLib.atan2(decimalX, decimalY);
+        LogResult.assertDecimalEqual("atan2", 1.483351, result);
+    end
+
+    function ceiling(){@Test}
+        decimalX = 000000429496.729700;
+        result = mathLib.ceiling(decimalX);
+        LogResult.assertDecimalEqual("ceiling", 429497.000000, result);
+    end
+
+    function cos(){@Test}
+        decimalX = -000000000000.000480;
+        result = mathLib.cos(decimalX);
+        LogResult.assertDecimalEqual("cos", 0.999999, result);
+    end
+
+    function cosh(){@Test}
+        decimalX = 000000000000.200000;
+        myFloat = mathLib.cosh(decimalX);
+        LogResult.assertFloatEqual("cosh", 1.020066755619076, myFloat);
+    end
+
+    function decimals1(){@Test}
+        decimalX = -000000000000.000480;
+        result = decimalX.decimals();
+        LogResult.assertDecimalEqual("decimals", 6, result);
+    end
+
+    function exp(){@Test}
+        decimalX = 000000000001.000000;
+        resultFloat = mathLib.exp(decimalX);
+        LogResult.assertFloatEqual("exp", 2.7182818284590455, resultFloat);
+    end
+
+    function floor(){@Test}
+        decimalX = -000000000000.000480;
+        result = mathLib.floor(decimalX);
+        LogResult.assertDecimalEqual("floor", -1.000000, result);
+    end
+
+    function frexp(){@Test}
+        decimalX = 000000000002.000000;
+        E int = 2;
+        result = mathLib.frexp(decimalX, E);
+        LogResult.assertDecimalEqual("frexp", .500000, result);
+    end
+
+    function ldexp(){@Test}
+        decimalX = 000000000010.000000;
+        exp int = 2;
+        result = mathLib.ldexp(decimalX, exp);
+        LogResult.assertDecimalEqual("ldexp", 40.0000000, result);
+    end
+
+    function log(){@Test}
+        decimalX = 000983771896.039000;
+        resultFloat = MathLib.log(decimalX);
+        LogResult.assertFloatEqual("log", 20.70690461517525, resultFloat);
+    end
+
+    function log10(){@Test}
+        decimalX = 000000000000.200000;
+        result = mathLib.log10(decimalX);
+        LogResult.assertDecimalEqual("log10", -.698970, result);
+    end
+
+    function maxSmallInt(){@Test}
+        result = mathLib.max(smallIntX, smallIntY);
+        LogResult.assertDecimalEqual("maxSmallInt", 23456, result);
+    end
+
+    function maxInt(){@Test}
+        result = mathLib.max(intX, intY);
+        LogResult.assertDecimalEqual("maxInt", 12345, result);
+    end
+
+    function maxBigInt(){@Test}
+        result = mathLib.max(bigIntX, bigIntY);
+        LogResult.assertDecimalEqual("maxBigInt", 25, result);
+    end
+
+    function maxFloat(){@Test}
+        result = mathLib.max(floatX, floatY);
+        LogResult.assertDecimalEqual("maxFloat", 2345, result);
+    end
+
+    function maxSmallFloat(){@Test}
+        result = mathLib.max(smallFloatX, smallFloatY);
+        LogResult.assertDecimalEqual("maxSmallFloat", 45, result);
+    end
+
+    function maxDecimal(){@Test}
+        decimalX = 000000000000.212000;
+        decimalY = 000000000000.212300;
+        result = mathLib.max(decimalX, decimalY);
+        LogResult.assertDecimalEqual("maxDecimal", .212300, result);
+    end
+
+    function minSmallInt(){@Test}
+        result = mathLib.min(smallIntX, smallIntY);
+        LogResult.assertDecimalEqual("minSmallInt", -12345, result);
+    end
+
+    function minInt(){@Test}
+        result = mathLib.min(intX, intY);
+        LogResult.assertDecimalEqual("minInt", 2345, result);
+    end
+
+    function minBigInt(){@Test}
+        result = mathLib.min(bigIntX, bigIntY);
+        LogResult.assertDecimalEqual("minBigInt", -25, result);
+    end
+
+    function minFloat(){@Test}
+        result = mathLib.min(floatX, floatY);
+        LogResult.assertDecimalEqual("minFloat", -999.99, result);
+    end
+
+    function minSmallFloat(){@Test}
+        result = mathLib.min(smallFloatX, smallFloatY);
+        LogResult.assertDecimalEqual("minSmallFloat", -5.0, result);
+    end
+
+    function minDecimal(){@Test}
+        decimalX = -000000000003.120000;
+        decimalY = 000000000000.212300;
+        result = mathLib.min(decimalX, decimalY);
+        LogResult.assertDecimalEqual("minDecimal", -3.120000, result);
+    end
+
+    function modf01_Java(){@Test {targetLang = [JAVA]}}
+        decimalX = 000000771896.039000;
+        y = 0;
+        resultFloat = mathLib.modf(decimalX, y);																
+	    LogResult.assertFloatEqual("modf", 0.03899999998975545, resultFloat);
+    end
+    
+    function modf01_JavaScript(){@Test {targetLang = [JAVASCRIPT]}}
+        decimalX = 000000771896.039000;
+        y = 0;
+        resultFloat = mathLib.modf(decimalX, y);																
+ 		LogResult.assertFloatEqual("modf", 0.039, resultFloat);
+    end
+    
+    function modf02(){@Test}
+	    LogResult.assertFloatEqual("modf", 771896, y);
+    end
+
+    function modf03_Java(){@Test {targetLang = [JAVA]}}
+        x = 23.5678;
+        resultSmallFloat = mathLib.modf(x, y);	
+	    LogResult.assertFloatEqual("modf", 0.5678005218505859, resultSmallFloat);        							
+    end
+    
+    function modf03_JavaScript(){@Test {targetLang = [JAVASCRIPT]}}
+        x = 23.5678;
+        resultSmallFloat = mathLib.modf(x, y);	
+		LogResult.assertFloatEqual("modf", 0.5678, resultSmallFloat);
+    end
+
+    function modf04(){@Test}
+        LogResult.assertFloatEqual("modf", 23, y);							
+    end
+
+    function pow(){@Test}
+        decimalX = 000000000003.000000;
+        decimalY = 000000000003.000000;
+        result = mathLib.pow(decimalX, decimalY);
+        LogResult.assertDecimalEqual("pow", 27.000000, result);
+    end
+
+    function precisionSmallInt(){@Test}
+        resultInt = mySmallInt.precision();
+        LogResult.assertBigIntEqual("precisionSmallInt", 4, resultInt);
+    end
+
+    function precisionInt(){@Test}
+        resultInt = myInt.precision();
+        LogResult.assertBigIntEqual("precisionInt", 9, resultInt);
+    end
+
+    function precisionBigInt(){@Test}
+        resultInt = myBigInt.precision();
+        LogResult.assertBigIntEqual("precision19", 18, resultInt);
+    end
+
+    function precisionFloat(){@Test}
+        resultInt = myFloat.precision();
+        LogResult.assertBigIntEqual("precisionFloat", 15, resultInt);
+    end
+
+    function precisionSmallFloat1(){@Test}
+        resultInt = mySmallFloat.precision();
+        LogResult.assertBigIntEqual("precisionSmallFloat", 6, resultInt);
+    end
+
+    function precisionDecimal(){@Test}
+        resultInt = decimal31.precision();
+        LogResult.assertBigIntEqual("precisionDecimal", 31, resultInt);
+    end
+
+    function roundFloat(){@Test}
+        myFloat = 999.99;
+        I int = 3;
+        result = mathLib.round(myFloat, I);
+        LogResult.assertDecimalEqual("roundFloat", 1000, result);
+    end
+
+    function roundSmallFloat(){@Test}
+        mySmallFloat = 4567;
+        result = mathLib.round(mySmallFloat, 2);
+        LogResult.assertDecimalEqual("roundSmallFloat", 4600, result);
+    end
+
+    function roundDecimal(){@Test}
+        decimalX = 000123499999.000000;
+        I int = 6;
+        result = mathLib.round(decimalX, I);
+        LogResult.assertDecimalEqual("roundDecimal", 000123000000.000000,
+                result);
+    end
+
+    function sin(){@Test}
+        decimalX = 000983771896.039000;
+        result = mathLib.sin(decimalX);
+        LogResult.assertDecimalEqual("sin", .726784, result);
+    end
+
+    function sinh(){@Test}
+        decimalX = 000000000000.200000;
+        result = mathLib.sinh(decimalX);
+        LogResult.assertDecimalEqual("sinh", 0.201336, result);
+    end
+
+    function sqrt(){@Test}
+        decimalX = 000000000214.702732;
+        result = mathLib.sqrt(decimalX);
+        LogResult.assertDecimalEqual("sqrt", 014.652738, result);
+    end
+
+    function tan(){@Test}
+        decimalX = 000983771896.039000;
+        result = mathLib.tan(decimalX);
+        LogResult.assertDecimalEqual("tan", 1.058117, result);
+    end
+
+    function tanh(){@Test}
+        decimalX = 000000000010.000000;
+        resultFloat = mathLib.tanh(decimalX);
+        LogResult.assertFloatEqual("tanh", 0.9999999958776927, resultFloat);
+    end
+
+end
+

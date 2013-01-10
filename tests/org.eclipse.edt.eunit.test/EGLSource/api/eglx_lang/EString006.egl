@@ -1,0 +1,132 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString006
+  * @title EdtString006 - runMatchesPatternFunction
+  * @description testing string pattern matching with and without wildcards
+  * @testcases runMatchesPatternFunction01 - runMatchesPatternFunction12
+  * @sources EdtString006.egl
+  * @keywords string, matchesPattern 
+ **/
+library EString006 {}
+	
+	s1 string;
+	pattern string;
+	escapeStr string;
+	nS1 string?;
+	nPattern string?;
+	actual boolean;
+	expected boolean;
+
+	// do matchesPattern with string literals
+	function runMatchesPatternFunction01(){@Test}	
+		actual = "abcdef".matchesPattern("a?c*");
+		expected = true;
+		LogResult.assertTrue("matchesPattern with literals true", (actual == expected) );
+	end
+	
+	function runMatchesPatternFunction02(){@Test}	
+		actual = "abcdef".matchesPattern("a?cf*");
+		expected = false;
+		LogResult.assertTrue("matchesPattern with literals false", (actual == expected) );
+	end
+	
+	function runMatchesPatternFunction03(){@Test}
+		s1 = "ab*def";
+		pattern = "ab\\*[abcd][abcde][^a-e]";
+		actual = s1.matchesPattern(pattern);
+		expected = true;
+		LogResult.assertTrue("matchesPattern with complex pattern", (actual == expected) );
+	end
+		
+	function runMatchesPatternFunction04(){@Test} 		
+		s1 = "ab*def";
+		pattern = "ab+*def";
+		escapeStr = "+";
+		actual = s1.matchesPattern(pattern, escapeStr);
+		expected = true;
+		LogResult.assertTrue("matchesPattern with specified escape string", (actual == expected) );
+	end
+
+	function runMatchesPatternFunction05(){@Test} 	
+		s1 = "abvcdef";
+		pattern = "a?c*";
+		actual = s1.matchesPattern(pattern);
+		expected = false;
+		LogResult.assertTrue("matchesPattern false", (actual == expected) );
+	end
+	
+	function runMatchesPatternFunction06(){@Test}
+		s1 = "ab*def  ";
+		pattern = "ab\\*[abcd][abcde][^a-e]     ";
+		actual = s1.matchesPattern(pattern);
+		expected = false;
+		LogResult.assertTrue("matchesPattern with complex pattern and trailing spaces", (actual == expected) );
+	end
+	
+	function runMatchesPatternFunction07(){@Test}
+		// RBD this false
+		s1 = "simple   ";
+		pattern = "simple         ";
+		actual = s1.matchesPattern(pattern);
+		expected = false;
+		LogResult.assertTrue("matchesPattern with simple pattern and trailing spaces", (actual == expected) );
+	end
+
+	function runMatchesPatternFunction08(){@Test}
+		s1 = "  ab*def";
+		pattern = "ab\\*[abcd][abcde][^a-e]";
+		actual = s1.matchesPattern(pattern);
+		expected = false;
+		LogResult.assertTrue("matchesPattern with complex pattern and leading spaces", (actual == expected) );
+	end
+	
+	function runMatchesPatternFunction09(){@Test}
+		try
+			nS1 = null;
+			pattern = "ab\\*[abcd][abcde][^a-e]";
+			actual = nS1.matchesPattern(pattern);
+			LogResult.failed("no exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runMatchesPatternFunction10(){@Test}
+		try
+			s1 = "ab*def";
+			nPattern = null;
+	 		actual = s1.matchesPattern(nPattern);
+			expected = false;
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runMatchesPatternFunction11(){@Test}
+		s1 = "ab*def";
+		pattern = "";
+		actual = s1.matchesPattern(pattern);
+		expected = false;
+		LogResult.assertTrue("matchesPattern with empty parameter", (actual == expected) );
+	end
+	
+	// Test InvalidPatternException
+	function runMatchesPatternFunction12(){@Test}
+		try
+			s1 = "ab*def";
+			pattern = "b\\"; // The pattern is invalid because there's nothing after the escape character.
+			actual = s1.matchesPattern(pattern);
+			LogResult.failed("matchesPattern throwing exception");
+		onException(oops InvalidPatternException)
+			LogResult.passed("matchesPattern throwing exception");
+		end
+	end
+	
+	
+end // EdtString006
+

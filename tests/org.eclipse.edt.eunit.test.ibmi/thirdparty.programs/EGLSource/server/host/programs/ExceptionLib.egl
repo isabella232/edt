@@ -1,0 +1,54 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+
+
+
+// basic library
+library ExceptionLib
+	
+ 	function TestProc(IPARM int inout){//wrong number of parameters
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+ 	function TestProc1(IPARM int inout, RETDATA int inout){//wrong program name
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="WRONG NAME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+ 	function TestProc2(IPARM int inout, RETDATA int inout){@ExternalName {value = "TestProc"},//wrong library name
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/JVINCENS.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+	function TestProc3(IPARM int inout, RETDATA int inout){@ExternalName {value = "TestProc"},
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+ 	function func1(IPARM int inout, RETDATA int inout){@ExternalName {value = "TestProc"},//no connections
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		}
+	}
+	END// /
+end

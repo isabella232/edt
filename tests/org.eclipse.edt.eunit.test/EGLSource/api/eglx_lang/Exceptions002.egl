@@ -1,0 +1,287 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title User defined Exception
+* @keywords User defined Exception, throw
+* @author EDT team
+* @createDate 2011/10/26
+* @description 
+*  Check that user exceptions are thrown and have expected content
+*/
+library Exceptions002
+	
+	variation string;
+	local LocalException?;
+	expected string;
+	actual string;
+	
+	function runExceptionTest001() {@Test}
+		variation = "Implicit empty user exception construction";
+		try
+			expected = "messageID is empty message is empty specifics is empty";
+			actual = "nothing";
+			throwEmptyLocalException();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest002() {@Test}
+		variation = "Implicit user exception construction missing messageID";
+		try
+			expected = "messageID is empty ";
+			actual = "nothing";
+			throwMissingIDLocalException();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest003() {@Test}
+		variation = "Implicit user exception construction missing message";
+		try
+			expected = "message is empty ";
+			actual = "nothing";
+			throwMissingMsgLocalException();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest004() {@Test}
+		variation = "Implicit user exception construction missing specifics";
+		try
+			expected = "specifics is empty";
+			actual = "nothing";
+			throwMissingSpecificsLocalException();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest005() {@Test}
+		variation = "Implicit popluated user exception construction";
+		try
+			expected = "";
+			actual = "nothing";
+			throwPopulatedLocalException();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest006() {@Test}
+		variation = "Explicit empty user exception construction";
+		try
+			expected = "messageID is empty message is empty specifics is empty";
+			actual = "nothing";
+			throwEmptyLocalExceptionExplicit();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest007() {@Test}
+		variation = "Explicit user exception construction missing messageID";
+		try
+			expected = "messageID is empty ";
+			actual = "nothing";
+			throwMissingIDLocalExceptionExplicit();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest008() {@Test}
+		variation = "Explicit user exception construction missing message";
+		try
+			expected = "message is empty ";
+			actual = "nothing";
+			throwMissingMsgLocalExceptionExplicit();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest009() {@Test}
+		variation = "Explicit user exception construction missing specifics";
+		try
+			expected = "specifics is empty";
+			actual = "nothing";
+			throwMissingSpecificsLocalExceptionExplicit();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function runExceptionTest010() {@Test}
+		variation = "Explicit popluated user exception construction";
+		try
+			expected = "";
+			actual = "nothing";
+			throwPopulatedLocalExceptionExplicit();
+		onException (oops AnyException)
+			if (oops isa LocalException)
+				local = oops as LocalException;
+				actual = missingLocalExceptionDetails(local);
+				LogResult.assertStringEqual(variation,expected, actual);
+			else
+				LogResult.failed("wrong exception");
+			end
+		end	
+	end
+	
+	function missingLocalExceptionDetails(oops LocalException in)returns (string)
+		populated boolean = true;
+		populated = oops.messageID != null;
+		
+		details string = "";
+		if (!populated)
+			details = "messageID is null ";
+		else
+			populated = oops.messageID != "";
+			if (!populated)
+				details = "messageID is empty ";
+			end
+		end
+		
+		populated = oops.message != null;
+		if (!populated)
+			details += "message is null ";
+		else
+			populated = oops.message != "";
+			if (!populated)
+				details += "message is empty ";
+			end
+		end
+		
+		populated = oops.specifics != null;
+		if (!populated)
+			details += "specifics is null";
+		else
+			populated = oops.specifics != "";
+			if (!populated)
+				details += "specifics is empty";
+			end
+		end
+
+		return(details);
+	end
+	
+	function throwEmptyLocalException()
+		mine LocalException;
+		throw mine;
+	end
+	
+	function throwMissingIDLocalException()
+		mine LocalException{message = "General details", specifics = "empty super details "};
+		throw mine;
+	end
+	
+	function throwMissingMsgLocalException()
+		mine LocalException{messageID = "Local" , specifics = "empty super details "};
+		throw mine;
+	end
+	
+	function throwMissingSpecificsLocalException()
+		mine LocalException{messageID = "Local" , message = "General details"};
+		throw mine;
+	end
+	
+	function throwPopulatedLocalException()
+		mine LocalException{messageID = "Local" , message = "General details", specifics = "empty super details "};
+		throw mine;
+	end
+	
+	function throwEmptyLocalExceptionExplicit()
+		mine LocalException = new LocalException;
+		throw mine;
+	end
+	
+	function throwMissingIDLocalExceptionExplicit()
+		mine LocalException = new LocalException{message = "General details", specifics = "empty super details "};
+		throw mine;
+	end
+	
+	function throwMissingMsgLocalExceptionExplicit()
+		mine LocalException = new LocalException{messageID = "Local" , specifics = "empty super details "};
+		throw mine;
+	end
+	
+	function throwMissingSpecificsLocalExceptionExplicit()
+		mine LocalException = new LocalException{messageID = "Local" , message = "General details"};
+		throw mine;
+	end
+	
+	function throwPopulatedLocalExceptionExplicit()
+		mine LocalException = new LocalException{messageID = "Local" , message = "General details", specifics = "empty super details "};
+		throw mine;
+	end
+	
+end
+
+// exception record
+//
+record LocalException type Exception
+	specifics string;
+end
+
+

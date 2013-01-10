@@ -1,0 +1,96 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestArrayLibTestLib
+* @title The function test program for ArrayLib in EDT for RichUI
+* @keywords array
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+* Test the functions defined for array, include appendElement, appendAll, 
+* getSize and etc.
+*/
+
+library TestArrayLibTestLib
+
+    bString string[];
+    anInt int;
+
+    function testArrayLibMain1(){@Test}
+        LogResult.logStdOut("Test appendAll(appendArray array in)");
+        aString string[];
+        aString.appendElement("firstElement");
+        aString.appendElement("secondElement");
+
+        bString.appendAll(aString);
+        anInt = bString.getSize();
+        LogResult.assertTrue1(anInt == 2);
+    end
+
+    function testArrayLibMain2(){@Test}
+        LogResult.logStdOut("Test appendElement(content arrayElement in)");
+        aString string[];
+        aString.appendElement("firstElement");
+        aString.appendElement("secondElement");
+
+        aString.appendElement("anElement");
+
+        LogResult.assertStringEqual1("anElement", aString[3]);
+    end
+
+    function testArrayLibMain4(){@Test}
+        LogResult.logStdOut("Test getSize() function");
+        aString string[];
+        aString.appendElement("firstElement");
+        aString.appendElement("secondElement");
+        aString.appendElement("anElement");
+        aString.appendElement("anotherElement");
+
+        anInt = aString.getSize();
+        LogResult.assertTrue1(anInt == 4);
+    end
+
+    function testArrayLibMain5(){@Test}
+        LogResult.logStdOut("Test insertElement(content arrayElement in , index int in)");
+        aString string[];
+        aString.appendElement("firstElement");
+        aString.appendElement("secondElement");
+        aString.appendElement("anElement");
+        aString.appendElement("anotherElement");
+
+        aString.insertElement("insertedElement", 1);
+        LogResult.assertStringEqual1("insertedElement", aString[1]);
+    end
+
+    function testArrayLibMain6(){@Test}
+        LogResult.logStdOut("Test removeAll() function");
+        aString string[];
+        aString.appendElement("firstElement");
+        aString.appendElement("secondElement");
+        aString.appendElement("anElement");
+        aString.appendElement("anotherElement");
+        aString.insertElement("insertedElement", 1);
+
+        aString.removeAll();
+        anInt = aString.getSize();
+        LogResult.assertTrue1(anInt == 0);
+    end
+
+    function testArrayLibMain7(){@Test}
+        LogResult.logStdOut("Test removeElement(index int in)");
+        bString.removeElement(1);
+        LogResult.assertStringEqual1("secondElement", bString[1]);
+    end
+
+    function testArrayLibMain8(){@Test}
+        LogResult.logStdOut("Test resize(size int in)");
+        bString.insertElement("firstElement", 1);
+        bString.resize(1);
+        anInt = bString.getSize();
+        LogResult.assertTrue1(anInt == 1);
+    end
+
+end

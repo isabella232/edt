@@ -1,0 +1,372 @@
+ /*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package client.handlers;
+
+import org.eclipse.edt.rui.widgets.box;
+import org.eclipse.edt.rui.widgets.button;
+import org.eclipse.edt.rui.widgets.checkbox;
+import org.eclipse.edt.rui.widgets.combo;
+import org.eclipse.edt.rui.widgets.datagrid;
+import org.eclipse.edt.rui.widgets.datagridcolumn;
+import org.eclipse.edt.rui.widgets.html;
+import org.eclipse.edt.rui.widgets.textfield;
+import common.data.Address;
+import common.data.awardsoffered;
+import common.data.collegedata;
+import common.data.collegerec;
+import common.data.formdatarec;
+import common.interfaces.icolleges;
+import eglx.http.ihttp;
+import eglx.lang.resource;
+import eglx.services.serviceinvocationexception;
+import eglx.services.servicekind;
+import eglx.ui.rui.event;
+import eglx.ui.rui.ruihandler;
+import eglx.xml.xmllib;
+import java.net.uri;
+
+
+handler Colleges type RUIHandler { initialUI = [ ui ] }  
+//	use PrettyXMLLib;
+	
+	serviceType Combo{values=["get college using REST GET"]};
+									
+	listAll Button{text="List All Colleges",onClick ::= invokeListAllService};
+	listAllByState Button{text="List All Colleges by State",onClick ::= invokeListAllByStateService};
+	getCollegeByID Button{text="Get College by ID",onClick ::= invokeListCollegeByIDService};
+	search Button{text="Search",onClick ::= invokeSearchService};
+	addCollege Button{text="Add College",onClick ::= invokeAddService};
+	updateCollege Button{text="Update College",onClick ::= invokeUpdateService};
+	deleteCollege Button{text="Delete College",onClick ::= invokeDeleteService};
+	
+	urlType Combo{values=["url from interface", 
+			"url as parameter", 
+			"base url"]};
+	
+	ui Box { columns=1,
+		background = "blue", width = 770, padding=11,
+		children = [inputSection, resultsBox] 
+	};
+	//serviceTypes String[] = ["XML", "JSON"];
+	//serviceTypeCombo Combo{ values = serviceTypes, width=100 };
+	
+	stateField TextField{ margin=3, style="width:225", text = "NC"};
+	idField TextField{ margin=3, style="width:225", text = "1"};
+	queryField TextField{ margin=3, style="width:225", text = "Duke"};
+	
+	inputSection Box { columns = 1, children = [
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Select the service call type:", margin = 3, marginTop=5 },serviceType]}, 
+		//new Box { children = [new HTML { font = "Verdana", color = "white", text = "Service Type: ", margin = 3, marginTop=5 },serviceTypeCombo]}, 
+		new Box { children = [listAll, new HTML { font = "Verdana", color = "white", text = "Big list, not recommended", margin = 3, marginTop=5 }]}, 
+		new Box { children = [listAllByState, urlType,stateField]}, 
+		new Box { children = [getCollegeByID,idField]}, 
+		new Box { children = [search,queryField]}, 
+		new Box { children = [addCollege]}, 
+		new Box { children = [updateCollege]}, 
+		new Box { children = [deleteCollege]}, 
+		CollegeBox 
+	]};
+	resultsHeader HTML{ margin=3, font = "Verdana", color = "white", text = "Results:"};
+	exceptionHeader HTML{ margin=3, font = "Verdana", color = "white", text = ""};
+	
+	resultsgrid DataGrid { 
+		marginLeft=20,
+		selectionListeners ::= handleResultSelection,
+ 		columns = [
+	 		new DataGridColumn{name="name", displayName="Name", width=100}, 
+	 		new DataGridColumn{name="id", displayName="ID"}, 
+	 		new DataGridColumn{name="_url", displayName="URL"}, 
+	 		new DataGridColumn{name="href", displayName="href"}, 
+	 		new DataGridColumn{name="duration", displayName="duration"}, 
+	 		new DataGridColumn{name="_private", displayName="_private"}, 
+	 		new DataGridColumn{name="forProfit", displayName="forProfit"}, 
+	 		new DataGridColumn{name="opeId", displayName="opeId"}
+ 		],
+ 		data = []
+ 	};
+ 	
+	resultsBox Box { columns=1, children = [
+		new Box { children = [resultsHeader, resultsGrid]}, 
+		originalXML
+	]};
+	originalXML TextField{ margin=2, text="", width = 700, height = 50};
+	
+	CollegeBox Box{ padding=8, columns=1,
+					children = [ CollegeBox1, CollegeBox5, CollegeBox2, CollegeBox3, CollegeBox4, CollegeAwardBox ] };
+	nameField TextField{};
+	idField2 TextField{readOnly = true,	width = "75"};
+	urlField TextField{};
+	CollegeBox1 Box{ padding=8,
+					 children = [ nameField, idField2, urlField ] };
+	addressField TextField{	width = "300" };
+	CollegeBox2 Box{ padding=8, children=[addressField] };
+	cityField TextField{};
+	stateField2 TextField{width = "50" };
+	zipField TextField{	width = "100" };
+	CollegeBox3 Box{ padding=8, children=[cityField, stateField2, countryField, zipField] };
+	associateCheck CheckBox{text="Associate", font = "Verdana", color = "white", width=100, margin=10};
+	bachelorCheck CheckBox{text="Bachelor", font = "Verdana", color = "white", width=100, margin=10};
+	masterCheck CheckBox{text="Master", font = "Verdana", color = "white", width=100, margin=10};
+	phdCheck CheckBox{text="PHD", font = "Verdana", color = "white", width=100, margin=10};
+	otherAwardsCheck CheckBox{text="OtherNonDegreeAward", font = "Verdana", color = "white", width=100, margin=10};
+	CollegeAwardBox Box{ padding=8, children=[associateCheck, bachelorCheck, masterCheck, phdCheck, otherAwardsCheck] };
+	CollegeBox4 Box{ padding=8,
+	children = [ privateCheck, profitCheck ] };
+	privateCheck CheckBox{ text = "IsPrivate",
+	color = "White",
+	margin = 10 };
+	profitCheck CheckBox{ text = "IsForProfit",
+	color = "White",
+	margin = 10 };
+	CollegeBox5 Box{ padding=8,
+	children = [ durationField, opeidField ] };
+	durationField TextField{};
+	opeidField TextField{};
+	countryField TextField{};
+
+	 function handleResultSelection(grid DataGrid in)
+		selectedCollege CollegeData? = resultsgrid.selection[1];
+		idField.text = selectedCollege.id;
+	end 
+    
+    function setCollegeFields( college CollegeData in)
+		nameField.text = college.name;
+		idField2.text = college.id;
+		urlField.text = college._url;
+		addressField.text = college.address.address;
+		cityField.text = college.address.city;
+		stateField2.text = college.address.state;
+		zipField.text = college.address.postalCode;
+		countryField.text = college.address.country;
+		
+		durationField.text = college.duration;
+		opeidField.text = college.opeId;
+		
+		privateCheck.setSelected(college._private);
+		profitCheck.setSelected(college.forProfit);
+		
+		associateCheck.setSelected(college.awardsOffered.associateDegree);
+		bachelorCheck.setSelected(college.awardsOffered.bachelorsDegree);
+		masterCheck.setSelected(college.awardsOffered.mastersDegree);
+		phdCheck.setSelected(college.awardsOffered.phdDegree);
+		otherAwardsCheck.setSelected(college.awardsOffered.otherNonDegreeAwards);
+    end
+    
+	function invokeListAllService( e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHTTP?{@Resource{uri = "binding:srvcIColleges"}};
+				call IColleges.listAll() 
+						using http
+						returning to handleReturnColleges onexception Exceptionhandler;
+		end
+	end
+ 
+	function handleReturnColleges(resultRecord CollegeRec in, http IHttp in)
+		SysLib.writeStdout(http.getResponse().body);
+		syslib.writestdout(resultRecord.college.getSize());
+		
+		resultList any[];		
+		i int = 0;
+		while (i<resultRecord.college.getSize())
+			i += 1;
+			resultList.appendElement(resultRecord.college[i]);
+		end
+
+		resultsgrid.data = resultList;
+		resultsBox.children = [
+			new Box { children = [resultsHeader, resultsGrid]}, 
+			originalXML
+			];
+	end
+	
+	function handleReturnCollege(resultRecord CollegeData in, http IHttp in)
+		SysLib.writeStdout(http.getResponse().body);
+		setCollegeFields(resultRecord);
+		resultsBox.children = [
+			new Box { children = [resultsHeader, resultsGrid]}, 
+			originalXML 
+			];
+	end
+	function invokeListAllByStateService(e Event in)
+		case(urlType.getSelection())
+			when(1)
+				invokeListAllByStateService1(e);
+			when(2)
+				invokeListAllByStateService2(e);
+			when(3)
+				invokeListAllByStateService3(e);
+		end
+	end
+	
+	function invokeListAllByStateService1(e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				call IColleges.listAllByState(stateField.text) 
+						using Resources.getResource("binding:srvcIColleges") as IHTTP
+						returning to handleReturnColleges onexception Exceptionhandler;
+		end
+		
+	end
+	
+	function invokeListAllByStateService2(e Event in)
+		_url string = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/colleges/?state=";
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHTTP?{@Resource{uri = "binding:srvcIColleges"}};
+				call IColleges.listAllByState2(_url, stateField.text) 
+							using http
+							returning to handleReturnColleges onexception Exceptionhandler;
+		end
+		
+	end
+	function invokeListAllByStateService3(e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHTTP?{@Resource{uri = "binding:IColleges2"}};
+				call IColleges.listAllByState3(stateField.text) 
+							using http
+							returning to handleReturnColleges onexception Exceptionhandler;
+		end
+		
+	end
+	function invokeListCollegeByIDService(e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				call IColleges.getCollegeByID(idField.text) 
+							using Resources.getResource("binding:srvcIColleges") as IHTTP
+							returning to handleReturnCollege onexception Exceptionhandler;
+		end
+	end
+	
+	function invokeSearchService(e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				call IColleges.search(queryField.text) 
+							using Resources.getResource("binding:srvcIColleges") as IHTTP
+							returning to handleReturnColleges onexception Exceptionhandler;
+		end
+	end
+	
+	function createNewCollege() returns (CollegeData)
+		newCollege CollegeData{};
+		newCollege.id = null;
+		newCollege.href = null;
+		newCollege.statistics = null;
+		newCollege.address = new Address;
+		newCollege.address.lat = null;
+		newCollege.address.lon = null;
+		newCollege.name = nameField.text;
+		newCollege._url = urlField.text;
+		newCollege.duration = durationField.text;
+		newCollege._private = privateCheck.getSelected();
+		newCollege.forProfit = profitCheck.getSelected();
+		newCollege.opeId = opeidField.text;
+		newCollege.address.address = addressField.text;
+		newCollege.address.city = cityField.text;
+		newCollege.address.state = stateField2.text;
+		newCollege.address.country = countryField.text;
+		newCollege.address.postalCode = zipField.text;
+		newCollege.awardsOffered = new AwardsOffered{};
+		newCollege.awardsOffered.associateDegree = associateCheck.getSelected();
+		newCollege.awardsOffered.bachelorsDegree = bachelorCheck.getSelected();
+		newCollege.awardsOffered.mastersDegree = masterCheck.getSelected();
+		newCollege.awardsOffered.phdDegree = phdCheck.getSelected();
+		newCollege.awardsOffered.otherNonDegreeAwards = otherAwardsCheck.getSelected();		
+		
+		return (newCollege);
+	end
+	
+	function invokeAddService(e Event in)
+		formdata FormDataRec{};
+		
+		newCollege CollegeData = createNewCollege();
+		
+		formdata.data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+xmllib.convertToXML(newCollege, false);
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHTTP?{@Resource{uri = "binding:srvcIColleges"}};
+				call IColleges.addCollege(formdata) 
+							using http
+							returning to handleUpdateReturn onexception Exceptionhandler;
+		end
+		
+	end
+	
+	function handleUpdateReturn(resultRecord CollegeData in)
+//		originalXML.text = serviceLib.getCurrentCallbackResponse().body;				
+		//writestdout("Result:" + serviceLib.getCurrentCallbackResponse().body);
+		syslib.writeStdout("college id: " + resultRecord.id + " has been added/updated");
+	end
+	
+	function handleReturn()
+//		response HttpResponse = serviceLib.getCurrentCallbackResponse();
+		//originalXML.text = response.body;
+//		syslib.writeStdout(" ");
+//		syslib.writeStdout("response status code: " + response.status);
+//		syslib.writeStdout("response status msg: " + response.statusMessage);
+//		syslib.writeStdout("response body:" + response.body);
+	end
+		
+	function invokeUpdateService(e Event in) 
+		formdata FormDataRec{};
+		newCollege CollegeData = createNewCollege();
+		newCollege.id = idField.text;
+		
+		formdata.data = xmllib.convertToXML(newCollege, true);
+		case( serviceType.getSelection())
+			when( 1 )
+				call IColleges.updateCollege(idField.text, formdata) 
+							using Resources.getResource("binding:srvcIColleges") as IHTTP
+							returning to handleUpdateReturn onexception Exceptionhandler;
+		end
+	end
+	function invokeDeleteService(e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHTTP = Resources.getResource("binding:srvcIColleges");
+				call IColleges.deleteCollege(idField.text) 
+							using http
+							returning to handleReturn onexception Exceptionhandler;
+		end
+	end
+
+	private function Exceptionhandler( exception AnyException in)
+//		originalXML.text = serviceLib.getCurrentCallbackResponse().body;
+		exceptionHeader.text = "<br>An exception has occurred<p>";
+		resultsBox.height = 350;
+		exceptionHeader.text += "message:" + exception.message + "<p>";
+		if( exception isa ServiceInvocationException )
+			exceptionHeader.text += "ServiceKind:" + serviceKind(exception as ServiceInvocationException) + "<p>";
+			exceptionHeader.text += "detail1:" + (exception as ServiceInvocationException).detail1 + "<p>";
+			exceptionHeader.text += "detail2:" + (exception as ServiceInvocationException).detail2 + "<p>";
+			exceptionHeader.text += "detail3:" + (exception as ServiceInvocationException).detail3 + "<p>";
+		end
+		resultsBox.children = [ 
+			resultsHeader, exceptionHeader
+		];
+		str string = exceptionHeader.text;
+		syslib.writeStdout(str.replaceStr("<p>", "/n"));
+	end
+	private function serviceKind( sie ServiceInvocationException in)returns(string)
+		case(sie.source)
+			when(eglx.services.ServiceKind.WEB)
+				return("WEB");
+			when(eglx.services.ServiceKind.NATIVE)
+				return("NATIVE");
+			when(eglx.services.ServiceKind.EGL)
+				return("EGL");
+			when(eglx.services.ServiceKind.REST)
+				return("REST");
+			otherwise
+				return("unknown");
+		end
+	end
+	
+end

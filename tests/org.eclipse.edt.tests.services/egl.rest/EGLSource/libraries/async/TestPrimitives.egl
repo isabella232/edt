@@ -1,0 +1,905 @@
+package libraries.async;
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import interfaces.IPrimitivePassing;
+import services.PrimitivePassing;
+import utilities.CommonUtilities;
+
+// basic library
+library TestPrimitives
+
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end					
+  						
+	function testInt_in(){@Test}
+		int1 int = 1;
+		call PrimitivePassing.int_inParm(int1) using CommonUtilities.getResource("primitives") returning to verifyInt_inParm onException handleServiceException;		
+	end
+	
+	function testInt_inoutParm(){@Test}
+		int1 int = 1;
+		call PrimitivePassing.int_inoutParm(int1) using CommonUtilities.getResource("primitives") returning to verifyInt_inoutParm onException handleServiceException;
+	end	
+	
+	function testInt_outParm() {@Test}
+		int1 int=0;
+		call PrimitivePassing.int_outparm(int1) using CommonUtilities.getResource("primitives") returning to verifyInt_outParm onException handleServiceException;
+	end
+	
+	function testInt_allParm() {@Test}
+		int1 int = 1;
+		int2 int = 2;
+		int3 int = 3;
+		call PrimitivePassing.int_all(int1, int2, int3)  using CommonUtilities.getResource("primitives") returning to verifyInt_allParm onException handleServiceException;
+	end
+	
+	function testBigint_inParm() {@Test}
+		bigint1 bigint = 1;
+		call IPrimitivePassing.bigint_inParm(bigint1) using CommonUtilities.getResource("primitives") returning to verifyBigint_inParm onException handleServiceException;
+	end
+
+	function testBigint_inoutParm() {@Test}
+		bigint1 bigint = 1;
+		call IPrimitivePassing.bigint_inoutParm(bigint1) using CommonUtilities.getResource("primitives") returning to verifyBigint_inoutParm onException handleServiceException;
+	end
+	
+	function testBigint_outParm() {@Test}
+		bigint1 bigint = 3;
+		call IPrimitivePassing.bigint_outParm(bigint1) using CommonUtilities.getResource("primitives") returning to verifyBigint_outParm onException handleServiceException; 
+	end
+
+	function testBigint_allParm() {@Test}
+		bigint1 bigint = 1;
+		bigint2 bigint = 2;
+		bigint3 bigint = 3;
+		
+		call IPrimitivePassing.bigint_all(bigint1, bigint2, bigint3) using CommonUtilities.getResource("primitives") returning to verifyBigint_allParm onException handleServiceException;
+	end	
+	
+	function testSmallint_inParm()	{@Test}
+		smallint1 smallint = 1;
+		call IPrimitivePassing.smallint_inParm(smallint1) using CommonUtilities.getResource("primitives") returning to verifySmallint_inParm onException handleServiceException;
+	end
+	
+	function testSmallint_inoutParm() {@Test}
+		smallint1 smallint = 1;
+		call IPrimitivePassing.smallint_inoutParm(smallint1) using CommonUtilities.getResource("primitives") returning to verifySmallint_inoutParm onException handleServiceException;		
+	end
+	
+	function testSmallint_outParm() {@Test}
+		smallint1 smallint = 3;
+		call IPrimitivePassing.smallint_outParm(smallint1) using CommonUtilities.getResource("primitives") returning to verifySmallint_outParm onException handleServiceException;
+	end
+	
+	function testSmallint_allParm() {@Test}
+		smallint1 smallint = 1;
+		smallint2 smallint = 2;
+		smallint3 smallint = 3;
+		call IPrimitivePassing.smallint_all(smallint1, smallint2, smallint3) using CommonUtilities.getResource("primitives") returning to verifySmallint_allParm onException handleServiceException;
+	end
+	
+	function testSmallfloat_inParm() {@Test}
+		smallfloat1 smallfloat = 1;
+		call IPrimitivePassing.smallfloat_inParm(smallfloat1) using CommonUtilities.getResource("primitives") returning to verifySmallfloat_inParm onException handleServiceException;
+	end
+	
+	function testSmallfloat_inoutParm(){@Test}
+		smallfloat1 smallfloat = 1;
+		call IPrimitivePassing.smallfloat_inoutParm(smallfloat1) using CommonUtilities.getResource("primitives") returning to verifySmallfloat_inoutParm onException handleServiceException;
+	end
+
+	function testSmallfloat_outParm(){@Test}
+		smallfloat1 smallfloat = 3.1;
+		call IPrimitivePassing.smallfloat_outParm(smallfloat1) using CommonUtilities.getResource("primitives") returning to verifySmallfloat_outParm onException handleServiceException;
+	end
+	
+	function testSmallfloat_allParm() {@Test}
+		smallfloat1 smallfloat = 1;
+		smallfloat2 smallfloat = 2;
+		smallfloat3 smallfloat = 3;
+		call IPrimitivePassing.smallfloat_all(smallfloat1, smallfloat2, smallfloat3) using CommonUtilities.getResource("primitives") returning to verifySmallfloat_allParm onException handleServiceException;
+	end
+	
+	function testFloat_inParm(){@Test}
+		float1 float = 1;
+		call IPrimitivePassing.float_inParm(float1) using CommonUtilities.getResource("primitives") returning to verifyFloat_inParm onException handleServiceException;
+	end
+
+	function testFloat_inoutParm() {@Test}
+		float1 float = 1;
+		call IPrimitivePassing.float_inoutParm(float1) using CommonUtilities.getResource("primitives") returning to verifyFloat_inoutParm onException handleServiceException;
+	end
+
+	function testFloat_outParm() {@Test}
+		float1 float = 3.1;
+		call IPrimitivePassing.float_outParm(float1) using CommonUtilities.getResource("primitives") returning to verifyFloat_outParm onException handleServiceException;
+	end
+	
+	function testFloat_allParm() {@Test}
+		float1 float = 1;
+		float2 float = 2;
+		float3 float = 3;
+		call IPrimitivePassing.float_all(float1, float2, float3) using CommonUtilities.getResource("primitives") returning to verifyFloat_allParm onException handleServiceException;
+	end
+	
+	function testDecimal_inParm() {@Test}
+		decimal1 decimal(10,2) = 1;
+		call IPrimitivePassing.decimal_inParm(decimal1) using CommonUtilities.getResource("primitives") returning to verifyDecimal_inParm onException handleServiceException;
+	end
+
+	function testDecimal_inoutParm() {@Test}
+		decimal1 decimal(10,2)= 1;
+		call IPrimitivePassing.decimal_inoutParm(decimal1) using CommonUtilities.getResource("primitives") returning to verifyDecimal_inoutParm onException handleServiceException;
+	end
+
+	function testDecimal_outParm() {@Test}
+		decimal1 decimal(10,2)= 3.1;
+		call IPrimitivePassing.decimal_outParm(decimal1) using CommonUtilities.getResource("primitives") returning to verifyDecimal_outParm onException handleServiceException;
+	end
+	
+	function testDecimal_allParm() {@Test}
+        decimal1 decimal(10,2)=1;
+        decimal2 decimal(10,2)=2;
+        decimal3 decimal(10,2)=3;
+		call IPrimitivePassing.decimal_all(decimal1, decimal2, decimal3) using CommonUtilities.getResource("primitives") returning to verifyDecimal_allParm onException handleServiceException;		
+	end
+
+	function testString_inParm() {@Test}
+		string1 String = "Fred";
+		call IPrimitivePassing.string_inParm(string1) using CommonUtilities.getResource("primitives") returning to verifyString_inParm onException handleServiceException;
+	end
+	
+	function testString_inoutParm() {@Test}
+		string1 String = "Fred";
+		call IPrimitivePassing.string_inoutParm(string1) using CommonUtilities.getResource("primitives") returning to verifyString_inoutParm onException handleServiceException;
+	end
+
+	function testString_outParm() {@Test}
+		string1 String = "something";
+		call IPrimitivePassing.string_outParm(string1) using CommonUtilities.getResource("primitives") returning to verifyString_outParm onException handleServiceException;
+	end
+	
+	function testString_allParm() {@Test}
+		string1 String = "something";
+		string2 String = "Fred";
+		string3 String = "Bob";
+		call IPrimitivePassing.string_all(string1, string2, string3) using CommonUtilities.getResource("primitives") returning to verifyString_allParm onException handleServiceException;
+	end
+	
+	function testLString_inParm() {@Test}
+		string1 String(5) = "Fred";
+		call IPrimitivePassing.Lstring_inParm(string1) using CommonUtilities.getResource("primitives") returning to verifyLString_inParm onException handleServiceException;
+	end
+	
+	function testLString_inoutParm() {@Test}
+		string1 String(5) = "Fred";
+		call IPrimitivePassing.Lstring_inoutParm(string1) using CommonUtilities.getResource("primitives") returning to verifyLString_inoutParm onException handleServiceException;
+	end
+
+	function testLString_outParm() {@Test}
+		string1 String(5) = "something";
+		call IPrimitivePassing.Lstring_outParm(string1) using CommonUtilities.getResource("primitives") returning to verifyLString_outParm onException handleServiceException;
+	end
+	
+	function testLString_allParm() {@Test}
+		string1 String(5) = "something";
+		string2 String(5) = "Fred";
+		string3 String(5) = "Bob";
+		call IPrimitivePassing.Lstring_all(string1, string2, string3) using CommonUtilities.getResource("primitives") returning to verifyLString_allParm onException handleServiceException;
+	end
+	
+	function testTimestamp_inParm() {@Test}
+		timestamp1 timestamp("yyyyMMddHHmmss") = "2005/02/15-12:30:11";
+		call IPrimitivePassing.timestamp_inParm(timestamp1) using CommonUtilities.getResource("primitives") returning to verifyTimestamp_inParm onException handleServiceException;
+	end
+	
+	function testTimestamp_inoutParm() {@Test}
+        timestamp1 timestamp("yyyyMMddHHmmss") = "1999/01/01-01:01:01";        
+        call IPrimitivePassing.timestamp_inoutParm(timestamp1) using CommonUtilities.getResource("primitives") returning to verifyTimestamp_inoutParm onException handleServiceException;
+	end
+	
+	function testTimestamp_outParm() {@Test}
+		timestamp1 timeStamp("yyyyMMddHHmmss") = "1999/01/01-01:01:01";
+		call IPrimitivePassing.timestamp_outParm(timestamp1) using CommonUtilities.getResource("primitives") returning to verifyTimestamp_outParm onException handleServiceException;
+
+	end
+	
+	function testTimestamp_allParm() {@Test}
+	    timestamp1 timestamp("yyyyMMddHHmmss") = "2005/02/15-12:30:11";
+      timestamp2 timestamp("yyyyMMddHHmmss") = "2005/02/15-12:35:11";
+      call IPrimitivePassing.timestamp_all(timestamp1, timestamp2) using CommonUtilities.getResource("primitives") returning to verifyTimestamp_allParm onException handleServiceException;
+	end
+	
+	function testTime_inParm() {@Test}
+		time1 time = "12:30:11";
+		call IPrimitivePassing.time_inParm(time1) using CommonUtilities.getResource("primitives") returning to verifyTime_inParm onException handleServiceException;
+	end
+	
+	function testTime_inoutParm() {@Test}
+        time1 time = "01:01:01";        
+        call IPrimitivePassing.time_inoutParm(time1) using CommonUtilities.getResource("primitives") returning to verifyTime_inoutParm onException handleServiceException;
+	end
+	
+	function testTime_outParm() {@Test}
+		time1 time = "01:01:01";
+		call IPrimitivePassing.time_outParm(time1) using CommonUtilities.getResource("primitives") returning to verifyTime_outParm onException handleServiceException;
+
+	end
+	
+	function testTime_allParm() {@Test}
+	  time1 time = "12:30:11";
+      time2 time = "12:35:11";
+      call IPrimitivePassing.time_all(time1, time2) using CommonUtilities.getResource("primitives") returning to verifyTime_allParm onException handleServiceException;
+	end
+	
+	function testBoolean_inParm(){@Test}
+		boolean1 boolean = true;
+		call PrimitivePassing.boolean_inParm(boolean1) using CommonUtilities.getResource("primitives") returning to verifyBoolean_inParm onException handleServiceException;
+	end
+	
+	function testBoolean_inoutParm() {@Test}
+		boolean1 boolean = true;
+		call  IPrimitivePassing.boolean_inoutParm(boolean1) using CommonUtilities.getResource("primitives") returning to verifyBoolean_inoutParm onException handleServiceException;
+	end
+	
+	function testBoolean_outParm() {@Test}
+		boolean1 boolean = true;
+		call IPrimitivePassing.boolean_outParm(boolean1) using CommonUtilities.getResource("primitives") returning to verifyBoolean_outParm onException handleServiceException; 
+	end
+	
+	function testBoolean_allParm() {@Test}
+        boolean1 boolean = true;
+        boolean2 boolean = true;
+        boolean3 boolean = false;
+		call IPrimitivePassing.boolean_all(boolean1, boolean2, boolean3) using CommonUtilities.getResource("primitives") returning to verifyBoolean_allParm onException handleServiceException;
+	end
+
+	function testDate_inParm() {@Test}
+		date1 date = "03/02/2010";
+		call IPrimitivePassing.date_inParam(date1) using CommonUtilities.getResource("primitives") returning to verifyDate_inParm onException handleServiceException;
+//		LogResult.skipped("bug");
+//		TestListMgr.nextTest();		
+	end	
+	
+	function testDate_inoutParm() {@Test}
+		date1 date = "03/02/2010";
+		call IPrimitivePassing.date_inoutParam(date1) using CommonUtilities.getResource("primitives") returning to verifyDate_inoutParm onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();		
+	end
+	
+	function testDate_outParm() {@Test}
+		date1 date = "03/02/2010";
+		call IPrimitivePassing.date_outParam(date1) using CommonUtilities.getResource("primitives") returning to verifyDate_outParm onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();		
+	end
+		
+	function testDate_allParm() {@Test}
+		date1 date = "03/02/2010";
+		date2 date = "04/06/2009";
+		date3 date = "09/30/2007";
+		call IPrimitivePassing.date_all(date1, date2, date3) using CommonUtilities.getResource("primitives") as IHttp returning to verifyDate_allParm onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();		
+	end
+		
+	function verifyInt_inParm(ret int in)
+		try		
+			LogResult.assertBigIntEqual("", 2, ret);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyInt_inoutParm(p int in)
+		try		
+			LogResult.assertBigIntEqual("", 2, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();
+	end	
+			
+	function verifyInt_outParm(p int in)
+		try
+			LogResult.assertBigIntEqual("", 1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyInt_allParm(p1 int in, p3 int in, retResult int in)		
+		try
+			LogResult.assertBigIntEqual(": p1 ", 1, p1);
+			LogResult.assertBigIntEqual(": p3", 4, p3);
+			LogResult.assertBigIntEqual(": ret", 3, retResult);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyBigint_inParm(retResult bigInt in)
+		try
+			LogResult.assertBigIntEqual("", 2, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();
+	end
+	
+	function verifyBigint_inoutParm(p bigInt in)
+		try
+			Logresult.assertBigIntEqual("", 2, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyBigint_outParm(p bigInt in)
+		try
+			LogResult.assertBigIntEqual("", 1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyBigint_allParm(p1 bigInt in, p3 bigInt in, retResult bigInt in)
+		try
+			LogResult.assertBigIntEqual(": p1", 1, p1);
+			LogResult.assertBigIntEqual(": p3", 4, p3);
+			LogResult.assertBigIntEqual(": retResult", 3, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallint_inParm(retResult smallInt in)
+		try
+			LogResult.assertBigIntEqual("", 2, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallint_inoutParm(p smallInt in)
+		try
+			LogResult.assertBigIntEqual("", 2, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallint_outParm(p smallInt in)
+		try
+			LogResult.assertBigIntEqual("", 1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallint_allParm(p1 smallInt in, p3 smallInt in, retResult smallInt in)
+		try
+			LogResult.assertBigIntEqual(": p1", 1, p1);
+			LogResult.assertBigIntEqual(": p3", 4, p3);
+			LogResult.assertBigIntEqual(": retResult", 3, retResult);			
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloat_inParm(retResult smallFloat in)
+		try		
+			LogResult.assertFloatEqual("", 2.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloat_inoutParm(p smallFloat in)
+		try
+			LogResult.assertFloatEqual("", 2.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloat_outParm(p smallFloat in)
+		try
+			LogResult.assertFloatEqual("", 1.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloat_allParm(p1 smallFloat in, p3 smallFloat in, retResult smallFloat in)
+		try
+			LogResult.assertFloatEqual(": p1", 1.1, p1);
+			LogResult.assertFloatEqual(": p3", 4.1, p3);
+			LogResult.assertFloatEqual(": retResult", 3.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+							
+		TestListMgr.nextTest();
+	end
+	
+	function verifyFloat_inParm(retResult float in)
+		try
+			LogResult.assertFloatEqual("", 2.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyFloat_inoutParm(p float in)
+		try
+			LogResult.assertFloatEqual("", 2.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyFloat_outParm(p float in)
+		try
+			LogResult.assertFloatEqual("", 1.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyFloat_allParm(p1 float in, p3 float in, retResult float in)
+		try
+			LogResult.assertFloatEqual(": p1", 1.1, p1);
+			LogResult.assertFloatEqual(": p3", 4.1, p3);
+			LogResult.assertFloatEqual(": retResult", 3.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+							
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDecimal_inParm(retResult decimal(10,2) in)
+		try
+			LogResult.assertDecimalEqual("", 2.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDecimal_inoutParm(p decimal(10,2) in)
+		try
+			LogResult.assertDecimalEqual("", 2.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyDecimal_outParm(p decimal(10,2) in)
+		try
+			LogResult.assertDecimalEqual("", 1.1, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDecimal_allParm(p1 decimal(10,2) in, p3 decimal(10,2) in, retResult decimal(10,2) in)
+		try
+			LogResult.assertDecimalEqual(": p1", 1.1, p1);
+			LogResult.assertDecimalEqual(": P3", 4.1, p3);
+			LogResult.assertDecimalEqual(": retResult", 3.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+							
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyString_inParm(retResult string in)
+		try
+			LogResult.assertStringEqual("", "Hi Fred", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyString_inoutParm(p string in)
+		try
+			LogResult.assertStringEqual("", "Hi Fred", p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyString_outParm(p string in)
+		try
+			LogResult.assertStringEqual("", "Hi", p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyString_allParm(p1 string in, p3 string in, retResult string in)		
+		try
+			LogResult.assertStringEqual(": p1", "Hi", p1);
+			LogResult.assertStringEqual(": p3", "Hi Bob", p3);
+			LogResult.assertStringEqual(": retResult", "Hi Fred", retResult);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+				
+		TestListMgr.nextTest();
+	end
+	
+	function verifyLString_inParm(retResult string(5) in)
+		try
+			LogResult.assertStringEqual("", "Hi Fr", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyLString_inoutParm(p string(5) in)
+		try
+			LogResult.assertStringEqual("", "Hi Fr", p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyLString_outParm(p string(5) in)
+		try
+			LogResult.assertStringEqual("", "Hi", p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+	end
+	
+	function verifylString_allParm(p1 string(5) in, p3 string(5) in, retResult string(5) in)		
+		try
+			LogResult.assertStringEqual(": p1", "Hi", p1);
+			LogResult.assertStringEqual(": p3", "Hi Bo", p3);
+			LogResult.assertStringEqual(": retResult", "Hi Fr", retResult);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+				
+		TestListMgr.nextTest();
+	end
+	
+	function verifyTimestamp_inParm(retResult timeStamp in)
+		try
+			expected timestamp("yyyyMMddHHmmss") = "2005/02/15-12:30:11";
+			LogResult.assertTimestampEqual("", expected, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyTimestamp_inoutParm(p timeStamp in)
+		try
+			expected timestamp("yyyyMMddHHmmss") = "2005/02/15-12:35:11";
+			LogResult.assertTimestampEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+		
+	end
+	
+	function verifyTimestamp_outParm(p timeStamp in)
+		try
+			expected timestamp("yyyyMMddHHmmss") = "2005/02/15-12:35:11";
+			LogResult.assertTimestampEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);			
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyTimestamp_allParm(p3 timeStamp in, retResult timeStamp in)
+        try
+	        retExpected timestamp("yyyyMMddHHmmss") = "2005/02/15-12:30:11";
+	        p3Expected timestamp("yyyyMMddHHmmss") = "2005/02/15-12:35:11";        	
+        	LogResult.assertTimestampEqual("", p3Expected, p3);
+        	LogResult.assertTimestampEqual("", retExpected, retResult);
+        onException(e1 AssertionFailedException)
+        	TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+        		
+        TestListMgr.nextTest();	
+	end
+	
+	function verifyTime_inParm(retResult time in)
+		try
+			expected time = "12:30:11";
+			LogResult.assertTimeEqual("", expected, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyTime_inoutParm(p time in)
+		try
+			expected time = "12:35:11";
+			LogResult.assertTimeEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();
+		
+	end
+	
+	function verifyTime_outParm(p time in)
+		try
+			expected time = "12:35:11";
+			LogResult.assertTimeEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);			
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyTime_allParm(p3 time in, retResult time in)
+        try
+	        retExpected time = "12:30:11";
+	        p3Expected time = "12:35:11";        	
+        	LogResult.assertTimeEqual("", p3Expected, p3);
+        	LogResult.assertTimeEqual("", retExpected, retResult);
+        onException(e1 AssertionFailedException)
+        	TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+        		
+        TestListMgr.nextTest();	
+	end
+	
+	function verifyBoolean_inParm(retResult boolean in)
+		try
+			LogResult.assertTrue("", false==retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);			
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBoolean_inoutParm(p boolean in)
+		try
+			LogResult.assertTrue("", false==p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);			
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBoolean_outParm(p boolean in)
+		try
+			LogResult.assertTrue("", false==p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBoolean_allParm(p1 boolean in, p3 boolean in, retResult boolean in)
+		try
+			LogResult.assertTrue(": p1", false==p1);
+			LogResult.assertTrue(": p3", true==p3);
+			LogResult.assertTrue(": retResult", false==retResult);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+			
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyDate_inParm(retResult date in)		
+		try
+			expected date = "03/03/2010";
+			LogResult.assertDateEqual("", expected, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);			
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDate_inoutParm(p date in)
+		try
+			expected date = "03/03/2010";
+			LogResult.assertDateEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);					
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDate_outParm(p date in)
+		try
+			expected date = "09/30/2008";		
+			LogResult.assertDateEqual("", expected, p);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);					
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyDate_allParm(p1 date in, p3 date in, retResult date in)
+		try
+			p1Expected date = "04/24/2007";
+			retExpected date = "04/07/2009";
+			p3Expected date = "10/01/2007";
+			LogResult.assertDateEqual(": p1", p1Expected, p1);
+			LogResult.assertDateEqual(": p3", p3Expected, p3);
+			LogResult.assertDateEqual(": retResult", retExpected, retResult);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+				
+		TestListMgr.nextTest();
+	end
+	
+		
+end

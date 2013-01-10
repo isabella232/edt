@@ -1,0 +1,684 @@
+package fvt.librarySupport;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+import eglx.lang.Constants;
+
+/*
+* @name String Library Support
+* @title The function test program for String Library Support in EDT
+* @keywords String 
+* @author EDT team
+* @createDate 2011/08/30
+* @description 
+* Test the String Library Support
+*/
+
+// format date/time fail
+
+library TestStrLibSupportLib
+
+    resultStr string;
+    resultInt int;
+    b boolean;
+    anInt int;
+    //anAny any;
+    //myString any;
+    anAny any?;
+    myString any?;
+    aString string;
+    message01 string;
+    myDate date;
+    myFormat string;
+    expected date;
+    sResult string;
+    sExpected string;
+    d date;
+    //myTime time;
+    myTs timeStamp?;
+    source string;
+    pattern string;
+    count int;
+    rc boolean;
+
+    function booleanAsString_1(){@test}
+        LogResult.logStdOut("booleanAsString - boolean literal, true");
+        resultStr = strlib.booleanAsString(true);
+        LogResult.assertStringEqual1("true", resultStr);
+    end
+
+    function booleanAsString_2(){@test}
+        LogResult.logStdOut("booleanAsString - boolean literal, false");
+        resultStr = strlib.booleanAsString(false);
+        rc =(resultStr == "false");
+        LogResult.assertStringEqual1("false", resultStr);
+    end
+
+    function booleanAsString_3(){@test}
+        LogResult.logStdOut("booleanAsString - boolean variable, true");
+        b = true;
+        resultStr = strlib.booleanAsString(b);
+        rc =(resultStr == "true");
+        LogResult.assertStringEqual1("true", resultStr);
+    end
+
+    function booleanAsString_4(){@test}
+        LogResult.logStdOut("booleanAsString - boolean variable, false");
+        b = false;
+        resultStr = strlib.booleanAsString(b);
+        rc =(resultStr == "false");
+        LogResult.assertStringEqual1("false", resultStr);
+    end
+
+    function booleanAsString_5(){@test}
+        LogResult.logStdOut("booleanAsString - integer literal, 1");
+        //        resultStr = strlib.booleanAsString(1);
+        //        rc =(resultStr == "true");
+        //        LogResult.assertStringEqual1("true", resultStr);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function booleanAsString_6(){@test}
+        LogResult.logStdOut("booleanAsString - integer literal, 0");
+        //        resultStr = strlib.booleanAsString(0);
+        //        rc =(resultStr == "false");
+        //        LogResult.assertStringEqual1("false", resultStr);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function booleanAsString_7(){@test}
+        LogResult.logStdOut("booleanAsString - integer variable, 1");
+        //        anInt = 1;
+        //        resultStr = strlib.booleanAsString(anInt);
+        //        rc =(resultStr == "true");
+        //        LogResult.assertStringEqual1("true", resultStr);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function booleanAsString_8(){@test}
+        LogResult.logStdOut("booleanAsString - integer variable, 0");
+        //        anInt = 0;
+        //        resultStr = strlib.booleanAsString(anInt);
+        //        rc =(resultStr == "false");
+        //        LogResult.assertStringEqual1("false", resultStr);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function booleanAsString_9(){@test}
+        LogResult.logStdOut("booleanAsString - Any variable, true");
+        anAny = 1;
+        resultStr = strlib.booleanAsString(anAny as boolean);
+        rc =(resultStr == "true");
+        LogResult.assertStringEqual1("true", resultStr);
+    end
+
+    function booleanAsString_10(){@test}
+        LogResult.logStdOut("booleanAsString - Any variable, false");
+        anAny = 0;
+        resultStr = strlib.booleanAsString(anAny as boolean);
+        rc =(resultStr == "false");
+        LogResult.assertStringEqual1("false", resultStr);
+    end
+
+    //  test of characterLen
+    
+    function characterLen_1(){@test}
+        LogResult.logStdOut("characterLen - String Literal");
+        resultInt = strlib.characterLen(" ABCDE    ");
+        LogResult.assertBigIntEqual1(6, resultInt);
+    end
+
+    function characterLen_2(){@test}
+        LogResult.logStdOut("characterLen - String variable");
+        aString = " ABCDE    ";
+        resultInt = strlib.characterLen(aString);
+        LogResult.assertBigIntEqual1(6, resultInt);
+    end
+
+    //clip
+    
+    function clip_1(){@test}
+        LogResult.logStdOut("clip - Any variable, null");
+        message01 = " Customer Record ";
+        rc =((strLib.clip(myString)) == null);
+        LogResult.assertTrue1(rc);
+    end
+
+    function clip_2(){@test}
+        LogResult.logStdOut("clip - String variable, option 0");
+        resultStr = strLib.clip(message01, 0);
+        LogResult.assertStringEqual1("Customer Record", resultStr);
+    end
+
+    function clip_3(){@test}
+        LogResult.logStdOut("clip - String literal, option 0");
+        resultStr = strLib.clip(" Customer Record ", 0);
+        LogResult.assertStringEqual1("Customer Record", resultStr);
+    end
+
+    function clip_4(){@test}
+        LogResult.logStdOut("clip - Any variable, option 0");
+        myString = message01;
+        resultStr = strLib.clip(myString, 0);
+        LogResult.assertStringEqual1("Customer Record", resultStr);
+    end
+
+    function clip_5(){@test}
+        LogResult.logStdOut("clip - String variable, option 1");
+        resultStr = strLib.clip(message01, 1);
+        LogResult.assertStringEqual1("Customer Record ", resultStr);
+    end
+
+    function clip_6(){@test}
+        LogResult.logStdOut("clip - String literal, option 1");
+        resultStr = strLib.clip(" Customer Record ", 1);
+        LogResult.assertStringEqual1("Customer Record ", resultStr);
+    end
+
+    function clip_7(){@test}
+        LogResult.logStdOut("clip - Any variable, option 1");
+        myString = message01;
+        resultStr = strLib.clip(myString, 1);
+        LogResult.assertStringEqual1("Customer Record ", resultStr);
+    end
+
+    function clip_8(){@test}
+        LogResult.logStdOut("clip - String variable, option 2");
+        resultStr = strLib.clip(message01, 2);
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    function clip_9(){@test}
+        LogResult.logStdOut("clip - String literal, option 2");
+        resultStr = strLib.clip(" Customer Record ", 2);
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    function clip_10(){@test}
+        LogResult.logStdOut("clip -Any variable, option 2");
+        myString = message01;
+        resultStr = strLib.clip(myString, 2);
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    function clip_11(){@test}
+        LogResult.logStdOut("clip -String variable, default option");
+        resultStr = strLib.clip(message01);
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    function clip_12(){@test}
+        LogResult.logStdOut("clip -String literal, default option");
+        resultStr = strLib.clip(" Customer Record ");
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    function clip_13(){@test}
+        LogResult.logStdOut("clip -Any variable, default option");
+        myString = message01;
+        resultStr = strLib.clip(myString);
+        LogResult.assertStringEqual1(" Customer Record", resultStr);
+    end
+
+    //formatDate
+    
+    function formatDate_1(){@test}
+        myDate = "20051114";
+        LogResult.logStdOut("formatDate - default date format(YYYYMMDD)");
+        resultStr = strLib.formatDate(myDate, "yyyyMMdd");
+        LogResult.assertStringEqual1("20051114", resultStr);
+
+    end
+
+    function formatDate_2(){@test}
+        LogResult.logStdOut("formatDate - with format string ('EEE, MMM d, yyyy')");
+        myFormat = "EEE, MMM d, yyyy";
+        resultStr = strLib.formatDate(myDate, myFormat);
+        LogResult.assertStringEqual1("Mon, Nov 14, 2005", resultStr);
+
+    end
+
+    function formatDate_3(){@test}
+        LogResult.logStdOut("formatDate - with format string ('EEE, MMM. d, ''yy')");
+        myFormat = "EEE, MMM. d, ''yy";
+        resultStr = strLib.formatDate(myDate, myFormat);
+        LogResult.assertStringEqual1("Mon, Nov. 14, '05", resultStr);
+
+    end
+
+    function formatDate_4(){@test}
+        LogResult.logStdOut("formatDate - with format string ('MMM d, yy G')");
+        myFormat = "MMM d, yy G";
+        resultStr = strLib.formatDate(myDate, myFormat);
+        LogResult.assertStringEqual1("Nov 14, 05 AD", resultStr);
+
+    end
+
+    function formatDate_5(){@test}
+        LogResult.logStdOut("formatDate - with format string ('w W D MMM d, yyyy G')");
+        myFormat = "w W D MMM d, yyyy G";
+        resultStr = strLib.formatDate(myDate, myFormat);
+        LogResult.assertStringEqual1("47 3 318 Nov 14, 2005 AD", resultStr);
+
+    end
+
+    function formatDate_6(){@test}
+        expected = "20041112"; //Keep this at this date for format testing
+        LogResult.logStdOut("dateMain - formatDate1");
+        sResult = strLib.formatDate(expected, "yyyy.MM.dd G");
+        LogResult.assertStringEqual1("2004.11.12 AD", sResult);
+
+    end
+
+    function formatDate_7(){@test}
+        LogResult.logStdOut("dateMain - formatDate2");
+        sResult = strLib.formatDate(expected, "'Month:'MMM 'Day:'dd 'Year:'yyyy");
+        LogResult.assertStringEqual1("Month:Nov Day:12 Year:2004", sResult);
+
+    end
+
+    function formatDate_8(){@test}
+        LogResult.logStdOut("dateMain - formatDate3");
+        sResult = strLib.formatDate(expected, "EEE '-' MMM'.' dd','yyyy GGG");
+        LogResult.assertStringEqual1("Fri - Nov. 12,2004 AD", sResult);
+
+    end
+
+    function formatDate_9(){@test}
+        LogResult.logStdOut("dateMain - formatDate4");
+        sResult = strLib.formatDate(expected, "EEEE");
+        LogResult.assertStringEqual1("Friday", sResult);
+
+    end
+
+    function formatDate_10(){@test}
+        d = "14921010";
+        LogResult.logStdOut("dateMain - formatDate5");
+        sResult = strLib.formatDate(d, "'Columbus sailed:' MM'/'dd'/'yyyy 'in the' C'th Century' G");
+        LogResult.assertStringEqual1("Columbus sailed: 10/10/1492 in the 15th Century AD", sResult);
+        LogResult.logStdOut("d=" + d + " result=" + sResult + " expected=" + sExpected);
+
+    end
+
+    function formatDate_11(){@test}
+        d = "1984:07:28";
+        LogResult.logStdOut("dateMain - formatDate7");
+        sResult = strLib.formatDate(d, "w 'weeks into the year on a 'EEEE' I was born:'F");
+        LogResult.assertStringEqual1("30 weeks into the year on a Saturday I was born:4", sResult);
+
+    end
+
+    function formatDate_12(){@test}
+        LogResult.logStdOut("dateMain - formatDate8");
+        sResult = strLib.formatDate(d, "'This was week' W 'of' MMMM");
+        LogResult.assertStringEqual1("This was week 4 of July", sResult);
+
+    end
+
+    function formatDate_13(){@test}
+        LogResult.logStdOut("dateMain - formatDate9");
+        sResult = strLib.formatDate(d, "'In Julian, my bday is:' yyyy'/'D");
+        LogResult.assertStringEqual1("In Julian, my bday is: 1984/210", sResult);
+
+    end
+
+    function formatDate_14(){@test}
+        LogResult.logStdOut("dateMain -  format USA");
+        //sResult = strLib.formatDate(d, strLib.usaDateFormat);
+        sResult = strLib.formatDate(d, Constants.usaDateFormat);
+        LogResult.assertStringEqual1("07/28/1984", sResult);
+    end
+
+    function formatDate_15(){@test}
+        LogResult.logStdOut("dateMain - JIS");
+        //sResult = strLib.formatDate(d, strLib.jisDateFormat);
+        sResult = strLib.formatDate(d, Constants.jisDateFormat);
+        LogResult.assertStringEqual1("1984-07-28", sResult);
+    end
+
+    function formatDate_16(){@test}
+        LogResult.logStdOut("dateMain -  format ISO");
+        //sResult = strLib.formatDate(d, strLib.isoDateFormat);
+        sResult = strLib.formatDate(d, Constants.isoDateFormat);
+        LogResult.assertStringEqual1("1984-07-28", sResult);
+    end
+
+    function formatDate_17(){@test}
+        LogResult.logStdOut("dateMain - EUR");
+        //sResult = strLib.formatDate(d, strLib.eurDateFormat);
+        sResult = strLib.formatDate(d, Constants.eurDateFormat);
+        LogResult.assertStringEqual1("28.07.1984", sResult);
+    end
+
+    function formatDate_18(){@test}
+        LogResult.logStdOut("formatDate variations were stripped down because not all formats are supported");
+        myDate = "11/14/2005";
+        LogResult.logStdOut("formatDate - default date format(MM/dd/yyyy)");
+        resultStr = strLib.formatDate(myDate, "MM/dd/yyyy");
+        LogResult.assertStringEqual1("11/14/2005", resultStr);
+
+    end
+
+    function formatDate_19(){@test}
+        expected = "11/12/2004"; //Keep this at this date for format testing
+        d = "07/28/1984";
+        LogResult.logStdOut("dateMain - USA");
+        //sResult = strLib.formatDate(d, strLib.usaDateFormat);
+        sResult = strLib.formatDate(d, Constants.usaDateFormat);
+        LogResult.assertStringEqual1("07/28/1984", sResult);
+
+    end
+
+    function formatDate_20(){@test}
+        LogResult.logStdOut("dateMain - JIS");
+        //sResult = strLib.formatDate(d, strLib.jisDateFormat);
+        sResult = strLib.formatDate(d, Constants.jisDateFormat);
+        LogResult.assertStringEqual1("1984-07-28", sResult);
+
+    end
+
+    function formatDate_21(){@test}
+        LogResult.logStdOut("dateMain -  format ISO");
+        //sResult = strLib.formatDate(d, strLib.isoDateFormat);
+        sResult = strLib.formatDate(d, Constants.isoDateFormat);
+        LogResult.assertStringEqual1("1984-07-28", sResult);
+
+    end
+
+    function formatDate_22(){@test}
+        LogResult.logStdOut("dateMain - EUR");
+        //sResult = strLib.formatDate(d, strLib.eurDateFormat);
+        sResult = strLib.formatDate(d, Constants.eurDateFormat);
+        LogResult.assertStringEqual1("28.07.1984", sResult);
+
+    end
+
+    // format Time JS
+    
+    //    function formatTimeJS_1(){@test}
+    //        LogResult.logStdOut("formatTime variations were stripped down because not all formats are supported");
+    //        LogResult.logStdOut("formatTime - default Format");
+    //        myTime = "02:14:59";
+    //        resultStr = strLib.formatTime(myTime);
+    //        LogResult.assertStringEqual1("02:14:59", sResult);
+    //    end
+    //
+    //    function formatTimeJS_2(){@test}
+    //        StrLib.defaultTimeFormat = StrLib.usaTimeFormat;
+    //        myTime = "12:08 am";
+    //        LogResult.logStdOut("formatTime - format USA");
+    //        resultStr = strLib.formatTime(myTime, strLib.usaTimeFormat);
+    //        LogResult.assertStringEqual1("12:08 AM", sResult);
+    //    end
+    //
+    //    function formatTimeJS_3(){@test}
+    //
+    //        myTime = "12:08 am";
+    //        LogResult.logStdOut("formatTime - format JIS");
+    //        resultStr = strLib.formatTime(myTime, strLib.jisTimeFormat);
+    //        LogResult.assertStringEqual1("00:08:00", sResult);
+    //    end
+    //
+    //    function formatTimeJS_4(){@test}
+    //
+    //        LogResult.logStdOut("formatTime - format ISO");
+    //        resultStr = strLib.formatTime(myTime, strLib.isoTimeFormat);
+    //        LogResult.assertStringEqual1("00.08.00", sResult);
+    //    end
+    //
+    //    function formatTimeJS_5(){@test}
+    //
+    //        myTime = "12:08 am";
+    //        LogResult.logStdOut("formatTime - format EUR");
+    //        resultStr = strLib.formatTime(myTime, strLib.eurTimeFormat);
+    //        LogResult.assertStringEqual1("00.08.00", sResult);
+    //    end
+    //
+    //    function formatTime_1(){@test}
+    //        myTime = "11:45 am";
+    //        LogResult.logStdOut("formatTime - default Format");
+    //        resultStr = strLib.formatTime(myTime);
+    //        LogResult.assertStringEqual1("11:45 AM", resultStr);
+    //    end
+    //
+    //    function formatTime_2(){@test}
+    //        LogResult.logStdOut("formatTime - Format with mask(hh a, zzzz)");
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("11 AM, Eastern Daylight Time",
+    //                resultStr);
+    //    end
+    //
+    //    function formatTime_3(){@test}
+    //        LogResult.logStdOut("formatTime - Format with mask(h:m a, zzzz)");
+    //        myFormat = "h:m a, zzz";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("11:45 AM, EDT", resultStr);
+    //    end
+    //
+    //    function formatTime_4(){@test}
+    //        LogResult.logStdOut("formatTime -  Format with mask(k K h H, Z)");
+    //        myFormat = "k K h H, Z";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("11 11 11 11, -0400", resultStr);
+    //    end
+    //
+    //    function formatTime_5(){@test}
+    //        myTime = "12:08 am";
+    //        LogResult.logStdOut("formatTime - Format with mask(K:mm a, z)");
+    //        myFormat = "K:mm a, z";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("0:08 AM, EDT", resultStr);
+    //    end
+    //
+    //    function formatTime_6(){@test}
+    //        LogResult.logStdOut("formatTime - Format with mask(h:mm a, z)");
+    //        myFormat = "h:mm a, z";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("12:08 AM, EDT", resultStr);
+    //    end
+    //
+    //    function formatTime_7(){@test}
+    //        LogResult.logStdOut("formatTime - Format with mask(k:mm a, z)");
+    //        myFormat = "k:mm a, z";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("24:08 AM, EDT", resultStr);
+    //    end
+    //
+    //    function formatTime_8(){@test}
+    //        LogResult.logStdOut("formatTime - Format with mask(H:mm a, z)");
+    //        myFormat = "H:mm a, z";
+    //        resultStr = strLib.formatTime(myTime, myFormat);
+    //        LogResult.assertStringEqual1("0:08 AM, EDT", resultStr);
+    //    end
+    //
+    //    function formatTime_9(){@test}
+    //        LogResult.logStdOut("formatTime - format USA");
+    //        resultStr = strLib.formatTime(myTime, strLib.usaTimeFormat);
+    //        LogResult.assertStringEqual1("12:08 AM", resultStr);
+    //    end
+    //
+    //    function formatTime_10(){@test}
+    //        LogResult.logStdOut("formatTime - format JIS");
+    //        resultStr = strLib.formatTime(myTime, strLib.jisTimeFormat);
+    //        LogResult.assertStringEqual1("00:08:00", resultStr);
+    //    end
+    //
+    //    function formatTime_11(){@test}
+    //        LogResult.logStdOut("formatTime - format ISO");
+    //        resultStr = strLib.formatTime(myTime, strLib.isoTimeFormat);
+    //        LogResult.assertStringEqual1("00.08.00", resultStr);
+    //    end
+    //
+    //    function formatTime_12(){@test}
+    //        LogResult.logStdOut("formatTime - format EUR");
+    //        resultStr = strLib.formatTime(myTime, strLib.eurTimeFormat);
+    //        LogResult.assertStringEqual1("00.08.00", resultStr);
+    //    end
+    
+    //formatTimeStamp
+    
+    function formatTimeStamp_1(){@test}
+        myTs = "2006-06-06-12-32-23";
+        LogResult.logStdOut("formatTimeStamp - default format");
+        resultStr = strLib.formatTimestamp(myTs, "yyMMddhhmmss-aa");
+        LogResult.assertStringEqual1("060606123223-0400", resultStr);
+    end
+
+    function formatTimeStamp_2(){@test}
+        LogResult.logStdOut("formatTimeStamp - Format with mask(MMMMMMMMM dd, yyyy hh:mm aa)");
+        myFormat = "MMMMMMMMM dd, yyyy hh:mm aa";
+        resultStr = strLib.formatTimestamp(myTs, myFormat);
+        LogResult.assertStringEqual1("June 06, 2006 12:32 PM", resultStr);
+    end
+
+    function formatTimeStamp_3(){@test}
+        LogResult.logStdOut("formatTimeStamp - Format with mask(MMMMMMMMM dd, yyyy hh:mm:ss aa)");
+        myFormat = "MMMMMMMMM dd, yyyy hh:mm:ss aa";
+        resultStr = strLib.formatTimestamp(myTs, myFormat);
+        LogResult.assertStringEqual1("June 06, 2006 12:32:23 PM", resultStr);
+    end
+
+    function formatTimeStamp_4(){@test}
+        LogResult.logStdOut("formatTimeStamp - db2TimestampFormat");
+        //resultStr = strLib.formatTimestamp(myTs, db2TimestampFormat);
+        resultStr = strLib.formatTimestamp(myTs, Constants.db2TimestampFormat);
+        LogResult.assertStringEqual1("2006-06-06-12.32.23.000000", resultStr);
+    end
+
+    function formatTimeStamp_5(){@test}
+        LogResult.logStdOut("formatTimeStamp - odbcTimestampFormat");
+        //resultStr = strLib.formatTimestamp(myTs, odbcTimestampFormat);
+        resultStr = strLib.formatTimestamp(myTs, Constants.odbcTimestampFormat);
+        LogResult.assertStringEqual1("2006-06-06 12:32:23.000000", resultStr);
+    end
+
+    // test format time stamp JS
+    
+    function formatTimeStampJS_1(){@test}
+        LogResult.logStdOut("formatTimeStamp - db2TimestampFormat");
+        myTs = "2006-06-06-12.32.23";
+        //resultStr = strLib.formatTimestamp(myTs, db2TimestampFormat);
+        resultStr = strLib.formatTimestamp(myTs, Constants.db2TimestampFormat);
+        LogResult.assertStringEqual1("2006-06-06-12.32.23.000000", resultStr);
+    end
+
+    function formatTimeStampJS_2(){@test}
+        LogResult.logStdOut("formatTimeStamp - odbcTimestampFormat");
+        //resultStr = strLib.formatTimestamp(myTs, odbcTimestampFormat);
+        resultStr = strLib.formatTimestamp(myTs, Constants.odbcTimestampFormat);
+        LogResult.assertStringEqual1("2006-06-06 12:32:23.000000", resultStr);
+    end
+
+    //test Index 
+    
+    function testIndexOf_1(){@test}
+        source = "STRING; CHAR; DBCHAR; MBCHAR; or UNICODE.";
+        pattern = "; ";
+        LogResult.logStdOut("indexOf - from beginning");
+        resultInt = strLib.indexOf(source, pattern); // result is 7 
+        LogResult.assertBigIntEqual1(7, resultInt);
+    end
+
+    function testIndexOf_2(){@test}
+        LogResult.logStdOut("indexOf - with start index");
+        resultInt = strLib.indexOf(source, pattern, 10); // result is 13
+        LogResult.assertBigIntEqual1(13, resultInt);
+    end
+
+    function testIndexOf_3(){@test}
+        LogResult.logStdOut("indexOf - with start index(2)");
+        resultInt = strLib.indexOf("|test", "|", 0); // result is 1
+        LogResult.assertBigIntEqual1(1, resultInt);
+    end
+
+    function testIndexOf_4(){@test}
+        LogResult.logStdOut("indexOf - not found");
+        resultInt = strLib.indexOf(source, "x");
+        LogResult.assertBigIntEqual1(0, resultInt);
+    end
+
+    function testIndexOf_5(){@test}
+        LogResult.logStdOut("indexOf - not found(2)");
+        resultInt = strLib.indexOf("|test", "|", 1);
+        LogResult.assertBigIntEqual1(0, resultInt);
+    end
+
+    //lowerCase
+    
+    function lowerCase_1(){@test}
+        LogResult.logStdOut("lowerCase - 1");
+        source = "ABcDe1@IBM.com";
+        resultStr = strLib.lowerCase(source); // result is "abcde1@ibm.com"
+        LogResult.assertStringEqual1("abcde1@ibm.com", resultStr);
+    end
+
+    function lowerCase_2(){@test}
+        LogResult.logStdOut("lowerCase - 2");
+        source = "http://WWW.IBM.com";
+        resultStr = strLib.lowerCase(source); // result is "abcde1@ibm.com"
+        LogResult.assertStringEqual1("http://www.ibm.com", resultStr);
+    end
+
+    function lowerCase_3(){@test}
+        LogResult.logStdOut("lowerCase - 3");
+        resultStr = strLib.lowerCase("ABC~!@#$%^&*()\t\nWXYZ  ");
+        LogResult.assertStringEqual1("abc~!@#$%^&*()\t\nwxyz  ", resultStr);
+    end
+
+    // test Spaces
+    
+    function testSpaces_1(){@test}
+        LogResult.logStdOut("spaces - 1");
+        resultStr = strLib.spaces(5);
+        LogResult.assertStringEqual1("     ", resultStr);
+    end
+
+    function testSpaces_2(){@test}
+        LogResult.logStdOut("spaces - 2");
+        resultStr = strLib.spaces(0);
+        LogResult.assertStringEqual1("", resultStr);
+    end
+
+    function testSpaces_3(){@test}
+        LogResult.logStdOut("spaces - 3");
+        resultStr = strLib.spaces(-1);
+        LogResult.assertStringEqual1("", resultStr);
+    end
+
+    function testSpaces_4(){@test}
+        LogResult.logStdOut("spaces - 4");
+        count = 5;
+        resultStr = strLib.spaces(count);
+        LogResult.assertStringEqual1("     ", resultStr);
+    end
+
+    function testSpaces_5(){@test}
+        LogResult.logStdOut("spaces - 5");
+        resultStr = strLib.spaces(null as int);
+        LogResult.assertStringEqual1("", resultStr);
+    end
+
+    //upperCase
+    
+    function upperCase_1(){@test}
+        LogResult.logStdOut("upperCase - 1");
+        source = "ABcDe1@IBM.com";
+        resultStr = strLib.upperCase(source); // result is "abcde1@ibm.com"
+        LogResult.assertStringEqual1("ABCDE1@IBM.COM", resultStr);
+    end
+
+    function upperCase_2(){@test}
+        LogResult.logStdOut("upperCase - 2");
+        source = "http://WWW.ibM.com";
+        resultStr = strLib.upperCase(source); // result is "abcde1@ibm.com"
+        LogResult.assertStringEqual1("HTTP://WWW.IBM.COM", resultStr);
+    end
+
+    function upperCase_3(){@test}
+        LogResult.logStdOut("upperCase - 3");
+        resultStr = strLib.upperCase("abc~!@#$%^&*()\t\nwxyz  ");
+        LogResult.assertStringEqual1("ABC~!@#$%^&*()\t\nWXYZ  ", resultStr);
+    end
+
+end

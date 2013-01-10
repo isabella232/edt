@@ -1,0 +1,379 @@
+package api.systemTypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library stringLibFunctions
+
+    result string;
+    commandLine string = "CALL PROG1 arg1,arg2";
+    delimiters string = " ,"; // space and comma delimiters
+    mySmallInt smallInt;
+    myBigInt bigInt;
+    myDecimal decimal(8, 2);
+    myInt int = 1;
+    mySmallFloat smallFloat;
+    myFloat float;
+    myDate date = "06/06/2006";
+    myTimeStamp timeStamp("yyyyMMddHHmmss");
+    myString string;
+    max int;
+    token string? = "";
+    datePattern string = "yyyy.MM.dd G";
+    fTimeStamp timeStamp("yyyyMMddHHmmssfff");
+    fTime time;
+    str1 string = "North";
+    str2 string = "Carolina";
+    str3 string;
+    myDateFormat string = "yyyyy.MMMMM.dd GGG";
+
+    // eglx.lang.StringLib
+    
+    function formatSmallInt(){@Test}
+    	mySmallInt = 1005;
+        myString = stringLib.format(mySmallInt, "$+***,***");					
+        LogResult.assertStringEqual1( "$+**1,005", myString);
+    end
+
+    function formatInt(){@Test}
+        myInt = -123456789;
+        myString = stringLib.format(myInt, "$-###,###,###,###");
+        LogResult.assertStringEqual1("$-    123,456,789", myString);
+    end
+
+    function formatBigInt(){@Test}
+        myBigInt = -003456789012345678I;
+        myString = stringLib.format(myBigInt, "($&&&,&&&,&&&,&&&,&&&,&&&)");
+        LogResult.assertStringEqual("formatBigInt",
+                "($003,456,789,012,345,678)", myString);
+    end
+
+    function formatDecimal(){@Test}
+        myDecimal = -12345.67;
+        myString = stringLib.format(myDecimal, "-<<<,<<<.<<");
+        LogResult.assertStringEqual("formatDecimal", "-12,345.67", myString);
+    end
+
+    function formatSmallFloat(){@Test}
+        mySmallFloat = 2.345678;
+        myString = stringLib.format(mySmallFloat, "***.**********");			
+        LogResult.assertStringEqual("formatSmallFloat", "**2.3456780000",
+                myString);
+    end
+
+    function formatFloat(){@Test}
+        myFloat = -5.66;
+        myString = stringLib.format(myFloat, "$++**,***");
+        LogResult.assertStringEqual("formatFloat", "$ -*****5", myString);
+    end
+
+    function formatDate1(){@Test}
+        myDate = "04/07/2015";
+        result = StringLib.format(myDate, Constants.usaDateFormat);   
+        LogResult.assertStringEqual("formatDate1", "04/07/2015", result);
+    end
+
+    function formatDate2(){@Test}
+        result = StringLib.format(myDate, "EEE, MMM, d, ''yy");  					    
+        LogResult.assertStringEqual("formatDate2", "Tue, Apr, 7, '15", result);
+    end
+
+    function formatDate3(){@Test}
+        result = StringLib.format(myDate, myDateFormat);	
+        LogResult.assertStringEqual("formatDate3", "02015.April.07 AD",
+                result);
+    end
+
+    function formatDate4(){@Test}
+        result = StringLib.format(myDate, datePattern);					
+        LogResult.assertStringEqual("formatDate3", "2015.04.07 AD", result);
+    end
+
+	function formatTimeStamp0A(){@Test}
+		try
+	        fTimeStamp = "2004-11-12-13-47-05-123456";
+			LogResult.skipped("Bug 382632 TypeCastException");
+		onException(exception TypeCastException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.skipped("Bug 382632 TypeCastException");
+		end
+	end
+	
+    function formatTimeStamp0(){@Test}
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, Constants.odbcTimeStampFormat);
+       	LogResult.assertStringEqual("formatTimeStamp0", "2004-11-12 13:47:05.123000", myString);
+    end    
+    
+    function formatTimeStamp1(){@Test}
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, Constants.usaTimeFormat);
+        LogResult.assertStringEqual("formatTimeStamp1", "01:47 PM", myString);             
+    end    
+    
+    function formatTimeStamp2(){@Test}
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, Constants.db2TimeStampFormat);       
+       	LogResult.assertStringEqual("formatTimeStamp2", "2004-11-12-13.47.05.123000", myString);
+    end    
+
+    function formatTimeStamp3(){@Test}
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp,
+                "EEE, dd MMM yyyy hh:mm:ss:SSS Z");
+        LogResult.assertStringEqual("formatTimeStamp3",
+                "Fri, 12 Nov 2004 01:47:05:123 -0500", myString);
+    end
+
+    function formatTimeStamp4(){@Test}
+        myString = stringLib.format(fTimeStamp, "yyyy-MM-dd-HH.mm.ss.SSS");
+        LogResult.assertStringEqual("formatTimeStamp4",
+                "2004-11-12-13.47.05.123", myString);
+    end
+    
+    function formatTimeStamp5() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, Constants.odbcTimeStampFormat);
+        LogResult.assertStringEqual("formatTimeStamp5", "2004-11-12 13:47:05.123000", myString);
+    end
+    
+    function formatTimeStamp6() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-567";
+        myString = stringLib.format(fTimeStamp, Constants.odbcTimeStampFormat);
+        LogResult.assertStringEqual("formatTimeStamp6", "2004-11-12 13:47:05.567000", myString);
+    end
+        
+    function formatTimeStamp7() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, Constants.db2TimeStampFormat);
+        LogResult.assertStringEqual("formatTimeStamp7", "2004-11-12-13.47.05.123000", myString);
+    end
+
+    function formatTimeStamp8() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-567";
+        myString = stringLib.format(fTimeStamp, Constants.db2TimeStampFormat);
+        LogResult.assertStringEqual("formatTimeStamp8", "2004-11-12-13.47.05.567000", myString);
+    end
+    
+    function formatTimeStamp9() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp,"yyyy-MM-dd hh:mm:ss.SSS");
+        LogResult.assertStringEqual("formatTimeStamp9", "2004-11-12 01:47:05.123", myString);
+    end
+
+    function formatTimeStamp10() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-567";
+        myString = stringLib.format(fTimeStamp, "yyyy-MM-dd hh:mm:ss.SSS");
+        LogResult.assertStringEqual("formatTimeStamp10", "2004-11-12 01:47:05.567", myString);
+    end
+    
+    function formatTimeStamp11() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, "yyyy-MM-dd HH:mm:ss.SSSSSSSS");
+        LogResult.assertStringEqual("formatTimeStamp11", "2004-11-12 13:47:05.12300000", myString);
+    end
+    
+    function formatTimeStamp12() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-567";
+        myString = stringLib.format(fTimeStamp, "yyyy-MM-dd HH:mm:ss.SSSSSSSS");
+        LogResult.assertStringEqual("formatTimeStamp12", "2004-11-12 13:47:05.56700000", myString);
+    end    
+    
+    function formatTimeStamp13() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-123";
+        myString = stringLib.format(fTimeStamp, "yy-MM-dd HH:mm:ss.SSSSSSSS");
+        LogResult.assertStringEqual("formatTimeStamp13", "04-11-12 13:47:05.12300000", myString);
+    end
+    
+    function formatTimeStamp14() {@Test}
+        mystring string;
+        fTimeStamp = "2004-11-12-13-47-05-567";
+        myString = stringLib.format(fTimeStamp, "yy-MM-dd HH:mm:ss.SSSSSSSS");
+        LogResult.assertStringEqual("formatTimeStamp14", "04-11-12 13:47:05.56700000", myString);
+    end
+        
+    function formatTime0(){@Test}
+        fTime = "13:47:05";
+        myString = stringLib.format(fTime, "HH - mm -- ss");
+        LogResult.assertStringEqual("formatTime0", "13 - 47 -- 05" , myString);           
+    end    
+
+    function formatTime1(){@Test}
+        fTime = "13:47:05";
+        myString = stringLib.format(fTime, Constants.isoTimeFormat);
+        LogResult.assertStringEqual("formatTime1", "13.47.05" , myString);                
+    end    
+    
+    function formatTime2(){@Test}
+        fTime = "13:47:05";
+        myString = stringLib.format(fTime, Constants.usaTimeFormat);
+        LogResult.assertStringEqual("formatTime2", "01:47 PM" , myString);                
+    end    
+    
+    function formatTime3(){@Test}
+        fTime = "13:47:05";
+        myString = stringLib.format(fTime, Constants.eurTimeFormat);
+        LogResult.assertStringEqual("formatTime3", "13.47.05" , myString);                
+    end    
+    
+    function formatTime4(){@Test}
+        fTime = "13:47:05";
+        myString = stringLib.format(fTime, Constants.jisTimeFormat);
+        LogResult.assertStringEqual("formatTime4", "13:47:05" , myString);                
+    end    
+
+    function formatTime5(){@Test}
+        fTime = "09:47:05";
+        myString = stringLib.format(fTime, Constants.usaTimeFormat);
+        LogResult.assertStringEqual("formatTime2", "09:47 AM" , myString);                
+    end        
+
+    function getNextToken1(){@Test}
+        myString = "I need tokens$ for the $arcade";
+        myInt = 3;
+        result = stringLib.getNextToken(myString, myInt, "$");					
+        LogResult.assertStringEqual("getNextToken1", "need tokens", result);
+    end
+
+    function getNextToken2(){@Test}
+        max = 20;
+        myInt = 1;
+        while(myInt < max) // i is updated below							   
+            token = StringLib.getNextToken(commandLine, myInt, delimiters);
+        end 
+        LogResult.assertStringEqual("getNextToken2", "arg2", token);
+    end
+
+    function getNextToken3(){@Test}
+        LogResult.assertDecimalEqual("getNextToken3", 21, myInt);
+    end
+
+    function getTokenCount(){@Test}
+        myInt = StringLib.getTokenCount(commandLine, delimiters);
+        LogResult.assertDecimalEqual("getTokenCount", 4, myInt);
+    end
+    
+   function getTokenCount2(){@Test}
+   		nullTokens string = "12,3,,";
+        myInt = StringLib.getTokenCount(nullTokens, delimiters);
+       	LogResult.assertDecimalEqual("getTokenCount Nulls", 2, myInt);
+    end
+    
+    function getTokenCount3(){@Test}
+   		nullTokens string = "12,3,,8";
+        myInt = StringLib.getTokenCount(nullTokens, delimiters);
+       	LogResult.assertDecimalEqual("getTokenCount Nulls", 3, myInt);
+    end
+    
+    function getNextTokenIndex2(){@Test}
+   		myString = "12,3,5";
+   		myPosition int = 1;
+   		myToken string = StringLib.getNextToken(myString, myPosition, delimiters);
+   		LogResult.assertDecimalEqual("getNextTokenIndex", 3, myPosition);
+   end
+   
+   function getNextTokenIndex3(){@Test}
+   		myString = "abce,fg,h";
+   		myPosition int = 2;
+   		myToken string = StringLib.getNextToken(myString, myPosition, delimiters);
+   		LogResult.assertDecimalEqual("getNextTokenIndex", 5, myPosition);
+   end
+   
+   function getNextTokenIndex4(){@Test}
+   		myString = "abce,fg,h";
+   		myPosition int = 1;
+   		myToken string = StringLib.getNextToken(myString, myPosition, delimiters);
+   		LogResult.assertDecimalEqual("getNextTokenIndex", 5, myPosition);
+   end
+   	 
+    function getNextTokenWithNullsLoop(){@Test}
+        myString = "12,3,,";
+        inputLength int = myString.length();
+
+        myPosition int = 1;
+        myToken String?;      
+        myCount int = stringLib.getTokenCount(myString, delimiters);
+        found int = 0;
+        tries int = 0;
+        
+        if(myCount > 0)
+            while(myPosition < inputLength)
+            	myToken = stringLib.getNextToken(myString, myPosition, delimiters);
+            	tries += 1;
+            	if (myToken != null)
+                  found = found + 1;
+                end
+                if (tries == 10)
+                	myPosition = 100;
+                end
+            end  
+            if (myPosition == 100)
+            	LogResult.failed("forced termination of loop");
+            else
+           		LogResult.assertBigIntEqual("getTokenCount doesn't match found count", myCount, found);
+            end
+        else
+        	LogResult.assertTrue1(false);
+        end
+    end
+    
+   function getNextTokenWithNullsLoop2(){@Test}
+        myString = "12,3,,5";
+        inputLength int = myString.length();
+
+        myPosition int = 1;
+        myToken String;      
+        myCount int = stringLib.getTokenCount(myString, delimiters);
+        found int = 0;
+        tries int = 0;
+        
+        if(myCount > 0)
+            while(myPosition < inputLength)
+            	myToken = stringLib.getNextToken(myString, myPosition, delimiters);
+            	tries += 1;
+            	if (myToken != null)
+                  found = found + 1;
+                end
+                if (tries == 10)
+                	myPosition = 100;
+                end
+            end  
+            if (myPosition == 100)
+            	LogResult.failed("forced termination of loop");
+            else
+           		LogResult.assertBigIntEqual("getTokenCount doesn't match found count", myCount, found);
+            end
+        else
+        	LogResult.assertTrue1(false);
+        end
+    end
+    
+    function fromCharCode1(){@Test}
+
+        result = StringLib.spaces(1);
+        str1 = str1 :: result :: str2;
+        LogResult.assertStringEqual("fromCharCode1", "North Carolina", str1);
+    end
+
+    function fromCharCode2(){@Test}
+        myInt = 69;
+        str1 = StringLib.fromCharCode(myInt);
+        myInt = 71;
+        str2 = StringLib.fromCharCode(myInt);
+        myInt = 76;
+        str3 = StringLib.fromCharCode(myInt);
+        myString = str1 :: str2 :: str3;    	
+        LogResult.assertStringEqual("fromCharCode2", "EGL", myString);
+    end
+
+end

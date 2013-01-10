@@ -1,0 +1,194 @@
+package sql.test ;
+
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.AnyException;
+import eglx.lang.SysLib;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+
+// basic library
+library dataSourceTest
+
+	use commonFunctionLibrary ;
+	use basicTest ;
+	
+	function basicConnect ( ) {@Test}
+		try  
+			setVariation ( "connect" ) ;
+//			commonFunctionLibrary.checkValue ( "Connection Active", ds.isClosed(), false ) ;
+			ds = Resources.getResource("binding:" + Constants.binding);
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicSetSchema ( ) {@Test}
+		try  
+			setVariation ( "set schema" ) ;
+			createSchema ( ) ;
+			ds.setCurrentSchema("EUNIT"); 
+			success ( ) ; 
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function basicCreateTable ( ) {@Test}
+		try  
+			setVariation ( "drop table") ;
+			dropTable ( ) ;
+			setVariation ( "create table" ) ;
+			createTable ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function setAndTestIsolationLevel ( ) { @Test }
+		try
+			setVariation ( "Check current isolation level recognized" ) ;
+			iLevel int = ds.getTransactionIsolation ( ) ;
+			log ( "Default isolation level = " + getIsolationLevelDesc ( iLevel ) ) ;
+			setVariation ( "Try setting all isolation levels" ) ;
+			setIsolationLevel ( ds.TRANSACTION_ISOLATION_NONE ) ;
+			setIsolationLevel ( ds.TRANSACTION_ISOLATION_READ_UNCOMMITTED ) ;
+			setIsolationLevel ( ds.TRANSACTION_ISOLATION_READ_COMMITTED ) ;
+			setIsolationLevel ( ds.TRANSACTION_ISOLATION_REPEATABLE_READ ) ;
+			setIsolationLevel ( ds.TRANSACTION_ISOLATION_SERIALIZABLE ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function autoCommit ( ) {@Test}
+		try  
+			setVariation ( "set and check auto commit" ) ;
+			setAutoCommit ( true ) ;
+			setVariation ( "add row ") ;
+			addRow ( 10 ) ;
+			setVariation ( "check row there after rollback " ) ;
+			Syslib.rollback ( ) ;
+			verifyRow ( 10 ) ;
+			setVariation ( "delete row" ) ;
+			deleteRow ( 10 ) ;
+			setVariation  ( "check row gone after rollback " ) ;
+			Syslib.rollback ( ) ;
+			checkDeletedRow ( 10 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function unitOfWork ( ) {@Test}
+		try  
+			setVariation ( "set and check extended unit of work" ) ;
+			setAutoCommit ( false ) ;
+			setVariation ( "add row ") ;
+			addRow ( 10 ) ;
+			setVariation ( "check row not there after rollback " ) ;
+			Syslib.rollback ( ) ;
+			checkDeletedRow ( 10 ) ;
+			setVariation ( "add row again") ;
+			addRow ( 10 ) ;
+			setVariation ( "check row there after commit, then rollback " ) ;
+			Syslib.commit ( ) ;
+			Syslib.rollback ( ) ;
+			verifyRow ( 10 ) ;
+			setVariation ( "delete row" ) ;
+			deleteRow ( 10 ) ;
+			setVariation  ( "check row still there after rollback " ) ;
+			Syslib.rollback ( ) ;
+			verifyRow ( 10 ) ;
+			setVariation ( "delete row again" ) ;
+			deleteRow ( 10 ) ;
+			setVariation  ( "check row gone after commit, thenrollback " ) ;
+			Syslib.commit ( ) ;
+			Syslib.rollback ( ) ;
+			checkDeletedRow ( 10 ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function verifySettings ( ) { @Test } 
+		try  
+			setVariation ( "check data source related settings" ) ;
+			condition boolean = ds.isClosed();
+			basicTest.checkValue ( "Setting:  closed", condition, false ) ;
+			condition = ds.isReadOnly();
+			basicTest.checkValue ( "Setting:  readOnly", condition, false ) ;
+			condition = ds.isValid ( 100 ) ;
+			basicTest.checkValue ( "Setting:  isValid(100)", condition, true ) ;
+			success();
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+		try
+			ds.isValid ( -100 ) ;
+			LogResult.failed("Setting:  isValid(-100)");
+		onException ( ex SQLException ) 
+			basicTest.checkValue ( "Setting:  isValid(-100)", true, true ) ;
+		end
+	end
+	
+	function basicCloseDS ( ) { @Test }
+		try
+			setVariation ( "commit transaction" ) ;
+			sysLib.commit ( ) ;
+			success();
+			setVariation ( "close ds " ) ;
+			close ds ;
+			success();
+			setVariation ( "check if closed" ) ;
+    		basicTest.checkValue ( "Data source is closed", true, ds.isClosed() ) ;
+			success();
+			try
+				setVariation ( "attempt i/o with closed ds" ) ;
+				addRow ( 100 ) ;
+				failure ( "add successful when ds closed" )	;
+			onException ( ex anyException )	
+				expectedException ( ex ) ;
+				success();
+			end
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+		
+	function setAutoCommit ( autoCommit boolean in )
+		ds.setAutoCommit( autoCommit ) ;
+		if ( autoCommit != ds.getAutoCommit ( ) )
+			throwException ( "Autocommit not set to " + autoCommit ) ;
+		end
+	end
+	
+	function setIsolationLevel ( ilevel int in )
+		if  ( ds.supportsTransactionIsolationLevel ( iLevel ) )
+			ds.setTransactionIsolation ( iLevel ) ;
+			if ( iLevel != ds.getTransactionIsolation( ) )
+				throwException ( "Isolation level " + getIsolationLevelDesc ( iLevel) + " not recognized" ) ;
+			end
+		end
+	end
+	
+	function getIsolationLevelDesc ( iLevel int in ) returns ( string )
+		case ( iLevel )			
+			when ( ds.TRANSACTION_ISOLATION_NONE ) return ( "TRANSACTION_ISOLATION_NONE" ) ;
+			when ( ds.TRANSACTION_ISOLATION_READ_UNCOMMITTED ) return ( "TRANSACTION_ISOLATION_READ_UNCOMMITTED" ) ;
+			when ( ds.TRANSACTION_ISOLATION_READ_COMMITTED ) return ( "TRANSACTION_ISOLATION_READ_COMMITTED" ) ;
+			when ( ds.TRANSACTION_ISOLATION_REPEATABLE_READ ) return ( "TRANSACTION_ISOLATION_REPEATABLE_READ" ) ;
+			when ( ds.TRANSACTION_ISOLATION_SERIALIZABLE ) return ( "TRANSACTION_ISOLATION_SERIALIZABLE" ) ;
+			otherwise 
+				throwException ( "Isolation level value " + iLevel + " not recognized" ) ;
+				return ( "Isolation level unknown" ) ;
+		end
+	end
+	
+end

@@ -1,0 +1,397 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Exceptions
+* @keywords Exception
+* @author EDT team
+* @createDate 2011/10/26
+* @description 
+*  Check that system exceptions are thrown and have expected content
+*/
+library Exceptions001
+	
+	variation string;
+	
+	function runExceptionTest001() {@Test}
+		variation = "NullValueException thrown";
+		nullString string? = null;
+		try
+			nullString.matchesPattern("abc");
+			LogResult.failed("no exception");
+		onException (oops AnyException)
+			if (oops isa NullValueException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest002() {@Test}
+		variation = "NullValueException general content";
+		nullString string? = null;
+		try
+			nullString.matchesPattern("abc");
+			LogResult.failed("expecting exception");
+		onException (oops AnyException)
+			LogResult.logStdOut(oops.messageID);
+			LogResult.logStdOut(oops.message);
+			if (oops isa NullValueException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest003() {@Test}
+		variation = "TypeCastException thrown";
+		try
+			actual int = "abc";  
+			LogResult.failed("Expecting Exception");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest004() {@Test}
+		variation = "TypeCastException general content";
+		try
+			actual int = "abc";  
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa TypeCastException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest005() {@Test}
+		variation = "TypeCastException specific content";
+		try
+			actual int = "abc";  
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa TypeCastException)
+				mine TypeCastException = oops as TypeCastException;
+				LogResult.logStdOut(mine.messageID);
+				LogResult.logStdOut(mine.message);
+				LogResult.logStdOut(mine.castToName);
+				LogResult.logStdOut(mine.actualTypeName);
+				if ((mine.castToName != "") && (mine.actualTypeName != ""))
+					LogResult.passed("OK");
+				else
+					LogResult.failed(variation);
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest006() {@Test}
+		variation = "InvalidIndexException thrown";
+		try
+			actual string = "abc";  
+			actual.charCodeAt(15);
+			LogResult.failed("Expecting Exception");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa InvalidIndexException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest007() {@Test}
+		variation = "InvalidIndexException general content";
+		try
+			actual string = "abc";  
+			actual.charCodeAt(15);
+		onException (oops AnyException)
+			if (oops isa InvalidIndexException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest008() {@Test}
+		variation = "InvalidIndexException specific content";
+		try
+			actual string = "abc";  
+			actual.charCodeAt(15);
+		onException (oops AnyException)
+			if (oops isa InvalidIndexException)
+				mine InvalidIndexException = oops as InvalidIndexException;
+				LogResult.logStdOut(mine.messageID);
+				LogResult.logStdOut(mine.message);
+				LogResult.logStdOut(mine.index);
+				if ((mine.index != "") && (mine.index != 0))
+					LogResult.passed("OK");
+				else
+					LogResult.failed(variation);
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+
+	
+	function runExceptionTest009() {@Test}
+		variation = "NumericOverflowException thrown";
+		try
+			overflow int = 2147483600;
+			overflow += 100;
+			LogResult.passed("no exception. Bug 356228 - EDT 1.0");
+		onException(oops AnyException)
+			if (oops isa NumericOverflowException)
+				LogResult.passed("OK Bug 356228");
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest010() {@Test}
+		variation = "NumericOverflowException general content";
+		try
+			overflow int = 2147483600;
+			overflow += 100;
+			LogResult.passed("no exception. Bug 356228 - EDT 1.0");
+		onException (oops AnyException)
+			LogResult.logStdOut(oops.messageID);
+			LogResult.logStdOut(oops.message);
+			if (oops isa NumericOverflowException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end	
+	
+	function runExceptionTest011() {@Test}
+		variation = "InvalidPatternException thrown";
+		pattern string = "\\";
+		source string = "abcdefg";
+		try
+			source.isLike(pattern);
+			LogResult.failed("no exception");
+		onException (oops AnyException)
+			if (oops isa InvalidPatternException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest012() {@Test}
+		variation = "InvalidPatternException general content";
+		pattern string = "\\";
+		source string = "abcdefg";
+		try
+			source.isLike(pattern);
+			LogResult.failed("no exception");
+		onException (oops AnyException)
+			LogResult.logStdOut(oops.messageID);
+			LogResult.logStdOut(oops.message);
+			if (oops isa InvalidPatternException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+/*
+ 	// TODO revisit when can separate java vs javascript tests
+	function runExceptionTest013() {@Test}
+		variation = "JavaObjectException thrown";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa JavaObjectException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest014() {@Test}
+		variation = "JavaObjectException general content";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa JavaObjectException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest015() {@Test}
+		variation = "JavaObjectException specific content";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa JavaObjectException)
+				mine JavaObjectException = oops as JavaObjectException;
+				LogResult.logStdOut(mine.messageID);
+				LogResult.logStdOut(mine.message);
+				LogResult.logStdOut(mine.exceptionType);
+				if ((mine.exceptionType != ""))
+					LogResult.passed("OK");
+				else
+					LogResult.failed(variation);
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function runExceptionTest016() {@Test}
+		variation = "JavaScriptObjectException thrown";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa JavaScriptObjectException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest017() {@Test}
+		variation = "JavaScriptObjectException general content";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa JavaScriptObjectException)
+				if (hasGeneralExceptionInfo(oops))
+					LogResult.passed("OK");
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+
+	function runExceptionTest018() {@Test}
+		variation = "JavaScriptObjectException specific content";
+		try
+			actual int = 12;  
+			zero int = 0;
+			result decimal(5,2) = actual / zero;
+			LogResult.failed("Expecting Exception");
+		onException (oops AnyException)
+			if (oops isa JavaScriptObjectException)
+				mine JavaScriptObjectException = oops as JavaScriptObjectException;
+				LogResult.logStdOut(mine.messageID);
+				LogResult.logStdOut(mine.message);
+				LogResult.logStdOut(mine.name);
+				if ((mine.name != ""))
+					LogResult.passed("OK");
+				else
+					LogResult.failed(variation);
+				end
+			else
+				wrongException();
+			end
+		end		
+	end
+*/
+	
+	function runExceptionTest199() {@Test}
+		variation = "TypeCastException thrown";
+		
+		try
+			actual date = "99/11/1999";  // "99999999"
+			LogResult.failed("Expecting Exception");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				wrongException();
+			end
+		end		
+	end
+	
+	function hasGeneralExceptionInfo(oops AnyException)returns (boolean)
+		populated boolean = true;
+		populated = oops.messageID != null;
+		details string = "";
+		if (!populated)
+			details = "messageID is null";
+		else
+			populated = oops.messageID != "";
+			if (!populated)
+				details = "messageID is empty ";
+			end
+		end
+		populated = oops.message != null;
+		if (!populated)
+			details += "message is null";
+		else
+			populated = oops.message != "";
+			if (!populated)
+				details += "message is empty";
+			end
+		end
+		populated = details == "";
+		details = variation + " " + details;
+		LogResult.assertTrue(details, populated);
+		return(populated);
+	end
+	
+	function wrongException()
+		info string = variation + " wrong exception";
+		LogResult.failed(info);
+	end
+end
+
+

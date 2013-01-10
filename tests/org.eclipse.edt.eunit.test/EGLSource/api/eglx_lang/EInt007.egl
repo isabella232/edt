@@ -1,0 +1,378 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.NumericOverflowException;
+
+/** @test
+  * @name EInt007
+  * @title EInt007 - runConversionFunction
+  * @description testing conversion from int to/from other types
+  * @testcases runConversionFunction01 - runConversionFunctionn34
+  * @sources EInt007.egl
+  * @keywords int, 
+ **/
+library EInt007 {}
+
+	expectedInt int?;
+	actualInt int;
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (expectedInt == actualInt);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + actualInt);
+	 		SysLib.writeStdOut(" expect " + expectedInt);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		variation = "smallInt implicit INT conversion";
+		actual smallint = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction02(){@Test}		
+		variation = "negative smallInt implicit INT conversion";
+		actual smallint = -7;
+		actualInt = actual;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction03(){@Test}
+		variation = "smallInt? implicit INT conversion";
+		actual smallint? = 7;
+		actualInt = actual;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction04(){@Test}
+		variation = "decimal implicit INT conversion";
+		actual decimal(5,2) = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction05(){@Test}
+		variation = "negative decimal implicit INT conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual;
+		expectedInt = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction06(){@Test}
+		variation = "decimal() implicit INT conversion";
+		actual decimal = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+		function runConversionFunction07(){@Test}
+		variation = "decimal? implicit INT conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction08(){@Test}
+		variation = "decimal()? implicit INT conversion";
+		actual decimal? = 123.45;
+		actualInt = actual;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction09(){@Test}
+		variation = "float implicit INT conversion1";
+		actual float = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction10(){@Test}
+		variation = "negative float implicit INT conversion2";
+		actual float = -2.539e7;
+		actualInt = actual;
+		expectedInt = -25390000;
+		assertTrue();
+	end
+	
+	
+	
+	function runConversionFunction11(){@Test}
+		variation = "float? implicit INT conversion1";
+		actual float? = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction12(){@Test}
+		variation = "smallFloat implicit INT conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction13(){@Test}
+		variation = "negative smallFloat implicit INT conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction14(){@Test}
+		variation = "smallFloat? implicit INT conversion1";
+		actual smallFloat? = 2.539E7;
+		actualInt = actual;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction15(){@Test}
+	 	try
+			variation = "bigint implicit INT conversion";
+			actual bigInt = 8928234898823I;
+			actualInt = actual;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end
+	end
+	
+	function runConversionFunction16(){@Test}
+		try
+			variation = "negative bigint implicit INT conversion";
+			actual bigInt = -8928234898823I;
+			actualInt = actual;
+			expectedInt = -8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end
+	end
+	
+	function runConversionFunction17(){@Test}
+		try
+			variation = "bigint? implicit INT conversion";
+			actual bigInt? = 8928234898823I;
+			actualInt = actual;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end
+	end
+	
+	function runConversionFunction18(){@Test}
+		variation = "smallInt explicit INT conversion";
+		actual smallint = 7;
+		actualInt = actual as int;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction19(){@Test}		
+		variation = "negative smallInt explicit INT conversion";
+		actual smallint = -7;
+		actualInt = actual as int;
+		expectedInt = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction20(){@Test}
+		variation = "smallInt? explicit INT conversion";
+		actual smallint? = 7;
+		actualInt = actual as int;
+		expectedInt = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction21(){@Test}
+		variation = "decimal explicit INT conversion";
+		actual decimal(5,2) = 123.45;
+		actualInt = actual as int;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction22(){@Test}
+		variation = "negative decimal explicit INT conversion";
+		actual decimal(5,2) = -123.45;
+		actualInt = actual as int;
+		expectedInt = -123;
+		assertTrue();
+	end
+	
+	function runConversionFunction23(){@Test}
+		variation = "decimal() explicit INT conversion";
+		actual decimal = 123.45;
+		actualInt = actual as int;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+		function runConversionFunction24(){@Test}
+		variation = "decimal? explicit INT conversion";
+		actual decimal(5,2)? = 123.45;
+		actualInt = actual as int;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction25(){@Test}
+		variation = "decimal()? explicit INT conversion";
+		actual decimal? = 123.45;
+		actualInt = actual as int;
+		expectedInt = 123;
+		assertTrue();
+	end
+	
+	function runConversionFunction26(){@Test}
+		variation = "float explicit INT conversion1";
+		actual float = 2.539E7;
+		actualInt = actual as int;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction27(){@Test}
+		variation = "negative float explicit INT conversion2";
+		actual float = -2.539e7;
+		actualInt = actual as int;
+		expectedInt = -25390000;
+		assertTrue();
+	end	
+	
+	function runConversionFunction28(){@Test}
+		variation = "float? explicit INT conversion1";
+		actual float? = 2.539E7;
+		actualInt = actual as int;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction29(){@Test}
+		variation = "smallFloat explicit INT conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual as int;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction30(){@Test}
+		variation = "negative smallFloat explicit INT conversion1";
+		actual smallFloat = 2.539E7;
+		actualInt = actual as int;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction31(){@Test}
+		variation = "smallFloat? explicit INT conversion1";
+		actual smallFloat? = 2.539E7;
+		actualInt = actual as int;
+		expectedInt = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction32(){@Test}
+		try
+			variation = "bigint explicit INT conversion";
+			actual bigInt = 8928234898823I;
+			actualInt = actual as int;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end			
+	end
+	
+	function runConversionFunction33(){@Test}
+		try
+			variation = "negative bigint explicit INT conversion";
+			actual bigInt = -8928234898823I;
+			actualInt = actual as int;
+			expectedInt = -8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end
+	end
+	
+	function runConversionFunction34(){@Test}
+		try
+			variation = "bigint? explicit INT conversion";
+			actual bigInt? = 8928234898823I;
+			actualInt = actual as int;
+			expectedInt = 8928234898823I;
+			assertTrue();
+		onException(ex NumericOverflowException )
+			LogResult.skipped("JS ONLY 356228");
+		end
+	end
+
+	function runConversionFunction35(){@Test}
+		variation = "bytes(4) implicit int conversion";
+		actual bytes(4) = 0x1BADF00D;
+		actualInt = actual;
+		expectedInt = 464384013;
+		assertTrue();
+	end
+	
+	function runConversionFunction37(){@Test}
+		variation = "bytes implicit int conversion";
+    	actual bytes = 0x7BA56DC3;
+		actualInt = actual;
+		expectedInt = 2074439107;
+		assertTrue();		
+	end
+	
+	function runConversionFunction38(){@Test}
+		variation = "bytes(4)? implicit int conversion";
+		actual bytes(4)? = 0x7BA56DC3;
+		actualInt = actual;
+		expectedInt = 2074439107;
+		assertTrue();	
+	end
+	
+	function runConversionFunction39(){@Test}
+		variation = "bytes? implicit int conversion";
+		actual bytes? = 0x7BA56DC3;
+		actualInt = actual;
+		expectedInt = 2074439107;
+		assertTrue();
+	end
+	
+	function runConversionFunction40(){@Test}
+		variation = "bytes explicit int conversion";
+    	actual bytes = 0x7BA56DC3;
+		actualInt = actual as int;
+		expectedInt = 2074439107;
+		assertTrue();
+	end
+	
+	function runConversionFunction41(){@Test}
+		variation = "bytes? explicit int conversion";
+    	actual bytes? = 0x7BA56DC3;
+		actualInt = actual as int;
+		expectedInt = 2074439107;
+		assertTrue();
+	end
+
+end // EInt007

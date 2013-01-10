@@ -1,0 +1,454 @@
+package server.host.rpg.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.jtopen.annotations.StructBin1;
+import eglx.jtopen.annotations.StructBin2;
+import eglx.jtopen.annotations.StructBin4;
+import eglx.jtopen.annotations.StructBin8;
+import eglx.jtopen.annotations.StructDate;
+import eglx.jtopen.annotations.StructFloat4;
+import eglx.jtopen.annotations.StructFloat8;
+import eglx.jtopen.annotations.StructPackedDecimal;
+import eglx.jtopen.annotations.StructText;
+import eglx.jtopen.annotations.StructTime;
+import eglx.jtopen.annotations.StructTimestamp;
+import eglx.jtopen.annotations.StructUnsignedBin1;
+import eglx.jtopen.annotations.StructUnsignedBin2;
+import eglx.jtopen.annotations.StructUnsignedBin4;
+import eglx.jtopen.annotations.StructUnsignedBin8;
+import eglx.jtopen.annotations.StructZonedDecimal;
+import eglx.services.Encoding;
+
+
+// basic library  
+library Primitive
+	
+	function primitiveHostProgramText(char20 string inout, 
+									lchar20 string(20) inout, 
+									unicode20 string inout,
+									lunicode20 string(20) inout){
+		@ExternalName {value = "PTEXT"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructText{length = 20},
+				null,
+				@StructText{length = 20, encoding = "UTF-16BE"},
+				@StructText{encoding = "UTF-16BE"}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramInt(bin1sign smallint inout,
+									bin2sign smallint inout,
+									bin4sign int inout,
+									bin8sign bigint inout){
+		@ExternalName {value = "PINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [@StructBin1{}, NULL, NULL, NULL]
+		}
+	}
+	end
+	
+	function primitiveHostProgramUInt(bin1 smallint inout,
+									bin2 int inout,
+									bin4 bigint inout,
+									bin8 decimal(20) inout){
+		@ExternalName {value = "PUINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructUnsignedBin1{}, 
+				@StructUnsignedBin2{}, 
+				@StructUnsignedBin4{}, 
+				@StructUnsignedBin8{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramFloat(float4 smallfloat inout,
+									float8 float inout){
+		@ExternalName {value = "PFLTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgramZoned(num112 decimal(11,2) inout,
+									num15 decimal(15) inout){
+		@ExternalName {value = "PZONE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructZonedDecimal {},
+				@StructZonedDecimal {}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramPacked(dec174 decimal(17,4) inout,
+									dec8 decimal(8) inout){
+		@ExternalName {value = "PPACK"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgramDate(date1 date inout,
+									date2 date inout,
+									date3 date inout){
+		@ExternalName {value = "PDATE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				null,
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA},
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	 
+	function primitiveHostProgramTime(time1 time inout,
+									time2 time inout,
+									time3 time inout){
+		@ExternalName {value = "PTIME"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				null,
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR},
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramTimeStamp(timestamp1 timestamp("yyyyMMddHHmmss") inout){
+		@ExternalName {value = "PTIMEST"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true
+		}
+	}
+	end
+	
+	function primitiveHostProgramText2(char20 string inout, 
+									lchar20 string(20) inout, 
+									unicode20 string inout,
+									lunicode20 string(20) inout){
+		@ExternalName {value = "PTEXT"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructText{length = 20},
+				@StructText{},
+				@StructText{length = 20, encoding = "UTF-16BE"},
+				@StructText{encoding = "UTF-16BE"}
+			]
+		}
+	}
+	end
+	
+
+	function primitiveHostProgramInt2(bin1sign smallint inout,
+									bin2sign smallint inout,
+									bin4sign int inout,
+									bin8sign bigint inout){
+		@ExternalName {value = "PINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructBin1{}, 
+				@StructBin2{},
+				@StructBin4{},
+				@StructBin8{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramUInt2(bin1 smallint inout,
+									bin2 int inout,
+									bin4 bigint inout,
+									bin8 decimal(20) inout){
+		@ExternalName {value = "PUINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructUnsignedBin1{}, 
+				@StructUnsignedBin2{}, 
+				@StructUnsignedBin4{}, 
+				@StructUnsignedBin8{}
+			]
+		}
+	}
+	end
+	
+
+	function primitiveHostProgramFloat2(float4 smallfloat inout,
+									float8 float inout){
+		@ExternalName {value = "PFLTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructFloat4{},
+				@StructFloat8{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramZoned2(num112 decimal(11,2) inout,
+									num15 decimal(15) inout){
+		@ExternalName {value = "PZONE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructZonedDecimal {},
+				@StructZonedDecimal {}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramPacked2(dec174 decimal(17,4) inout,
+									dec8 decimal(8) inout){
+		@ExternalName {value = "PPACK"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructPackedDecimal{},
+				@StructPackedDecimal{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramDate2(date1 date inout,
+									date2 date inout,
+									date3 date inout){
+		@ExternalName {value = "PDATE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructDate{},
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA},
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramTime2(time1 time inout,
+									time2 time inout,
+									time3 time inout){
+		@ExternalName {value = "PTIME"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructTime{},
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR},
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramTimeStamp2(timestamp1 timestamp("yyyyMMddHHmmss") inout){
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@ExternalName {value = "PTIMEST"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [@StructTimestamp{}]
+		}
+	}
+	end
+	
+	function primitiveHostProgramText3(char20 string inout, 
+									lchar20 string(20) inout, 
+									unicode20 string inout,
+									lunicode20 string(20) inout){
+		@ExternalName {value = "PTEXT"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructText{length = 20, preserveTrailingSpaces = true},
+				@StructText{preserveTrailingSpaces = true},
+				@StructText{length = 20, encoding = "UTF-16BE", preserveTrailingSpaces = true},
+				@StructText{encoding = "UTF-16BE", preserveTrailingSpaces = true}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramInt3(bin1sign smallint inout,
+									bin2sign smallint inout,
+									bin4sign int inout,
+									bin8sign bigint inout){
+		@ExternalName {value = "PINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [@StructBin1{}, 
+				@StructBin2{},
+				@StructBin4{},
+				@StructBin8{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramUInt3(bin1 smallint inout,
+									bin2 int inout,
+									bin4 bigint inout,
+									bin8 decimal(20) inout){
+		@ExternalName {value = "PUINTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructUnsignedBin1{}, 
+				@StructUnsignedBin2{}, 
+				@StructUnsignedBin4{}, 
+				@StructUnsignedBin8{}
+ 			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramFloat3(float4 smallfloat inout,
+									float8 float inout){
+		@ExternalName {value = "PFLTS"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructFloat4{},
+				@StructFloat8{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramZoned3(num112 decimal(11,2) inout,
+									num15 decimal(15) inout){
+		@ExternalName {value = "PZONE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructZonedDecimal {},
+				@StructZonedDecimal {}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramPacked3(dec174 decimal(17,4) inout,
+									dec8 decimal(8) inout){
+		@ExternalName {value = "PPACK"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructPackedDecimal{},
+				@StructPackedDecimal{}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramDate3(date1 date inout,
+									date2 date inout,
+									date3 date inout){
+		@ExternalName {value = "PDATE"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructDate{},
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA},
+				@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramTime3(time1 time inout,
+									time2 time inout,
+									time3 time inout){
+		@ExternalName {value = "PTIME"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [
+				@StructTime{},
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR},
+				@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}
+			]
+		}
+	}
+	end
+	
+	function primitiveHostProgramTimeStamp3(timestamp1 timestamp("yyyyMMddHHmmss") inout){
+		@ExternalName {value = "PTIMEST"},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"},
+		@IBMiProgram {
+			programName = "/QSYS.LIB/TSTSRVPGM.LIB/EDTPRIMSRV",
+			isServiceProgram = true,
+			parameterAnnotations = [@StructTimestamp{}]
+		}
+	}
+	end
+	
+end

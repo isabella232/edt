@@ -1,0 +1,394 @@
+package fvt.numericdata;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestNumericData01Lib
+* @title The function test program for float, smallfloat, decimal and money in EDT
+* @keywords float, smallfloat, decimal and money
+* @author EDT team
+* @createDate 2011/08/29
+* @description 
+* Test the math operations for float, smallfloat, decimal and money.
+*/
+
+library TestNumericData01Lib
+
+    fNumber1 float;
+
+    sf smallFloat;
+    sFMax smallFloat = 3.4028230e+38;
+    sFMaxResult smallFloat = 2.4028230e+38;
+    //egl.MAX_SMALLFLOAT = 3.4028234663852886e38, egl.MIN_SMALLFLOAT = 1.401298464324817e-45.
+    //It will cause overflow when assigning 1.4e-45 to type smallfloat
+    //The constructor of the RUI Lib will invoke the initial function eze$$setInitial(), which throws exception, so comment out this line
+    //sFMin smallFloat = 1.4e-45;
+    sfMinResult smallFloat = 3.4e-45;
+    maxDelta smallFloat = 1.0e+38;
+    minDelta smallFloat = 2.0e-45;
+
+    aF float;
+    aD decimal(4, 1);
+    //aM money(6);
+    aSFL smallFloat;
+    aFL float;
+
+    data1 int = 2;
+    data2 decimal(2, 1) = 1.1;
+    data3 float = -0.4E+1;
+    data5 smallFloat = -4;
+    //data6 money(3, 2) = 1.01;
+    
+    function floatDataTest1(){@Test}
+        LogResult.logStdOut("float data type test 1 : for max positive value");
+        fNumber1 = 7.199999999999999e+75; //maximum value in java for double
+        fNumber1 = fNumber1 - 7e+75;
+        LogResult.assertFloatEqual1(1.99999999999999E74, fNumber1);
+    end
+
+    function floatDataTest2(){@Test}
+        LogResult.logStdOut("float data type test 2 : for min positive value");
+        fNumber1 = 5.4E-79;
+        fNumber1 = fNumber1 * 1e+1;
+        LogResult.assertFloatEqual1(5.4E-78, fNumber1);
+    end
+
+    function floatDataTest3(){@Test}
+        LogResult.logStdOut("float data type test 5: for min negative value");
+        fNumber1 = -7.199999999999999e+75;//smallest negative value
+        fNumber1 = fNumber1 + 1e+75;
+        LogResult.assertFloatEqual1(-0.6199999999999999e+76, fNumber1);
+    end
+
+    function floatDataTest4(){@Test}
+        LogResult.logStdOut("float data type test 7: for max negative value");
+        fNumber1 = -.54E-78;//biggest negative value
+        fNumber1 = fNumber1 - 0.1E-78;
+        LogResult.assertFloatEqual1(-.64E-78, fNumber1);
+    end
+
+    function floatDataTest5(){@Test}
+        LogResult.logStdOut("float data type test 8: for zero value");
+        fNumber1 = -.54E-78;
+        fNumber1 = fNumber1 + 1;
+        fNumber1 = fNumber1 - 1;
+        LogResult.assertFloatEqual1(0, fNumber1);
+    end
+
+    function smallFloatDataTest1(){@Test}
+        LogResult.logStdOut("smallfloat data type test 1: for max value");
+        sF = sFmax - maxDelta;//the run time value is 2.4028236E38, but in java run time value is 2.4028234E38
+        LogResult.assertFloatEqual1(sfMaxResult, sF);
+    end
+
+    function smallFloatDataTest2(){@Test}
+        //        LogResult.logStdOut("smallfloat data type test 2 : for min value");
+        //        sF = sFmin + minDelta;//the run time value is 2.4028236E38, but in java run time value is 2.4028234E38
+        //        LogResult.assertFloatEqual1(sfMinResult, sF);
+        LogResult.skipped("Overflow when assigning 1.4e-45 to type smallfloat");
+    end
+
+    function smallFloatDataTest3(){@Test}
+        //        LogResult.logStdOut("smallfloat data type test 5: smallest negative value");
+        //        sfMax = sfMax * -1;
+        //        sfMaxResult = sfMaxResult * -1;
+        //        sfMin = sfMin * -1;
+        //        sfMinResult = sfMinResult * -1;
+        //        sF = sFmax + maxDelta;//the run time value is 2.4028236E38, but in java run time value is 2.4028234E38
+        //        LogResult.assertFloatEqual1(sfMaxResult, sF);
+        LogResult.skipped("Overflow when assigning 1.4e-45 to type smallfloat");
+    end
+
+    function smallFloatDataTest4(){@Test}
+        //        LogResult.logStdOut("smallfloat data type test 7");
+        //        sF = sFmin - minDelta;//the run time value is 2.4028236E38, but in java run time value is 2.4028234E38
+        //        LogResult.assertFloatEqual1(sfMinResult, sF);
+        LogResult.skipped("Overflow when assigning 1.4e-45 to type smallfloat");
+    end
+
+    function moneyDataTest1(){@Test}
+        LogResult.logStdOut("overflow for the default money data type");
+        LogResult.skipped("NOT RUN");
+    end
+
+    function moneyDataTest2(){@Test}
+        LogResult.logStdOut("overflow for the money data type");
+        LogResult.skipped("NOT RUN");
+    end
+
+    function moneyDataTest3(){@Test}
+        LogResult.logStdOut("money data type test 1 :default scale");
+        //a = .24;
+        //LogResult.assertTrue1(a == 0.24);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function moneyDataTest4(){@Test}
+        LogResult.logStdOut("money data type test 2 :default precision ");
+        //b=12345678901234.56;
+        //LogResult.assertTrue1(b == 12345678901234.56);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function moneyDataTest5(){@Test}
+        LogResult.logStdOut("money data type test 3: max precision should be 31 digits");
+        //c money(32,6);
+        //c = 1234567890123456789012345.123456;
+        //LogResult.assertTrue1(c == 1234567890123456789012345.123456);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function decimalDataTest1(){@Test}
+        LogResult.logStdOut("test for decimal data type : max length is 32 digits");
+        a decimal(32, 2);
+        a = 123456789012345678901234567890.12;
+        LogResult.skipped("NOT RUN");
+    end
+
+    function decimalDataTest2(){@Test}
+        LogResult.logStdOut("test for decimal data type : max length is over 32 digits");
+        //a = a*1000000; //in 717 build value in debug is 123456789012345678901234567890120000
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest1(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 1");
+        aF = 3.45E+2;
+        aF = aF + 5;
+        LogResult.assertFloatEqual1(3.5E+2, aF);
+    end
+
+    function arithmeticTest2(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 2");
+        aF = 3.45E+2;
+        aF = aF + 7.7;
+        LogResult.assertFloatEqual1(3.527E+2, aF);
+    end
+
+    function arithmeticTest3(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 3");
+        aF = 3.45E+2;
+        aD = 100.1;
+        aF = aF + aD;
+        LogResult.assertFloatEqual1(4.451E+2, aF);
+    end
+
+    function arithmeticTest4(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 4");
+        aF = 3.45E+2;
+        aSF smallFloat;
+        aSF = 100.1;
+        aF = aF + aSF;
+        LogResult.assertFloatEqual1(4.451E+2, aF);
+    end
+
+    //    function arithmeticTest5(){@Test}
+    //        LogResult.logStdOut("float data type in arithmetic expression test 5");
+    //        aF = 3.45E+2;
+    //        aM = 1000.15;
+    //        aF = aF + aM;
+    //        LogResult.assertFloatEqual1(1.34515E+3, aF);
+    //    end
+    
+    function arithmeticTest6(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 8");
+        aF = -3.45E+1;
+        aF = aF ** 2;
+        LogResult.assertFloatEqual1(1190.25, aF);
+    end
+
+    function arithmeticTest7(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 9");
+        aF = -3.45E+1;
+        aF = aF + 3.25E+1;
+        LogResult.assertFloatEqual1(-2.0, aF);
+    end
+
+    function arithmeticTest8(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 10");
+        aF = -3.33E+1;
+        aF = aF / 3;
+        LogResult.assertFloatEqual1(-1.11e+1, aF);
+    end
+
+    function arithmeticTest9(){@Test}
+        LogResult.logStdOut("float data type in arithmetic expression test 11");
+        aF = -3.33E+1;
+        aF = aF * 3;
+        LogResult.assertFloatEqual1(-9.99e+1, aF);
+    end
+
+    function arithmeticTest10(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 1");
+        aSFL = 3.45E+2;
+        aSFL = aSFL + 5;
+        LogResult.assertFloatEqual1(3.5E+2, aSFL);
+    end
+
+    function arithmeticTest11(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 2");
+        aSFL = 3.45E+2;
+        aSFL = aSFL + 7.7;
+        LogResult.assertFloatEqual1(3.527E+2, aSFL);
+    end
+
+    function arithmeticTest12(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 3");
+        aSFL = 3.45E+2;
+        aD = 100.1;
+        aSFL = aSFL + aD;
+        LogResult.assertFloatEqual1(4.451E+2, aSFL);
+    end
+
+    function arithmeticTest13(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 4");
+        aSFL = 3.45E+2;
+        aFL = 100.1;
+        aSFL = aSFL + aFL;
+        LogResult.assertFloatEqual1(4.451E+2, aSFL);
+    end
+
+    //    function arithmeticTest14(){@Test}
+    //        LogResult.logStdOut("smallfloat data type in arithmetic expression test 5");
+    //        aSFL = 3.45E+2;
+    //        aM = 1000.15;
+    //        aSFL = aSFL + aM;
+    //        LogResult.assertFloatEqual1(1.34515E+3, aSFL);
+    //    end
+    
+    function arithmeticTest15(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 8");
+        aSFL = -3.45E+1;
+        aSFL = aSFL ** 2;
+        LogResult.assertFloatEqual1(1190.25, aSFL);
+    end
+
+    function arithmeticTest16(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 9");
+        aSFL = -3.45E+1;
+        aSFL = aSFL + 3.25E+1;
+        LogResult.assertFloatEqual1(-2.0, aSFL);
+    end
+
+    function arithmeticTest17(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 10");
+        aSFL = -3.33E+1;
+        aSFL = aSFL / 3;
+        LogResult.assertFloatEqual1(-1.11e+1, aSFL);
+    end
+
+    function arithmeticTest18(){@Test}
+        LogResult.logStdOut("smallfloat data type in arithmetic expression test 11");
+        aSFL = -3.33E+1;
+        aSFL = aSFL * 3;
+        LogResult.assertFloatEqual1(-9.99e+1, aSFL);
+    end
+
+    function arithmeticTest19(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 1");
+        //		mD money(5,1);
+        //		mD = 10.2;
+        //		aF = -3.45E+2;
+        //		mD = mD + aF;
+        //		LogResult.assertTrue1(mD ==-334.8);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest20(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 2");
+        //		mD = 10.2;
+        //		mD = mD + 10;
+        //		LogResult.assertTrue1(mD == 20.2);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest21(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 3");
+        //		mD = 10.2;
+        //		aD = 100.1;
+        //		aD = mD + aD;
+        //		LogResult.assertTrue1(aD == 110.3);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest22(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 4");
+        //		mD = 10.2;
+        //		aSF = 10.1;
+        //		mD = mD + aSF;
+        //		LogResult.assertTrue1(mD == 20.3);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest23(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 5");
+        //		mD = 10.2;
+        //		aM = 1000.15;
+        //		aM = mD + aM;
+        //		LogResult.assertTrue1(aM == 1010.35);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest24(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 8");
+        //		mD =10.2;
+        //		mD = mD ** 2;
+        //		LogResult.assertTrue1(mD == 104.0);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest25(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 9");
+        //		mD = -10.2;
+        //		mD = mD + 3.25;
+        //		LogResult.assertTrue1(mD == -6.9);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest26(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 10");
+        //		mD = -33.3;
+        //		mD = mD /3;
+        //		LogResult.assertTrue1(mD == -11.1);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function arithmeticTest27(){@Test}
+        LogResult.logStdOut("money data type in arithmetic expression test 11");
+        //		mD = -3.3;
+        //		mD = mD * 3;
+        //		LogResult.assertTrue1(mD == -9.9);
+        LogResult.skipped("NOT RUN");
+    end
+
+    function powerOperatorTest1(){@Test}
+        LogResult.logStdOut("power operator test 1");
+        LogResult.assertBigIntEqual1(25, 5 ** 2);
+    end
+
+    function powerOperatorTest2(){@Test}
+        LogResult.logStdOut("power operator test 2");
+        LogResult.assertBigIntEqual1(4, data1 ** data1);
+    end
+
+    function powerOperatorTest3(){@Test}
+        LogResult.logStdOut("power operator test 3");
+        LogResult.assertFloatEqual1(1.2100000000000000, data2 ** 2);
+    end
+
+    function powerOperatorTest4(){@Test}
+        LogResult.logStdOut("power operator test 4");
+        LogResult.assertFloatEqual1(-64, data3 ** 3);
+    end
+
+    function powerOperatorTest5(){@Test}
+        LogResult.logStdOut("power operator test 6");
+        LogResult.assertFloatEqual1(0.00390625, data5 ** data5);
+    end
+
+    //    function powerOperatorTest6(){@Test}
+    //        LogResult.logStdOut("power operator test 7");
+    //        LogResult.assertFloatEqual1(1.0201, data6 ** 2);
+    //    end
+end

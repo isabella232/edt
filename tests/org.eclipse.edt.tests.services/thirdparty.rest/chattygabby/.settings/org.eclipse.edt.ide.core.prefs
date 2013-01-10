@@ -1,0 +1,5 @@
+#Sat Oct 22 14:21:40 EDT 2011
+DefaultDeploymentDescriptorPath/<project>=/chattygabby/EGLSource/chattygabby.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

@@ -1,0 +1,160 @@
+<dwml xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="1.0" xsi:noNamespaceSchemaLocation="http://www.nws.noaa.gov/forecasts/xml/DWMLgen/schema/DWML.xsd">
+	<head>
+		<product srsName="WGS 1984" concise-name="dwmlByDay"
+			operational-mode="official">
+			<title>
+NOAA's National Weather Service Forecast by 12 Hour Period
+</title>
+			<field>meteorological</field>
+			<category>forecast</category>
+			<creation-date refresh-frequency="PT1H">2011-10-17T17:59:25Z</creation-date>
+		</product>
+		<source>
+			<more-information>http://www.nws.noaa.gov/forecasts/xml/</more-information>
+			<production-center>
+				Meteorological Development Laboratory
+				<sub-center>Product Generation Branch</sub-center>
+			</production-center>
+			<disclaimer>http://www.nws.noaa.gov/disclaimer.html</disclaimer>
+			<credit>http://www.weather.gov/</credit>
+			<credit-logo>http://www.weather.gov/images/xml_logo.gif</credit-logo>
+			<feedback>http://www.weather.gov/feedback.php</feedback>
+		</source>
+	</head>
+	<data>
+		<location>
+			<location-key>point1</location-key>
+			<point latitude="41.50" longitude="-72.98" />
+		</location>
+		<moreWeatherInformation applicable-location="point1">url</moreWeatherInformation>
+		<time-layout time-coordinate="local" summarization="12hourly">
+			<layout-key>k-p24h-n5-1</layout-key>
+			<start-valid-time period-name="Today">2011-10-17T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-17T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Tomorrow">2011-10-18T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-18T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Wednesday">2011-10-19T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-19T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Thursday">2011-10-20T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-20T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Friday">2011-10-21T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-21T18:00:00-04:00</end-valid-time>
+		</time-layout>
+		<time-layout time-coordinate="local" summarization="12hourly">
+			<layout-key>k-p24h-n5-2</layout-key>
+			<start-valid-time period-name="Tonight">2011-10-17T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-18T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Tomorrow Night">2011-10-18T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-19T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Wednesday Night">2011-10-19T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-20T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Thursday Night">2011-10-20T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-21T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Friday Night">2011-10-21T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-22T06:00:00-04:00</end-valid-time>
+		</time-layout>
+		<time-layout time-coordinate="local" summarization="12hourly">
+			<layout-key>k-p12h-n10-3</layout-key>
+			<start-valid-time period-name="Today">2011-10-17T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-17T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Tonight">2011-10-17T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-18T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Tomorrow">2011-10-18T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-18T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Tomorrow Night">2011-10-18T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-19T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Wednesday">2011-10-19T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-19T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Wednesday Night">2011-10-19T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-20T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Thursday">2011-10-20T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-20T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Thursday Night">2011-10-20T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-21T06:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Friday">2011-10-21T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-21T18:00:00-04:00</end-valid-time>
+			<start-valid-time period-name="Friday Night">2011-10-21T18:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-22T06:00:00-04:00</end-valid-time>
+		</time-layout>
+		<time-layout time-coordinate="local" summarization="12hourly">
+			<layout-key>k-p5d-n1-4</layout-key>
+			<start-valid-time>2011-10-17T06:00:00-04:00</start-valid-time>
+			<end-valid-time>2011-10-22T06:00:00-04:00</end-valid-time>
+		</time-layout>
+		<parameters applicable-location="point1">
+			<temperature type="maximum" units="Fahrenheit"
+				time-layout="k-p24h-n5-1">
+				<name>Daily Maximum Temperature</name>
+				<value>65</value>
+				<value>64</value>
+				<value>61</value>
+				<value>60</value>
+				<value>57</value>
+			</temperature>
+			<temperature type="minimum" units="Fahrenheit"
+				time-layout="k-p24h-n5-2">
+				<name>Daily Minimum Temperature</name>
+				<value>44</value>
+				<value>51</value>
+				<value>51</value>
+				<value>44</value>
+				<value>41</value>
+			</temperature>
+			<probability-of-precipitation type="12 hour"
+				units="percent" time-layout="k-p12h-n10-3">
+				<name>12 Hourly Probability of Precipitation</name>
+				<value>12</value>
+				<value>0</value>
+				<value>12</value>
+				<value>77</value>
+				<value>90</value>
+				<value>70</value>
+				<value>18</value>
+				<value>14</value>
+				<value>14</value>
+				<value>9</value>
+			</probability-of-precipitation>
+			<weather time-layout="k-p12h-n10-3">
+				<name>Weather Type, Coverage, and Intensity</name>
+				<weather-conditions weather-summary="Mostly Sunny" />
+				<weather-conditions weather-summary="Partly Cloudy" />
+				<weather-conditions weather-summary="Mostly Cloudy" />
+				<weather-conditions weather-summary="Rain Likely">
+					<value coverage="likely" intensity="light" weather-type="rain"
+						qualifier="none" />
+				</weather-conditions>
+				<weather-conditions weather-summary="Rain">
+					<value coverage="definitely" intensity="moderate"
+						weather-type="rain" qualifier="none" />
+				</weather-conditions>
+				<weather-conditions weather-summary="Rain Showers Likely">
+					<value coverage="likely" intensity="light" weather-type="rain showers"
+						qualifier="none" />
+				</weather-conditions>
+				<weather-conditions weather-summary="Mostly Cloudy" />
+				<weather-conditions weather-summary="Mostly Clear" />
+				<weather-conditions weather-summary="Mostly Sunny" />
+				<weather-conditions weather-summary="Mostly Clear" />
+			</weather>
+			<conditions-icon type="forecast-NWS" time-layout="k-p12h-n10-3">
+				<name>Conditions Icons</name>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/few.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/nsct.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/bkn.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/nra80.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/ra90.jpg</icon-link>
+				<icon-link>
+					http://www.nws.noaa.gov/weather/images/fcicons/hi_nshwrs70.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/bkn.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/nfew.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/few.jpg</icon-link>
+				<icon-link>http://www.nws.noaa.gov/weather/images/fcicons/nfew.jpg</icon-link>
+			</conditions-icon>
+			<hazards time-layout="k-p5d-n1-4">
+				<name>Watches, Warnings, and Advisories</name>
+				<hazard-conditions xsi:nil="true" />
+			</hazards>
+		</parameters>
+	</data>
+</dwml>

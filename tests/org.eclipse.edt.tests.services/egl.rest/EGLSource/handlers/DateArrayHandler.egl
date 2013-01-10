@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler DateArrayHandler
+	item1 date[];
+end

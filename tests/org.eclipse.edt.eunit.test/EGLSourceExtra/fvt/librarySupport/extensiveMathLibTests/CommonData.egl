@@ -1,0 +1,51 @@
+package fvt.librarySupport.extensiveMathLibTests;
+
+/*
+* @name CommonData cited by Precision 
+* @title The referred record of Precision Test in EDT
+* @keywords CommonData 
+* @author EDT team
+* @createDate 2011/09/08
+* @description 
+* CommonData cited by Precision 
+*/
+
+Record PD_SQL 
+// Record used for maxNumericDigits = 18  
+
+  DECIMAL01D0_S decimal(1); 
+  DECIMAL02D0_S decimal(2); 
+  DECIMAL03D0_S decimal(3); 
+  DECIMAL04D0_S decimal(4); 
+  DECIMAL05D0_S decimal(5); 
+  DECIMAL06D0_S decimal(6); 
+  DECIMAL07D0_S decimal(7); 
+  DECIMAL08D0_S decimal(8); 
+  DECIMAL09D0_S decimal(9); 
+  DECIMAL10D0_S decimal(10);
+  DECIMAL11D0_S decimal(11);
+  DECIMAL12D0_S decimal(12);
+  DECIMAL13D0_S decimal(13);
+  DECIMAL14D0_S decimal(14);
+  DECIMAL15D0_S decimal(15);
+  DECIMAL16D0_S decimal(16);
+  DECIMAL17D0_S decimal(17);
+  DECIMAL18D0_S decimal(18);
+
+  DECIMAL19D0_S decimal(19);
+  DECIMAL20D0_S decimal(20);
+  DECIMAL21D0_S decimal(21);
+  DECIMAL22D0_S decimal(22);
+  DECIMAL23D0_S decimal(23);
+  DECIMAL24D0_S decimal(24);
+  DECIMAL25D0_S decimal(25);
+  DECIMAL26D0_S decimal(26);
+  DECIMAL27D0_S decimal(27);
+  DECIMAL28D0_S decimal(28);
+  DECIMAL29D0_S decimal(29);
+  DECIMAL30D0_S decimal(30);
+  DECIMAL31D0_S decimal(31);  
+  DECIMAL32D0_S decimal(32);  
+ 
+end // end PD32_DEC_D0_SQL	
+

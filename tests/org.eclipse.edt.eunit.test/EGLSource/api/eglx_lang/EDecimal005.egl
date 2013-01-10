@@ -1,0 +1,198 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+import eglx.java.JavaObjectException;
+
+/** @test
+  * @name EDecimal005
+  * @title EDecimal005 - runArithmeticFunction
+  * @description testing decimal arithmetic opertations and expressions
+  * @testcases runArithmeticFunction01 - runArithmeticFunction18
+  * @sources EDecimal005.egl
+  * @keywords decimal, operations, expressions
+ **/
+library EDecimal005 {}
+	
+	int1 bigInt = 75;
+	int2 bigInt = -75;
+	int3 bigInt = 5;
+	int4 bigInt = -5;
+	int5 bigInt = 2;
+	int6 bigInt = -2;
+	int7 bigInt = 3;
+	zero bigInt = 0;
+	intActual bigInt;
+	intExpect bigInt;
+	variation string;
+	
+	function compileError()
+ 		compileError("");
+ 	end
+ 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+ 	function assertTrue()
+	 	success boolean = (intExpect == intActual);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + intActual);
+	 		SysLib.writeStdOut(" expect " + intExpect);
+	 	end
+	 	// revert();
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runArithmeticFunction01(){@Test}	
+		variation = "operation + with literals";
+		intActual = int1 + int3;
+		intExpect = 80;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction02(){@Test}	
+		variation = "operation + with negative literals";
+		intActual = int1 + int4;
+		intExpect = 70;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction03(){@Test}	
+		variation = "operation - with literals";
+		intActual = int1 - int3;
+		intExpect = 70;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction04(){@Test}	
+		variation = "operation - with negative literals";
+		intActual = int1 - int4;
+		intExpect = 80;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction05(){@Test}	
+		variation = "operation * with literals";
+		intActual = int1 * int3;
+		intExpect = 375;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction06(){@Test}	
+		variation = "operation * with negative literals";
+		intActual = int1 * int4;
+		intExpect = -375;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction07(){@Test}	
+		variation = "operation / with literals";
+		intActual = int1 / int3;
+		intExpect = 15;
+		assertTrue();
+	end
+
+	function runArithmeticFunction08(){@Test}	
+		variation = "operation / with negative literals";
+		intActual = int1 / int4;
+		intExpect = -15;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction09(){@Test}	
+		variation = "operation / with literals";
+		intActual = int1 / int5;
+		intExpect = 37;
+		assertTrue();
+	end
+
+	function runArithmeticFunction10(){@Test}	
+		variation = "operation / with negative literals";
+		intActual = int1 / int6;
+		intExpect = -37;
+		assertTrue();
+	end
+			
+	function runArithmeticFunction11(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and literals";
+		failDetails string;
+		try
+			intActual = int1 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction12(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and negative literals";
+		failDetails string;
+		try
+			intActual = int2 / zero;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction13(){@Test}	
+		variation = "operation % with literals";
+		intActual = int1 % int5;
+		intExpect = 1;
+		assertTrue();
+	end
+
+	function runArithmeticFunction14(){@Test}	
+		variation = "operation % with negative literals";
+		intActual = int1 % int6;
+		intExpect = 1;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction15(){@Test}	
+		variation = "operation ** with literals to float";
+		actual float = int3 ** int7;
+		intActual = actual;
+		intExpect = 125;
+		assertTrue();
+	end
+
+	function runArithmeticFunction16(){@Test}	
+		variation = "operation ** with negative literals to float";
+		actual float = int4 ** int7;
+		intActual = actual;
+		intExpect = -125;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction17(){@Test}	
+		variation = "operation ** with literals to bigInt";
+     	intActual = int3 ** int7;
+		intExpect = 125;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction18(){@Test}	
+		variation = "operation ** with negative literals to bigInt";
+		intActual = int4 ** int7;
+		intExpect = -125;
+		assertTrue();
+	end
+
+	
+end // EDecimal005
+

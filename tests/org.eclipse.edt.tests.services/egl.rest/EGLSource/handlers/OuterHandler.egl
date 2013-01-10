@@ -1,0 +1,9 @@
+package handlers;
+
+// basic handler
+
+handler OuterHandler
+	item1 string;
+	item2 string[];
+	item4 InnerHandler;
+end

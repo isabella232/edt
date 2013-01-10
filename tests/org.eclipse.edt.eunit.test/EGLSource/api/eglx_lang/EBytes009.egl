@@ -1,0 +1,174 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes009
+  * @title EBytes009 - runAssignmentFunction
+  * @description testing assignemt of any to bytes
+  * @testcases runAssignmentFunction01 - runAssignmentFunction19
+  * @sources EBytes009.egl
+  * @keywords bytes, any, assignment
+ **/
+library EBytes009
+	function runAssignmentFunction01(){@Test}
+		b2 bytes;
+		b1 any = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable without length", b2 == 0x1234567890abcdef);
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		b2 bytes(8);
+		b1 any = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable with same length", b2 == 0x1234567890abcdef);
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		b2 bytes(4);
+		b1 any = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable is shorter #1", b2 == 0x12345678);
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		b2 bytes(4);
+		b1 any = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable is shorter #2", b2 == 0x12345678);
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		b1 any = 0x70b6f81d;
+		b2 bytes(8) = 0xfb9720d08acc8721;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable is longer #1", b2 == 0x70b6f81d8acc8721);
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		b1 any = 0x70b6f81d;
+		b2 bytes(8) = 0xfb9720d08acc8721;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable is longer #2", b2 == 0x70b6f81d8acc8721);
+	end
+	
+	function runAssignmentFunction07(){@Test}
+		b1 any = 0xa8f63e;
+		b2 bytes;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, target variable without length", b2 == 0xa8f63e);
+	end
+
+	function runAssignmentFunction08(){@Test}
+		b2 bytes?;
+		b1 any? = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable variables without lengths", b2 == 0x1234567890abcdef);
+	end
+	
+	function runAssignmentFunction09(){@Test}
+		b2 bytes(8)?;
+		b1 any? = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable variables with same lengths", b2 == 0x1234567890abcdef);
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		b2 bytes(4)?;
+		b1 any? = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable target variable is shorter #1", b2 == 0x12345678);
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		b2 bytes(4)?;
+		b1 any? = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable target variable is shorter #2", b2 == 0x12345678);
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		b1 any? = 0x70b6f81d;
+		b2 bytes(8)? = 0xfb9720d08acc8721;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable target variable is longer #1", b2 == 0x70b6f81d8acc8721);
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		b1 any? = 0x70b6f81d;
+		b2 bytes(8)? = 0xfb9720d08acc8721;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable target variable is longer #2", b2 == 0x70b6f81d8acc8721);
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		b1 any? = 0xa8f63e;
+		b2 bytes?;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable target variable without length", b2 == 0xa8f63e);
+	end
+
+	function runAssignmentFunction15(){@Test}
+		b1 any? = null;
+		b2 bytes?;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, null variables #1", b2 == null);
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		b1 any? = null;
+		b2 bytes(8)? = 0x1234567890abcdef;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, null variables #2", b2 == null);
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		b1 any = 0x1234567890abcdef;
+		b2 bytes(4)?;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, non-nullable to nullable", b2 == 0x12345678);
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		b1 any? = 0x34;
+		b2 bytes(4);
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable to non-nullable", b2 == 0x34000000);
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		b1 any = 0x90abcdef;
+		b2 bytes(8)?;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, non-nullable to nullable", b2 == 0x90abcdef00000000);
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		b1 any? = 0x34;
+		b2 bytes;
+		b2 = b1;
+	
+		LogResult.assertTrue("assignment, nullable to non-nullable", b2 == 0x34);
+	end
+end

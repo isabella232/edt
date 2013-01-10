@@ -1,0 +1,119 @@
+package fvt.baseStatements;
+
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title The function test program for valid FOR in EDT for RichUI
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* The testFor function tests use of each data type valid as an integer, as well as numeric literals and
+* expressions for the controls of the for statement. In addition, the data items used as
+* controls may come from a standalone data item, an item of a record, a dynamic item array, 
+* an item of a fixed array of a record, an item of a library, an item of a record within
+* a library, or a dynamic item array element.
+
+*/
+Library TestCaseStatementLib
+
+	Function testForIntDataItem(){@Test}
+		counter smallInt;
+		stop bigInt;
+		total int;
+		
+		// Record start of variation 
+		LogResult.logStdOut("Controls are data items with int types");
+		total = 0;
+		stop = 5;
+		
+		for ( counter from 0 to stop )
+			case (counter)
+				when ( 1 )
+					total = total + 1;
+				when ( 2, 3 )
+					total += 3;
+				otherwise
+					total += 5;
+			end
+		end
+		LogResult.assertTrue1(total == 22);
+	end
+	
+	Function testForStringDataItem(){@Test}
+		counter smallInt;
+		stop bigInt;
+		total int;
+		
+		// Record start of variation 
+		LogResult.logStdOut("Controls are data items with string types") ;		
+		total = 0;
+		stop = 5;
+		aString  string = "a";
+		
+		for ( counter from 1 to stop )
+			case ( aString )
+				when ( "a" )
+					total = total + 1;
+					aString += "b"; 
+				when ( "ab", "abc" )
+					total += 3;
+					aString  += "c";
+				otherwise
+					total += 5;
+			end
+		end
+		syslib.writestdout ( " --- total = " + total );
+		syslib.writestdout ( " --- aString = " + aString );
+		LogResult.assertTrue1(total == 17 && aString == "abcc");
+	end	
+	
+	Function testForConditions(){@Test}
+		counter smallInt;
+		stop bigInt;
+		total int;
+		
+		// Record start of variation 
+		LogResult.logStdOut("Controls are boolean expressions") ;		
+		total = 0;
+		stop = 5;
+
+		for ( counter from 1 to stop )
+			case
+				when ( counter == 1 )
+					total = total + 1;
+				when ( counter > 1 && counter < 3 )
+					total += 3;
+				when ( counter == 115 || counter == 4 )
+					total += 4;
+				otherwise
+					total += 5;
+			end
+		end
+		syslib.writestdout ( " --- total = " + total );
+		LogResult.assertTrue1(total == 18);
+	end	
+	
+	Function testForSystemVar(){@Test}
+		counter smallInt;
+		stop bigInt;
+		total int;
+		
+		// Record start of variation 
+		LogResult.logStdOut("Controls are data items with SysVar types") ;		
+		total = 0;
+		stop = 5;
+		
+		for ( counter from 1 to stop )
+			total = total + stop;
+		end
+		syslib.writestdout ( " --- total = " + total );		
+		LogResult.assertTrue1(total == 25);
+	end	
+	
+		
+end

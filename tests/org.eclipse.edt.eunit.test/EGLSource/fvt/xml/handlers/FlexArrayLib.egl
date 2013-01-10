@@ -1,0 +1,713 @@
+package fvt.xml.handlers;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.xml.XmlLib;
+import fvt.xml.handlers.data.primitiveArrayFlex;
+
+/* 
+* @name FlexArrayLib
+* @title The function test program for Flex Array
+* @keywords Flex Array
+* @author EDT team
+* @createDate 2011/08/25
+* @description 
+* Test Flexible Record, Convert Primitive Array Record to and from XML
+*/
+
+library FlexArrayLib
+
+    struct primitiveArrayFlex{};
+
+    function setUp()  
+        struct.paf1 =[12345, 54321]; //bigint[]
+        struct.paf2 =[1245, 1246]; // int[]
+        struct.paf3 =[1245, 1246]; // smallint[]
+        struct.paf4 =[1245.44E20, 1246.44E20]; // float[]
+        struct.paf5 =[1245.44E20, 1246.44E20]; // smallfloat[]
+        struct.paf9 =[1245.55, 1246.55]; // decimal(4)[]
+        struct.paf10 =[1245.55, 1246.55]; // decimal(10)[]
+        struct.paf11 =[1245.55, 1246.55]; // decimal(20) []
+        struct.paf12 =[1245.55, 1246.55]; // decimal(6,2)[]
+        struct.paf13 =["ABCDE", "XYZ"]; // string[]
+        struct.paf14 =["abcdfeghijk", "987654321az"]; // string[]
+        struct.paf19 =["03/27/2009", "03/28/2009"]; // date[]
+        struct.paf20 =["15:17:05", "16:12:15"]; // time[]
+        struct.paf21 =["2009/03/27 14:12:05", "2009/03/28 15:12:05"]; // timestamp[]
+        struct.paf25 =[true, false]; // boolean[]
+        struct.paf26 =[0x123456, 0xFEDCBA]; // bytes(3)[]
+    end
+
+    function testPaf1Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf1.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf1.getSize(), struct2.paf1.getSize());
+    end
+
+    function testPaf1_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf1[1]");
+        LogResult.assertBigIntEqual1(struct.paf1[1], struct2.paf1[1]);
+    end
+
+    function testPaf1_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf1[2]");
+        LogResult.assertBigIntEqual1(struct.paf1[2], struct2.paf1[2]);
+    end
+
+    function testPaf2Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf2.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf2.getSize(), struct2.paf2.getSize());
+    end
+
+    function testPaf2_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf2[1]");
+        LogResult.assertBigIntEqual1(struct.paf2[1], struct2.paf2[1]);
+    end
+
+    function testPaf2_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf2[2]");
+        LogResult.assertBigIntEqual1(struct.paf2[2], struct2.paf2[2]);
+    end
+
+    function testPaf3Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf3.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf3.getSize(), struct2.paf3.getSize());
+    end
+
+    function testPaf3_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf3[1]");
+        LogResult.assertBigIntEqual1(struct.paf3[1], struct2.paf3[1]);
+    end
+
+    function testPaf3_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf3[2]");
+        LogResult.assertBigIntEqual1(struct.paf3[2], struct2.paf3[2]);
+    end
+
+    function testPaf4Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf4.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf4.getSize(), struct2.paf4.getSize());
+    end
+
+    function testPaf4_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf4[1]");
+        LogResult.assertFloatEqual1(struct.paf4[1], struct2.paf4[1]);
+    end
+
+    function testPaf4_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf4[2]");
+        LogResult.assertFloatEqual1(struct.paf4[2], struct2.paf4[2]);
+    end
+
+    function testPaf5Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf5.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf5.getSize(), struct2.paf5.getSize());
+    end
+
+    function testPaf5_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf5[1]");
+        LogResult.assertFloatEqual1(struct.paf5[1], struct2.paf5[1]);
+    end
+
+    function testPaf5_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf5[2]");
+        LogResult.assertFloatEqual1(struct.paf5[2], struct2.paf5[2]);
+    end
+
+    function testPaf9Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf9.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf9.getSize(), struct2.paf9.getSize());
+    end
+
+    function testPaf9_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf9[1]");
+        LogResult.assertDecimalEqual1(struct.paf9[1], struct2.paf9[1]);
+    end
+
+    function testPaf9_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf9[2]");
+        LogResult.assertDecimalEqual1(struct.paf9[2], struct2.paf9[2]);
+    end
+
+    function testPaf10Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf10.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf10.getSize(), struct2.paf10.getSize());
+    end
+
+    function testPaf10_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf10[1]");
+        LogResult.assertDecimalEqual1(struct.paf10[1], struct2.paf10[1]);
+    end
+
+    function testPaf10_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf10[2]");
+        LogResult.assertDecimalEqual1(struct.paf10[2], struct2.paf10[2]);
+    end
+
+    function testPaf11Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf11.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf11.getSize(), struct2.paf11.getSize());
+    end
+
+    function testPaf11_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf11[1]");
+        LogResult.assertDecimalEqual1(struct.paf11[1], struct2.paf11[1]);
+    end
+
+    function testPaf11_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf11[2]");
+        LogResult.assertDecimalEqual1(struct.paf11[2], struct2.paf11[2]);
+    end
+
+    function testPaf12Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf12.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf12.getSize(), struct2.paf12.getSize());
+    end
+
+    function testPaf12_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf12[1]");
+        LogResult.assertDecimalEqual1(struct.paf12[1], struct2.paf12[1]);
+    end
+
+    function testPaf12_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf12[2]");
+        LogResult.assertDecimalEqual1(struct.paf12[2], struct2.paf12[2]);
+    end
+
+    function testPaf13Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf13.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf13.getSize(), struct2.paf13.getSize());
+    end
+
+    function testPaf13_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf13[1]");
+        LogResult.assertStringEqual1(struct.paf13[1], struct2.paf13[1]);
+    end
+
+    function testPaf13_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf13[2]");
+        LogResult.assertStringEqual1(struct.paf13[2], struct2.paf13[2]);
+    end
+
+    function testPaf14Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf14.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf14.getSize(), struct2.paf14.getSize());
+    end
+
+    function testPaf14_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf14[1]");
+        LogResult.assertStringEqual1(struct.paf14[1], struct2.paf14[1]);
+    end
+
+    function testPaf14_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf14[2]");
+        LogResult.assertStringEqual1(struct.paf14[2], struct2.paf14[2]);
+    end
+
+    function testPaf19Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("imitiveArrayStruct.paf19.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf19.getSize(), struct2.paf19.getSize());
+    end
+
+    function testPaf19_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf19[1]");
+        LogResult.assertDateEqual1(struct.paf19[1], struct2.paf19[1]);
+    end
+
+    function testPaf19_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf19[2]");
+        LogResult.assertDateEqual1(struct.paf19[2], struct2.paf19[2]);
+    end
+
+    function testPaf20Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("imitiveArrayStruct.paf20.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf20.getSize(), struct2.paf20.getSize());
+    end
+
+    function testPaf20_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf20[1]");
+        LogResult.assertTimeEqual1(struct.paf20[1], struct2.paf20[1]);
+    end
+
+    function testPaf20_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf20[2]");
+        LogResult.assertTimeEqual1(struct.paf20[2], struct2.paf20[2]);
+    end
+
+    function testPaf21Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf21.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf21.getSize(), struct2.paf21.getSize());
+    end
+
+    function testPaf21_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf21[1]");
+        LogResult.assertTimestampEqual1(struct.paf21[1], struct2.paf21[1]);
+    end
+
+    function testPaf21_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf21[2]");
+        LogResult.assertTimestampEqual1(struct.paf21[2], struct2.paf21[2]);
+    end
+
+    function testPaf25Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("itiveArrayStruct.paf25.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf25.getSize(), struct2.paf25.getSize());
+    end
+
+    function testPaf25_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf25[1]");
+        LogResult.assertTrue1(struct.paf25[1] == struct2.paf25[1]);
+    end
+
+    function testPaf25_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf25[2]");
+        LogResult.assertTrue1(struct.paf25[2] == struct2.paf25[2]);
+    end
+
+    function testPaf26Size(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("itiveArrayStruct.paf26.getsize()");
+        LogResult.assertBigIntEqual1(struct.paf26.getSize(), struct2.paf26.getSize());
+    end
+
+    function testPaf26_1(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf26[1]");
+        LogResult.assertTrue1(struct.paf26[1] == struct2.paf26[1]);
+    end
+
+    function testPaf26_2(){@Test}
+        setUp();
+
+        //xml string = XMLLib.convertToXML(struct);
+        xml string = XMLLib.convertToXML(struct, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        struct2 primitiveArrayFlex{};
+        XMLLib.convertFromXML(xml, struct2);
+
+        LogResult.logStdOut("primitiveArrayStruct.paf26[2]");
+        LogResult.assertTrue1(struct.paf26[2] == struct2.paf26[2]);
+    end
+
+end

@@ -1,0 +1,6 @@
+#Mon Mar 05 17:21:52 CST 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.eunit.test/EGLSource/org_eclipse_edt_eunit_test.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds//EGLSource/gen/javascript=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+generatorIds/<project>=

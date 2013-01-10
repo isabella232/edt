@@ -1,0 +1,5 @@
+#Fri Oct 07 16:05:44 EDT 2011
+DefaultDeploymentDescriptorPath/<project>=/Sunrise/EGLSource/Sunrise.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

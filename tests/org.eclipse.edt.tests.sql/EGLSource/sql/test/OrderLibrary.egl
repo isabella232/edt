@@ -1,0 +1,77 @@
+package sql.test;
+
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+
+// basic library
+library OrderLibrary
+
+	use dataSourceLibrary ;
+	use commonFunctionLibrary ;
+	
+	order Order? = new order ;
+	orderTwin Order? = new order ; 
+	emptyOrder Order? = new order ;
+		
+	function createOrderTable ( )
+		dropOrderTable();
+		execute from ds with #sql{
+			CREATE TABLE ORDER_TABLE
+			   (
+			      ORDER_ID INTEGER NOT NULL,
+			      ORDER_MOD INTEGER NOT NULL,
+			      ORDER_SHIP_DATE DATE,
+			      CUST_ID INTEGER
+			   )
+		};
+		
+//			      id INTEGER NOT NULL,
+//			      name VARCHAR(50)			
+		
+		execute from ds with #sql{	
+			ALTER TABLE ORDER_TABLE
+			   ADD CONSTRAINT ORDER_TABLE_PK Primary Key (
+			      ORDER_ID ) 
+		};
+	end
+	
+	function dropOrderTable ( ) 
+		try 
+			execute with #sql{ drop table ORDER_TABLE } from ds ;
+		onException ( ex SQLException )
+			Syslib.writeStdOut ( " drop table exception, sqlstate = " + ex.SQLSTATE ) ;
+			Syslib.writeStdOut ( " exception message = " + ex.message ) ;
+		end
+	end 
+	
+	function verifyOrder ( id int in, cust_id int )	
+		setEmpty ( ) ;	
+		order.order_id = id ;		
+		get order from ds ;
+		checkOrder ( order, id, cust_id ) ;
+	end
+	
+	function verifyNotOrder ( id int in )	
+		setEmpty ( ) ;	
+		order.order_id = id ;		
+		get order from ds ;
+		compareRow ( emptyOrder, order ) ;
+	end
+	
+	private function setEmpty ( )
+		order = emptyOrder ;
+	end
+	
+	function checkOrder ( actualOrder Order, id int in, cust_id int )
+		orderTwin.initializeOrder ( id, cust_id ) ;
+		compareRow ( orderTwin, actualOrder ) ;
+	end	
+	
+	function compareRow ( expectedRow Order, actualRow Order )
+		checkColumnValue ( "order_id", expectedRow.order_id, actualRow.order_id ) ;
+		checkColumnValue ( "order_mod", expectedRow.order_mod, actualRow.order_mod ) ;
+		checkColumnValue ( "order_ship_date", expectedRow.order_ship_date, actualRow.order_ship_date ) ;
+		checkColumnValue ( "cust_id", expectedRow.cust_id, actualRow.cust_id ) ;
+	end
+	
+end

@@ -1,0 +1,145 @@
+package fvt.operators;
+
+import FVT.operators.myFlexRecord;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestIsaOperatorLib
+* @title The function test program for the EGL ISA operator
+* @keywords ISA
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL ISA operator
+*/
+
+library TestIsaOperatorLib
+
+    anInt any = new int;
+    aString any = new string;
+    myRecord any = new myFlexRecord;
+
+    anInt1 any = new int[];
+    aString1 any = new string[];
+    myRecord1 any = new myFlexRecord[];
+
+    function TestAny1a(){@Test}
+        LogResult.logStdOut("Check any string - 1a");
+        LogResult.assertTrue1((isaString(aString)));
+    end
+
+    function TestAny1b(){@Test}
+        LogResult.logStdOut("Check any string - 1b");
+        LogResult.assertTrue1(!(isaInt(aString)));
+    end
+
+    function TestAny1c(){@Test}
+        LogResult.logStdOut("Check any string - 1c");
+        LogResult.assertTrue1(!(isaRecord(aString)));
+    end
+
+    function TestAny2a(){@Test}
+        LogResult.logStdOut("Check any integer - 2a");
+        LogResult.assertTrue1(!(isaString(anInt)));
+    end
+
+    function TestAny2b(){@Test}
+        LogResult.logStdOut("Check any integer - 2b");
+        LogResult.assertTrue1((isaInt(anInt)));
+    end
+
+    function TestAny2c(){@Test}
+        LogResult.logStdOut("Check any integer - 2c");
+        LogResult.assertTrue1(!(isaRecord(anInt)));
+    end
+
+    function TestAny3a(){@Test}
+        LogResult.logStdOut("Check any record - 3a");
+        LogResult.assertTrue1(!(isaString(myRecord)));
+    end
+
+    function TestAny3b(){@Test}
+        LogResult.logStdOut("Check any record - 3b");
+        LogResult.assertTrue1(!(isaInt(myRecord)));
+    end
+
+    function TestAny3c(){@Test}
+        LogResult.logStdOut("Check any record - 3c");
+        LogResult.assertTrue1((isaRecord(myRecord)));
+    end
+
+    function TestAnyArray1a(){@Test}
+        LogResult.logStdOut("Check any string array- 1a");
+        LogResult.assertTrue1((isaStringArray(aString1)));
+    end
+
+    function TestAnyArray1b(){@Test}
+        LogResult.logStdOut("Check any string array- 1a");
+        LogResult.assertTrue1(!(isaIntArray(aString1)));
+    end
+
+    function TestAnyArray1c(){@Test}
+        LogResult.logStdOut("Check any string array-- 1c");
+        LogResult.assertTrue1(!(isaRecordArray(aString1)));
+    end
+
+    function TestAnyArray2a(){@Test}
+        LogResult.logStdOut("Check any integer array-- 2a");
+        LogResult.assertTrue1(!(isaStringArray(anInt1)));
+    end
+
+    function TestAnyArray2b(){@Test}
+        LogResult.logStdOut("Check any integer array-- 2b");
+        LogResult.assertTrue1((isaIntArray(anInt1)));
+    end
+
+    function TestAnyArray2c(){@Test}
+        LogResult.logStdOut("Check any integer array-- 2c");
+        LogResult.assertTrue1(!(isaRecordArray(anInt1)));
+    end
+
+    function TestAnyArray3a(){@Test}
+        LogResult.logStdOut("Check any record array-- 3a");
+        LogResult.assertTrue1(!(isaStringArray(myRecord1)));
+    end
+
+    function TestAnyArray3b(){@Test}
+        LogResult.logStdOut("Check any record array-- 3b");
+        LogResult.assertTrue1(!(isaIntArray(myRecord1)));
+    end
+
+    function TestAnyArray3c(){@Test}
+        LogResult.logStdOut("Check any record array-- 3c");
+        LogResult.assertTrue1((isaRecordArray(myRecord1)));
+    end
+
+    function isaString(item any in) returns(boolean)
+        return(item isa string);
+    end
+
+    function isaInt(item any in) returns(boolean)
+        return(item isa int);
+    end
+
+    function isaRecord(item any in) returns(boolean)
+        return(item isa myFlexRecord);
+    end
+
+    function isaAnyArray(item any in) returns(boolean)
+        return(item isa any[]);
+    end
+
+    function isaStringArray(item any in) returns(boolean)
+        return(item isa string[]);
+    end
+
+    function isaIntArray(item any in) returns(boolean)
+        return(item isa int[]);
+    end
+
+    function isaRecordArray(item any in) returns(boolean)
+        return(item isa myFlexRecord[]);
+    end
+
+end

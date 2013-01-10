@@ -1,0 +1,205 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.java.JavaObjectException;
+
+/** @test
+  * @name EInt004
+  * @title EInt004 - runArithmeticFunction
+  * @description testing integer arithmetic opertations and expressions
+  * @testcases runArithmeticFunction01 - runArithmeticFunction19
+  * @sources EInt004.egl
+  * @keywords int, operations, expressions
+ **/
+library EInt004 {}
+	
+	intActual int;
+	intExpect int;
+	variation string;
+	
+	function compileError()
+ 		compileError("");
+ 	end
+ 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+ 	function assertTrue()
+	 	success boolean = (intExpect == intActual);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + intActual);
+	 		SysLib.writeStdOut(" expect " + intExpect);
+	 	end
+	 	// revert();
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runArithmeticFunction01(){@Test}	
+		variation = "operation + with literals";
+		intActual = 75 + 5;
+		intExpect = 80;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction02(){@Test}	
+		variation = "operation + with negative literals";
+		intActual = 75 + -5;
+		intExpect = 70;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction03(){@Test}	
+		variation = "operation - with literals";
+		intActual = 75 - 5;
+		intExpect = 70;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction04(){@Test}	
+		variation = "operation - with negative literals";
+		intActual = 75 - -5;
+		intExpect = 80;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction05(){@Test}	
+		variation = "operation * with literals";
+		intActual = 75 * 5;
+		intExpect = 375;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction06(){@Test}	
+		variation = "operation * with negative literals";
+		intActual = 75 * -5;
+		intExpect = -375;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction07(){@Test}	
+		variation = "operation / with literals";
+		intActual = 75 / 5;
+		intExpect = 15;
+		assertTrue();
+	end
+
+	function runArithmeticFunction08(){@Test}	
+		variation = "operation / with negative literals";
+		intActual = 75 / -5;
+		intExpect = -15;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction09(){@Test}	
+		variation = "operation / with literals";
+		intActual = 75 / 2;
+		intExpect = 37;
+		assertTrue();
+	end
+
+	function runArithmeticFunction10(){@Test}	
+		variation = "operation / with negative literals";
+		intActual = 75 / -2;
+		intExpect = -37;
+		assertTrue();
+	end
+			
+	function runArithmeticFunction11(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and literals";
+		failDetails string;
+		try
+			intActual = 75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction12(){@Test {targetLang = [JAVA]}}	
+		variation = "operation / with 0 and negative literals";
+		failDetails string;
+		try
+			intActual = -75 / 0;
+			failDetails = variation + " no exception ";
+			LogResult.failed(failDetails);
+		onException (expect JavaObjectException)
+			failDetails = variation + " exceptionType " + expect.exceptionType;
+			LogResult.passed("OK");
+		onException (wrong AnyException)
+			failDetails = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runArithmeticFunction13(){@Test}	
+		variation = "operation % with literals";
+		intActual = 75 % 2;
+		intExpect = 1;
+		assertTrue();
+	end
+
+	function runArithmeticFunction14(){@Test}	
+		variation = "operation % with negative literals";
+		intActual = 75 % -2;
+		intExpect = 1;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction15(){@Test}	
+		variation = "operation ** with literals to float";
+		actual float = 5 ** 3;
+		intActual = actual;
+		intExpect = 125;
+		assertTrue();
+	end
+
+	function runArithmeticFunction16(){@Test}	
+		variation = "operation ** with negative literals to float";
+		actual float = -5 ** 3;
+		intActual = actual;
+		intExpect = -125;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction17(){@Test}	
+		variation = "operation ** with literals to int";
+		intActual = 5 ** 3;
+		intExpect = 125;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction18(){@Test}	
+		variation = "operation ** with negative literals to int";
+		intActual = -5 ** 3;
+		intExpect = -125;
+		assertTrue();
+	end
+	
+	function runArithmeticFunction19(){@Test}	
+		variation = "operation + with overflow";
+		try
+			overflow int = 2147483600;
+			overflow += 100;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed("OK Bug 356228");
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+
+end // EInt004
+

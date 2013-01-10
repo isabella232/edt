@@ -1,0 +1,91 @@
+### Eclipse Workspace Patch 1.0
+#P egl.rest
+Index: EGLSource/utilities/CommonUtilities.egl
+===================================================================
+RCS file: /cvsroot/rbd/org.eclipse.edt.tests.services/egl.rest/EGLSource/utilities/CommonUtilities.egl,v
+retrieving revision 1.3
+diff -u -r1.3 CommonUtilities.egl
+--- EGLSource/utilities/CommonUtilities.egl	8 Nov 2011 22:02:10 -0000	1.3
++++ EGLSource/utilities/CommonUtilities.egl	8 Nov 2011 22:07:42 -0000
+@@ -20,11 +20,13 @@
+ 		temp.item3 = 99999999.10;
+ 		recArray.appendElement(temp);
+ 		
++		temp = new SimpleRecord;
+ 		temp.item1 = "Index 1";
+ 		temp.item2 = 20;
+ 		temp.item3 = 99999999.20;
+ 		recArray.appendElement(temp);
+ 		
++		temp = new SimpleRecord;
+ 		temp.item1 = "Index 1";
+ 		temp.item2 = 30;
+ 		temp.item3 = 99999999.30;
+@@ -56,17 +58,22 @@
+ 		temp2.item3 = 99999999.10;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[1].item4[2].item1";
+ 		temp2.item2 = 20;
+ 		temp2.item3 = 99999999.20;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[1].item4[3].item1";
+ 		temp2.item2 = 30;
+ 		temp2.item3 = 99999999.30;
+ 		temp.item4.appendElement(temp2);
+ 
+ 		recArray.appendElement(temp);
++		
++		temp = new ArrayContainingRecord;
++		temp2 = new simpleRecord;
+ 			
+ 		// create recArray[2]
+ 		temp.item1 = new string[];
+@@ -87,11 +94,13 @@
+ 		temp2.item3 = 99999999.10;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[2].item4[2].item1";
+ 		temp2.item2 = 20;
+ 		temp2.item3 = 99999999.20;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[2].item4[3].item1";
+ 		temp2.item2 = 30;
+ 		temp2.item3 = 99999999.30;
+@@ -99,6 +108,8 @@
+ 
+ 		recArray.appendElement(temp);
+ 			
++		temp = new ArrayContainingRecord;
++		temp2 = new simpleRecord;
+ 		// create recArray[3]
+ 		temp.item1 = new string[];
+ 		temp.item1.appendElement("recArray[3].item1[1]");
+@@ -118,11 +129,13 @@
+ 		temp2.item3 = 99999999.10;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[3].item4[2].item1";
+ 		temp2.item2 = 20;
+ 		temp2.item3 = 99999999.20;
+ 		temp.item4.appendElement(temp2);
+ 		
++		temp2 = new simpleRecord;
+ 		temp2.item1 = "recArray[3].item4[3].item1";
+ 		temp2.item2 = 30;
+ 		temp2.item3 = 99999999.30;
+@@ -151,7 +164,6 @@
+         flex.item4 = temp;
+     end
+ 
+-	
+ 	function getStringRec( idx int in )returns(StringRec)
+ 		rec StringRec;
+ 		rec.field1 = "StringRec" + idx + ".field1";

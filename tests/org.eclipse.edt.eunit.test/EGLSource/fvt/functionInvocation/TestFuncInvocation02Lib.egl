@@ -1,0 +1,277 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation02Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation02Lib
+    use returnvaluefunctions;
+
+    //a any;
+    a any?;
+
+    function testInNumericExpressions1a(){@Test}
+        LogResult.logStdOut("In numeric expressions any - 1a");
+        //a1 any;
+        a1 any?;
+        a1 = 6 + retInt();
+        rc1 boolean = a1 isa int;
+//        LogResult.assertTrue1(a1 isa decimal(10));
+ 		LogResult.assertTrue1(a1 isa int);
+    end
+
+    function testInNumericExpressions1b(){@Test}
+        LogResult.logStdOut("In numeric expressions any - 1b");
+        a = 6 + retInt();
+        LogResult.assertDecimalEqual1(11, a);
+    end
+
+    function testInNumericExpressions2(){@Test}
+        LogResult.logStdOut("In numeric expressions any - 2");
+        a = 5;
+        a = a as int + retBin();
+        LogResult.assertDecimalEqual1(10, a);
+    end
+
+    //    function testInNumericExpressions3(){@Test}
+    //        LogResult.logStdOut("In numeric expressions any - 3");
+    //        //		b decimal(4,2);
+    //        b any;
+    //        b = 33.33;
+    //        b = b as decimal(4, 2) + retDecimal();
+    //        //		LogResult.assertTrue1( compareAnyNumber(b,37.88) );
+    //    end
+    
+    function testInNumericExpressions4(){@Test}
+        LogResult.logStdOut("In numeric expressions any - 4");
+        //c any;
+        c any?;
+        c = 10.5 + retFloat();
+        success boolean =(c as float == 19.6999);
+        LogResult.assertTrue1(success);
+        if(!success)
+        //LogResult.expect(c, 19.6999);
+        end
+    end
+
+    //    function testInFunctionArguments1(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 1");
+    //        //		LogResult.assertTrue1( ArgInt(retAnyInt()) );
+    //    end
+    
+    //    function testInFunctionArguments2(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 2");
+    //        //		LogResult.assertTrue1( ArgBin(retAnyBin()) );
+    //    end
+    
+    //    function testInFunctionArguments3(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 3");
+    //        //		LogResult.assertTrue1( ArgDecimal(retAnyDecimal() ));
+    //    end
+    
+    //    function testInFunctionArguments4(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 4");
+    //        //		LogResult.assertTrue1( argfloat(retAnyFloat()) );
+    //    end
+    
+    //    function testInFunctionArguments5(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 5");
+    //        //		LogResult.assertTrue1( ArgChar(retAnychar()) );
+    //    end
+    
+    //    function testInFunctionArguments6(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 6");
+    //        //		LogResult.assertTrue1( argDate(retAnyDate()) );
+    //    end
+    
+    //    function testInFunctionArguments7(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 7");
+    //        //		LogResult.assertTrue1( argTime(retAnyTime()) );
+    //    end
+    
+    //    function testInFunctionArguments8(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 8");
+    //        //		LogResult.assertTrue1( argTimeStamp(retAnyTimeStamp()) );
+    //    end
+    
+    //    function testInFunctionArguments9(){@Test}
+    //        //		LogResult.logStdOut("In function arguments any - 9";
+    //        //		LogResult.assertTrue1( ArgDBchar(retAnyDBchar()) );
+    //    end
+    
+    //    function testInFunctionArguments10(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 10");
+    //        //		LogResult.assertTrue1( ArgMbchar(retAnyMbchar()) );
+    //    end
+    
+    //    function testInFunctionArguments11(){@Test}
+    //        LogResult.logStdOut("In function arguments any - 11");
+    //        //		LogResult.assertTrue1( argstring(retAnystring()) );
+    //    end
+    
+    //    function testInTextExpressions1(){@Test}
+    //        LogResult.logStdOut("In text expressions any - 1");
+    //        //		if ( systemType is debug )
+    //        //		end
+    //        //d string; //char(6);
+    //        //d ="IBM" + retAnychar();
+    //        //LogResult.assertTrue1(d=="IBMEGL");
+    //    end
+    
+    //    function testInTextExpressionsSwitch2(){@Test}
+    //        //	Validation error: text expressions involving function expression that return any.
+    //        LogResult.logStdOut("In text expressions any switch- 2");
+    //        //		e hex(4);
+    //        //		e =  retAnyHex() + "AB" ;
+    //        //		LogResult.assertTrue1(e=="ABE1");
+    //    end
+    
+    //    function testInTextExpressions2(){@Test}
+    //        //LogResult.logStdOut("In text expressions any - 2";
+    //        //e2 hex(4);
+    //        //e2 =  "AB" + retAnyHex() ;
+    //        //LogResult.assertTrue1(e2=="ABE1");
+    //    end
+    
+    //    function testInTextExpressions3(){@Test}
+    //        //	LogResult.logStdOut("In text expressions any - 3";	
+    //        //	f date;
+    //        //	f = retAnyDate()+1;
+    //        //	datalib.compareDate(f, dateTimeLib.dateValue("20040102"));
+    //    end
+    
+    //    function testInTextExpressions4(){@Test}
+    //        //	LogResult.logStdOut("In text expressions Any - 4";
+    //        //	g time;
+    //        //	g = retAnyTime();
+    //        //	dataLib.compareTime(g, dateTimeLib.timeValue("080000"));
+    //    end
+    
+    //    function testInTextExpressions5(){@Test}
+    //        //	LogResult.logStdOut("In text expressions Any - 5";
+    //        //	h timestamp;
+    //        //	h = retAnyTimeStamp();
+    //        //	dataLib.compareTimeStamp(h,dateTimeLib.timestampValue("20040101080000"));
+    //    end
+    
+    //    function testInTextExpressions6(){@Test}
+    //        //	LogResult.logStdOut("In text expressions Any- 6";
+    //        //	i dbchar(4);
+    //        //	i = retAnyDBchar() + "??";
+    //        //	LogResult.assertTrue1(i=="????");
+    //    end
+    
+    //    function testInTextExpressions7(){@Test}
+    //        //	LogResult.logStdOut("In text expressions Any - 7";
+    //        //	j mbchar(10);
+    //        //	j = retAnyDBchar() + "??1";
+    //        //	LogResult.assertTrue1(j=="ABC???1");
+    //    end
+    
+    function testInTextExpressions8(){@Test}
+        LogResult.logStdOut("In text expressions any - 8");
+        k string;
+        k = "pass" + retAnyString();// + "pass";
+        LogResult.assertTrue1(k == "passEGLTEST");
+    end
+
+    //    function testInTextExpressions9(){@Test}
+    //        LogResult.logStdOut("In text expressions any - 9");
+    //        //ln string; //unicode(7);
+    //        //ln = "34" + retAnyUnicode();
+    //        //LogResult.assertTrue1(ln=="34EGL12");
+    //    end
+    
+    function testInConditionals1(){@Test}
+        LogResult.logStdOut("In conditionals Any - 1");
+        LogResult.assertTrue1(retAnyInt() as int >= 5);
+    end
+
+    //    function testInConditionals2(){@Test}
+    //        LogResult.logStdOut("In conditionals Any- 2");
+    //        //LogResult.assertTrue1( retAnychar() like "EGL" );
+    //    end
+    
+    function testInConditionals3(){@Test}
+        LogResult.logStdOut("In conditionals Any- 3");
+        result boolean = true;
+        while(retAnyDecimal() as decimal(4, 2) < 3.55)
+            result = false;
+            exit while; // prevent infinite looping
+        end
+        LogResult.assertTrue1(result);
+    end
+
+    //    function testInConditionals4(){@Test}
+    //        LogResult.logStdOut("In conditionals Any - 4");
+    //        LogResult.assertTrue1(retAnyString() matches "EGL*" && retAnyFloat() as float != 10);
+    //    end
+    
+    //    function testInAssignmentSource1(){@Test}
+    //        //		LogResult.logStdOut("function return in assignment source - 1";
+    //        //		aa int;
+    //        //		aa = retInt();
+    //        //		compareInt(aa,5);
+    //    end
+    
+    //    function testInAssignmentSource2(){@Test}
+    //        //		LogResult.logStdOut("function return in assignment source - 2";
+    //        //		bb char(4);
+    //        //		bb = retchar();
+    //        //		LogResult.assertTrue1(bb=="EGL ");
+    //    end
+    
+    //    function testInAssignmentSource3(){@Test}
+    //        //		LogResult.logStdOut("function return in assignment source - 3";
+    //        //		cc decimal(4,2);
+    //        //		cc = retDecimal();
+    //        //		datalib.compareNumber(cc,retDecimal());
+    //    end
+    
+    //    function testInAssignmentSource4(){@Test}
+    //        //		LogResult.logStdOut("function return in assignment source - 4";
+    //        //		dd string;
+    //        //		dd = retString();
+    //        //		datalib.compareString(dd,retString());
+    //    end
+    
+    function testInMoveSource1(){@Test}
+        LogResult.logStdOut("function return in move source Any- 1");
+        //aaa any;
+        aaa any?;
+        aaa = 3;
+        //move retAnyInt() to aaa;
+        aaa = retAnyInt();
+        LogResult.assertBigIntEqual1(5, aaa as int);
+    end
+
+    function testInMoveSource2(){@Test}
+        LogResult.logStdOut("function return in move source Any - 2");
+        bbb string;
+        //move retAnyString() to bbb;
+        bbb = retAnyString();
+        LogResult.assertStringEqual1("EGLTEST", bbb as string);
+    end
+
+    //    function testClobFunctions1(){@Test}
+    //        LogResult.logStdOut("Clob Functions 1");
+    //        //		aClob Clob;
+    //        //		setClobFromString ( aClob, "This is the contents of a clob" ) ;
+    //        //		compareString (getStrFromClob(aClob), "This is the contents of a clob" ) ;
+    //    end
+    
+    //    function testClobFunctions2(){@Test}
+    //        //		LogResult.logStdOut("Clob Functions 2";
+    //        // 		compareInt(getClobLen(aClob), 30);
+    //    end
+    
+end

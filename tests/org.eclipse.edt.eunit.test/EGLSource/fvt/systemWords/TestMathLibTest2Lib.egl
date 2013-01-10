@@ -1,0 +1,240 @@
+package fvt.systemWords;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestMathLibTest2Lib
+* @title The function test program for other part of MathLib in EDT for RichUI
+* @keywords MathLib
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+*/
+
+library TestMathLibTest2Lib
+
+    variation string;
+
+    function testDecimalFunction01(){@Test}
+        operand smallInt;
+        variation = "MathLib.decimals(smallInt)";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction02(){@Test}
+        operand int;
+        variation = "MathLib.decimals(int)";
+
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction03(){@Test}
+        operand bigInt;
+        variation = "MathLib.decimals(bigInt)";
+
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction04(){@Test}
+        operand smallFloat;
+        variation = "MathLib.decimals(smallFloat)";
+
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction05(){@Test}
+        operand float;
+        variation = "MathLib.decimals(float)";
+
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction06(){@Test}
+        operand decimal(31, 3);
+        variation = "MathLib.decimals(decima(31,3))";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(3, count);
+    end
+
+    function testDecimalFunction07(){@Test}
+        operand decimal(31, 3);
+        variation = "MathLib.decimals(decima(31,3) = 123.45)";
+        operand = 123.45;
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(3, count);
+    end
+
+    function testDecimalFunction08(){@Test}
+        operand decimal(19, 0);
+        variation = "MathLib.decimals(decima(19,0))";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction09(){@Test}
+        operand decimal;
+        variation = "MathLib.decimals(decimal)";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction10(){@Test}
+        operand decimal;
+        operand = 123.45;
+        variation = "MathLib.decimals(decimal = 123.45)";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(2, count);
+    end
+
+    function testDecimalFunction11(){@Test}
+        operand number;
+        variation = "MathLib.decimals(number)";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(0, count);
+    end
+
+    function testDecimalFunction12(){@Test}
+        operand number;
+        operand = 123.45;
+        variation = "MathLib.decimals(number = 123.45)";
+        count int = operand.decimals();
+       	LogResult.assertBigIntEqual1(2, count);    
+    end
+
+    function testDecimalFunctionNullable(){@Test}
+        try
+            operand decimal(4, 2)?;
+            variation = "MathLib.decimals(decimal(4,2)?)";
+            count int = operand.decimals();
+        onException(nve NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function testDecimalFunctionNullable2(){@Test}
+        operand decimal(4, 2)?;
+        operand = 23.23;
+        variation = "MathLib.decimals(decimal(4,2))";
+        count int = operand.decimals();
+        LogResult.assertBigIntEqual1(2, count);
+    end
+
+    function testPrecisionFunction01(){@Test}
+        operand smallInt;
+        variation = "MathLib.precision(smallInt)";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(4, count);
+
+    end
+
+    function testPrecisionFunction02(){@Test}
+        operand int;
+        variation = "MathLib.precision(int)";
+
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(9, count);
+
+    end
+
+    function testPrecisionFunction03(){@Test}
+        operand bigInt;
+        variation = "MathLib.precision(bigInt)";
+
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(18, count);
+    end
+
+    function testPrecisionFunction04(){@Test}
+        operand smallFloat;
+        variation = "MathLib.precision(smallFloat)";
+
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(6, count);
+    end
+
+    function testPrecisionFunction05(){@Test}
+        operand float;
+        variation = "MathLib.precision(float)";
+
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(15, count);
+    end
+
+    function testPrecisionFunction06(){@Test}
+        operand decimal(31, 3);
+        variation = "MathLib.precision(decima(31,3))";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(31, count);
+    end
+
+    function testPrecisionFunction07(){@Test}
+        operand decimal(32, 3);
+        variation = "MathLib.precision(decima(32,3) = 123.45)";
+        operand = 123.45;
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(32, count);
+    end
+
+    function testPrecisionFunction08(){@Test}
+        operand decimal(19, 0);
+        variation = "MathLib.precision(decima(19,0))";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(19, count);
+    end
+
+    function testPrecisionFunction09(){@Test}
+        operand decimal;
+        variation = "MathLib.precision(decimal)";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(1, count);
+    end
+
+    function testPrecisionFunction10(){@Test}
+        operand decimal;
+        operand = 123.45;
+        variation = "MathLib.precision(decimal = 123.45)";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(5, count);
+    end
+
+    function testPrecisionFunction11(){@Test}
+         operand number;
+         variation = "MathLib.precision(number)";
+         count int = operand.precision();
+         LogResult.assertBigIntEqual1(9, count);
+        
+    end
+
+    function testPrecisionFunction12(){@Test}
+		operand number;
+        operand = 123.45;
+        variation = "MathLib.precision(number = 123.45)";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(5, count);
+       
+    end
+
+    function testPrecisionFunctionNullable(){@Test}
+        try
+            operand decimal(4, 2)?;
+            variation = "MathLib.precision(decimal(4,2)?)";
+            count int = operand.precision();
+        onException(nve NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function testPrecisionFunctionNullable2(){@Test}
+        operand decimal(4,2)?;
+        operand = 23.23;
+        variation = "MathLib.precision(decimal(4,2))";
+        count int = operand.precision();
+        LogResult.assertBigIntEqual1(4, count);
+    end
+end

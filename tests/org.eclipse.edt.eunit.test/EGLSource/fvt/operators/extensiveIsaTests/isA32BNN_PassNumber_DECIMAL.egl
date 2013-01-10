@@ -1,0 +1,2656 @@
+package fvt.operators.extensiveIsaTests;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name isA32BNN_PassNumber_DECIMAL
+* @title The function test program for the EGL ISA operator
+* @keywords ISA
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL ISA operator
+*/
+
+library isA32BNN_PassNumber_DECIMAL
+
+    private EXPECTED_COMPARE string;
+    private RESULT_COMPARE string;
+    private hadFailure string;
+    private myLen int;
+    private myDec int;
+    private myType string;
+
+    decimalSqlRec decimalSqlRec;
+    DECIMAL19D0 decimal(19, 0);
+    DECIMAL20D0 decimal(20, 0);
+    DECIMAL21D0 decimal(21, 0);
+    DECIMAL22D0 decimal(22, 0);
+    DECIMAL23D0 decimal(23, 0);
+    DECIMAL24D0 decimal(24, 0);
+    DECIMAL25D0 decimal(25, 0);
+    DECIMAL26D0 decimal(26, 0);
+    DECIMAL27D0 decimal(27, 0);
+    DECIMAL28D0 decimal(28, 0);
+    DECIMAL29D0 decimal(29, 0);
+    DECIMAL30D0 decimal(30, 0);
+    DECIMAL31D0 decimal(31, 0);
+    DECIMAL19I2 decimal(19);
+    DECIMAL20I2 decimal(20);
+    DECIMAL21I2 decimal(21);
+    DECIMAL22I2 decimal(22);
+    DECIMAL23I2 decimal(23);
+    DECIMAL24I2 decimal(24);
+    DECIMAL25I2 decimal(25);
+    DECIMAL26I2 decimal(26);
+    DECIMAL27I2 decimal(27);
+    DECIMAL28I2 decimal(28);
+    DECIMAL29I2 decimal(29);
+    DECIMAL30I2 decimal(30);
+    DECIMAL31I2 decimal(31);
+    DECIMAL01D0 decimal(1, 0);
+    DECIMAL02D0 decimal(2, 0);
+    DECIMAL03D0 decimal(3, 0);
+    DECIMAL04D0 decimal(4, 0);
+    DECIMAL05D0 decimal(5, 0);
+    DECIMAL06D0 decimal(6, 0);
+    DECIMAL07D0 decimal(7, 0);
+    DECIMAL08D0 decimal(8, 0);
+    DECIMAL09D0 decimal(9, 0);
+    DECIMAL10D0 decimal(10, 0);
+    DECIMAL11D0 decimal(11, 0);
+    DECIMAL12D0 decimal(12, 0);
+    DECIMAL13D0 decimal(13, 0);
+    DECIMAL14D0 decimal(14, 0);
+    DECIMAL15D0 decimal(15, 0);
+    DECIMAL16D0 decimal(16, 0);
+    DECIMAL17D0 decimal(17, 0);
+    DECIMAL18D0 decimal(18, 0);
+    DECIMAL01I2 decimal(1);
+    DECIMAL02I2 decimal(2);
+    DECIMAL03I2 decimal(3);
+    DECIMAL04I2 decimal(4);
+    DECIMAL05I2 decimal(5);
+    DECIMAL06I2 decimal(6);
+    DECIMAL07I2 decimal(7);
+    DECIMAL08I2 decimal(8);
+    DECIMAL09I2 decimal(9);
+    DECIMAL10I2 decimal(10);
+    DECIMAL11I2 decimal(11);
+    DECIMAL12I2 decimal(12);
+    DECIMAL13I2 decimal(13);
+    DECIMAL14I2 decimal(14);
+    DECIMAL15I2 decimal(15);
+    DECIMAL16I2 decimal(16);
+    DECIMAL17I2 decimal(17);
+    DECIMAL18I2 decimal(18);
+    DECIMAL32D0 decimal(32, 0);
+    DECIMAL32 decimal(32);
+    DECIMAL32D00 decimal(32, 0);
+    DECIMAL32D01 decimal(32, 1);
+    DECIMAL32D02 decimal(32, 2);
+    DECIMAL32D03 decimal(32, 3);
+    DECIMAL32D04 decimal(32, 4);
+    DECIMAL32D05 decimal(32, 5);
+    DECIMAL32D06 decimal(32, 6);
+    DECIMAL32D07 decimal(32, 7);
+    DECIMAL32D08 decimal(32, 8);
+    DECIMAL32D09 decimal(32, 9);
+    DECIMAL32D10 decimal(32, 10);
+    DECIMAL32D11 decimal(32, 11);
+    DECIMAL32D12 decimal(32, 12);
+    DECIMAL32D13 decimal(32, 13);
+    DECIMAL32D14 decimal(32, 14);
+    DECIMAL32D15 decimal(32, 15);
+    DECIMAL32D16 decimal(32, 16);
+    DECIMAL32D17 decimal(32, 17);
+    DECIMAL32D18 decimal(32, 18);
+    DECIMAL32D19 decimal(32, 19);
+    DECIMAL32D20 decimal(32, 20);
+    DECIMAL32D21 decimal(32, 21);
+    DECIMAL32D22 decimal(32, 22);
+    DECIMAL32D23 decimal(32, 23);
+    DECIMAL32D24 decimal(32, 24);
+    DECIMAL32D25 decimal(32, 25);
+    DECIMAL32D26 decimal(32, 26);
+    DECIMAL32D27 decimal(32, 27);
+    DECIMAL32D28 decimal(32, 28);
+    DECIMAL32D29 decimal(32, 29);
+    DECIMAL32D30 decimal(32, 30);
+    DECIMAL32D31 decimal(32, 31);
+    DECIMAL32D32 decimal(32, 32);
+    DECIMAL32I2 decimal(32);
+    DECIMAL18 decimal(18);
+    DECIMAL18D00 decimal(18, 0);
+    DECIMAL18D01 decimal(18, 1);
+    DECIMAL18D02 decimal(18, 2);
+    DECIMAL18D03 decimal(18, 3);
+    DECIMAL18D04 decimal(18, 4);
+    DECIMAL18D05 decimal(18, 5);
+    DECIMAL18D06 decimal(18, 6);
+    DECIMAL18D07 decimal(18, 7);
+    DECIMAL18D08 decimal(18, 8);
+    DECIMAL18D09 decimal(18, 9);
+    DECIMAL18D10 decimal(18, 10);
+    DECIMAL18D11 decimal(18, 11);
+    DECIMAL18D12 decimal(18, 12);
+    DECIMAL18D13 decimal(18, 13);
+    DECIMAL18D14 decimal(18, 14);
+    DECIMAL18D15 decimal(18, 15);
+    DECIMAL18D16 decimal(18, 16);
+    DECIMAL18D17 decimal(18, 17);
+    DECIMAL18D18 decimal(18, 18);
+    DECIMAL31 decimal(31);
+    DECIMAL31D00 decimal(31, 0);
+    DECIMAL31D01 decimal(31, 1);
+    DECIMAL31D02 decimal(31, 2);
+    DECIMAL31D03 decimal(31, 3);
+    DECIMAL31D04 decimal(31, 4);
+    DECIMAL31D05 decimal(31, 5);
+    DECIMAL31D06 decimal(31, 6);
+    DECIMAL31D07 decimal(31, 7);
+    DECIMAL31D08 decimal(31, 8);
+    DECIMAL31D09 decimal(31, 9);
+    DECIMAL31D10 decimal(31, 10);
+    DECIMAL31D11 decimal(31, 11);
+    DECIMAL31D12 decimal(31, 12);
+    DECIMAL31D13 decimal(31, 13);
+    DECIMAL31D14 decimal(31, 14);
+    DECIMAL31D15 decimal(31, 15);
+    DECIMAL31D16 decimal(31, 16);
+    DECIMAL31D17 decimal(31, 17);
+    DECIMAL31D18 decimal(31, 18);
+    DECIMAL31D19 decimal(31, 19);
+    DECIMAL31D20 decimal(31, 20);
+    DECIMAL31D21 decimal(31, 21);
+    DECIMAL31D22 decimal(31, 22);
+    DECIMAL31D23 decimal(31, 23);
+    DECIMAL31D24 decimal(31, 24);
+    DECIMAL31D25 decimal(31, 25);
+    DECIMAL31D26 decimal(31, 26);
+    DECIMAL31D27 decimal(31, 27);
+    DECIMAL31D28 decimal(31, 28);
+    DECIMAL31D29 decimal(31, 29);
+    DECIMAL31D30 decimal(31, 30);
+    DECIMAL31D31 decimal(31, 31);
+
+    function isA_PassToNumber_32_DEC_DECIMAL32D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 0;
+        isaNumberParm32_DEC_Dx(DECIMAL32D0);  //decimal(32,0))
+    end
+
+    function isA_PassToNumber_32_DEC_SQL_DECIMAL32D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 0;
+        isaNumberParm32_DEC_Dx(decimalSqlRec.DECIMAL32D0_S);  //decimal(32,0))
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D00(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D00");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 0;
+        isaNumberParm32_DEC_Dx(DECIMAL32D00);  //decimal(32,0))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D01");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 1;
+        isaNumberParm32_DEC_Dx(DECIMAL32D01);  //decimal(32,1))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D02(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D02");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 2;
+        isaNumberParm32_DEC_Dx(DECIMAL32D02);  //decimal(32,2))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D03(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D03");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 3;
+        isaNumberParm32_DEC_Dx(DECIMAL32D03);  //decimal(32,3))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D04(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D04");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 4;
+        isaNumberParm32_DEC_Dx(DECIMAL32D04);  //decimal(32,4))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D05(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D05");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 5;
+        isaNumberParm32_DEC_Dx(DECIMAL32D05);  //decimal(32,5))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D06(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D06");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 6;
+        isaNumberParm32_DEC_Dx(DECIMAL32D06);  //decimal(32,6))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D07(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D07");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 7;
+        isaNumberParm32_DEC_Dx(DECIMAL32D07);  //decimal(32,7))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D08(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D08");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 8;
+        isaNumberParm32_DEC_Dx(DECIMAL32D08);  //decimal(32,8))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D09(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D09");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 9;
+        isaNumberParm32_DEC_Dx(DECIMAL32D09);  //decimal(32,9))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D10(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D10");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 10;
+        isaNumberParm32_DEC_Dx(DECIMAL32D10);  //decimal(32,10))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D11(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D11");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 11;
+        isaNumberParm32_DEC_Dx(DECIMAL32D11);  //decimal(32,11))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D12(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D12");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 12;
+        isaNumberParm32_DEC_Dx(DECIMAL32D12);  //decimal(32,12))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D13(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D13");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 13;
+        isaNumberParm32_DEC_Dx(DECIMAL32D13);  //decimal(32,13))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D14(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D14");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 14;
+        isaNumberParm32_DEC_Dx(DECIMAL32D14);  //decimal(32,14))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D15(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D15");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 15;
+        isaNumberParm32_DEC_Dx(DECIMAL32D15);  //decimal(32,15))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D16(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D16");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 16;
+        isaNumberParm32_DEC_Dx(DECIMAL32D16);  //decimal(32,16))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D17(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D17");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 17;
+        isaNumberParm32_DEC_Dx(DECIMAL32D17);  //decimal(32,17))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D18(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D18");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 18;
+        isaNumberParm32_DEC_Dx(DECIMAL32D18);  //decimal(32,18))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D19(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D19");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 19;
+        isaNumberParm32_DEC_Dx(DECIMAL32D19);  //decimal(32,19))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D20(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D20");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 20;
+        isaNumberParm32_DEC_Dx(DECIMAL32D20);  //decimal(32,20))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D21(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D21");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 21;
+        isaNumberParm32_DEC_Dx(DECIMAL32D21);  //decimal(32,21))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D22(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D22");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 22;
+        isaNumberParm32_DEC_Dx(DECIMAL32D22);  //decimal(32,22))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D23(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D23");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 23;
+        isaNumberParm32_DEC_Dx(DECIMAL32D23);  //decimal(32,23))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D24(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D24");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 24;
+        isaNumberParm32_DEC_Dx(DECIMAL32D24);  //decimal(32,24))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D25(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D25");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 25;
+        isaNumberParm32_DEC_Dx(DECIMAL32D25);  //decimal(32,25))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D26(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D26");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 26;
+        isaNumberParm32_DEC_Dx(DECIMAL32D26);  //decimal(32,26))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D27(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D27");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 27;
+        isaNumberParm32_DEC_Dx(DECIMAL32D27);  //decimal(32,27))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D28(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D28");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 28;
+        isaNumberParm32_DEC_Dx(DECIMAL32D28);  //decimal(32,28))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D29(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D29");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 29;
+        isaNumberParm32_DEC_Dx(DECIMAL32D29);  //decimal(32,29))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D30(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D30");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 30;
+        isaNumberParm32_DEC_Dx(DECIMAL32D30);  //decimal(32,30))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D31(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D31");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 31;
+        isaNumberParm32_DEC_Dx(DECIMAL32D31);  //decimal(32,31))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_D_DECIMAL32D32(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D32");
+        myType = "DEC ";
+        EXPECTED_COMPARE = "==";
+        myLen = 32;
+        myDec = 32;
+        isaNumberParm32_DEC_Dx(DECIMAL32D32);  //decimal(32,32))
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL31D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D0 - is it a decimal(30,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 30;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL31D0);  //decimal(30,0))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL31D0_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D0 - is it a decimal(31,0)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL31D0);  //decimal(31,0))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL31D0_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D0 - is it a decimal(32,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 0;
+        isaNumberParm32_DEC_Dx(DECIMAL31D0);  //decimal(32,0))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D01 - is it a decimal(32,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 0;
+        isaNumberParm32_DEC_Dx(DECIMAL32D01);  //decimal(32,0))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D01_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D01 - is it a decimal(32,1)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 1;
+        isaNumberParm32_DEC_Dx(DECIMAL32D01);  //decimal(32,1))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D01_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D01 - is it a decimal(32,2)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 2;
+        isaNumberParm32_DEC_Dx(DECIMAL32D01);  //decimal(32,2))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D31(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D31 - is it a decimal(32,30)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 30;
+        isaNumberParm32_DEC_Dx(DECIMAL32D31);  //decimal(32,30))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D31_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D31 - is it a decimal(32,31)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 31;
+        isaNumberParm32_DEC_Dx(DECIMAL32D31);  //decimal(32,31))
+        
+    end
+
+    function isA_PassToNumber_32_DEC_BOUNDARY_DECIMAL32D31_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL32D31 - is it a decimal(32,32)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 32;
+        myDec = 32;
+        isaNumberParm32_DEC_Dx(DECIMAL32D31);  //decimal(32,32))
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL19D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL19D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 19;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL19D0);  //decimal(19,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL20D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL20D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 20;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL20D0);  //decimal(20,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL21D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL21D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 21;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL21D0);  //decimal(21,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL22D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL22D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 22;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL22D0);  //decimal(22,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL23D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL23D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 23;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL23D0);  //decimal(23,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL24D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL24D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 24;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL24D0);  //decimal(24,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL25D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL25D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 25;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL25D0);  //decimal(25,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL26D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL26D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 26;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL26D0);  //decimal(26,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL27D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL27D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 27;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL27D0);  //decimal(27,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL28D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL28D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 28;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL28D0);  //decimal(28,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL29D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL29D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 29;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL29D0);  //decimal(29,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL30D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL30D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 30;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL30D0);  //decimal(30,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_DECIMAL31D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL31D0);  //decimal(31,0))
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL19D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL19D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 19;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL19D0_S);  //decimal(19,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL20D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL20D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 20;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL20D0_S);  //decimal(20,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL21D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL21D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 21;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL21D0_S);  //decimal(21,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL22D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL22D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 22;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL22D0_S);  //decimal(22,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL23D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL23D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 23;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL23D0_S);  //decimal(23,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL24D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL24D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 24;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL24D0_S);  //decimal(24,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL25D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL25D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 25;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL25D0_S);  //decimal(25,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL26D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL26D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 26;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL26D0_S);  //decimal(26,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL27D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL27D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 27;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL27D0_S);  //decimal(27,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL28D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL28D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 28;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL28D0_S);  //decimal(28,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL29D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL29D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 29;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL29D0_S);  //decimal(29,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL30D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL30D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 30;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL30D0_S);  //decimal(30,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_SQL_DECIMAL31D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(decimalSqlRec.DECIMAL31D0_S);  //decimal(31,0))
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D00(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D00");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_Dx(DECIMAL31D00);  //decimal(31,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D01");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 1;
+        isaNumberParm31_DEC_Dx(DECIMAL31D01);  //decimal(31,1))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D02(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D02");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 2;
+        isaNumberParm31_DEC_Dx(DECIMAL31D02);  //decimal(31,2))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D03(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D03");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 3;
+        isaNumberParm31_DEC_Dx(DECIMAL31D03);  //decimal(31,3))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D04(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D04");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 4;
+        isaNumberParm31_DEC_Dx(DECIMAL31D04);  //decimal(31,4))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D05(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D05");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 5;
+        isaNumberParm31_DEC_Dx(DECIMAL31D05);  //decimal(31,5))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D06(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D06");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 6;
+        isaNumberParm31_DEC_Dx(DECIMAL31D06);  //decimal(31,6))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D07(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D07");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 7;
+        isaNumberParm31_DEC_Dx(DECIMAL31D07);  //decimal(31,7))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D08(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D08");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 8;
+        isaNumberParm31_DEC_Dx(DECIMAL31D08);  //decimal(31,8))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D09(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D09");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 9;
+        isaNumberParm31_DEC_Dx(DECIMAL31D09);  //decimal(31,9))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D10(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D10");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 10;
+        isaNumberParm31_DEC_Dx(DECIMAL31D10);  //decimal(31,10))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D11(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D11");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 11;
+        isaNumberParm31_DEC_Dx(DECIMAL31D11);  //decimal(31,11))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D12(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D12");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 12;
+        isaNumberParm31_DEC_Dx(DECIMAL31D12);  //decimal(31,12))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D13(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D13");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 13;
+        isaNumberParm31_DEC_Dx(DECIMAL31D13);  //decimal(31,13))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D14(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D14");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 14;
+        isaNumberParm31_DEC_Dx(DECIMAL31D14);  //decimal(31,14))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D15(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D15");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 15;
+        isaNumberParm31_DEC_Dx(DECIMAL31D15);  //decimal(31,15))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D16(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D16");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 16;
+        isaNumberParm31_DEC_Dx(DECIMAL31D16);  //decimal(31,16))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D17(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D17");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 17;
+        isaNumberParm31_DEC_Dx(DECIMAL31D17);  //decimal(31,17))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D18(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D18");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 18;
+        isaNumberParm31_DEC_Dx(DECIMAL31D18);  //decimal(31,18))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D19(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D19");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 19;
+        isaNumberParm31_DEC_Dx(DECIMAL31D19);  //decimal(31,19))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D20(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D20");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 20;
+        isaNumberParm31_DEC_Dx(DECIMAL31D20);  //decimal(31,20))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D21(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D21");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 21;
+        isaNumberParm31_DEC_Dx(DECIMAL31D21);  //decimal(31,21))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D22(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D22");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 22;
+        isaNumberParm31_DEC_Dx(DECIMAL31D22);  //decimal(31,22))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D23(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D23");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 23;
+        isaNumberParm31_DEC_Dx(DECIMAL31D23);  //decimal(31,23))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D24(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D24");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 24;
+        isaNumberParm31_DEC_Dx(DECIMAL31D24);  //decimal(31,24))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D25(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D25");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 25;
+        isaNumberParm31_DEC_Dx(DECIMAL31D25);  //decimal(31,25))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D216(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D216");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 26;
+        isaNumberParm31_DEC_Dx(DECIMAL31D26);  //decimal(31,26))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D27(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D27");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 27;
+        isaNumberParm31_DEC_Dx(DECIMAL31D27);  //decimal(31,27))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D28(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D28");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 28;
+        isaNumberParm31_DEC_Dx(DECIMAL31D28);  //decimal(31,28))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D29(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D29");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 29;
+        isaNumberParm31_DEC_Dx(DECIMAL31D29);  //decimal(31,29))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D30(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D30");
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 30;
+        isaNumberParm31_DEC_Dx(DECIMAL31D30);  //decimal(31,30))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_D_DECIMAL31D31(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D31");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 31;
+        isaNumberParm31_DEC_Dx(DECIMAL31D31);  //decimal(31,31))
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL19D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL19D0 - is it a decimal(18,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL19D0);  //decimal(18,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL19D0_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL19D0 - is it a decimal(19,0)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 19;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL19D0);  //decimal(19,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL19D0_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL19D0 - is it a decimal(20,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 20;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL19D0);  //decimal(20,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL30D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL30D0 - is it a decimal(29,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 29;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL30D0);  //decimal(29,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL30D0_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL30D0 - is it a decimal(30,0)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 30;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL30D0);  //decimal(30,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL30D0_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL30D0 - is it a decimal(31,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_D0(DECIMAL30D0);  //decimal(31,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D01 - is it a decimal(31,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 0;
+        isaNumberParm31_DEC_Dx(DECIMAL31D01);  //decimal(31,0))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D01_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D01 - is it a decimal(31,1)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 1;
+        isaNumberParm31_DEC_Dx(DECIMAL31D01);  //decimal(31,1))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D01_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D01 - is it a decimal(31,2)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 2;
+        isaNumberParm31_DEC_Dx(DECIMAL31D01);  //decimal(31,2))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D30(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D30 - is it a decimal(31,29)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 29;
+        isaNumberParm31_DEC_Dx(DECIMAL31D30);  //decimal(31,29))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D30_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D30 - is it a decimal(31,30)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 30;
+        isaNumberParm31_DEC_Dx(DECIMAL31D30);  //decimal(31,30))
+        
+    end
+
+    function isA_PassToNumber_31_DEC_BOUNDARY_DECIMAL31D30_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL31D30 - is it a decimal(31,31)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 31;
+        myDec = 31;
+        isaNumberParm31_DEC_Dx(DECIMAL31D30);  //decimal(31,31))
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL01D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL01D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 1;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL01D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL02D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL02D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 2;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL02D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL03D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL03D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 3;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL03D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL04D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL04D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 4;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL04D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL05D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL05D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 5;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL05D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL06D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL06D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 6;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL06D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL07D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL07D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 7;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL07D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL08D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL08D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 8;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL08D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL09D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL09D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 9;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL09D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL10D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL10D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 10;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL10D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL11D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL11D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 11;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL11D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL12D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL12D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 12;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL12D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL13D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL13D0");
+        myType = "DEC ";
+        myLen = 13;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL13D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL14D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL14D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 14;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL14D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL15D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL15D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 15;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL15D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL16D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL16D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 16;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL16D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL17D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL17D0");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 17;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL17D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_DECIMAL18D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D0");
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL18D0);
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL01D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL01D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 1;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL01D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL02D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL02D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 2;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL02D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL03D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL03D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 3;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL03D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL04D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL04D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 4;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL04D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL05D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL05D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 5;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL05D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL06D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL06D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 6;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL06D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL07D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL07D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 7;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL07D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL08D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL08D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 8;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL08D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL09D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL09D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 9;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL09D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL10D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL10D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 10;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL10D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL11D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL11D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 11;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL11D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL12D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL12D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 12;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL12D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL13D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL13D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 13;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL13D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL14D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL14D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 14;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL14D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL15D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL15D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 15;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL15D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL16D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL16D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 16;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL16D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL17D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL17D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 17;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL17D0_S);
+
+    end
+
+    function isA_PassToNumber_18_DEC_SQL_DECIMAL18D0_S(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D0_S");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(decimalSqlRec.DECIMAL18D0_S);
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D00(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D00");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_Dx(DECIMAL18D00);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D01");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 1;
+        isaNumberParm18_DEC_Dx(DECIMAL18D01);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D02(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D02");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 2;
+        isaNumberParm18_DEC_Dx(DECIMAL18D02);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D03(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D03");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 3;
+        isaNumberParm18_DEC_Dx(DECIMAL18D03);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D04(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D04");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 4;
+        isaNumberParm18_DEC_Dx(DECIMAL18D04);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D05(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D05");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 5;
+        isaNumberParm18_DEC_Dx(DECIMAL18D05);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D06(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D06");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 6;
+        isaNumberParm18_DEC_Dx(DECIMAL18D06);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D07(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D07");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 7;
+        isaNumberParm18_DEC_Dx(DECIMAL18D07);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D08(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D08");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 8;
+        isaNumberParm18_DEC_Dx(DECIMAL18D08);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D09(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D09");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 9;
+        isaNumberParm18_DEC_Dx(DECIMAL18D09);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D10(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D10");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 10;
+        isaNumberParm18_DEC_Dx(DECIMAL18D10);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D11(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D11");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 11;
+        isaNumberParm18_DEC_Dx(DECIMAL18D11);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D12(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D12");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 12;
+        isaNumberParm18_DEC_Dx(DECIMAL18D12);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D13(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D13");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 13;
+        isaNumberParm18_DEC_Dx(DECIMAL18D13);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D14(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D14");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 14;
+        isaNumberParm18_DEC_Dx(DECIMAL18D14);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D15(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D15");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 15;
+        isaNumberParm18_DEC_Dx(DECIMAL18D15);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D16(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D16");
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 16;
+        isaNumberParm18_DEC_Dx(DECIMAL18D16);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D17(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D17");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 17;
+        isaNumberParm18_DEC_Dx(DECIMAL18D17);
+
+    end
+
+    function isA_PassToNumber_18_DEC_D_DECIMAL18D18(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D18");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 18;
+        isaNumberParm18_DEC_Dx(DECIMAL18D18);
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL02D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL02D0 - is it a decimal(1,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 1;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL02D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL02D0_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL02D0 - is it a decimal(2,0)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 2;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL02D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL02D0_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL02D0 - is it a decimal(3,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 3;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL02D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL17D0(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL17D0 - is it a decimal(16,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 16;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL17D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL17D0_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL17D0 - is it a decimal(17,0)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 17;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL17D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL17D0_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL17D0 - is it a decimal(18,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_D0(DECIMAL17D0);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D01(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D01 - is it a decimal(18,0)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 0;
+        isaNumberParm18_DEC_Dx(DECIMAL18D01);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D01_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D01 - is it a decimal(18,1)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 1;
+        isaNumberParm18_DEC_Dx(DECIMAL18D01);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D01_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D01 - is it a decimal(18,2)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 2;
+        isaNumberParm18_DEC_Dx(DECIMAL18D01);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D17(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D17 - is it a decimal(18,16)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 16;
+        isaNumberParm18_DEC_Dx(DECIMAL18D17);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D17_1(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D17 - is it a decimal(18,17)");
+        EXPECTED_COMPARE = "==";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 17;
+        isaNumberParm18_DEC_Dx(DECIMAL18D17);
+
+    end
+
+    function isA_PassToNumber_18_DEC_BOUNDARY_DECIMAL18D17_2(){@Test}
+        LogResult.logStdOut("isA - PassToNumber - DECIMAL18D17 - is it a decimal(18,18)");
+        EXPECTED_COMPARE = "!=";
+        myType = "DEC ";
+        myLen = 18;
+        myDec = 18;
+        isaNumberParm18_DEC_Dx(DECIMAL18D17);
+    end
+
+    function isaNumberParm18_DEC_D0(myNumber number)
+        RESULT_COMPARE = "!=";
+        hadFailure = "N";
+        case(myType)
+            when("DEC ")
+                case(myLen)
+                    when(1)
+                        if(myNumber isa decimal(1, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(2)
+                        if(myNumber isa decimal(2, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(3)
+                        if(myNumber isa decimal(3, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(4)
+                        if(myNumber isa decimal(4, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(5)
+                        if(myNumber isa decimal(5, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(6)
+                        if(myNumber isa decimal(6, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(7)
+                        if(myNumber isa decimal(7, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(8)
+                        if(myNumber isa decimal(8, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(9)
+                        if(myNumber isa decimal(9, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(10)
+                        if(myNumber isa decimal(10, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(11)
+                        if(myNumber isa decimal(11, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(12)
+                        if(myNumber isa decimal(12, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(13)
+                        if(myNumber isa decimal(13, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(14)
+                        if(myNumber isa decimal(14, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(15)
+                        if(myNumber isa decimal(15, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(16)
+                        if(myNumber isa decimal(16, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(17)
+                        if(myNumber isa decimal(17, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(18)
+                        if(myNumber isa decimal(18, 0))
+                            RESULT_COMPARE = "==";
+                        end                	
+                end
+            otherwise
+                LogResult.logStdOut("BUG in isaAnyNumber for " + myType);
+                //TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), false);
+                hadFailure = "Y";
+        end
+        if(hadFailure == "N")
+            LogResult.assertTrue1(RESULT_COMPARE == EXPECTED_COMPARE);
+        end
+    end  // end isaNumberParm18_DEC_D0
+    
+    function isaNumberParm18_DEC_Dx(myNumber number)
+        RESULT_COMPARE = "!=";
+        hadFailure = "N";
+        case(myType)
+            when("DEC ")
+                case(myDec)
+                    when(0)
+                        if(myNumber isa decimal(18, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(1)
+                        if(myNumber isa decimal(18, 1))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(2)
+                        if(myNumber isa decimal(18, 2))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(3)
+                        if(myNumber isa decimal(18, 3))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(4)
+                        if(myNumber isa decimal(18, 4))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(5)
+                        if(myNumber isa decimal(18, 5))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(6)
+                        if(myNumber isa decimal(18, 6))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(7)
+                        if(myNumber isa decimal(18, 7))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(8)
+                        if(myNumber isa decimal(18, 8))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(9)
+                        if(myNumber isa decimal(18, 9))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(10)
+                        if(myNumber isa decimal(18, 10))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(11)
+                        if(myNumber isa decimal(18, 11))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(12)
+                        if(myNumber isa decimal(18, 12))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(13)
+                        if(myNumber isa decimal(18, 13))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(14)
+                        if(myNumber isa decimal(18, 14))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(15)
+                        if(myNumber isa decimal(18, 15))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(16)
+                        if(myNumber isa decimal(18, 16))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(17)
+                        if(myNumber isa decimal(18, 17))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(18)
+                        if(myNumber isa decimal(18, 18))
+                            RESULT_COMPARE = "==";
+                        end
+                end
+            otherwise
+                LogResult.logStdOut("BUG in isaAnyNumber for " + myType);
+                //TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), false);
+                hadFailure = "Y";
+        end
+        if(hadFailure == "N")
+            LogResult.assertTrue1(RESULT_COMPARE == EXPECTED_COMPARE);
+        end
+    end  // end isaNumberParm18_DEC_Dx
+    
+    function isaNumberParm31_DEC_D0(myNumber number)
+        RESULT_COMPARE = "!=";
+        hadFailure = "N";
+        case(myType)
+            when("DEC ")
+                case(myLen)
+                    when(19)
+                        if(myNumber isa decimal(19, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(20)
+                        if(myNumber isa decimal(20, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(21)
+                        if(myNumber isa decimal(21, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(22)
+                        if(myNumber isa decimal(22, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(23)
+                        if(myNumber isa decimal(23, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(24)
+                        if(myNumber isa decimal(24, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(25)
+                        if(myNumber isa decimal(25, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(26)
+                        if(myNumber isa decimal(26, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(27)
+                        if(myNumber isa decimal(27, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(28)
+                        if(myNumber isa decimal(28, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(29)
+                        if(myNumber isa decimal(29, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(30)
+                        if(myNumber isa decimal(30, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(31)
+                        if(myNumber isa decimal(31, 0))
+                            RESULT_COMPARE = "==";
+                        end                	
+                end
+            otherwise
+                LogResult.logStdOut("BUG in isaAnyNumber for " + myType);
+                //TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), false);
+                hadFailure = "Y";
+        end
+        if(hadFailure == "N")
+            LogResult.assertTrue1(RESULT_COMPARE == EXPECTED_COMPARE);
+        end
+    end  // end isaNumberParm31_DEC_D0
+    
+    function isaNumberParm31_DEC_Dx(myNumber number)
+        RESULT_COMPARE = "!=";
+        hadFailure = "N";
+        case(myType)
+            when("DEC ")
+                case(myDec)
+                    when(0)
+                        if(myNumber isa decimal(31, 0))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(1)
+                        if(myNumber isa decimal(31, 1))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(2)
+                        if(myNumber isa decimal(31, 2))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(3)
+                        if(myNumber isa decimal(31, 3))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(4)
+                        if(myNumber isa decimal(31, 4))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(5)
+                        if(myNumber isa decimal(31, 5))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(6)
+                        if(myNumber isa decimal(31, 6))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(7)
+                        if(myNumber isa decimal(31, 7))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(8)
+                        if(myNumber isa decimal(31, 8))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(9)
+                        if(myNumber isa decimal(31, 9))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(10)
+                        if(myNumber isa decimal(31, 10))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(11)
+                        if(myNumber isa decimal(31, 11))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(12)
+                        if(myNumber isa decimal(31, 12))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(13)
+                        if(myNumber isa decimal(31, 13))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(14)
+                        if(myNumber isa decimal(31, 14))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(15)
+                        if(myNumber isa decimal(31, 15))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(16)
+                        if(myNumber isa decimal(31, 16))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(17)
+                        if(myNumber isa decimal(31, 17))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(18)
+                        if(myNumber isa decimal(31, 18))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(19)
+                        if(myNumber isa decimal(31, 19))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(20)
+                        if(myNumber isa decimal(31, 20))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(21)
+                        if(myNumber isa decimal(31, 21))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(22)
+                        if(myNumber isa decimal(31, 22))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(23)
+                        if(myNumber isa decimal(31, 23))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(24)
+                        if(myNumber isa decimal(31, 24))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(25)
+                        if(myNumber isa decimal(31, 25))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(26)
+                        if(myNumber isa decimal(31, 26))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(27)
+                        if(myNumber isa decimal(31, 27))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(28)
+                        if(myNumber isa decimal(31, 28))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(29)
+                        if(myNumber isa decimal(31, 29))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(30)
+                        if(myNumber isa decimal(31, 30))
+                            RESULT_COMPARE = "==";
+                        end
+                    when(31)
+                        if(myNumber isa decimal(31, 31))
+                            RESULT_COMPARE = "==";
+                        end
+                end
+            otherwise
+                LogResult.logStdOut("BUG in isaAnyNumber for " + myType);
+                //TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), false);
+                hadFailure = "Y";
+        end
+        if(hadFailure == "N")
+            LogResult.assertTrue1(RESULT_COMPARE == EXPECTED_COMPARE);
+        end
+    end  // end isaNumberParm31_DEC_Dx
+    
+    function isaNumberParm32_DEC_Dx(myNumber number)
+        RESULT_COMPARE = "!=";
+        hadFailure = "N";
+        case(myType)
+            when("DEC ")
+                case(myLen)
+                    when(32)
+                        case(myDec)
+                            when(0)
+                                if(myNumber isa decimal(32, 0))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(1)
+                                if(myNumber isa decimal(32, 1))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(2)
+                                if(myNumber isa decimal(32, 2))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(3)
+                                if(myNumber isa decimal(32, 3))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(4)
+                                if(myNumber isa decimal(32, 4))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(5)
+                                if(myNumber isa decimal(32, 5))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(6)
+                                if(myNumber isa decimal(32, 6))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(7)
+                                if(myNumber isa decimal(32, 7))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(8)
+                                if(myNumber isa decimal(32, 8))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(9)
+                                if(myNumber isa decimal(32, 9))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(10)
+                                if(myNumber isa decimal(32, 10))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(11)
+                                if(myNumber isa decimal(32, 11))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(12)
+                                if(myNumber isa decimal(32, 12))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(13)
+                                if(myNumber isa decimal(32, 13))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(14)
+                                if(myNumber isa decimal(32, 14))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(15)
+                                if(myNumber isa decimal(32, 15))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(16)
+                                if(myNumber isa decimal(32, 16))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(17)
+                                if(myNumber isa decimal(32, 17))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(18)
+                                if(myNumber isa decimal(32, 18))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(19)
+                                if(myNumber isa decimal(32, 19))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(20)
+                                if(myNumber isa decimal(32, 20))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(21)
+                                if(myNumber isa decimal(32, 21))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(22)
+                                if(myNumber isa decimal(32, 22))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(23)
+                                if(myNumber isa decimal(32, 23))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(24)
+                                if(myNumber isa decimal(32, 24))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(25)
+                                if(myNumber isa decimal(32, 25))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(26)
+                                if(myNumber isa decimal(32, 26))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(27)
+                                if(myNumber isa decimal(32, 27))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(28)
+                                if(myNumber isa decimal(32, 28))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(29)
+                                if(myNumber isa decimal(32, 29))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(30)
+                                if(myNumber isa decimal(32, 30))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(31)
+                                if(myNumber isa decimal(32, 31))
+                                    RESULT_COMPARE = "==";
+                                end
+                            when(32)
+                                if(myNumber isa decimal(32, 32))
+                                    RESULT_COMPARE = "==";
+                                end
+                        end
+                end
+            otherwise
+                LogResult.logStdOut("BUG in isaAnyNumber for " + myType);
+                //TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), false);
+                hadFailure = "Y";
+        end
+        if(hadFailure == "N")
+            LogResult.assertTrue1(RESULT_COMPARE == EXPECTED_COMPARE);
+        end
+    end  // end isaNumberParm32_DEC_Dx
+end
+
+//record decimalSqlRec type sqlRecord
+//// Record used for maxNumericDigits = 32 (Java Only)  
+//    {tableNames =[["JUNK", "T1"]]}
+//    DECIMAL32D0_S decimal(32, 0){column = "DECIMAL32D0", isSQLNullable = yes};
+//    DECIMAL32I2_S decimal(32){column = "DECIMAL32D0", isSQLNullable = yes};
+//    DECIMAL01D0_S decimal(1, 0){column = "DECIMAL01D0", isSQLNullable = yes};
+//    DECIMAL02D0_S decimal(2, 0){column = "DECIMAL02D0", isSQLNullable = yes};
+//    DECIMAL03D0_S decimal(3, 0){column = "DECIMAL03D0", isSQLNullable = yes};
+//    DECIMAL04D0_S decimal(4, 0){column = "DECIMAL04D0", isSQLNullable = yes};
+//    DECIMAL05D0_S decimal(5, 0){column = "DECIMAL05D0", isSQLNullable = yes};
+//    DECIMAL06D0_S decimal(6, 0){column = "DECIMAL06D0", isSQLNullable = yes};
+//    DECIMAL07D0_S decimal(7, 0){column = "DECIMAL07D0", isSQLNullable = yes};
+//    DECIMAL08D0_S decimal(8, 0){column = "DECIMAL08D0", isSQLNullable = yes};
+//    DECIMAL09D0_S decimal(9, 0){column = "DECIMAL09D0", isSQLNullable = yes};
+//    DECIMAL10D0_S decimal(10, 0){column = "DECIMAL10D0", isSQLNullable = yes};
+//    DECIMAL11D0_S decimal(11, 0){column = "DECIMAL11D0", isSQLNullable = yes};
+//    DECIMAL12D0_S decimal(12, 0){column = "DECIMAL12D0", isSQLNullable = yes};
+//    DECIMAL13D0_S decimal(13, 0){column = "DECIMAL13D0", isSQLNullable = yes};
+//    DECIMAL14D0_S decimal(14, 0){column = "DECIMAL14D0", isSQLNullable = yes};
+//    DECIMAL15D0_S decimal(15, 0){column = "DECIMAL15D0", isSQLNullable = yes};
+//    DECIMAL16D0_S decimal(16, 0){column = "DECIMAL16D0", isSQLNullable = yes};
+//    DECIMAL17D0_S decimal(17, 0){column = "DECIMAL17D0", isSQLNullable = yes};
+//    DECIMAL18D0_S decimal(18, 0){column = "DECIMAL18D0", isSQLNullable = yes};
+//    DECIMAL01I2_S decimal(1){column = "DECIMAL01D0", isSQLNullable = yes};
+//    DECIMAL02I2_S decimal(2){column = "DECIMAL02D0", isSQLNullable = yes};
+//    DECIMAL03I2_S decimal(3){column = "DECIMAL03D0", isSQLNullable = yes};
+//    DECIMAL04I2_S decimal(4){column = "DECIMAL04D0", isSQLNullable = yes};
+//    DECIMAL05I2_S decimal(5){column = "DECIMAL05D0", isSQLNullable = yes};
+//    DECIMAL06I2_S decimal(6){column = "DECIMAL06D0", isSQLNullable = yes};
+//    DECIMAL07I2_S decimal(7){column = "DECIMAL07D0", isSQLNullable = yes};
+//    DECIMAL08I2_S decimal(8){column = "DECIMAL08D0", isSQLNullable = yes};
+//    DECIMAL09I2_S decimal(9){column = "DECIMAL09D0", isSQLNullable = yes};
+//    DECIMAL10I2_S decimal(10){column = "DECIMAL10D0", isSQLNullable = yes};
+//    DECIMAL11I2_S decimal(11){column = "DECIMAL11D0", isSQLNullable = yes};
+//    DECIMAL12I2_S decimal(12){column = "DECIMAL12D0", isSQLNullable = yes};
+//    DECIMAL13I2_S decimal(13){column = "DECIMAL13D0", isSQLNullable = yes};
+//    DECIMAL14I2_S decimal(14){column = "DECIMAL14D0", isSQLNullable = yes};
+//    DECIMAL15I2_S decimal(15){column = "DECIMAL15D0", isSQLNullable = yes};
+//    DECIMAL16I2_S decimal(16){column = "DECIMAL16D0", isSQLNullable = yes};
+//    DECIMAL17I2_S decimal(17){column = "DECIMAL17D0", isSQLNullable = yes};
+//    DECIMAL18I2_S decimal(18){column = "DECIMAL18D0", isSQLNullable = yes};
+//    DECIMAL19D0_S decimal(19, 0){column = "DECIMAL19D0", isSQLNullable = yes};
+//    DECIMAL20D0_S decimal(20, 0){column = "DECIMAL20D0", isSQLNullable = yes};
+//    DECIMAL21D0_S decimal(21, 0){column = "DECIMAL21D0", isSQLNullable = yes};
+//    DECIMAL22D0_S decimal(22, 0){column = "DECIMAL22D0", isSQLNullable = yes};
+//    DECIMAL23D0_S decimal(23, 0){column = "DECIMAL23D0", isSQLNullable = yes};
+//    DECIMAL24D0_S decimal(24, 0){column = "DECIMAL24D0", isSQLNullable = yes};
+//    DECIMAL25D0_S decimal(25, 0){column = "DECIMAL25D0", isSQLNullable = yes};
+//    DECIMAL26D0_S decimal(26, 0){column = "DECIMAL26D0", isSQLNullable = yes};
+//    DECIMAL27D0_S decimal(27, 0){column = "DECIMAL27D0", isSQLNullable = yes};
+//    DECIMAL28D0_S decimal(28, 0){column = "DECIMAL28D0", isSQLNullable = yes};
+//    DECIMAL29D0_S decimal(29, 0){column = "DECIMAL29D0", isSQLNullable = yes};
+//    DECIMAL30D0_S decimal(30, 0){column = "DECIMAL30D0", isSQLNullable = yes};
+//    DECIMAL31D0_S decimal(31, 0){column = "DECIMAL31D0", isSQLNullable = yes};
+//    DECIMAL19I2_S decimal(19){column = "DECIMAL19D0", isSQLNullable = yes};
+//    DECIMAL20I2_S decimal(20){column = "DECIMAL20D0", isSQLNullable = yes};
+//    DECIMAL21I2_S decimal(21){column = "DECIMAL21D0", isSQLNullable = yes};
+//    DECIMAL22I2_S decimal(22){column = "DECIMAL22D0", isSQLNullable = yes};
+//    DECIMAL23I2_S decimal(23){column = "DECIMAL23D0", isSQLNullable = yes};
+//    DECIMAL24I2_S decimal(24){column = "DECIMAL24D0", isSQLNullable = yes};
+//    DECIMAL25I2_S decimal(25){column = "DECIMAL25D0", isSQLNullable = yes};
+//    DECIMAL26I2_S decimal(26){column = "DECIMAL26D0", isSQLNullable = yes};
+//    DECIMAL27I2_S decimal(27){column = "DECIMAL27D0", isSQLNullable = yes};
+//    DECIMAL28I2_S decimal(28){column = "DECIMAL28D0", isSQLNullable = yes};
+//    DECIMAL29I2_S decimal(29){column = "DECIMAL29D0", isSQLNullable = yes};
+//    DECIMAL30I2_S decimal(30){column = "DECIMAL30D0", isSQLNullable = yes};
+//    DECIMAL31I2_S decimal(31){column = "DECIMAL31D0", isSQLNullable = yes};
+//end // end PD32_DEC_D0_SQL	
+
+record decimalSqlRec
+// Record used for maxNumericDigits = 32 (Java Only)  
+    DECIMAL32D0_S decimal(32, 0);
+    DECIMAL32I2_S decimal(32);
+    DECIMAL01D0_S decimal(1, 0);
+    DECIMAL02D0_S decimal(2, 0);
+    DECIMAL03D0_S decimal(3, 0);
+    DECIMAL04D0_S decimal(4, 0);
+    DECIMAL05D0_S decimal(5, 0);
+    DECIMAL06D0_S decimal(6, 0);
+    DECIMAL07D0_S decimal(7, 0);
+    DECIMAL08D0_S decimal(8, 0);
+    DECIMAL09D0_S decimal(9, 0);
+    DECIMAL10D0_S decimal(10, 0);
+    DECIMAL11D0_S decimal(11, 0);
+    DECIMAL12D0_S decimal(12, 0);
+    DECIMAL13D0_S decimal(13, 0);
+    DECIMAL14D0_S decimal(14, 0);
+    DECIMAL15D0_S decimal(15, 0);
+    DECIMAL16D0_S decimal(16, 0);
+    DECIMAL17D0_S decimal(17, 0);
+    DECIMAL18D0_S decimal(18, 0);
+    DECIMAL01I2_S decimal(1);
+    DECIMAL02I2_S decimal(2);
+    DECIMAL03I2_S decimal(3);
+    DECIMAL04I2_S decimal(4);
+    DECIMAL05I2_S decimal(5);
+    DECIMAL06I2_S decimal(6);
+    DECIMAL07I2_S decimal(7);
+    DECIMAL08I2_S decimal(8);
+    DECIMAL09I2_S decimal(9);
+    DECIMAL10I2_S decimal(10);
+    DECIMAL11I2_S decimal(11);
+    DECIMAL12I2_S decimal(12);
+    DECIMAL13I2_S decimal(13);
+    DECIMAL14I2_S decimal(14);
+    DECIMAL15I2_S decimal(15);
+    DECIMAL16I2_S decimal(16);
+    DECIMAL17I2_S decimal(17);
+    DECIMAL18I2_S decimal(18);
+    DECIMAL19D0_S decimal(19, 0);
+    DECIMAL20D0_S decimal(20, 0);
+    DECIMAL21D0_S decimal(21, 0);
+    DECIMAL22D0_S decimal(22, 0);
+    DECIMAL23D0_S decimal(23, 0);
+    DECIMAL24D0_S decimal(24, 0);
+    DECIMAL25D0_S decimal(25, 0);
+    DECIMAL26D0_S decimal(26, 0);
+    DECIMAL27D0_S decimal(27, 0);
+    DECIMAL28D0_S decimal(28, 0);
+    DECIMAL29D0_S decimal(29, 0);
+    DECIMAL30D0_S decimal(30, 0);
+    DECIMAL31D0_S decimal(31, 0);
+    DECIMAL19I2_S decimal(19);
+    DECIMAL20I2_S decimal(20);
+    DECIMAL21I2_S decimal(21);
+    DECIMAL22I2_S decimal(22);
+    DECIMAL23I2_S decimal(23);
+    DECIMAL24I2_S decimal(24);
+    DECIMAL25I2_S decimal(25);
+    DECIMAL26I2_S decimal(26);
+    DECIMAL27I2_S decimal(27);
+    DECIMAL28I2_S decimal(28);
+    DECIMAL29I2_S decimal(29);
+    DECIMAL30I2_S decimal(30);
+    DECIMAL31I2_S decimal(31);
+end // end PD32_DEC_D0_SQL	

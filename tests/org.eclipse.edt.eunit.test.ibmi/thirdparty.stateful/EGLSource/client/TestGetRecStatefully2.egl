@@ -1,0 +1,87 @@
+package client;
+
+import common.CUST;
+import server.CustomerPgm;
+
+// basic library
+library TestGetRecStatefully2
+	
+	use TestGetRecStatefully;	
+	function test1(){@Test}
+		currentExpected = 1;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test2(){@Test}
+		currentExpected = 2;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test3(){@Test}
+		currentExpected = 3;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test4(){@Test}
+		currentExpected = 4;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test5(){@Test}
+		currentExpected = 5;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test6(){@Test}
+		currentExpected = 6;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test7(){@Test}
+		currentExpected = 7;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test8(){@Test}
+		currentExpected = 8;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test9(){@Test}
+    	call CustomerPgm.connectionsInThePool() using new HttpProxy returning to verifyConnectionsInThePool onException handleException;
+	end
+	
+	function test10(){@Test}
+    	call CustomerPgm.killSession() using new HttpProxy returning to killSessionResponse onException handleException;
+	end
+	
+	function test11(){@Test}
+		currentExpected = 1;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test12(){@Test}
+		currentExpected = 2;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function killSessionResponse()
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyResults(retResult CUST[] in)
+		TestGetRecStatefully.verifyResults(retResult);
+	end
+	
+	function handleException(exp AnyException in, http IHTTP)
+		syslib.writeStdout("EXCEPTION:" + exp);
+		TestListMgr.handleCallBackException(exp, http);
+	end
+	
+	function verifyConnectionsInThePool(retResult int in)
+		syslib.writeStdout("connections in the pool:" + retResult);
+		LogResult.assertBigIntEqual("verify connections in the pool", 2, retResult);
+		TestListMgr.nextTest();			
+	end
+	
+end

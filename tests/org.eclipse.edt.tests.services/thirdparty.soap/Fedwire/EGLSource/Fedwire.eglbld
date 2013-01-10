@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE EGL PUBLIC "-//IBM Corporation, Inc.//DTD EGL Build Parts 6.0//EN" "">
+
+<EGL>
+<BuildDescriptor
+	name="Fedwire_Java"
+	genProject="Fedwire"
+	system="WIN"
+	J2EE="YES"
+	genProperties="GLOBAL"
+	dbms="DB2"
+	sqlValidationConnectionURL="jdbc:db2://localhost:50000/SAMPLE"
+	sqlJDBCDriverClass="com.ibm.db2.jcc.DB2Driver"
+	sqlDB="jdbc:db2://localhost:50000/SAMPLE"
+	sqlJNDIName=""
+	deploymentDescriptor="Fedwire"
+>
+</BuildDescriptor>
+<BuildDescriptor
+	name="Fedwire_JavaScript"
+	genProject="Fedwire"
+	system="JAVASCRIPT"
+	J2EE="NO"
+	genProperties="GLOBAL"
+	deploymentDescriptor="Fedwire"
+>
+</BuildDescriptor>
+</EGL>

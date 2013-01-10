@@ -1,0 +1,79 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate006
+  * @title EdtDate006 - runAssignmentFunction
+  * @description testing Date assignment and initialization functions
+  * @testcases runAssigmentFunction10 - runAssignmentnFunction18
+  * @sources EdtDate006.egl
+  * @keywords date, functions, assignemnt
+ **/
+library EDate006 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+	febNonLeap date = "02-28-1999";
+	febLeap date = "02-29-2000";
+	marFirst date = "03-01-2000";
+	marFirst1999 date = "03-01-1999";
+	
+	// Variable Declarations
+	varDate date;
+	
+	
+	function runAssignmentFunction10(){@Test}
+		LogResult.assertTrue("initialization",febNonLeap=="02/28/1999");
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		LogResult.assertStringEqual("", "02/28/1999", febNonLeap);		
+	end	
+	
+	function runAssignmentFunction12(){@Test}
+		LogResult.assertDateEqual("", "02-28-1999", febNonLeap);		
+	end			
+	
+	function runAssignmentFunction13(){@Test}
+		myDate date?;
+		LogResult.assertTrue("nullable initialization", myDate != "");
+	end
+	
+	function runAssignmentFunction14(){@Test}
+		myDate date?;
+		LogResult.assertTrue("nullable isNull", (myDate == null));
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		myDate date?;
+		myDate = febLeap;
+		LogResult.assertTrue("nullable not Null", (myDate != null ));
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		myDate date?;
+		
+		myDate = febLeap;
+		myDate = null;
+		LogResult.assertTrue("nullable reset to Null", (myDate == null ));
+
+	end
+	
+	function runAssignmentFunction17(){@Test}
+		myDate, another date?;
+		myDate = febLeap;
+		myDate = another;
+		LogResult.assertTrue("nullable indirectly set to null", (myDate == null ));
+	end
+	
+
+
+	function runAssignmentFunction18(){@Test}		
+			varDate2 date;
+			LogResult.assertDateEqual("consistent variable initialisation", varDate2, varDate);
+	end
+end

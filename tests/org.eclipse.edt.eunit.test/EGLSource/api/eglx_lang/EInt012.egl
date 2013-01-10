@@ -1,0 +1,244 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+
+/** @test
+  * @name EInt012
+  * @title EInt012 - runISAFunction
+  * @description testing int variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EInt012.egl
+  * @keywords int, isa
+ **/
+library EInt012 {}
+
+	variation string;
+	isIt boolean;
+	expected boolean;
+	myRecord EInt012Record {intField = 34767};
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "int/record.field is any";
+		isIt = myRecord.intField isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "int/record.field is bigInt";
+		isIt = myRecord.intField isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "int/record.field is boolean";
+		isIt = myRecord.intField isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "int/record.field is date";
+		isIt = myRecord.intField isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "int/record.field is decimal(4,2)";
+		isIt = myRecord.intField isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "int/record.field is decimal";
+		isIt = myRecord.intField isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "int/record.field is dictionary";
+		isIt = myRecord.intField isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "int/record.field is float";
+		isIt = myRecord.intField isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "int/record.field is int";
+		isIt = myRecord.intField isa int;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "int/record.field is number";
+		isIt = myRecord.intField isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "int/record.field is smallFloat";
+		isIt = myRecord.intField isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "int/record.field is smallInt";
+		isIt = myRecord.intField isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "int/record.field is string";
+		isIt = myRecord.intField isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "int/record.field is timestamp";
+		isIt = myRecord.intField isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "int/record.field is anyexception";
+		isIt = myRecord.intField isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "int/record.field is DynamicAccessException";
+		isIt = myRecord.intField isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "int/record.field is InvalidArgumentException";
+		isIt = myRecord.intField isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "int/record.field is InvalidIndexException";
+		isIt = myRecord.intField isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "int/record.field is InvalidPatternException";
+		isIt = myRecord.intField isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "int/record.field is InvocationException";
+		isIt = myRecord.intField isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "int/record.field is JavaObjectException";
+//		isIt = myRecord.intField isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "int/record.field is JavaScriptObjectException";
+//		isIt = myRecord.intField isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "int/record.field is NullValueException";
+		isIt = myRecord.intField isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "int/record.field is NumericOverflowException";
+		isIt = myRecord.intField isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "int/record.field is ServiceInvocationException";
+		isIt = myRecord.intField isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "int/record.field is SQLException";
+//		isIt = myRecord.intField isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "int/record.field is TypeCastException";
+		isIt = myRecord.intField isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "int/record.field is bytes";
+		isIt = myRecord.intField isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "int/record.field is bytes(8)";
+		isIt = myRecord.intField isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // EInt012
+
+// basic record
+//
+record EInt012Record
+	
+	intField int;
+	
+end

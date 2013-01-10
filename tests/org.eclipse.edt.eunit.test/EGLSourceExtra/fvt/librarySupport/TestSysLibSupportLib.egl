@@ -1,0 +1,60 @@
+package fvt.librarySupport;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+/*
+* @name System Library Support
+* @title The function test program for System Library Support in EDT
+* @keywords System Library
+* @author EDT team
+* @createDate 2011/09/01
+* @description 
+* Test the System Library Support
+*/
+
+library TestSysLibSupportLib{}
+
+    num1 int;
+    num2 int;
+    rc boolean;
+    msg string;
+    inserts string[];
+    b boolean = true;
+
+    // conditionAsInt
+    
+    //    function testConditionAsInt1(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, true");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(true) == 1);
+    //    end
+    //
+    //    function testConditionAsInt2(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, false");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(false) == 0);
+    //    end
+    //
+    //    function testConditionAsInt3(){@Test}
+    //        LogResult.logStdOut("SysLib - conditionAsInt, boolean(true)");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(b) == 1);
+    //    end
+    //
+    //    function testConditionAsInt4(){@Test}
+    //        b = false;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, boolean(false)");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(b) == 0);
+    //    end
+    //
+    //    function testConditionAsInt5(){@Test}
+    //        num1 = 247;
+    //        num2 = 247;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, num1 == num2");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(num1 == num2) == 1);
+    //    end
+    //
+    //    function testConditionAsInt6(){@Test}
+    //        num1 = 247;
+    //        num2 = 419;
+    //        LogResult.logStdOut("SysLib - conditionAsInt, num1 != num2");
+    //        LogResult.assertTrue1(SysLib.conditionAsInt(num1 == num2) == 0);
+    //    end
+end

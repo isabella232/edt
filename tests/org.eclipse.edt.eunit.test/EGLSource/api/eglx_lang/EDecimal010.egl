@@ -1,0 +1,244 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EDecimal010
+  * @title EDecimal010 - runISAFunction
+  * @description testing bigInt nullable variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn30
+  * @sources EDecimal010.egl
+  * @keywords bigInt, isa
+ **/
+library EDecimal010 {}
+
+	isIt boolean;
+	expected boolean;
+	decimal1n decimal(5,2)? = 123.45;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "decimal(5,2)/nullable variable is any";
+		isIt = decimal1n isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "decimal(5,2)/nullable variable is bigInt";
+		isIt = decimal1n isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "decimal(5,2)/nullable variable is boolean";
+		isIt = decimal1n isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "decimal(5,2)/nullable variable is date";
+		isIt = decimal1n isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "decimal(5,2)/nullable variable is decimal(4,2)";
+		isIt = decimal1n isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "decimal(5,2)/nullable variable is decimal";
+		isIt = decimal1n isa decimal;
+		expected = true;
+		variation = "JS Bug 360462";
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "decimal(5,2)/nullable variable is dictionary";
+		isIt = decimal1n isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "decimal(5,2)/nullable variable is float";
+		isIt = decimal1n isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "decimal(5,2)/nullable variable is int";
+		isIt = decimal1n isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "decimal(5,2)/nullable variable is number";
+		isIt = decimal1n isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "decimal(5,2)/nullable variable is smallFloat";
+		isIt = decimal1n isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "decimal(5,2)/nullable variable is smallInt";
+		isIt = decimal1n isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "decimal(5,2)/nullable variable is string";
+		isIt = decimal1n isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "decimal(5,2)/nullable variable is timestamp";
+		isIt = decimal1n isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "decimal(5,2)/nullable variable is anyexception";
+		isIt = decimal1n isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "decimal(5,2)/nullable variable is DynamicAccessException";
+		isIt = decimal1n isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "decimal(5,2)/nullable variable is InvalidArgumentException";
+		isIt = decimal1n isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "decimal(5,2)/nullable variable is InvalidIndexException";
+		isIt = decimal1n isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "decimal(5,2)/nullable variable is InvalidPatternException";
+		isIt = decimal1n isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "decimal(5,2)/nullable variable is InvocationException";
+		isIt = decimal1n isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "decimal(5,2)/nullable variable is JavaObjectException";
+//		isIt = decimal1n isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "decimal(5,2)/nullable variable is JavaScriptObjectException";
+//		isIt = decimal1n isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "decimal(5,2)/nullable variable is NullValueException";
+		isIt = decimal1n isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "decimal(5,2)/nullable variable is NumericOverflowException";
+		isIt = decimal1n isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "decimal(5,2)/nullable variable is ServiceInvocationException";
+		isIt = decimal1n isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "decimal(5,2)/nullable variable is SQLException";
+//		isIt = decimal1n isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "decimal(5,2)/nullable variable is TypeCastException";
+		isIt = decimal1n isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "decimal(5,2)/null is decimal";
+		decimal1n = null;
+		isIt = decimal1n isa decimal;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction31(){@Test}
+		variation = "decimal(5,2)/nullable variable is bytes";
+		isIt = decimal1n isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction32(){@Test}
+		variation = "decimal(5,2)/nullable variable is bytes(8)";
+		isIt = decimal1n isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+end // EDecimal010

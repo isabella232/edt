@@ -1,0 +1,34 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+  * @name TestSqlRecordLib
+  * @title TestSqlRecordLib - RunSqlRecordFunctions
+  * @description test case for "Flexible Records" data type behavior
+  * @testcases runTestSqlRecordLib
+  * @sources TestSqlRecordLib.egl
+  * @keywords SQL Record functions
+ **/
+
+library TestSqlRecordLib
+
+    aSqlRec MySqlRecord;
+
+    function runTestSqlRecordLib(){@Test}
+        intA int;
+        LogResult.assertTrue1(aSqlRec.anInt == 7 && aSqlRec.aString == "ASqlRecord");
+    end
+    
+end
+
+//  record MySqlRecord type SQLRecord
+//  	aString	string = "ASqlRecord";
+//  	anInt		int = 7;
+//  end
+
+record MySqlRecord
+    aString string = "ASqlRecord";
+    anInt int = 7;
+end

@@ -1,0 +1,30 @@
+package gen.javascript;
+
+/* 
+* @name delegation
+* @title A delegation RUIHandler
+* @keywords delegate
+* @author EDT team
+* @createDate 2011/08/10
+* @description 
+* A delegation RUIHandler
+*/
+
+handler delegation type RUIHandler{onConstructionFunction = dipsy}
+
+    function dipsy()
+        jayso jsobject = new jsobject("test", 88);
+        jayso.delegate1 = dumpsy;
+        jayso.delegate1();
+        jayso.boolean2 = false;
+        if(jayso.boolean2)
+            sysLib.writestdout("TRUE");
+        else
+            sysLib.writestdout("FALSE");
+        end
+    end
+
+    function dumpsy()
+        sysLib.writestdout("what crazy functions!");
+    end
+end

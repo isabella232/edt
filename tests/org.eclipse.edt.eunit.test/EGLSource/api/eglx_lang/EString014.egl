@@ -1,0 +1,244 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+
+/** @test
+  * @name EString014
+  * @title EString014 - runISAFunction
+  * @description testing string variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EString014.egl
+  * @keywords string, isa
+ **/
+library EString014 {}
+
+	variation string;
+	isIt boolean;
+	expected boolean;
+	myRecord EString014Record {stringField = "abc"};
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "string/record.field is any";
+		isIt = myRecord.stringField isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "string/record.field is bigInt";
+		isIt = myRecord.stringField isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "string/record.field is boolean";
+		isIt = myRecord.stringField isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "string/record.field is date";
+		isIt = myRecord.stringField isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "string/record.field is decimal(4,2)";
+		isIt = myRecord.stringField isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "string/record.field is decimal";
+		isIt = myRecord.stringField isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "string/record.field is dictionary";
+		isIt = myRecord.stringField isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "string/record.field is float";
+		isIt = myRecord.stringField isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "string/record.field is int";
+		isIt = myRecord.stringField isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "string/record.field is number";
+		isIt = myRecord.stringField isa number;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "string/record.field is smallFloat";
+		isIt = myRecord.stringField isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "string/record.field is smallInt";
+		isIt = myRecord.stringField isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "string/record.field is string";
+		isIt = myRecord.stringField isa string;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "string/record.field is timestamp";
+		isIt = myRecord.stringField isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "string/record.field is anyexception";
+		isIt = myRecord.stringField isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "string/record.field is DynamicAccessException";
+		isIt = myRecord.stringField isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "string/record.field is InvalidArgumentException";
+		isIt = myRecord.stringField isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "string/record.field is InvalidIndexException";
+		isIt = myRecord.stringField isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "string/record.field is InvalidPatternException";
+		isIt = myRecord.stringField isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "string/record.field is InvocationException";
+		isIt = myRecord.stringField isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "string/record.field is JavaObjectException";
+//		isIt = myRecord.stringField isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "string/record.field is JavaScriptObjectException";
+//		isIt = myRecord.stringField isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "string/record.field is NullValueException";
+		isIt = myRecord.stringField isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "string/record.field is NumericOverflowException";
+		isIt = myRecord.stringField isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "string/record.field is ServiceInvocationException";
+		isIt = myRecord.stringField isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "string/record.field is SQLException";
+//		isIt = myRecord.stringField isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "string/record.field is TypeCastException";
+		isIt = myRecord.stringField isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "string/record.field is bytes";
+		isIt = myRecord.stringField isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "string/record.field is bytes(8)";
+		isIt = myRecord.stringField isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // EString014
+
+// basic record
+//
+record EString014Record
+	
+	stringField string;
+	
+end

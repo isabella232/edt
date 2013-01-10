@@ -1,0 +1,343 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import api.eglx_lang.ExceptionState;
+import api.eglx_lang.TestRec;
+
+// basic library
+library ObjectInitialization001
+
+	mine myLittleRecord;
+	second myLittleRecord = mine;
+	
+	function setValues() { @Test }
+		tr TestRec{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+
+	function nullRecord() { @Test }
+		tr TestRec?;
+		LogResult.assertTrue1( tr == null );
+	end
+
+	function notNullRecord() { @Test }
+		tr TestRec;
+		LogResult.assertTrue1( tr != null );
+	end
+
+	function setValuesOnNullableRecord1() { @Test }
+//		state ExceptionState = ExceptionState.noException;
+//		try
+//			// The record is nullable and not initialized, so it's null.
+//			// The assignment to s should fail.
+//			tr TestRec?{ s = "a value for field s" };
+//		onException ( nvx NullValueException )
+//			state = ExceptionState.correct;
+//		onException ( ax AnyException )
+//			state = ExceptionState.wrongException;
+//		end
+//		LogResult.assertTrue1( state == ExceptionState.correct );
+		LogResult.passed("Validation error OK");
+	end
+
+	function setValuesOnNullableRecord2() { @Test }
+		tr TestRec? = new TestRec{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+
+	function setValuesOnNullableRecord3() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The record is nullable and not initialized, so it's null.
+			// The assignment to s should fail.
+			tr TestRec?;			
+			tr{ s = "a value for field s" };
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+		end
+		LogResult.assertTrue1( state == ExceptionState.correct );	
+	end
+
+	function setValuesOnNullableRecord4() { @Test }
+		tr TestRec? = new TestRec;		
+		tr{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr.s );
+	end
+
+	function setValuesOnNullableHandler1() { @Test }
+//		state ExceptionState = ExceptionState.noException;
+//		try
+//			// The handler is nullable and not initialized, so it's null.
+//			// The assignment to i should fail.
+//			th TestHandler?{ i = 54 };
+//		onException ( nvx NullValueException )
+//			state = ExceptionState.correct;
+//		onException ( ax AnyException )
+//			state = ExceptionState.wrongException;
+//		end
+//		LogResult.assertTrue1( state == ExceptionState.correct );
+		LogResult.passed("Validation error OK");
+	end
+	
+	function setValuesOnNullableHandler2() { @Test }
+		th TestHandler? = new TestHandler{ i = 54 };
+		LogResult.assertBigIntEqual1( 54, th.i );
+	end
+
+	function setValuesOnNullableHandler3() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The handler is nullable and not initialized, so it's null.
+			// The assignment to i should fail.
+			th TestHandler?;
+			th{ i = 54 };
+			LogResult.failed("No Exception");
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+			// excpetion in source assertion
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+			LogResult.failed("Wrong Exception");
+		end
+	end
+	
+	function setValuesOnNullableHandler4() { @Test }
+		th TestHandler? = new TestHandler;
+		th{ i = 54 };
+		LogResult.assertBigIntEqual1( 54, th.i );
+	end
+	
+	function callFunctionOfNullableHandler1() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The handler is nullable and not initialized, so it's null.
+			// The function call should fail.
+			th TestHandler?;
+			th.sneeze();
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+		end
+		LogResult.assertTrue1( state == ExceptionState.correct );
+	end
+
+	function callFunctionOfNullableHandler2() { @Test }
+		th TestHandler? = new TestHandler;
+		LogResult.assertStringEqual1( "Ah-choo!", th.sneeze() );
+	end
+	
+	function setValuesOnNullableList1() { @Test }
+		state ExceptionState = ExceptionState.noException;
+//		try
+//			// The List is nullable and not initialized, so it's null.
+//			// Appending the new element should fail.
+//			tr TestRec[]?{ new TestRec };
+//		onException ( nvx NullValueException )
+//			state = ExceptionState.correct;
+//		onException ( ax AnyException )
+//			state = ExceptionState.wrongException;
+//		end
+//		LogResult.assertTrue1( state == ExceptionState.correct );
+		LogResult.passed("Validation error OK");
+	end
+
+	function setValuesOnNullableList2() { @Test }
+		r TestRec{ s = "a value for field s" };
+		tr TestRec[]? = [ r ];
+		LogResult.assertStringEqual1( "a value for field s", tr[1].s );
+	end
+
+	function setValuesOnNullableList3() { @Test }
+		state ExceptionState = ExceptionState.noException;
+		try
+			// The List is nullable and not initialized, so it's null.
+			// Appending the new element should fail.
+//			tr TestRec?[];	
+			tr TestRec[]?;		
+			tr{ new TestRec };
+			LogResult.failed("No Exception");
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+			LogResult.passed("OK");
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+			LogResult.failed("Wrong Exception");
+		end
+		// LogResult.assertTrue1( state == ExceptionState.correct );
+	end
+
+	function setValuesOnNullableList4() { @Test }
+		tr TestRec[]? = new TestRec[ 1 ];		
+		tr[1]{ s = "a value for field s" };
+		LogResult.assertStringEqual1( "a value for field s", tr[1].s );
+	end
+
+	function defaultValueOfNullable() { @Test }
+		d decimal(5,2)?;
+		LogResult.assertTrue1( d == null );
+	end
+	
+	function assignNullToNotNullable() { @Test }
+		isNull decimal(5,2)?;
+		d decimal(5,2);
+		state ExceptionState = ExceptionState.noException;
+		try
+			d = isNull;
+		onException ( nvx NullValueException )
+			state = ExceptionState.correct;
+		onException ( ax AnyException )
+			state = ExceptionState.wrongException;
+		end
+		LogResult.assertTrue1( state == ExceptionState.correct );
+	end
+	
+	function plusWithNull() { @Test }
+		s1 string?;
+		partial string = "<" + s1 + ">";
+		LogResult.assertStringEqual1( "<>", "<" + s1 + ">" );
+	end
+	
+	function colonColonWithNull() { @Test }
+		s1 string?;
+		LogResult.assertStringEqual1( "<>", "<" :: s1 :: ">" );
+	end
+	
+	function questionColonWithNull() { @Test }
+		s1 string?;
+		LogResult.assertTrue1( ("<" ?: s1 ?: ">") == null );
+	end
+	
+	function recordAssignmentTest() {@Test}
+		second = mine;
+		mine.thing2 = "somtething else";
+		LogResult.assertStringEqual1("two", second.thing2);
+	end
+	
+	function recordInMapAassignmentTest() {@Test}
+		// Everything in a dictionary is a reference
+	   	intB int;
+	   	aMap dictionary;
+	   	bMap dictionary;
+	   	aMap.myRecord = new myLittleRecord;
+        aMap.myRecord.count = 30000;
+        bMap.myRecord = aMap.myRecord;
+        bMap.myRecord.count = 5000;
+        intB = aMap.myRecord.count;
+		LogResult.assertBigIntEqual1( 5000, intB);
+	end
+	
+	function recordToAnyAssignment01() {@Test}
+		firstRec myLittleRecord;
+		any1 any = firstRec;
+		any2 any = any1;
+		any1.thing2 = "modified.two";
+		expected string = "two";
+		LogResult.assertStringEqual1(expected, firstRec.thing2);
+	end
+	
+	function recordToAnyAssignment02() {@Test}
+		firstRec myLittleRecord;
+		any1 any = firstRec;
+		any2 any = any1;
+		any1.thing2 = "modified.two";
+		expected string = "modified.two";
+		LogResult.assertStringEqual1(expected, any1.thing2);
+	end
+	
+	function recordToAnyAssignment03() {@Test}
+		firstRec myLittleRecord;
+		any1 any = firstRec;
+		any2 any = any1;
+		any1.thing2 = "modified.two";
+		expected string = "modified.two";
+		LogResult.assertStringEqual1(expected, any2.thing2);
+	end
+	
+//	function nullLiteralWriteStdOut() {@Test}
+//		try
+//			syslib.writestdout(null);
+//			LogResult.failed("Expecting NullValueException");
+//		onException(oops NullValueException)
+//			LogResult.passed("OK");
+//		end
+//	end
+	
+//	function nullLiteralWriteStdErr() {@Test}
+//		try
+//			syslib.writestderr(null);
+//			LogResult.failed("Expecting NullValueException");
+//		onException(oops NullValueException)
+//			LogResult.passed("OK");
+//		end
+//	end
+	
+	function nullVariableWriteStdOut() {@Test}
+		nullString string?;
+		try
+			syslib.writestdout(nullString);
+			LogResult.failed("Expecting NullValueException");
+		onException(oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function nullVariableWriteStdErr() {@Test}
+		nullString string?;
+		try
+			syslib.writestderr(nullString);
+			LogResult.failed("Expecting NullValueException");
+		onException(oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function testJRecordProvider1() {@Test}
+		JRecordProvider.init();
+		r1 JRecord = JRecordProvider.getJRecord();
+		r1.f1 = "abc";
+		JRecordProvider.printRecord();
+		LogResult.assertStringEqual1("xyz", JRecordProvider.getField1());
+	end
+	
+	function testJRecordProvider2() {@Test}
+		JRecordProvider.init();
+		JRecordProvider.getJRecord().f1 = "abcd";
+		JRecordProvider.printRecord();
+		LogResult.assertStringEqual1("xyz", JRecordProvider.getField1());		
+	end
+	
+	function testJRecordProvider3() {@Test}
+		JRecordProvider.init();
+		JRecordProvider.r.f1 = "KNIT";
+		JRecordProvider.printRecord();
+		LogResult.assertStringEqual1("KNIT", JRecordProvider.getField1());
+	end
+	
+//	function initSimpleRecordArray(recArray Rec1[] inout)
+	function initSimpleRecordArray() {@Test}
+		temp myLittleRecord;
+		recArray myLittleRecord[];
+		
+		temp.thing1 = "Index 1";
+		recArray.appendElement(temp);
+		
+		temp.thing1 = "Index 2";
+		recArray.appendElement(temp);
+		LogResult.assertTrue1(recArray[1].thing1 != recArray[2].thing1);
+	end
+	
+end
+
+record myLittleRecord
+	
+	thing1 string = "one";
+	thing2 string = "two";
+	thing3 string = "three";
+	count  int= 2;
+	
+end

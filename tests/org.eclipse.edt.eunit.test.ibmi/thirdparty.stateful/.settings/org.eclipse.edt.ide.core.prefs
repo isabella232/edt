@@ -1,0 +1,7 @@
+#Fri Mar 16 10:26:49 EDT 2012
+DefaultDeploymentDescriptorPath/<project>=/thirdparty.stateful/EGLSource/thirdparty_stateful.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds//EGLSource/client=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+generatorIds//EGLSource/server=org.eclipse.edt.ide.gen.JavaGenProvider
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider

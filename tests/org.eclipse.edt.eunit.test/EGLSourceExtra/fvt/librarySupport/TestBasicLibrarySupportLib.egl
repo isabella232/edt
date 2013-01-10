@@ -1,0 +1,76 @@
+// Aug 15, 2006 3:55:26 PM - EGL V7.0 Migration
+package fvt.librarySupport;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+/*
+* @name Basic Library Support
+* @title The function test program for Basic Library Support in EDT
+* @keywords Library
+* @author EDT team
+* @createDate 2011/08/25
+* @description 
+* Test the Basic Library Support
+*/
+
+library TestBasicLibrarySupportLib{}
+
+    rc boolean;
+
+    function check_string_value_method_1(){@test}
+        LogResult.logStdOut("check_string_value_method_1");
+        TestBasicLibrarySupportLib2.aString = "abc";
+        rc =(TestBasicLibrarySupportLib2.getString() == "abc");
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_integer_value_method_1(){@test}
+        LogResult.logStdOut("check_integer_value_method_1");
+        TestBasicLibrarySupportLib2.aInt = 10;
+        rc =(TestBasicLibrarySupportLib2.getInt() == 10);
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_string_value_method_2(){@test}
+        LogResult.logStdOut("check_string_value_method_2");
+        TestBasicLibrarySupportLib2.setString("cde");
+        rc =(TestBasicLibrarySupportLib2.getString() == "cde");
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_integer_value_method_2(){@test}
+        LogResult.logStdOut("check_integer_value_method_2");
+        TestBasicLibrarySupportLib2.setInt(5);
+        rc =(TestBasicLibrarySupportLib2.getInt() == 5);
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_string_value_method_3(){@test}
+        LogResult.logStdOut("check_string_value_method_3");
+        TestBasicLibrarySupportLib2.setString("cde");
+        rc =(TestBasicLibrarySupportLib2.getString() == "cde");
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_integer_value_integer_3(){@test}
+        LogResult.logStdOut("check_integer_value_method_4");
+        TestBasicLibrarySupportLib2.setInt(5);
+        rc =(TestBasicLibrarySupportLib2.getInt() == 5);
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_string_value_method_4(){@test}
+        LogResult.logStdOut("check_string_value_method_4");
+        TestBasicLibrarySupportLib2.setString("abc");
+        rc =(TestBasicLibrarySupportLib2.getString() == "abc");
+        LogResult.assertTrue1(rc);
+    end
+
+    function check_integer_value_method_4(){@test}
+        LogResult.logStdOut("check_integer_value_method_4");
+        TestBasicLibrarySupportLib2.setInt(5);
+        rc =(TestBasicLibrarySupportLib2.getInt() == 5);
+        LogResult.assertTrue1(rc);
+    end
+
+end

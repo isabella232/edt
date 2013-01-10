@@ -1,0 +1,48 @@
+package server.host.rpg.programs.data.handlers;
+
+import eglx.jtopen.annotations.StructBin1;
+import eglx.jtopen.annotations.StructBin2;
+import eglx.jtopen.annotations.StructBin4;
+import eglx.jtopen.annotations.StructBin8;
+import eglx.jtopen.annotations.StructDate;
+import eglx.jtopen.annotations.StructFloat4;
+import eglx.jtopen.annotations.StructFloat8;
+import eglx.jtopen.annotations.StructPackedDecimal;
+import eglx.jtopen.annotations.StructText;
+import eglx.jtopen.annotations.StructTime;
+import eglx.jtopen.annotations.StructTimestamp;
+import eglx.jtopen.annotations.StructUnsignedBin1;
+import eglx.jtopen.annotations.StructUnsignedBin2;
+import eglx.jtopen.annotations.StructUnsignedBin4;
+import eglx.jtopen.annotations.StructUnsignedBin8;
+import eglx.jtopen.annotations.StructZonedDecimal;
+import eglx.services.Encoding;
+
+
+handler Handler2
+	char20 string{@StructText{length = 20}}; 
+	lchar20 string(20){@StructText}; 
+	unicode20 string{@StructText{length = 20, encoding = "UTF-16BE"}}; 
+	lunicode20 string(20){@StructText{encoding = "UTF-16BE"}}; 
+	bin1sign smallint{@StructBin1{}};
+	bin2sign smallint{@StructBin2{}};
+	bin4sign int{@StructBin4{}};
+	bin8sign bigint{@StructBin8{}};
+	dec174 decimal(17,4){@StructPackedDecimal{}};
+	dec8 decimal(8){@StructPackedDecimal{}};
+	num150 decimal(15){@StructZonedDecimal {}};
+	num112 decimal(11,2){@StructZonedDecimal {}};
+	bin1 smallint{@StructUnsignedBin1{}};
+	bin2 int{@StructUnsignedBin2{}};
+	bin4 bigint{@StructUnsignedBin4{}};
+	bin8 decimal(20){@StructUnsignedBin8{}};
+	date1 date{@StructDate};
+	date2 date{@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_EUR}};
+	date3 date{@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}};
+	time1 time{@StructTime};
+	time2 time{@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR}};
+	time3 time{@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}};
+	timestamp1 timestamp("yyyyMMddHHmmss"){@StructTimestamp{}};
+	float4 smallfloat{@StructFloat4};
+	float8 float{@StructFloat8};
+end

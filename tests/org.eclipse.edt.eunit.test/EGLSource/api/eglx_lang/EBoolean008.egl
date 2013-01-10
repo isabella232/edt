@@ -1,0 +1,243 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+/** @test
+  * @name EBoolean008
+  * @title EBoolean008 - runISAFunction
+  * @description testing smallInt variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn29
+  * @sources EBoolean008.egl
+  * @keywords smallInt, isa
+ **/
+library EBoolean008 {}
+
+	variation string;
+	isIt boolean;
+	expected boolean;
+	myRecord EBoolean008Record {booleanField = true};
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "boolean/record.field is any";
+		isIt = myRecord.booleanField isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "boolean/record.field is bigInt";
+		isIt = myRecord.booleanField isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "boolean/record.field is boolean";
+		isIt = myRecord.booleanField isa boolean;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "boolean/record.field is date";
+		isIt = myRecord.booleanField isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "boolean/record.field is decimal(4,2)";
+		isIt = myRecord.booleanField isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "boolean/record.field is decimal";
+		isIt = myRecord.booleanField isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "boolean/record.field is dictionary";
+		isIt = myRecord.booleanField isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "boolean/record.field is float";
+		isIt = myRecord.booleanField isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "boolean/record.field is int";
+		isIt = myRecord.booleanField isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "boolean/record.field is number";
+		isIt = myRecord.booleanField isa number;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "boolean/record.field is smallFloat";
+		isIt = myRecord.booleanField isa smallFloat;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "boolean/record.field is smallInt";
+		isIt = myRecord.booleanField isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "boolean/record.field is string";
+		isIt = myRecord.booleanField isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "boolean/record.field is timestamp";
+		isIt = myRecord.booleanField isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "boolean/record.field is anyexception";
+		isIt = myRecord.booleanField isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "boolean/record.field is DynamicAccessException";
+		isIt = myRecord.booleanField isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "boolean/record.field is InvalidArgumentException";
+		isIt = myRecord.booleanField isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "boolean/record.field is InvalidIndexException";
+		isIt = myRecord.booleanField isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "boolean/record.field is InvalidPatternException";
+		isIt = myRecord.booleanField isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "boolean/record.field is InvocationException";
+		isIt = myRecord.booleanField isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "boolean/record.field is JavaObjectException";
+//		isIt = myRecord.booleanField isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "boolean/record.field is JavaScriptObjectException";
+//		isIt = myRecord.booleanField isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "boolean/record.field is NullValueException";
+		isIt = myRecord.booleanField isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "boolean/record.field is NumericOverflowException";
+		isIt = myRecord.booleanField isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "boolean/record.field is ServiceInvocationException";
+		isIt = myRecord.booleanField isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "boolean/record.field is SQLException";
+//		isIt = myRecord.booleanField isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "boolean/record.field is TypeCastException";
+		isIt = myRecord.booleanField isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "boolean/record.field is bytes";
+		isIt = myRecord.booleanField isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction31(){@Test}
+		variation = "boolean/record.field is bytes(8)";
+		isIt = myRecord.booleanField isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+	
+end // EBoolean008
+
+// basic record
+//
+record EBoolean008Record
+	
+	booleanField boolean;
+	
+end

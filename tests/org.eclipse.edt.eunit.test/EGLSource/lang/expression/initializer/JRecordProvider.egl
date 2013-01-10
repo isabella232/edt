@@ -1,0 +1,30 @@
+package lang.expression.initializer;
+
+// basic library
+library JRecordProvider
+
+
+	r JRecord;
+	
+	function init()
+		r.f1 = "xyz";
+	end
+	
+	// Function Declarations
+	function getJRecord() returns(JRecord)
+		return (r);
+	end
+	
+	function getField1() returns(String)
+		return (r.f1);
+	end
+	
+	function printRecord()
+		sysLib.writeStdOut("r.f1 in lib1 is: " + r.f1);
+	end
+	
+end
+
+Record JRecord
+	f1 String;
+end

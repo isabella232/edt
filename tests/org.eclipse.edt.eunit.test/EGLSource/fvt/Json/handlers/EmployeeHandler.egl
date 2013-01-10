@@ -1,0 +1,9 @@
+package fvt.Json.handlers;
+
+handler EmployeeHandler
+    EmpNo EmpNumberHandler;
+    //array EmpNumber[0];
+    array EmpNumberHandler[] = new EmpNumberHandler[]; //change for EDT 0.7
+    dict Dictionary{};
+    LastName string;
+end

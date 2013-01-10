@@ -1,0 +1,62 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime003
+  * @title EdtTime003 - runConversionFunction
+  * @description testing Time 'extend' functions
+  * @testcases runConversionFunction01 - runConversionFunction04
+  * @sources EdtTime003.egl
+  * @keywords time, conversion, extend, timestamp
+ **/
+library ETime003 {}
+
+	theTime Time = "23:59:59";
+
+	const theTimeStamp timeStamp("HHmmss") = "23:59:59";
+	const theTimeStampHour timeStamp("HH") = "23";
+	const theTimeStampHourMinute timeStamp("HHmm") = "23:59";
+	
+	function runConversionFunction01(){@Test}
+		LogResult.assertTrue("time to timestamp hhmmss",theTime.extend("hhmmss")==theTimeStamp);
+	end
+	
+	function runConversionFunction02(){@Test}
+		LogResult.assertTrue("time to timestamp hh", theTime.extend("hh")==theTimeStampHour);
+	end
+	
+	function runConversionFunction03(){@Test}
+		LogResult.assertTrue("time to timestamp hhmm", theTime.extend("hhmm")==theTimeStampHourMinute);
+	end
+	
+	function runConversionFunction04(){@Test}
+		theTimeStampMinuteSecond timeStamp("mmss") = "59:59";
+		LogResult.assertTrue("time to timestamp mmss",theTimeStamp.extend("mmss")==theTimeStampMinuteSecond);
+	end
+	
+	function runConversionFunction05(){@Test}
+		try
+			theTime.extend("ffzz");
+			LogResult.failed("exception should have been thrown");
+		onException(exception InvalidArgumentException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runConversionFunction06(){@Test}
+		try
+			theTime.extend("hhzz");
+			LogResult.failed("exception should have been thrown");
+		onException(exception InvalidArgumentException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+end

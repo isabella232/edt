@@ -1,0 +1,13 @@
+package fvt.delegates;
+
+delegate MyDelegate(i int) returns(int)
+end
+
+delegate MyDelegateIN(i int in) returns(int)
+end
+
+delegate MyDelegateOUT(i int out) returns(int)
+end
+
+delegate MyDelegateINOUT(i int inOut) returns(int)
+end

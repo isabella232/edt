@@ -1,0 +1,2224 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestConstParametersLib
+* @title The function test program for the EGL Const Parameters
+* @keywords EGL Const Parameters
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Const Parameters
+*/
+
+library TestConstParametersLib
+
+    cgb boolean = false;
+    cgi int = 27;
+    cgmy int = 103;
+    cgs string = "I am a string constant";
+    // const cgt time = "10:12:13";
+    
+    // const cgab boolean[2] =[false, true];
+    // const cgai int[2] =[-27, 54];
+    // const cgamy int[2] =[555, 777];
+    // const cgas string[2] =["flip", "flop"];
+    // const cgat time[2] =["07:35:53", "22:42:19"];
+    cgab boolean[] =[false, true]; // Change for EDT 0.7
+    cgai int[] =[-27, 54];// Change for EDT 0.7
+    cgamy int[] =[555, 777];// Change for EDT 0.7
+    cgas string[] =["flip", "flop"];// Change for EDT 0.7
+    
+    cb boolean = false;
+    ci int = 27;
+    cmy int = 103;
+    cs string = "I am a string constant";
+    // const ct time = "10:12:13";
+    
+    // const cab boolean[2] =[false, true];
+    // const cai int[2] =[-27, 54];
+    // const camy int[2] =[555, 777];
+    // const cas string[2] =["flip", "flop"];
+    // const cat time[2] =["07:35:53", "22:42:19"];
+    cab boolean[] =[false, true];// Change for EDT 0.7
+    cai int[] =[-27, 54];// Change for EDT 0.7
+    camy int[] =[555, 777];// Change for EDT 0.7
+    cas string[] =["flip", "flop"];// Change for EDT 0.7
+    
+    b boolean = false;
+    i int = 27;
+    my int = 103;
+    s string = "I am a string constant";
+    //t time = "10:12:13";
+    
+    // ab boolean[2] =[false, true];
+    // ai int[2] =[-27, 54];
+    // amy int[2] =[555, 777];
+    // astr string[2] =["flip", "flop"];
+    // at time[2] =["07:35:53", "22:42:19"];
+    ab boolean[] =[false, true];// Change for EDT 0.7
+    ai int[] =[-27, 54];// Change for EDT 0.7
+    amy int[] =[555, 777];// Change for EDT 0.7
+    astr string[] =["flip", "flop"];// Change for EDT 0.7
+    
+    //aTimestamp timeStamp = "1984-12-31 09:17:56";// Change for EDT 0.7
+    aTimestamp timeStamp("yyyyMMddHHmmss") = "1984-12-31 09:17:56";// Change for EDT 0.7
+    //= timeStampValueWithPattern("1984-12-31 09:17:56", "yyyyMMddHHmmss");
+    
+    aNullableInt int? = null;
+
+    //    fcbINd fcbINd = fcbIN;
+    //    fciINd fciINd = fciIN;
+    //    fciNullableINd fciNullableINd = fciNullableIN;
+    //    fcmyINd fcmyINd = fcmyIN;
+    //    fcbiINd fcbiINd = fcbiIN;
+    //    fcsINd fcsINd = fcsIN;
+    //    // BUG: List cannot be resolved to a variable
+    //    //facsINd facsINd = facsIN;
+    //    //faciINd faciINd = faciIN;
+    
+    //    //fctINd fctINd = TestConstParametersOtherLib.fctIN;
+    //    
+    //    fcbINOUTd fcbINOUTd = fcbINOUT;
+    //    fciINOUTd fciINOUTd = fciINOUT;
+    //    fciNullableINOUTd fciNullableINOUTd = fciNullableINOUT;
+    //    fcmyINOUTd fcmyINOUTd = fcmyINOUT;
+    //    fcbiINOUTd fcbiINOUTd = fcbiINOUT;
+    //    fcsINOUTd fcsINOUTd = fcsINOUT;
+    //    facsINOUTd facsINOUTd = facsINOUT;
+    //    faciINOUTd faciINOUTd = faciINOUT;
+    //    //fctINOUTd fctINOUTd = TestConstParametersOtherLib.fctINOUT;
+    //    // Test passing values to const in parameters.
+    fcbINd fcbINd?;
+    fciINd fciINd?;
+    fciNullableINd fciNullableINd?;
+    fcmyINd fcmyINd?;
+    fcbiINd fcbiINd?;
+    fcsINd fcsINd?;
+    // BUG: List cannot be resolved to a variable
+    //facsINd facsINd?;
+    //faciINd faciINd?;
+    //fctINd fctINd = TestConstParametersOtherLib.fctIN;
+    
+    fcbINOUTd fcbINOUTd?;
+    fciINOUTd fciINOUTd?;
+    fciNullableINOUTd fciNullableINOUTd?;
+    fcmyINOUTd fcmyINOUTd?;
+    fcbiINOUTd fcbiINOUTd?;
+    fcsINOUTd fcsINOUTd?;
+    facsINOUTd facsINOUTd?;
+    faciINOUTd faciINOUTd?;
+    //fctINOUTd fctINOUTd = TestConstParametersOtherLib.fctINOUT;
+    // Test passing values to const in parameters.
+    
+    function setup()
+        fcbINd = fcbIN;
+        fciINd = fciIN;
+        fciNullableINd = fciNullableIN;
+        fcmyINd = fcmyIN;
+        fcbiINd = fcbiIN;
+        fcsINd = fcsIN;
+        // BUG: List cannot be resolved to a variable
+        //facsINd = facsIN;
+        //faciINd = faciIN;
+        
+        //fctINd fctINd = TestConstParametersOtherLib.fctIN;
+        
+        fcbINOUTd = fcbINOUT;
+        fciINOUTd = fciINOUT;
+        fciNullableINOUTd = fciNullableINOUT;
+        fcmyINOUTd = fcmyINOUT;
+        fcbiINOUTd = fcbiINOUT;
+        fcsINOUTd = fcsINOUT;
+        facsINOUTd = facsINOUT;
+        faciINOUTd = faciINOUT;
+        //fctINOUTd fctINOUTd = TestConstParametersOtherLib.fctINOUT;
+        // Test passing values to const in parameters.
+    end
+
+    function fcbIN(cb boolean const in, expected boolean in)
+        LogResult.assertTrue1((cb == expected));
+    end
+
+    function fciIN(ci int const in, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fciNullableIN(ci int? const in, expected int in, expectedNull boolean in)
+        LogResult.logStdOut("fciNullableIN check null status");
+        LogResult.assertTrue1(((ci == null) == expectedNull));
+    end
+
+    function fcmyIN(ci int const in, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fcbiIN(cbi bigInt const in, expected bigInt in)
+        LogResult.assertBigIntEqual1(expected, cbi);
+    end
+
+    function fcsIN(cs string const in, expected string in)
+        LogResult.assertStringEqual1(expected, cs);
+    end
+
+    function facsIN(cas string[] const in, index int in, expected string in, newElt string in)
+        LogResult.assertStringEqual1(expected, cas[index]);
+        cas[index] = newElt;
+    end
+
+    function faciIN(cai int[] const in, index int in, expected int in, newElt int in)
+        LogResult.assertBigIntEqual1(expected, cai[index]);
+        cai[index] = newElt;
+    end
+
+    function fcbINOUT(cb boolean const inOut, expected boolean in)
+        LogResult.assertTrue1((cb == expected));
+    end
+
+    function fciINOUT(ci int const inOut, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fciNullableINOUT(ci int? const inOut, expected int in, expectedNull boolean in)
+        LogResult.logStdOut("fciNullableINOUT check null status");
+        LogResult.assertTrue1((ci == null) == expectedNull);
+    end
+
+    function fcmyINOUT(ci int const inOut, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fcbiINOUT(cbi bigInt const inOut, expected bigInt in)
+        LogResult.assertBigIntEqual1(expected, cbi);
+    end
+
+    function fcsINOUT(cs string const inOut, expected string in)
+        LogResult.assertStringEqual1(expected, cs);
+    end
+
+    function facsINOUT(cas string[] const inOut, index int in, expected string in, newElt string in)
+        LogResult.assertStringEqual1(expected, cas[index]);
+        cas[index] = newElt;
+    end
+
+    function faciINOUT(cai int[] const inOut, index int in, expected int in, newElt int in)
+        LogResult.assertBigIntEqual1(expected, cai[index]);
+        cai[index] = newElt;
+    end
+
+    function fcbNonConstIN(cb boolean in, expected boolean in)
+        LogResult.assertTrue1((cb == expected));
+    end
+
+    function fciNonConstIN(ci int in, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fciNullableNonConstIN(ci int? in, expected int in, expectedNull boolean in)
+        LogResult.logStdOut("fciNullableNonConstIN check null status");
+        LogResult.assertTrue1((ci == null) == expectedNull);
+    end
+
+    function fcmyNonConstIN(ci int in, expected int in)
+        LogResult.assertBigIntEqual1(expected, ci);
+    end
+
+    function fcbiNonConstIN(cbi bigInt in, expected bigInt in)
+        LogResult.assertBigIntEqual1(expected, cbi);
+    end
+
+    function fcsNonConstIN(cs string in, expected string in)
+        LogResult.assertStringEqual1(expected, cs);
+    end
+
+    function facsNonConstIN(cas string[] in, index int in, expected string in, newElt string in)
+        LogResult.assertStringEqual1(expected, cas[index]);
+        cas[index] = newElt;
+    end
+
+    function faciNonConstIN(cai int[] in, index int in, expected int in, newElt int in)
+        LogResult.assertBigIntEqual1(expected, cai[index]);
+        cai[index] = newElt;
+    end
+
+    // Test passing values to const in parameters with delegates.
+    
+    function testConstInsBooleanConstIn1(){@Test}
+        setup();
+        LogResult.logStdOut("boolean const in 1");
+        fcbIN(cb, false);
+    end
+
+    function testConstInsBooleanConstIn2(){@Test}
+        LogResult.logStdOut("boolean const in 2");
+        fcbIN(cgb, false);
+    end
+
+    function testConstInsBooleanConstIn3(){@Test}
+        LogResult.logStdOut("boolean const in 3");
+        fcbIN(TestConstParametersOtherLib.cb, false);
+    end
+
+    function testConstInsBooleanConstIn4(){@Test}
+        LogResult.logStdOut("boolean const in 4");
+        fcbIN(b, false);
+    end
+
+    function testConstInsBooleanConstIn5(){@Test}
+        LogResult.logStdOut("boolean const in 5");
+        fcbIN(cab[2], true);
+    end
+
+    function testConstInsBooleanConstIn6(){@Test}
+        LogResult.logStdOut("boolean const in 6");
+        fcbIN(cgab[2], true);
+    end
+
+    function testConstInsBooleanConstIn7(){@Test}
+        LogResult.logStdOut("boolean const in 7");
+        fcbIN(TestConstParametersOtherLib.cab[2], true);
+    end
+
+    function testConstInsBooleanConstIn8(){@Test}
+        LogResult.logStdOut("boolean const in 8");
+        fcbIN(ab[2], true);
+    end
+
+    function testConstInsBooleanConstIn9(){@Test}
+        LogResult.logStdOut("boolean const in 9");
+        fcbIN(true, true);
+    end
+
+    function testConstInsBooleanConstIn10(){@Test}
+        LogResult.logStdOut("boolean const in 10");
+        fcbIN("abc".length() == 467, false);
+    end
+
+    function testConstInsIntConstIn1(){@Test}
+        LogResult.logStdOut("int const in 1");
+        fciIN(ci, 27);
+    end
+
+    function testConstInsIntConstIn2(){@Test}
+        LogResult.logStdOut("int const in 2");
+        fciIN(cgi, 27);
+    end
+
+    function testConstInsIntConstIn3(){@Test}
+        LogResult.logStdOut("int const in 3");
+        fciIN(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInsIntConstIn4(){@Test}
+        LogResult.logStdOut("int const in 4");
+        fciIN(i, 27);
+    end
+
+    function testConstInsIntConstIn5(){@Test}
+        LogResult.logStdOut("int const in 5");
+        fciIN(cai[2], 54);
+    end
+
+    function testConstInsIntConstIn6(){@Test}
+        LogResult.logStdOut("int const in 6");
+        fciIN(cgai[2], 54);
+    end
+
+    function testConstInsIntConstIn7(){@Test}
+        LogResult.logStdOut("int const in 7");
+        fciIN(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInsIntConstIn8(){@Test}
+        LogResult.logStdOut("int const in 8");
+        fciIN(ai[2], 54);
+    end
+
+    function testConstInsIntConstIn9(){@Test}
+        LogResult.logStdOut("int const in 9");
+        fciIN(-987, -987);
+    end
+
+    function testConstInsIntConstIn10(){@Test}
+        LogResult.logStdOut("int const in 10");
+        fciIN("abc".length(), 3);
+    end
+
+    function testConstInsIntConstIn11(){@Test}
+        LogResult.logStdOut("int const in 11");
+        fciIN(i * 3, 81);
+
+    end
+
+    function testConstInsDataItemConstIn1(){@Test}
+        LogResult.logStdOut("DataItem const in 1");
+        fcmyIN(cmy, 103);
+    end
+
+    function testConstInsDataItemConstIn2(){@Test}
+        LogResult.logStdOut("DataItem const in 2");
+        fcmyIN(cgmy, 103);
+    end
+
+    function testConstInsDataItemConstIn3(){@Test}
+        LogResult.logStdOut("DataItem const in 3");
+        fcmyIN(TestConstParametersOtherLib.cmy, 103);
+    end
+
+    function testConstInsDataItemConstIn4(){@Test}
+        LogResult.logStdOut("DataItem const in 4");
+        fcmyIN(my, 103);
+    end
+
+    function testConstInsDataItemConstIn5(){@Test}
+        LogResult.logStdOut("DataItem const in 5");
+        fcmyIN(camy[2], 777);
+    end
+
+    function testConstInsDataItemConstIn6(){@Test}
+        LogResult.logStdOut("DataItem const in 6");
+        fcmyIN(cgamy[2], 777);
+    end
+
+    function testConstInsDataItemConstIn7(){@Test}
+        LogResult.logStdOut("DataItem const in 7");
+        fcmyIN(TestConstParametersOtherLib.camy[2], 777);
+    end
+
+    function testConstInsDataItemConstIn8(){@Test}
+        LogResult.logStdOut("DataItem const in 8");
+        fcmyIN(amy[2], 777);
+    end
+
+    function testConstInsDataItemConstIn9(){@Test}
+        LogResult.logStdOut("DataItem const in 9");
+        fcmyIN(-987, -987);
+    end
+
+    function testConstInsDataItemConstIn10(){@Test}
+        LogResult.logStdOut("DataItem const in 10");
+        fcmyIN("abc".length(), 3);
+    end
+
+    function testConstInsDataItemConstIn11(){@Test}
+        LogResult.logStdOut("DataItem const in 11");
+        fcmyIN(i * 3, 81);
+
+    end
+
+    function testConstInsBigintConstIn1(){@Test}
+        LogResult.logStdOut("bigint const in 1");
+        fcbiIN(ci, 27);
+    end
+
+    function testConstInsBigintConstIn2(){@Test}
+        LogResult.logStdOut("bigint const in 2");
+        fcbiIN(cgi, 27);
+    end
+
+    function testConstInsBigintConstIn3(){@Test}
+        LogResult.logStdOut("bigint const in 3");
+        fcbiIN(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInsBigintConstIn4(){@Test}
+        LogResult.logStdOut("bigint const in 4");
+        fcbiIN(i, 27);
+    end
+
+    function testConstInsBigintConstIn5(){@Test}
+        LogResult.logStdOut("bigint const in 5");
+        fcbiIN(cai[2], 54);
+    end
+
+    function testConstInsBigintConstIn6(){@Test}
+        LogResult.logStdOut("bigint const in 6");
+        fcbiIN(cgai[2], 54);
+    end
+
+    function testConstInsBigintConstIn7(){@Test}
+        LogResult.logStdOut("bigint const in 7");
+        fcbiIN(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInsBigintConstIn8(){@Test}
+        LogResult.logStdOut("bigint const in 8");
+        fcbiIN(ai[2], 54);
+    end
+
+    function testConstInsBigintConstIn9(){@Test}
+        LogResult.logStdOut("bigint const in 9");
+        fcbiIN(-987, -987);
+    end
+
+    function testConstInsBigintConstIn10(){@Test}
+        LogResult.logStdOut("bigint const in 10");
+        fcbiIN("abc".length(), 3);
+    end
+
+    function testConstInsBigintConstIn11(){@Test}
+        LogResult.logStdOut("bigint const in 11");
+        fcbiIN(i * 3, 81);
+    end
+
+    function testConstInsStringConstIn1(){@Test}
+        LogResult.logStdOut("string const in 1");
+        fcsIN(cs, "I am a string constant");
+    end
+
+    function testConstInsStringConstIn2(){@Test}
+        LogResult.logStdOut("string const in 2");
+        fcsIN(cgs, "I am a string constant");
+    end
+
+    function testConstInsStringConstIn3(){@Test}
+        LogResult.logStdOut("string const in 3");
+        fcsIN(TestConstParametersOtherLib.cs, "I am a string constant");
+    end
+
+    function testConstInsStringConstIn4(){@Test}
+        LogResult.logStdOut("string const in 4");
+        fcsIN(s, "I am a string constant");
+    end
+
+    function testConstInsStringConstIn5(){@Test}
+        LogResult.logStdOut("string const in 5");
+        fcsIN(cas[2], "flop");
+    end
+
+    function testConstInsStringConstIn6(){@Test}
+        LogResult.logStdOut("string const in 6");
+        fcsIN(cgas[2], "flop");
+    end
+
+    function testConstInsStringConstIn7(){@Test}
+        LogResult.logStdOut("string const in 7");
+        fcsIN(TestConstParametersOtherLib.cas[2], "flop");
+    end
+
+    function testConstInsStringConstIn8(){@Test}
+        LogResult.logStdOut("string const in 8");
+        fcsIN(astr[2], "flop");
+    end
+
+    function testConstInsStringConstIn9(){@Test}
+        LogResult.logStdOut("string const in 9");
+        fcsIN("SNOBOL", "SNOBOL");
+    end
+
+    function testConstInsStringConstIn10(){@Test}
+        LogResult.logStdOut("string const in 10");
+        fcsIN(s :: " _hotdog_ ", "I am a string constant _hotdog_ ");
+    end
+
+    function testConstInsStringConstIn11(){@Test}
+        LogResult.logStdOut("string const in 11");
+        fcsIN(i + 83, "110");
+
+    end
+
+    //    function testConstInsTimeConstIn1(){@Test}
+    //        LogResult.logStdOut("time const in 1");
+    //        TestConstParametersOtherLib.fctIN(ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInsTimeConstIn2(){@Test}
+    //        LogResult.logStdOut("time const in 2");
+    //        TestConstParametersOtherLib.fctIN(cgt, "10:12:13");
+    //    end
+    //
+    //    function testConstInsTimeConstIn3(){@Test}
+    //        LogResult.logStdOut("time const in 3");
+    //        TestConstParametersOtherLib.fctIN(TestConstParametersOtherLib.ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInsTimeConstIn4(){@Test}
+    //        LogResult.logStdOut("time const in 4");
+    //        TestConstParametersOtherLib.fctIN(t, "10:12:13");
+    //    end
+    //
+    //    function testConstInsTimeConstIn5(){@Test}
+    //        LogResult.logStdOut("time const in 5");
+    //        TestConstParametersOtherLib.fctIN(cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsTimeConstIn6(){@Test}
+    //        LogResult.logStdOut("time const in 6");
+    //        TestConstParametersOtherLib.fctIN(cgat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsTimeConstIn7(){@Test}
+    //        LogResult.logStdOut("time const in 7");
+    //        TestConstParametersOtherLib.fctIN(TestConstParametersOtherLib.cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsTimeConstIn8(){@Test}
+    //        LogResult.logStdOut("time const in 8");
+    //        TestConstParametersOtherLib.fctIN(at[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsTimeConstIn9(){@Test}
+    //        LogResult.logStdOut("time const in 9");
+    //        TestConstParametersOtherLib.fctIN(timeOf(aTimestamp), "09:17:56");
+    //
+    //    end
+    
+    function testConstInsIntQueConstIn1(){@Test}
+        LogResult.logStdOut("int? const in 1");
+        aNullableInt int? = null;
+        fciNullableIN(aNullableInt, 0, true);
+    end
+
+    function testConstInsIntQueConstIn2(){@Test}
+        LogResult.logStdOut("int? const in 2");
+        aNullableInt = -1234;
+        fciNullableIN(aNullableInt, -1234, false);
+
+    end
+
+    function testConstInsStringArrayConstIn1(){@Test}
+        LogResult.logStdOut("string[] const in 1");
+        facsIN(cas, 1, "flip", "new");
+    end
+
+    function testConstInsStringArrayConstIn2(){@Test}
+        LogResult.logStdOut("string[] const in 2");
+        LogResult.assertStringEqual1("new", cas[1]);
+        cas[1] = "flip";
+    end
+
+    function testConstInsStringArrayConstIn3(){@Test}
+        LogResult.logStdOut("string[] const in 3");
+        facsIN(cas, 2, "flop", "newt");
+    end
+
+    function testConstInsStringArrayConstIn4(){@Test}
+        LogResult.logStdOut("string[] const in 4");
+        LogResult.assertStringEqual1("newt", cas[2]);
+        cas[2] = "flop";
+    end
+
+    function testConstInsStringArrayConstIn5(){@Test}
+        LogResult.logStdOut("string[] const in 5");
+        facsIN(["flup", "flap"], 2, "flap", "-");
+    end
+
+    function testConstInsStringArrayConstIn6(){@Test}
+        LogResult.logStdOut("string[] const in 6");
+        facsIN(TestConstParametersOtherLib.cas, 1, "flip", "new");
+    end
+
+    function testConstInsStringArrayConstIn7(){@Test}
+        LogResult.logStdOut("string[] const in 7");
+        LogResult.assertStringEqual1("new", TestConstParametersOtherLib.cas[1]);
+        TestConstParametersOtherLib.cas[1] = "flip";
+    end
+
+    function testConstInsStringArrayConstIn8(){@Test}
+        LogResult.logStdOut("string[] const in 8");
+        facsIN(TestConstParametersOtherLib.cas, 2, "flop", "newt");
+    end
+
+    function testConstInsStringArrayConstIn9(){@Test}
+        LogResult.logStdOut("string[] const in 9");
+        LogResult.assertStringEqual1("newt", TestConstParametersOtherLib.cas[2]);
+        TestConstParametersOtherLib.cas[2] = "flop";
+
+    end
+
+    function testConstInsIntArrayConstIn1(){@Test}
+        LogResult.logStdOut("int[] const in 1");
+        faciIN(cai, 1, -27, 31);
+    end
+
+    function testConstInsIntArrayConstIn2(){@Test}
+        LogResult.logStdOut("int[] const in 2");
+        LogResult.assertBigIntEqual1(31, cai[1]);
+        cai[1] = -27;
+    end
+
+    function testConstInsIntArrayConstIn3(){@Test}
+        LogResult.logStdOut("int[] const in 3");
+        faciIN(cai, 2, 54, -1212);
+    end
+
+    function testConstInsIntArrayConstIn4(){@Test}
+        LogResult.logStdOut("int[] const in 4");
+        LogResult.assertBigIntEqual1(-1212, cai[2]);
+        cai[2] = 54;
+    end
+
+    function testConstInsIntArrayConstIn5(){@Test}
+        LogResult.logStdOut("int[] const in 5");
+        myTemp int[] = [88, 99, 1010];
+        faciIN(myTemp, 3, 1010, 0);
+    end
+
+    function testConstInsIntArrayConstIn6(){@Test}
+        LogResult.logStdOut("int[] const in 6");
+        faciIN(TestConstParametersOtherLib.cai, 1, -27, 31);
+    end
+
+    function testConstInsIntArrayConstIn7(){@Test}
+        LogResult.logStdOut("int[] const in 7");
+        LogResult.assertBigIntEqual1(31, TestConstParametersOtherLib.cai[1]);
+        TestConstParametersOtherLib.cai[1] = -27;
+    end
+
+    function testConstInsIntArrayConstIn8(){@Test}
+        LogResult.logStdOut("int[] const in 8");
+        faciIN(TestConstParametersOtherLib.cai, 2, 54, -1212);
+    end
+
+    function testConstInsIntArrayConstIn9(){@Test}
+        LogResult.logStdOut("int[] const in 9");
+        LogResult.assertBigIntEqual1(-1212, TestConstParametersOtherLib.cai[2]);
+        TestConstParametersOtherLib.cai[2] = 54;
+    end
+
+    function testConstInoutsBooleanConstInout1(){@Test}
+        LogResult.logStdOut("boolean const inout 1");
+        fcbINOUT(cb, false);
+    end
+
+    function testConstInoutsBooleanConstInout2(){@Test}
+        LogResult.logStdOut("boolean const inout 2");
+       	fcbINOUT(cgb, false);
+    end
+
+    function testConstInoutsBooleanConstInout3(){@Test}
+        LogResult.logStdOut("boolean const inout 3");
+        fcbINOUT(TestConstParametersOtherLib.cb, false);
+    end
+
+    function testConstInoutsBooleanConstInout4(){@Test}
+        LogResult.logStdOut("boolean const inout 4");
+        fcbINOUT(b, false);
+    end
+
+    function testConstInoutsBooleanConstInout5(){@Test}
+        LogResult.logStdOut("boolean const inout 5");
+        fcbINOUT(cab[2], true);
+    end
+
+    function testConstInoutsBooleanConstInout6(){@Test}
+        LogResult.logStdOut("boolean const inout 6");
+        fcbINOUT(cgab[2], true);
+    end
+
+    function testConstInoutsBooleanConstInout7(){@Test}
+        LogResult.logStdOut("boolean const inout 7");
+        fcbINOUT(TestConstParametersOtherLib.cab[2], true);
+    end
+
+    function testConstInoutsBooleanConstInout8(){@Test}
+        LogResult.logStdOut("boolean const inout 8");
+        fcbINOUT(ab[2], true);
+    end
+
+    function testConstInoutsBooleanConstInout9(){@Test}
+        LogResult.logStdOut("boolean const inout 9");
+        mytemp boolean = true;
+        fcbINOUT(mytemp, true);
+    end
+
+    function testConstInoutsIntConstInout1(){@Test}
+        LogResult.logStdOut("int const inout 1");
+        fciINOUT(ci, 27);
+    end
+
+    function testConstInoutsIntConstInout2(){@Test}
+        LogResult.logStdOut("int const inout 2");
+        fciINOUT(cgi, 27);
+    end
+
+    function testConstInoutsIntConstInout3(){@Test}
+        LogResult.logStdOut("int const inout 3");
+        fciINOUT(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInoutsIntConstInout4(){@Test}
+        LogResult.logStdOut("int const inout 4");
+        fciINOUT(i, 27);
+    end
+
+    function testConstInoutsIntConstInout5(){@Test}
+        LogResult.logStdOut("int const inout 5");
+        fciINOUT(cai[2], 54);
+    end
+
+    function testConstInoutsIntConstInout6(){@Test}
+        LogResult.logStdOut("int const inout 6");
+        fciINOUT(cgai[2], 54);
+    end
+
+    function testConstInoutsIntConstInout7(){@Test}
+        LogResult.logStdOut("int const inout 7");
+        fciINOUT(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInoutsIntConstInout8(){@Test}
+        LogResult.logStdOut("int const inout 8");
+        fciINOUT(ai[2], 54);
+    end
+
+    function testConstInoutsIntConstInout9(){@Test}
+        LogResult.logStdOut("int const inout 9");
+        myTemp int = -987;
+        fciINOUT(myTemp, -987);
+    end
+
+    function testConstInoutsDataItemConstInout1(){@Test}
+        LogResult.logStdOut("DataItem const inout 1");
+        fcmyINOUT(cmy, 103);
+    end
+
+    function testConstInoutsDataItemConstInout2(){@Test}
+        LogResult.logStdOut("DataItem const inout 2");
+        fcmyINOUT(cgmy, 103);
+    end
+
+    function testConstInoutsDataItemConstInout3(){@Test}
+        LogResult.logStdOut("DataItem const inout 3");
+        fcmyINOUT(TestConstParametersOtherLib.cmy, 103);
+    end
+
+    function testConstInoutsDataItemConstInout4(){@Test}
+        LogResult.logStdOut("DataItem const inout 4");
+        fcmyINOUT(my, 103);
+    end
+
+    function testConstInoutsDataItemConstInout5(){@Test}
+        LogResult.logStdOut("DataItem const inout 5");
+        fcmyINOUT(camy[2], 777);
+    end
+
+    function testConstInoutsDataItemConstInout6(){@Test}
+        LogResult.logStdOut("DataItem const inout 6");
+        fcmyINOUT(cgamy[2], 777);
+    end
+
+    function testConstInoutsDataItemConstInout7(){@Test}
+        LogResult.logStdOut("DataItem const inout 7");
+        fcmyINOUT(TestConstParametersOtherLib.camy[2], 777);
+    end
+
+    function testConstInoutsDataItemConstInout8(){@Test}
+        LogResult.logStdOut("DataItem const inout 8");
+        fcmyINOUT(amy[2], 777);
+    end
+
+    function testConstInoutsDataItemConstInout9(){@Test}
+        LogResult.logStdOut("DataItem const inout 9");
+        myTemp int = -987;
+        fcmyINOUT(myTemp, -987);
+    end
+
+    function testConstInoutsStringConstInout1(){@Test}
+        LogResult.logStdOut("string const inout 1");
+        fcsINOUT(cs, "I am a string constant");
+    end
+
+    function testConstInoutsStringConstInout2(){@Test}
+        LogResult.logStdOut("string const inout 2");
+        fcsINOUT(cgs, "I am a string constant");
+    end
+
+    function testConstInoutsStringConstInout3(){@Test}
+        LogResult.logStdOut("string const inout 3");
+        fcsINOUT(TestConstParametersOtherLib.cs, "I am a string constant");
+    end
+
+    function testConstInoutsStringConstInout4(){@Test}
+        LogResult.logStdOut("string const inout 4");
+        fcsINOUT(s, "I am a string constant");
+    end
+
+    function testConstInoutsStringConstInout5(){@Test}
+        LogResult.logStdOut("string const inout 5");
+        fcsINOUT(cas[2], "flop");
+    end
+
+    function testConstInoutsStringConstInout6(){@Test}
+        LogResult.logStdOut("string const inout 6");
+        fcsINOUT(cgas[2], "flop");
+    end
+
+    function testConstInoutsStringConstInout7(){@Test}
+        LogResult.logStdOut("string const inout 7");
+        fcsINOUT(TestConstParametersOtherLib.cas[2], "flop");
+    end
+
+    function testConstInoutsStringConstInout8(){@Test}
+        LogResult.logStdOut("string const inout 8");
+        fcsINOUT(astr[2], "flop");
+    end
+
+    function testConstInoutsStringConstInout9(){@Test}
+        LogResult.logStdOut("string const inout 9");
+        myTemp string = "SNOBOL";
+        fcsINOUT(myTemp, "SNOBOL");
+    end
+
+    //    function testConstInoutsTimeConstInout1(){@Test}
+    //        LogResult.logStdOut("time const inout 1");
+    //        TestConstParametersOtherLib.fctINOUT(ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout2(){@Test}
+    //        LogResult.logStdOut("time const inout 2");
+    //        TestConstParametersOtherLib.fctINOUT(cgt, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout3(){@Test}
+    //        LogResult.logStdOut("time const inout 3");
+    //        TestConstParametersOtherLib.fctINOUT(TestConstParametersOtherLib.ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout4(){@Test}
+    //        LogResult.logStdOut("time const inout 4");
+    //        TestConstParametersOtherLib.fctINOUT(t, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout5(){@Test}
+    //        LogResult.logStdOut("time const inout 5");
+    //        TestConstParametersOtherLib.fctINOUT(cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout6(){@Test}
+    //        LogResult.logStdOut("time const inout 6");
+    //        TestConstParametersOtherLib.fctINOUT(cgat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout7(){@Test}
+    //        LogResult.logStdOut("time const inout 7");
+    //        TestConstParametersOtherLib.fctINOUT(TestConstParametersOtherLib.cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsTimeConstInout8(){@Test}
+    //        LogResult.logStdOut("time const inout 8");
+    //        TestConstParametersOtherLib.fctINOUT(at[2], "22:42:19");
+    //
+    //    end
+    
+    function testConstInoutsIntQueConstInout1(){@Test}
+        LogResult.logStdOut("int? const inout 1");
+        aNullableInt int? = null;
+        fciNullableINOUT(aNullableInt, 0, true);
+    end
+
+    function testConstInoutsIntQueConstInout2(){@Test}
+        LogResult.logStdOut("int? const inout 2");
+        aNullableInt = -1234;
+        fciNullableINOUT(aNullableInt, -1234, false);
+    end
+
+    function testConstInoutsStringArrayConstInout1(){@Test}
+        LogResult.logStdOut("string[] const inout 1");
+        facsINOUT(cas, 1, "flip", "new");
+    end
+
+    function testConstInoutsStringArrayConstInout2(){@Test}
+        LogResult.logStdOut("string[] const inout 2");
+        LogResult.assertStringEqual1("new", cas[1]);
+        cas[1] = "flip";
+    end
+
+    function testConstInoutsStringArrayConstInout3(){@Test}
+        LogResult.logStdOut("string[] const inout 3");
+        facsINOUT(cas, 2, "flop", "newt");
+    end
+
+    function testConstInoutsStringArrayConstInout4(){@Test}
+        LogResult.logStdOut("string[] const inout 4");
+        LogResult.assertStringEqual1("newt", cas[2]);
+        cas[2] = "flop";
+    end
+
+    function testConstInoutsStringArrayConstInout5(){@Test}
+        LogResult.logStdOut("string[] const inout 5");
+        arg1 string[] = ["flup", "flap"];
+        facsINOUT(arg1, 2, "flap", "-");
+    end
+
+    function testConstInoutsStringArrayConstInout6(){@Test}
+        LogResult.logStdOut("string[] const inout 6");
+        facsINOUT(TestConstParametersOtherLib.cas, 1, "flip", "new");
+    end
+
+    function testConstInoutsStringArrayConstInout7(){@Test}
+        LogResult.logStdOut("string[] const inout 7");
+        LogResult.assertStringEqual1("new", TestConstParametersOtherLib.cas[1]);
+        TestConstParametersOtherLib.cas[1] = "flip";
+    end
+
+    function testConstInoutsStringArrayConstInout8(){@Test}
+        LogResult.logStdOut("string[] const inout 8");
+        facsINOUT(TestConstParametersOtherLib.cas, 2, "flop", "newt");
+    end
+
+    function testConstInoutsStringArrayConstInout9(){@Test}
+        LogResult.logStdOut("string[] const inout 9");
+        LogResult.assertStringEqual1("newt", TestConstParametersOtherLib.cas[2]);
+        TestConstParametersOtherLib.cas[2] = "flop";
+
+    end
+
+    function testConstInoutsIntArrayConstInout1(){@Test}
+        LogResult.logStdOut("int[] const inout 1");
+        faciINOUT(cai, 1, -27, 31);
+    end
+
+    function testConstInoutsIntArrayConstInout2(){@Test}
+        LogResult.logStdOut("int[] const inout 2");
+        LogResult.assertBigIntEqual1(31, cai[1]);
+        cai[1] = -27;
+    end
+
+    function testConstInoutsIntArrayConstInout3(){@Test}
+        LogResult.logStdOut("int[] const inout 3");
+        faciINOUT(cai, 2, 54, -1212);
+    end
+
+    function testConstInoutsIntArrayConstInout4(){@Test}
+        LogResult.logStdOut("int[] const inout 4");
+        LogResult.assertBigIntEqual1(-1212, cai[2]);
+        cai[2] = 54;
+    end
+
+    function testConstInoutsIntArrayConstInout5(){@Test}
+        LogResult.logStdOut("int[] const inout 5");
+        mytemp int[] = [88, 99, 1010];
+        faciINOUT(mytemp, 3, 1010, 0);
+    end
+
+    function testConstInoutsIntArrayConstInout6(){@Test}
+        LogResult.logStdOut("int[] const inout 6");
+        faciINOUT(TestConstParametersOtherLib.cai, 1, -27, 31);
+    end
+
+    function testConstInoutsIntArrayConstInout7(){@Test}
+        LogResult.logStdOut("int[] const inout 7");
+        LogResult.assertBigIntEqual1(31, TestConstParametersOtherLib.cai[1]);
+        TestConstParametersOtherLib.cai[1] = -27;
+    end
+
+    function testConstInoutsIntArrayConstInout8(){@Test}
+        LogResult.logStdOut("int[] const inout 8");
+        faciINOUT(TestConstParametersOtherLib.cai, 2, 54, -1212);
+    end
+
+    function testConstInoutsIntArrayConstInout9(){@Test}
+        LogResult.logStdOut("int[] const inout 9");
+        LogResult.assertBigIntEqual1(-1212, TestConstParametersOtherLib.cai[2]);
+        TestConstParametersOtherLib.cai[2] = 54;
+    end
+
+    function testInsBooleanNon_constIn1(){@Test}
+        LogResult.logStdOut("boolean non-const in 1");
+        fcbNonConstIN(cb, false);
+    end
+
+    function testInsBooleanNon_constIn2(){@Test}
+        LogResult.logStdOut("boolean non-const in 2");
+        fcbNonConstIN(cgb, false);
+    end
+
+    function testInsBooleanNon_constIn3(){@Test}
+        LogResult.logStdOut("boolean non-const in 3");
+        fcbNonConstIN(TestConstParametersOtherLib.cb, false);
+    end
+
+    function testInsBooleanNon_constIn5(){@Test}
+        LogResult.logStdOut("boolean non-const in 5");
+        fcbNonConstIN(cab[2], true);
+    end
+
+    function testInsBooleanNon_constIn6(){@Test}
+        LogResult.logStdOut("boolean non-const in 6");
+        fcbNonConstIN(cgab[2], true);
+    end
+
+    function testInsBooleanNon_constIn7(){@Test}
+        LogResult.logStdOut("boolean non-const in 7");
+        fcbNonConstIN(TestConstParametersOtherLib.cab[2], true);
+    end
+
+    function testInsBooleanNon_constIn9(){@Test}
+        LogResult.logStdOut("boolean non-const in 9");
+        fcbNonConstIN(true, true);
+    end
+
+    function testInsBooleanNon_constIn10(){@Test}
+        LogResult.logStdOut("boolean non-const in 10");
+        fcbNonConstIN("abc".length() == 467, false);
+
+    end
+
+    function testInsIntNon_constIn1(){@Test}
+        LogResult.logStdOut("int non-const in 1");
+        fciNonConstIN(ci, 27);
+    end
+
+    function testInsIntNon_constIn2(){@Test}
+        LogResult.logStdOut("int non-const in 2");
+        fciNonConstIN(cgi, 27);
+    end
+
+    function testInsIntNon_constIn3(){@Test}
+        LogResult.logStdOut("int non-const in 3");
+        fciNonConstIN(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testInsIntNon_constIn5(){@Test}
+        LogResult.logStdOut("int non-const in 5");
+        fciNonConstIN(cai[2], 54);
+    end
+
+    function testInsIntNon_constIn6(){@Test}
+        LogResult.logStdOut("int non-const in 6");
+        fciNonConstIN(cgai[2], 54);
+    end
+
+    function testInsIntNon_constIn7(){@Test}
+        LogResult.logStdOut("int non-const in 7");
+        fciNonConstIN(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testInsIntNon_constIn9(){@Test}
+        LogResult.logStdOut("int non-const in 9");
+        fciNonConstIN(-987, -987);
+    end
+
+    function testInsIntNon_constIn10(){@Test}
+        LogResult.logStdOut("int non-const in 10");
+        fciNonConstIN("abc".length(), 3);
+    end
+
+    function testInsIntNon_constIn11(){@Test}
+        LogResult.logStdOut("int non-const in 11");
+        fciNonConstIN(ci * 3, 81);
+
+    end
+
+    function testInsDataItemNon_constIn1(){@Test}
+        LogResult.logStdOut("DataItem non-const in 1");
+        fcmyNonConstIN(cmy, 103);
+    end
+
+    function testInsDataItemNon_constIn2(){@Test}
+        LogResult.logStdOut("DataItem non-const in 2");
+        fcmyNonConstIN(cgmy, 103);
+    end
+
+    function testInsDataItemNon_constIn3(){@Test}
+        LogResult.logStdOut("DataItem non-const in 3");
+        fcmyNonConstIN(TestConstParametersOtherLib.cmy, 103);
+    end
+
+    function testInsDataItemNon_constIn4(){@Test}
+        LogResult.logStdOut("DataItem non-const in 4");
+        fcmyNonConstIN(camy[2], 777);
+    end
+
+    function testInsDataItemNon_constIn6(){@Test}
+        LogResult.logStdOut("DataItem non-const in 6");
+        fcmyNonConstIN(cgamy[2], 777);
+    end
+
+    function testInsDataItemNon_constIn7(){@Test}
+        LogResult.logStdOut("DataItem non-const in 7");
+        fcmyNonConstIN(TestConstParametersOtherLib.camy[2], 777);
+    end
+
+    function testInsDataItemNon_constIn9(){@Test}
+        LogResult.logStdOut("DataItem non-const in 9");
+        fcmyNonConstIN(-987, -987);
+    end
+
+    function testInsDataItemNon_constIn10(){@Test}
+        LogResult.logStdOut("DataItem non-const in 10");
+        fcmyNonConstIN("abc".length(), 3);
+    end
+
+    function testInsDataItemNon_constIn11(){@Test}
+        LogResult.logStdOut("DataItem non-const in 11");
+        fcmyNonConstIN(ci * 3, 81);
+
+    end
+
+    function testInsBigintNon_constIn1(){@Test}
+        LogResult.logStdOut("bigint non-const in 1");
+        fcbiNonConstIN(ci, 27);
+    end
+
+    function testInsBigintNon_constIn2(){@Test}
+        LogResult.logStdOut("bigint non-const in 2");
+        fcbiNonConstIN(cgi, 27);
+    end
+
+    function testInsBigintNon_constIn3(){@Test}
+        LogResult.logStdOut("bigint non-const in 3");
+        fcbiNonConstIN(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testInsBigintNon_constIn5(){@Test}
+        LogResult.logStdOut("bigint non-const in 5");
+        fcbiNonConstIN(cai[2], 54);
+    end
+
+    function testInsBigintNon_constIn6(){@Test}
+        LogResult.logStdOut("bigint non-const in 6");
+        fcbiNonConstIN(cgai[2], 54);
+    end
+
+    function testInsBigintNon_constIn7(){@Test}
+        LogResult.logStdOut("bigint non-const in 7");
+        fcbiNonConstIN(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testInsBigintNon_constIn9(){@Test}
+        LogResult.logStdOut("bigint non-const in 9");
+        fcbiNonConstIN(-987, -987);
+    end
+
+    function testInsBigintNon_constIn10(){@Test}
+        LogResult.logStdOut("bigint non-const in 10");
+        fcbiNonConstIN("abc".length(), 3);
+    end
+
+    function testInsBigintNon_constIn11(){@Test}
+        LogResult.logStdOut("bigint non-const in 11");
+        fcbiNonConstIN(ci * 3, 81);
+
+    end
+
+    function testInsStringNon_constIn1(){@Test}
+        LogResult.logStdOut("string non-const in 1");
+        fcsNonConstIN(cs, "I am a string constant");
+    end
+
+    function testInsStringNon_constIn2(){@Test}
+        LogResult.logStdOut("string non-const in 2");
+        fcsNonConstIN(cgs, "I am a string constant");
+    end
+
+    function testInsStringNon_constIn3(){@Test}
+        LogResult.logStdOut("string non-const in 3");
+        fcsNonConstIN(TestConstParametersOtherLib.cs, "I am a string constant");
+    end
+
+    function testInsStringNon_constIn5(){@Test}
+        LogResult.logStdOut("string non-const in 5");
+        fcsNonConstIN(cas[2], "flop");
+    end
+
+    function testInsStringNon_constIn6(){@Test}
+        LogResult.logStdOut("string non-const in 6");
+        fcsNonConstIN(cgas[2], "flop");
+    end
+
+    function testInsStringNon_constIn7(){@Test}
+        LogResult.logStdOut("string non-const in 7");
+        fcsNonConstIN(TestConstParametersOtherLib.cas[2], "flop");
+    end
+
+    function testInsStringNon_constIn9(){@Test}
+        LogResult.logStdOut("string non-const in 9");
+        fcsNonConstIN("SNOBOL", "SNOBOL");
+    end
+
+    function testInsStringNon_constIn10(){@Test}
+        LogResult.logStdOut("string non-const in 10");
+        fcsNonConstIN(cs :: " _hotdog_ ", "I am a string constant _hotdog_ ");
+    end
+
+    function testInsStringNon_constIn11(){@Test}
+        LogResult.logStdOut("string non-const in 11");
+        fcsNonConstIN(ci + 83, "110");
+
+    end
+
+    //    function testInsTimeNon_constIn1(){@Test}
+    //        LogResult.logStdOut("time non-const in 1");
+    //        TestConstParametersOtherLib.fctNonConstIN(ct, "10:12:13");
+    //    end
+    //
+    //    function testInsTimeNon_constIn2(){@Test}
+    //        LogResult.logStdOut("time non-const in 2");
+    //        TestConstParametersOtherLib.fctNonConstIN(cgt, "10:12:13");
+    //    end
+    //
+    //    function testInsTimeNon_constIn3(){@Test}
+    //        LogResult.logStdOut("time non-const in 3");
+    //        TestConstParametersOtherLib.fctNonConstIN(TestConstParametersOtherLib.ct, "10:12:13");
+    //    end
+    //
+    //    function testInsTimeNon_constIn5(){@Test}
+    //        LogResult.logStdOut("time non-const in 5");
+    //        TestConstParametersOtherLib.fctNonConstIN(cat[2], "22:42:19");
+    //    end
+    //
+    //    function testInsTimeNon_constIn6(){@Test}
+    //        LogResult.logStdOut("time non-const in 6");
+    //        TestConstParametersOtherLib.fctNonConstIN(cgat[2], "22:42:19");
+    //    end
+    //
+    //    function testInsTimeNon_constIn7(){@Test}
+    //        LogResult.logStdOut("time non-const in 7");
+    //        TestConstParametersOtherLib.fctNonConstIN(TestConstParametersOtherLib.cat[2], "22:42:19");
+    //    end
+    //
+    //    function testInsTimeNon_constIn9(){@Test}
+    //        LogResult.logStdOut("time non-const in 9");
+    //        TestConstParametersOtherLib.fctNonConstIN(timeOf(aTimestamp), "09:17:56");
+    //
+    //    end
+    
+    function testInsIntQueNon_constIn1(){@Test}
+        LogResult.logStdOut("int? non-const in 1");
+        aNullableInt int? = null;
+        fciNullableNonConstIN(aNullableInt, 0, true);
+    end
+
+    function testInsIntQueNon_constIn2(){@Test}
+        LogResult.logStdOut("int? non-const in 2");
+        aNullableInt = -1234;
+        fciNullableNonConstIN(aNullableInt, -1234, false);
+
+    end
+
+    function testInsStringArrayNon_constIn1(){@Test}
+        LogResult.logStdOut("string[] non-const in 1");
+        facsNonConstIN(cas, 1, "flip", "new");
+    end
+
+    function testInsStringArrayNon_constIn2(){@Test}
+        LogResult.logStdOut("string[] non-const in 2");
+        LogResult.assertStringEqual1("new", cas[1]);
+        cas[1] = "flip";
+    end
+
+    function testInsStringArrayNon_constIn3(){@Test}
+        LogResult.logStdOut("string[] non-const in 3");
+        facsNonConstIN(cas, 2, "flop", "newt");
+    end
+
+    function testInsStringArrayNon_constIn4(){@Test}
+        LogResult.logStdOut("string[] non-const in 4");
+        LogResult.assertStringEqual1("newt", cas[2]);
+        cas[2] = "flop";
+    end
+
+    function testInsStringArrayNon_constIn5(){@Test}
+        LogResult.logStdOut("string[] non-const in 5");
+        facsNonConstIN(["flup", "flap"], 2, "flap", "-");
+    end
+
+    function testInsStringArrayNon_constIn6(){@Test}
+        LogResult.logStdOut("string[] non-const in 6");
+        facsNonConstIN(TestConstParametersOtherLib.cas, 1, "flip", "new");
+    end
+
+    function testInsStringArrayNon_constIn7(){@Test}
+        LogResult.logStdOut("string[] non-const in 7");
+        LogResult.assertStringEqual1("new", TestConstParametersOtherLib.cas[1]);
+        TestConstParametersOtherLib.cas[1] = "flip";
+    end
+
+    function testInsStringArrayNon_constIn8(){@Test}
+        LogResult.logStdOut("string[] non-const in 8");
+        facsNonConstIN(TestConstParametersOtherLib.cas, 2, "flop", "newt");
+    end
+
+    function testInsStringArrayNon_constIn9(){@Test}
+        LogResult.logStdOut("string[] non-const in 9");
+        LogResult.assertStringEqual1("newt", TestConstParametersOtherLib.cas[2]);
+        TestConstParametersOtherLib.cas[2] = "flop";
+
+    end
+
+    function testInsIntArrayNon_constIn1(){@Test}
+        LogResult.logStdOut("int[] non-const in 1");
+        faciNonConstIN(cai, 1, -27, 31);
+    end
+
+    function testInsIntArrayNon_constIn2(){@Test}
+        LogResult.logStdOut("int[] non-const in 2");
+        LogResult.assertBigIntEqual1(31, cai[1]);
+        cai[1] = -27;
+    end
+
+    function testInsIntArrayNon_constIn3(){@Test}
+        LogResult.logStdOut("int[] non-const in 3");
+        faciNonConstIN(cai, 2, 54, -1212);
+    end
+
+    function testInsIntArrayNon_constIn4(){@Test}
+        LogResult.logStdOut("int[] non-const in 4");
+        LogResult.assertBigIntEqual1(-1212, cai[2]);
+        cai[2] = 54;
+    end
+
+    function testInsIntArrayNon_constIn5(){@Test}
+        LogResult.logStdOut("int[] non-const in 5");
+        mytemp int[] = [88, 99, 1010];
+        faciNonConstIN(mytemp, 3, 1010, 0);
+    end
+
+    function testInsIntArrayNon_constIn6(){@Test}
+        LogResult.logStdOut("int[] non-const in 6");
+        faciNonConstIN(TestConstParametersOtherLib.cai, 1, -27, 31);
+    end
+
+    function testInsIntArrayNon_constIn7(){@Test}
+        LogResult.logStdOut("int[] non-const in 7");
+        LogResult.assertBigIntEqual1(31, TestConstParametersOtherLib.cai[1]);
+        TestConstParametersOtherLib.cai[1] = -27;
+    end
+
+    function testInsIntArrayNon_constIn8(){@Test}
+        LogResult.logStdOut("int[] non-const in 8");
+        faciNonConstIN(TestConstParametersOtherLib.cai, 2, 54, -1212);
+    end
+
+    function testInsIntArrayNon_constIn9(){@Test}
+        LogResult.logStdOut("int[] non-const in 9");
+        LogResult.assertBigIntEqual1(-1212, TestConstParametersOtherLib.cai[2]);
+        TestConstParametersOtherLib.cai[2] = 54;
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn1(){@Test}
+        LogResult.logStdOut("delegate boolean const in 1");
+        fcbINd(cb, false);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn2(){@Test}
+        LogResult.logStdOut("delegate boolean const in 2");
+        fcbINd(cgb, false);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn3(){@Test}
+        LogResult.logStdOut("delegate boolean const in 3");
+        fcbINd(TestConstParametersOtherLib.cb, false);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn4(){@Test}
+        LogResult.logStdOut("delegate boolean const in 4");
+        fcbINd(b, false);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn5(){@Test}
+        LogResult.logStdOut("delegate boolean const in 5");
+        fcbINd(cab[2], true);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn6(){@Test}
+        LogResult.logStdOut("delegate boolean const in 6");
+        fcbINd(cgab[2], true);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn7(){@Test}
+        LogResult.logStdOut("delegate boolean const in 7");
+        fcbINd(TestConstParametersOtherLib.cab[2], true);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn8(){@Test}
+        LogResult.logStdOut("delegate boolean const in 8");
+        fcbINd(ab[2], true);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn9(){@Test}
+        LogResult.logStdOut("delegate boolean const in 9");
+        fcbINd(true, true);
+    end
+
+    function testConstInsDelegatesDelegateBooleanConstIn10(){@Test}
+        LogResult.logStdOut("delegate boolean const in 10");
+        fcbINd("abc".length() == 467, false);
+
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn1(){@Test}
+        LogResult.logStdOut("delegate int const in 1");
+        fciINd(ci, 27);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn2(){@Test}
+        LogResult.logStdOut("delegate int const in 2");
+        fciINd(cgi, 27);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn3(){@Test}
+        LogResult.logStdOut("delegate int const in 3");
+        fciINd(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn4(){@Test}
+        LogResult.logStdOut("delegate int const in 4");
+        fciINd(i, 27);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn5(){@Test}
+        LogResult.logStdOut("delegate int const in 5");
+        fciINd(cai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn6(){@Test}
+        LogResult.logStdOut("delegate int const in 6");
+        fciINd(cgai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn7(){@Test}
+        LogResult.logStdOut("delegate int const in 7");
+        fciINd(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn8(){@Test}
+        LogResult.logStdOut("delegate int const in 8");
+        fciINd(ai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn9(){@Test}
+        LogResult.logStdOut("delegate int const in 9");
+        fciINd(-987, -987);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn10(){@Test}
+        LogResult.logStdOut("delegate int const in 10");
+        fciINd("abc".length(), 3);
+    end
+
+    function testConstInsDelegatesDelegateIntConstIn11(){@Test}
+        LogResult.logStdOut("delegate int const in 11");
+        fciINd(i * 3, 81);
+
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn1(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 1");
+        fcmyINd(cmy, 103);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn2(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 2");
+        fcmyINd(cgmy, 103);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn3(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 3");
+        fcmyINd(TestConstParametersOtherLib.cmy, 103);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn4(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 4");
+        fcmyINd(my, 103);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn5(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 5");
+        fcmyINd(camy[2], 777);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn6(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 6");
+        fcmyINd(cgamy[2], 777);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn7(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 7");
+        fcmyINd(TestConstParametersOtherLib.camy[2], 777);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn8(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 8");
+        fcmyINd(amy[2], 777);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn9(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 9");
+        fcmyINd(-987, -987);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn10(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 10");
+        fcmyINd("abc".length(), 3);
+    end
+
+    function testConstInsDelegatesDelegateDataItemConstIn11(){@Test}
+        LogResult.logStdOut("delegate DataItem const in 11");
+        fcmyINd(i * 3, 81);
+
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn1(){@Test}
+        LogResult.logStdOut("delegate bigint const in 1");
+        fcbiINd(ci, 27);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn2(){@Test}
+        LogResult.logStdOut("delegate bigint const in 2");
+        fcbiINd(cgi, 27);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn3(){@Test}
+        LogResult.logStdOut("delegate bigint const in 3");
+        fcbiINd(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn4(){@Test}
+        LogResult.logStdOut("delegate bigint const in 4");
+        fcbiINd(i, 27);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn5(){@Test}
+        LogResult.logStdOut("delegate bigint const in 5");
+        fcbiINd(cai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn6(){@Test}
+        LogResult.logStdOut("delegate bigint const in 6");
+        fcbiINd(cgai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn7(){@Test}
+        LogResult.logStdOut("delegate bigint const in 7");
+        fcbiINd(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn8(){@Test}
+        LogResult.logStdOut("delegate bigint const in 8");
+        fcbiINd(ai[2], 54);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn9(){@Test}
+        LogResult.logStdOut("delegate bigint const in 9");
+        fcbiINd(-987, -987);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn10(){@Test}
+        LogResult.logStdOut("delegate bigint const in 10");
+        fcbiINd("abc".length(), 3);
+    end
+
+    function testConstInsDelegatesDelegateBigintConstIn11(){@Test}
+        LogResult.logStdOut("delegate bigint const in 11");
+        fcbiINd(i * 3, 81);
+
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn1(){@Test}
+        LogResult.logStdOut("delegate string const in 1");
+        fcsINd(cs, "I am a string constant");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn2(){@Test}
+        LogResult.logStdOut("delegate string const in 2");
+        fcsINd(cgs, "I am a string constant");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn3(){@Test}
+        LogResult.logStdOut("delegate string const in 3");
+        fcsINd(TestConstParametersOtherLib.cs, "I am a string constant");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn4(){@Test}
+        LogResult.logStdOut("delegate string const in 4");
+        fcsINd(s, "I am a string constant");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn5(){@Test}
+        LogResult.logStdOut("delegate string const in 5");
+        fcsINd(cas[2], "flop");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn6(){@Test}
+        LogResult.logStdOut("delegate string const in 6");
+        fcsINd(cgas[2], "flop");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn7(){@Test}
+        LogResult.logStdOut("delegate string const in 7");
+        fcsINd(TestConstParametersOtherLib.cas[2], "flop");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn8(){@Test}
+        LogResult.logStdOut("delegate string const in 8");
+        fcsINd(astr[2], "flop");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn9(){@Test}
+        LogResult.logStdOut("delegate string const in 9");
+        fcsINd("SNOBOL", "SNOBOL");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn10(){@Test}
+        LogResult.logStdOut("delegate string const in 10");
+        fcsINd(s :: " _hotdog_ ", "I am a string constant _hotdog_ ");
+    end
+
+    function testConstInsDelegatesDelegateStringConstIn11(){@Test}
+        LogResult.logStdOut("delegate string const in 11");
+        fcsINd(i + 83, "110");
+
+    end
+
+    //    function testConstInsDelegatesDelegateTimeConstIn1(){@Test}
+    //        LogResult.logStdOut("delegate time const in 1");
+    //        fctINd(ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn2(){@Test}
+    //        LogResult.logStdOut("delegate time const in 2");
+    //        fctINd(cgt, "10:12:13");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn3(){@Test}
+    //        LogResult.logStdOut("delegate time const in 3");
+    //        fctINd(TestConstParametersOtherLib.ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn4(){@Test}
+    //        LogResult.logStdOut("delegate time const in 4");
+    //        fctINd(t, "10:12:13");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn5(){@Test}
+    //        LogResult.logStdOut("delegate time const in 5");
+    //        fctINd(cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn6(){@Test}
+    //        LogResult.logStdOut("delegate time const in 6");
+    //        fctINd(cgat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn7(){@Test}
+    //        LogResult.logStdOut("delegate time const in 7");
+    //        fctINd(TestConstParametersOtherLib.cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn8(){@Test}
+    //        LogResult.logStdOut("delegate time const in 8");
+    //        fctINd(at[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInsDelegatesDelegateTimeConstIn9(){@Test}
+    //        LogResult.logStdOut("delegate time const in 9");
+    //        fctINd(timeOf(aTimestamp), "09:17:56");
+    //
+    //    end
+    
+    function testConstInsDelegatesDelegateIntQueConstIn1(){@Test}
+        LogResult.logStdOut("delegate int? const in 1");
+        aNullableInt int? = null;
+        fciNullableINd(aNullableInt, 0, true);
+    end
+
+    function testConstInsDelegatesDelegateIntQueConstIn2(){@Test}
+        LogResult.logStdOut("delegate int? const in 2");
+        aNullableInt = -1234;
+        fciNullableINd(aNullableInt, -1234, false);
+
+    end
+/*
+    function testConstInsDelegatesDelegateStringArrayConstIn1(){@Test}
+        LogResult.logStdOut("delegate string[] const in 1");
+        //facsINd(cas, 1, "flip", "new");
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn2(){@Test}
+        LogResult.logStdOut("delegate string[] const in 2");
+        LogResult.assertStringEqual1("new", cas[1]);
+        cas[1] = "flip";
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn3(){@Test}
+        LogResult.logStdOut("delegate string[] const in 3");
+        //facsINd(cas, 2, "flop", "newt");
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn4(){@Test}
+        LogResult.logStdOut("delegate string[] const in 4");
+        LogResult.assertStringEqual1("newt", cas[2]);
+        cas[2] = "flop";
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn5(){@Test}
+        LogResult.logStdOut("delegate string[] const in 5");
+        //facsINd(["flup", "flap"], 2, "flap", "-");
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn6(){@Test}
+        LogResult.logStdOut("delegate string[] const in 6");
+        //facsINd(TestConstParametersOtherLib.cas, 1, "flip", "new");
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn7(){@Test}
+        LogResult.logStdOut("delegate string[] const in 7");
+        LogResult.assertStringEqual1("new", TestConstParametersOtherLib.cas[1]);
+        TestConstParametersOtherLib.cas[1] = "flip";
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn8(){@Test}
+        LogResult.logStdOut("delegate string[] const in 8");
+        //facsINd(TestConstParametersOtherLib.cas, 2, "flop", "newt");
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateStringArrayConstIn9(){@Test}
+        LogResult.logStdOut("delegate string[] const in 9");
+        LogResult.assertStringEqual1("newt", TestConstParametersOtherLib.cas[2]);
+        TestConstParametersOtherLib.cas[2] = "flop";
+
+    end
+    
+    function testConstInsDelegatesDelegateIntArrayConstIn1(){@Test}
+        LogResult.logStdOut("delegate int[] const in 1");
+        //faciINd(cai, 1, -27, 31);
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn2(){@Test}
+        LogResult.logStdOut("delegate int[] const in 2");
+        LogResult.assertBigIntEqual1(31, cai[1]);
+        cai[1] = -27;
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn3(){@Test}
+        LogResult.logStdOut("delegate int[] const in 3");
+        //faciINd(cai, 2, 54, -1212);
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn4(){@Test}
+        LogResult.logStdOut("delegate int[] const in 4");
+        LogResult.assertBigIntEqual1(-1212, cai[2]);
+        cai[2] = 54;
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn5(){@Test}
+        LogResult.logStdOut("delegate int[] const in 5");
+        //faciINd([88, 99, 1010], 3, 1010, 0);
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn6(){@Test}
+        LogResult.logStdOut("delegate int[] const in 6");
+        //faciINd(TestConstParametersOtherLib.cai, 1, -27, 31);
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn7(){@Test}
+        LogResult.logStdOut("delegate int[] const in 7");
+        LogResult.assertBigIntEqual1(31, TestConstParametersOtherLib.cai[1]);
+        TestConstParametersOtherLib.cai[1] = -27;
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn8(){@Test}
+        LogResult.logStdOut("delegate int[] const in 8");
+        //faciINd(TestConstParametersOtherLib.cai, 2, 54, -1212);
+        LogResult.skipped("BUG: List cannot be resolved to a variable");
+    end
+
+    function testConstInsDelegatesDelegateIntArrayConstIn9(){@Test}
+        LogResult.logStdOut("delegate int[] const in 9");
+        LogResult.assertBigIntEqual1(-1212, TestConstParametersOtherLib.cai[2]);
+        TestConstParametersOtherLib.cai[2] = 54;
+    end
+*/
+    function testConstInoutsDelegatesDelegateBooleanConstInout1(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 1");
+        fcbINOUTd(cb, false);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout2(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 2");
+        fcbINOUTd(cgb, false);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout3(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 3");
+        fcbINOUTd(TestConstParametersOtherLib.cb, false);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout4(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 4");
+        fcbINOUTd(b, false);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout5(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 5");
+        fcbINOUTd(cab[2], true);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout6(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 6");
+        fcbINOUTd(cgab[2], true);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout7(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 7");
+        fcbINOUTd(TestConstParametersOtherLib.cab[2], true);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout8(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 8");
+        fcbINOUTd(ab[2], true);
+    end
+
+    function testConstInoutsDelegatesDelegateBooleanConstInout9(){@Test}
+        LogResult.logStdOut("delegate boolean const inout 9");
+        myTemp boolean = true;
+        fcbINOUTd(myTemp, true);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout1(){@Test}
+        LogResult.logStdOut("delegate int const inout 1");
+        fciINOUTd(ci, 27);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout2(){@Test}
+        LogResult.logStdOut("delegate int const inout 2");
+        fciINOUTd(cgi, 27);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout3(){@Test}
+        LogResult.logStdOut("delegate int const inout 3");
+        fciINOUTd(TestConstParametersOtherLib.ci, 27);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout4(){@Test}
+        LogResult.logStdOut("delegate int const inout 4");
+        fciINOUTd(i, 27);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout5(){@Test}
+        LogResult.logStdOut("delegate int const inout 5");
+        fciINOUTd(cai[2], 54);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout6(){@Test}
+        LogResult.logStdOut("delegate int const inout 6");
+        fciINOUTd(cgai[2], 54);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout7(){@Test}
+        LogResult.logStdOut("delegate int const inout 7");
+        fciINOUTd(TestConstParametersOtherLib.cai[2], 54);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout8(){@Test}
+        LogResult.logStdOut("delegate int const inout 8");
+        fciINOUTd(ai[2], 54);
+    end
+
+    function testConstInoutsDelegatesDelegateIntConstInout9(){@Test}
+        LogResult.logStdOut("delegate int const inout 9");
+        myTemp int = -987;
+        fciINOUTd(myTemp, -987);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout1(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 1");
+        fcmyINOUTd(cmy, 103);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout2(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 2");
+        fcmyINOUTd(cgmy, 103);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout3(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 3");
+        fcmyINOUTd(TestConstParametersOtherLib.cmy, 103);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout4(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 4");
+        fcmyINOUTd(my, 103);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout5(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 5");
+        fcmyINOUTd(camy[2], 777);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout7(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 7");
+        fcmyINOUTd(TestConstParametersOtherLib.camy[2], 777);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout8(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 8");
+        fcmyINOUTd(amy[2], 777);
+    end
+
+    function testConstInoutsDelegatesDelegateDataItemConstInout9(){@Test}
+        LogResult.logStdOut("delegate DataItem const inout 9");
+        myTemp int = -987;
+        fcmyINOUTd(myTemp, -987);
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout1(){@Test}
+        LogResult.logStdOut("delegate string const inout 1");
+        fcsINOUTd(cs, "I am a string constant");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout2(){@Test}
+        LogResult.logStdOut("delegate string const inout 2");
+        fcsINOUTd(cgs, "I am a string constant");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout3(){@Test}
+        LogResult.logStdOut("delegate string const inout 3");
+        fcsINOUTd(TestConstParametersOtherLib.cs, "I am a string constant");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout4(){@Test}
+        LogResult.logStdOut("delegate string const inout 4");
+        fcsINOUTd(s, "I am a string constant");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout5(){@Test}
+        LogResult.logStdOut("delegate string const inout 5");
+        fcsINOUTd(cas[2], "flop");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout6(){@Test}
+        LogResult.logStdOut("delegate string const inout 6");
+        fcsINOUTd(cgas[2], "flop");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout7(){@Test}
+        LogResult.logStdOut("delegate string const inout 7");
+        fcsINOUTd(TestConstParametersOtherLib.cas[2], "flop");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout8(){@Test}
+        LogResult.logStdOut("delegate string const inout 8");
+        fcsINOUTd(astr[2], "flop");
+    end
+
+    function testConstInoutsDelegatesDelegateStringConstInout9(){@Test}
+        LogResult.logStdOut("delegate string const inout 9");
+        myTemp string = "SNOBOL";
+        fcsINOUTd(mytemp, "SNOBOL");
+    end
+
+    //    function testConstInoutsDelegatesDelegateTimeConstInout1(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 1");
+    //        fctINOUTd(ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout2(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 2");
+    //        fctINOUTd(cgt, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout3(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 3");
+    //        fctINOUTd(TestConstParametersOtherLib.ct, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout4(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 4");
+    //        fctINOUTd(t, "10:12:13");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout5(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 5");
+    //        fctINOUTd(cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout6(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 6");
+    //        fctINOUTd(cgat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout7(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 7");
+    //        fctINOUTd(TestConstParametersOtherLib.cat[2], "22:42:19");
+    //    end
+    //
+    //    function testConstInoutsDelegatesDelegateTimeConstInout8(){@Test}
+    //        LogResult.logStdOut("delegate time const inout 8");
+    //        fctINOUTd(at[2], "22:42:19");
+    //
+    //    end
+    
+    function testConstInoutsDelegatesDelegateIntQueConstInout1(){@Test}
+        LogResult.logStdOut("delegate int? const inout 1");
+        aNullableInt int? = null;
+        fciNullableINOUTd(aNullableInt, 0, true);
+    end
+
+    function testConstInoutsDelegatesDelegateIntQueConstInout2(){@Test}
+        LogResult.logStdOut("delegate int? const inout 2");
+        aNullableInt = -1234;
+        fciNullableINOUTd(aNullableInt, -1234, false);
+
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout1(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 1");
+        facsINOUTd(cas, 1, "flip", "new");
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout2(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 2");
+        LogResult.assertStringEqual1("new", cas[1]);
+        cas[1] = "flip";
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout3(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 3");
+        facsINOUTd(cas, 2, "flop", "newt");
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout4(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 4");
+        LogResult.assertStringEqual1("newt", cas[2]);
+        cas[2] = "flop";
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout5(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 5");
+        arg1 string[] = ["flup", "flap"];
+        facsINOUTd(arg1, 2, "flap", "-");
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout6(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 6");
+        facsINOUTd(TestConstParametersOtherLib.cas, 1, "flip", "new");
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout7(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 7");
+        LogResult.assertStringEqual1("new", TestConstParametersOtherLib.cas[1]);
+        TestConstParametersOtherLib.cas[1] = "flip";
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout8(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 8");
+        facsINOUTd(TestConstParametersOtherLib.cas, 2, "flop", "newt");
+    end
+
+    function testConstInoutsDelegatesDelegateStringArrayConstInout9(){@Test}
+        LogResult.logStdOut("delegate string[] const inout 9");
+        LogResult.assertStringEqual1("newt", TestConstParametersOtherLib.cas[2]);
+        TestConstParametersOtherLib.cas[2] = "flop";
+
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout1(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 1");
+        faciINOUTd(cai, 1, -27, 31);
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout2(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 2");
+        LogResult.assertBigIntEqual1(31, cai[1]);
+        cai[1] = -27;
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout3(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 3");
+        faciINOUTd(cai, 2, 54, -1212);
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout4(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 4");
+        LogResult.assertBigIntEqual1(-1212, cai[2]);
+        cai[2] = 54;
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout5(){@Test}
+     	LogResult.logStdOut("delegate int[] const inout 5");
+     	arg1  int[] = [88, 99, 1010];
+      	faciINOUTd(arg1, 3, 1010, 0);
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout6(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 6");
+        faciINOUTd(TestConstParametersOtherLib.cai, 1, -27, 31);
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout7(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 7");
+        LogResult.assertBigIntEqual1(31, TestConstParametersOtherLib.cai[1]);
+        TestConstParametersOtherLib.cai[1] = -27;
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout8(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 8");
+        faciINOUTd(TestConstParametersOtherLib.cai, 2, 54, -1212);
+    end
+
+    function testConstInoutsDelegatesDelegateIntArrayConstInout9(){@Test}
+        LogResult.logStdOut("delegate int[] const inout 9");
+        LogResult.assertBigIntEqual1(-1212, TestConstParametersOtherLib.cai[2]);
+        TestConstParametersOtherLib.cai[2] = 54;
+    end
+
+end
+
+delegate fcbINd(cb boolean const in, expected boolean in)
+end
+
+delegate fciINd(ci int const in, expected int in)
+end
+
+delegate fciNullableINd(ci int? const in, expected int in, expectedNull boolean in)
+end
+
+delegate fcmyINd(ci int const in, expected int in)
+end
+
+delegate fcbiINd(cbi bigInt const in, expected bigInt in)
+end
+
+delegate fcsINd(cs string const in, expected string in)
+end
+
+delegate facsINd(cas string[] const in, index int in, expected string in, newElt string in)
+end
+
+delegate faciINd(cai int[] const in, index int in, expected int in, newElt int in)
+end
+
+//delegate fctINd(ct time const in, expected time in)
+//end
+
+delegate fcbINOUTd(cb boolean const inOut, expected boolean in)
+end
+
+delegate fciINOUTd(ci int const inOut, expected int in)
+end
+
+delegate fciNullableINOUTd(ci int? const inOut, expected int in, expectedNull boolean in)
+end
+
+delegate fcmyINOUTd(ci int const inOut, expected int in)
+end
+
+delegate fcbiINOUTd(cbi bigInt const inOut, expected bigInt in)
+end
+
+delegate fcsINOUTd(cs string const inOut, expected string in)
+end
+
+delegate facsINOUTd(cas string[] const inOut, index int in, expected string in, newElt string in)
+end
+
+delegate faciINOUTd(cai int[] const inOut, index int in, expected int in, newElt int in)
+end
+
+//delegate fctINOUTd(ct time const inOut, expected time in)
+//end

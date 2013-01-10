@@ -1,0 +1,130 @@
+package fvt.operators;
+
+import FVT.operators.myFlexRecord;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestAsOperatorLib
+* @title The function test program for the EGL AS operator
+* @keywords AS
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL AS operator
+*/
+
+library TestAsOperatorLib
+
+    ret string;
+    aDict Dictionary{a = 1, b = 4};
+    rec myFlexRecord{aChar = "5", aMoney = 10};
+
+    function testAs1a(){@Test}
+        LogResult.logStdOut("Check dictionary item values as int - 1a");
+        LogResult.assertBigIntEqual1(1,(aDict.a as int));
+    end
+
+    function testAs1b(){@Test}
+        LogResult.logStdOut("Check dictionary item values as int - 1b");
+        LogResult.assertBigIntEqual1(4,(aDict.b as int));
+    end
+
+    function testAs2a(){@Test}
+        result int =(aDict.a as int) +(aDict.b as int);
+        LogResult.logStdOut("Dictionary items used in expression as int - 2a");
+        LogResult.assertBigIntEqual1(5, result);
+    end
+
+    function testAs3a(){@Test}
+        sresult string =(aDict.a as string) +(aDict.b as string);
+        LogResult.logStdOut("Dictionary items used in expression as string - 3a");
+        LogResult.assertStringEqual1("14", sresult);
+    end
+
+    function testAs4a(){@Test}
+        ret string = testCallAsInt(aDict.a, aDict.b);
+        LogResult.logStdOut("Dictionary items passed as any and used in expression as int - 4a");
+        LogResult.assertStringEqual1("5", ret);
+    end
+
+    function testAs4b(){@Test}
+        ret = testCallAsInt2(aDict.a, aDict.b);
+        LogResult.logStdOut("Dictionary items passed as any and used in expression as int - 4b");
+        LogResult.assertStringEqual1("5", ret);
+    end
+
+    function testAs4c(){@Test}
+        LogResult.logStdOut("Dictionary items passed as any and used in expression as int - 4c");
+        LogResult.assertStringEqual1("5", aDict.a);
+        aDict.a = 1;
+    end
+
+    function testAs5a(){@Test}
+        ret = testCallAsString(aDict.a, aDict.b);
+        LogResult.logStdOut("Dictionary items passed as any and used in expression as string - 5a");
+        LogResult.assertStringEqual1("14", ret);
+    end
+
+    function testAs6a(){@Test}
+        ret = testCallAsInt(rec.aChar, rec.aMoney);
+        LogResult.logStdOut("Record items passed as any and used in expression as int - 6a");
+        LogResult.assertStringEqual1("15", ret);
+    end
+
+    function testAs7a(){@Test}
+        ret = testCallAsRecord(rec, rec);
+        LogResult.logStdOut("Records passed as any - 7a");
+        LogResult.assertStringEqual1("55", ret);
+    end
+
+    function testCallAsInt(parm1 any in, parm2 any in) returns(string)
+        ret string =(parm1 as int) +(parm2 as int);
+        return(ret);
+    end
+
+    function testCallAsInt2(parm1 any inOut, parm2 any inOut) returns(string)
+        ret string =(parm1 as int) +(parm2 as int);
+        parm1 =(parm1 as int) +(parm2 as int);
+        return(ret);
+    end
+
+    function testCallAsString(parm1 any in, parm2 any in) returns(string)
+        ret string =(parm1 as string) +(parm2 as string);
+        return(ret);
+    end
+
+    function testCallAsRecord(parm1 any in, parm2 any in) returns(string)
+        rec1 myFlexRecord =(parm1 as myFlexRecord);
+        rec2 myFlexRecord =(parm2 as myFlexRecord);
+        ret string = rec1.aChar + rec2.aChar;
+        return(ret);
+    end
+end
+
+record exFlexRecord
+    aChar string;
+    aString string;
+    aMoney int;
+end
+
+record myFlexRecord
+    aChar string;
+    aMoney int;
+end
+
+record myFlexRecord2
+    aMoney int;
+    aChar string;
+end
+
+record empRecord1
+    empnum int;
+    empname string[] = new string[10];
+end
+
+record empRecord2
+    empnum int[] = new int[10];
+    empname string;
+end
+

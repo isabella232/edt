@@ -1,0 +1,15 @@
+package fvt.xml.handlers.data;
+
+import eglx.json.JsonName;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+handler WeatherForecastsRecWrong{@xmlRootElement{name = "WeatherForecasts"}}
+    Lat string?{@JSONName{"Latitude"}, @XMLElement{name = "Latitude"}};
+    long string?{@JSONName{"Longitude"}, @XMLElement{name = "Longitude"}};
+    AllocationFactor string?;
+    FipsCode string?;
+    PlaceName string?;
+    StateCode string?;
+    Details DetailsWrong?;
+end

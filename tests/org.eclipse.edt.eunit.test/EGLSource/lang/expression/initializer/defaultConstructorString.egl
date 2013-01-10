@@ -1,0 +1,109 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Field intialization of STRINGs based on default constructor rules Enhancement 372125
+* @keywords default constructor string
+* @author EDT team
+* @createDate 2012/03/09
+* @description 
+*  Field intialization of STRINGs based on default constructor rules Enhancement 372125
+*/
+library defaultConstructorString
+	
+	function testString() {@Test}
+		s1 string;
+		
+		LogResult.assertStringEqual1("", s1);
+	end
+	
+	function testStringNotEqual() {@Test}
+		s1 string;
+		
+		LogResult.assertTrue1(!(s1 != ""));
+	end
+	
+	function testNullableString() {@Test}
+		s2 string?;
+		
+		LogResult.assertTrue1(s2 == null);
+	end
+	
+	function testStringArray() {@Test}
+		s3 string[];
+		
+		LogResult.assertTrue1(s3 isa string[] && s3.getSize() == 0);
+	end
+	
+	function testNullableStringArray() {@Test}
+		s4 string?[];
+		
+		LogResult.assertTrue1(s4 isa string?[] && s4.getSize() == 0);
+	end
+	
+	function testStringArrayWithNew() {@Test}
+		s5 string[] = new string[];
+		
+		LogResult.assertTrue1(s5 isa string[] && s5.getSize() == 0);
+	end
+	
+	function testStringArrayWithNewParameter() {@Test}
+		s6 string[] = new string[4];
+		
+		LogResult.assertTrue1(s6 isa string[] && s6.getSize() == 4 && s6[1] == "");
+	end
+	
+	function testNullableStringArrayWithNew() {@Test}
+		s7 string?[] = new string?[];
+		
+		LogResult.assertTrue1(s7 isa string?[] && s7.getSize() == 0);
+	end
+	
+	function testNullableStringArrayWithNewParameter() {@Test}
+		s8 string?[] = new string?[4];
+		
+		LogResult.assertTrue1(s8 isa string?[] && s8.getSize() == 4 && s8[1] == null);
+	end
+	
+	function testStringNullableArray() {@Test}
+		s9 string[]?;
+
+		LogResult.assertTrue1(s9 == null);
+	end
+	
+	function testStringNullableArrayWithNew() {@Test}
+		s10 string[]? = new string[];
+
+		LogResult.assertTrue1(s10 isa string[] && s10.getSize() == 0);
+	end
+	
+	function testStringNullableArrayWithNewParameter() {@Test}
+		s11 string[]? = new string[4];
+
+		LogResult.assertTrue1(s11 isa string[] && s11.getSize() == 4 && s11[1] == "");
+	end
+	
+	function testNullableStringNullableArray() {@Test}
+		s13 string?[]?;
+
+		LogResult.assertTrue1(s13 == null);
+	end
+	
+	function testNullableStringNullableArrayWithNew() {@Test}
+		s14 string?[]? = new string?[];
+
+		LogResult.assertTrue1(s14 isa string?[] && s14.getSize() == 0);
+	end
+	
+	function testNullableStringNullableArrayWithNewParameter() {@Test}
+		s15 string?[]? = new string?[4];
+
+		LogResult.assertTrue1(s15 isa string?[] && s15.getSize() == 4 && s15[1] == null);
+	end
+end
+
+		
+	

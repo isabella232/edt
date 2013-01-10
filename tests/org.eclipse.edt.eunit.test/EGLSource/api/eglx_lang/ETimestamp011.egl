@@ -1,0 +1,210 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp011
+  * @title EdtTimestamp011 - runValueFunction
+  * @description testing timestamp function hourof
+  * @testcases runValueFunction01 - runValueFunction22
+  * @sources EdtTimestamp011.egl
+  * @keywords timestamp, functions, hourOf
+ **/
+library ETimestamp011 {}
+
+	// Constant Declarations
+	const constTimeStamp timeStamp = "2011-10-07 12.17.59";
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	const constTimeStampMDDate timeStamp("MMdd") = "06-15";
+	const constTimeStampDHDate timeStamp("ddHH") = "24-09";
+	const constTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	const constTimeStampHMTime timeStamp("HHmm") = "15-18";
+	const constTimeStampMSTime timeStamp("mmss") = "16-15";
+	
+	// Variable Declarations
+	varTimeStamp timeStamp = "2011-10-07 12.17.59";
+	varTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2011-12-31-10-55-30-987654";
+	varTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2011-12-31-10-55-30";
+	varTimeStampDate timeStamp("yyyyMMdd") = "2011-12-31";
+	varTimeStampYDate timeStamp("yyyy") = "2012";
+	varTimeStampYMDate timeStamp("yyyyMM") = "2011-06";
+	varTimeStampMDDate timeStamp("MMdd") = "06-15";
+	varTimeStampDHDate timeStamp("ddHH") = "24-09";
+	varTimeStampTime timeStamp("HHmmss") = "11-31-00";
+	varTimeStampHMTime timeStamp("HHmm") = "15-18";
+	varTimeStampMSTime timeStamp("mmss") = "16-15";
+	 	
+	function runHourOfFunction01(){@Test}
+		LogResult.assertBigIntEqual("constant hourOf", 12, constTimeStamp.hourOf());
+	end
+	 	
+	function runHourOfFunction02(){@Test}
+		LogResult.assertBigIntEqual("constant full hourOf", 10, constTimeStampFull.hourOf());
+	end
+	 	
+	function runHourOfFunction03(){@Test}
+		LogResult.assertBigIntEqual("constant datetime hourOf", 10, constTimeStampDateTime.hourOf());
+	end
+	 	
+	function runHourOfFunction04(){@Test}
+		aHour int;
+		try
+		    aHour = constTimeStampDate.hourOf();
+			LogResult.failed("constant date hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant date hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction05(){@Test}
+		aHour int;
+		try
+		    aHour = constTimeStampYDate.hourOf();
+			LogResult.failed("constant Ydate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant Ydate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction06(){@Test}
+		aHour int;
+		try
+		    aHour = constTimeStampYMDate.hourOf();
+			LogResult.failed("constant YMdate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant YMdate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction07(){@Test}
+		aHour int;
+		try
+		    aHour = constTimeStampMDDate.hourOf();
+			LogResult.failed("constant MDdate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MDdate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction08(){@Test}
+		LogResult.assertBigIntEqual("constant DHdate hourOf", 9, constTimeStampDHDate.hourOf());
+	end
+	 	
+	function runHourOfFunction09(){@Test}
+		LogResult.assertBigIntEqual("constant time hourOf", 11, constTimeStampTime.hourOf());
+	end
+	 	
+	function runHourOfFunction10(){@Test}
+		LogResult.assertBigIntEqual("constant HMTime hourOf", 15, constTimeStampHMTime.hourOf());
+	end
+	 	
+	function runHourOfFunction11(){@Test}
+		aHour int;
+		try
+		    aHour = constTimeStampMSTime.hourOf();
+			LogResult.failed("constant MStime hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("constant MSTime hourof: wrong exception thrown");
+		end
+	end
+	
+	function runHourOfFunction12(){@Test}
+		LogResult.assertBigIntEqual("variable hourOf", 12, varTimeStamp.hourOf());
+	end
+	 	
+	function runHourOfFunction13(){@Test}
+		LogResult.assertBigIntEqual("variable full hourOf", 10, varTimeStampFull.hourOf());
+	end
+	 	
+	function runHourOfFunction14(){@Test}
+		LogResult.assertBigIntEqual("variable datetime hourOf", 10, varTimeStampDateTime.hourOf());
+	end
+	 	
+	function runHourOfFunction15(){@Test}
+		aHour int;
+		try
+		    aHour = varTimeStampDate.hourOf();
+			LogResult.failed("variable date hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable date hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction16(){@Test}
+		aHour int;
+		try
+		    aHour = varTimeStampYDate.hourOf();
+			LogResult.failed("variable Ydate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable Ydate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction17(){@Test}
+		aHour int;
+		try
+		    aHour = varTimeStampYMDate.hourOf();
+			LogResult.failed("variable YMdate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable YMdate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction18(){@Test}
+		aHour int;
+		try
+		    aHour = varTimeStampMDDate.hourOf();
+			LogResult.failed("variable MDdate hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MDdate hourof: wrong exception thrown");
+		end
+	end
+	 	
+	function runHourOfFunction19(){@Test}
+		LogResult.assertBigIntEqual("variable DHdate hourOf", 9, varTimeStampDHDate.hourOf());
+	end
+	 	
+	function runHourOfFunction20(){@Test}
+		LogResult.assertBigIntEqual("variable time hourOf", 11, varTimeStampTime.hourOf());
+	end
+	 	
+	function runHourOfFunction21(){@Test}
+		LogResult.assertBigIntEqual("variable HMTime hourOf", 15, varTimeStampHMTime.hourOf());
+	end
+	 	
+	function runHourOfFunction22(){@Test}
+		aHour int;
+		try
+		    aHour = varTimeStampMSTime.hourOf();
+			LogResult.failed("variable MStime hourof: exception should have been thrown");
+		onException(exception InvalidArgumentException)
+			LogResult.passed("OK");
+		onException(exception AnyException)
+			LogResult.failed("variable MSTime hourof: wrong exception thrown");
+		end
+	end
+
+end

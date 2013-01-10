@@ -1,0 +1,313 @@
+package server.test.rpg.primitive;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import server.host.rpg.programs.Primitive;
+
+// basic library
+library Parameters2
+	
+	char20 string; 
+	lchar20 string(20); 
+	unicode20 string; 
+	lunicode20 string(20); 
+	bin1sign smallint;
+	bin2sign smallint;
+	bin4sign int;
+	bin8sign bigint;
+	dec174 decimal(17,4);
+	dec80 decimal(8,0);
+	num15 decimal(15);
+	num112 decimal(11,2);
+	bin1 smallint;
+	bin2 int;
+	bin4 bigint;
+	bin8 decimal(20);
+	date1 date;
+	date2 date;
+	date3 date;
+	time1 time;
+	time2 time;
+	time3 time;
+	timestamp1 timestamp("yyyyMMddHHmmss");
+	float4 smallfloat;
+	float8 float;
+	testParameters boolean = true;
+	function call1(){@Test}
+		char20 = "abcd"; 
+		lchar20 = "defg"; 
+		unicode20 = "xyz"; 
+		lunicode20 = "abc"; 
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramText2");
+			Primitive.primitiveHostProgramText2(char20, lchar20, unicode20, lunicode20);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function char20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing char20 value");
+            LogResult.assertStringEqual("Fail char20", "abcdYYYYY", char20);
+		end
+	end
+	function lchar20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing lchar20 value");
+            LogResult.assertStringEqual("Fail lchar20", "defgYYYYY", lchar20);
+		end
+	end
+	function unicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing unicode20 value");
+            LogResult.assertStringEqual("Fail unicode20", "xyz ZZZZZZZZZZ", unicode20);
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing lunicode20 value");
+            LogResult.assertStringEqual("Fail lunicode20", "abc ZZZZZZZZZZ", lunicode20);
+		end
+	end
+	function call2(){@Test}
+		bin1sign = -1;
+		bin2sign = 1;
+		bin4sign = 2;
+		bin8sign = 3;
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramInt");
+			Primitive.primitiveHostProgramInt2(bin1sign, bin2sign, bin4sign, bin8sign);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function bin1signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin1sign value");
+            LogResult.assertBigIntEqual("Fail bin1sign", 97, bin1sign);
+		end
+	end
+	function bin2signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin2sign value");
+            LogResult.assertBigIntEqual("Fail bin2sign", 999, bin2sign);
+		end
+	end
+	function bin4signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin4sign value");
+            LogResult.assertBigIntEqual("Fail bin4sign", 10000, bin4sign);
+		end
+	end
+	function bin8signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin8sign value");
+            LogResult.assertBigIntEqual("Fail bin8sign", 100001, bin8sign);
+		end
+	end
+	function call8(){@Test}
+		float4 = 8;
+		float8 = 9;
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramFloat");
+			Primitive.primitiveHostProgramFloat2(float4, float8);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function float4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing float4 value");
+            LogResult.assertFloatEqual("Fail float4", 8.99 as smallfloat, float4);
+		end
+	end
+	function float8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing float8 value");
+            LogResult.assertFloatEqual("Fail float8", 9.99, float8);
+		end
+	end
+
+	function call3(){@Test}
+		dec174 = 45.67;
+		dec80 = 14;
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramPacked");
+			Primitive.primitiveHostProgramPacked2(dec174, dec80);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function dec112Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing dec174 value");
+            LogResult.assertDecimalEqual("Fail dec174", 10043.67, dec174);
+		end
+	end
+	function dec15Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing dec80 value");
+            LogResult.assertDecimalEqual("Fail dec80", 100012, dec80);
+		end
+	end
+	function call4(){@Test}
+		num15 = 5;
+		num112 = 11.61;
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramZoned");
+			Primitive.primitiveHostProgramZoned2(num112, num15);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function num6Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing num15 value");
+            LogResult.assertDecimalEqual("Fail num15", 1003, num15);
+		end
+	end
+	function num103Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing num112 value");
+            LogResult.assertDecimalEqual("Fail num112", 109.61, num112);
+		end
+	end
+	function call5(){@Test}
+		bin1 = 5;
+		bin2 = 6;
+		bin4  = 7;
+		bin8  = 8;
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramUInt");
+			Primitive.primitiveHostProgramUInt2(bin1, bin2, bin4, bin8);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function bin1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin1 value");
+            LogResult.assertBigIntEqual("Fail bin1", 103, bin1);
+		end
+	end
+	function bin2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin2 value");
+            LogResult.assertBigIntEqual("Fail bin2", 1004, bin2);
+		end
+	end
+	function bin4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin4 value");
+            LogResult.assertBigIntEqual("Fail bin4", 10005, bin4);
+		end
+	end
+	function bin8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin8 value");
+            LogResult.assertBigIntEqual("Fail bin8", 100006, bin8);
+		end
+	end
+	function call6(){@Test}
+		date1 = "06/24/2011";
+		date2 = "05/19/1997";
+		date3 = "04/03/1922";
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramDate");
+			Primitive.primitiveHostProgramDate2(date1, date2, date3);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function date1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date1 value");
+            LogResult.assertDateEqual("Fail date1", "11/29/2016", date1);
+		end
+	end
+	function date2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date2 value");
+            LogResult.assertDateEqual("Fail date2", "10/24/2002", date2);
+		end
+	end
+
+	function date3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date3 value");
+            LogResult.assertDateEqual("Fail date3", "09/08/1927", date3);
+		end
+	end
+	function call6a(){@Test}
+		time1 = "17:54:34";
+		time2 = "07:14:03";
+		time3 = "01:45:43";
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramTime");
+			Primitive.primitiveHostProgramTime(time1, time2, time3);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function time1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time1 value");
+            LogResult.assertTimeEqual("Fail time1", "22:59:39", time1);
+		end
+	end
+	function time2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time2 value");
+            LogResult.assertTimeEqual("Fail time2", "12:19:08", time2);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time3 value");
+            LogResult.assertTimeEqual("Fail time3", "06:50:48", time3);
+		end
+	end
+	function call7(){@Test}
+		timestamp1 = "2012/02/11 17:54:34";
+		try
+	       	LogResult.logStdOut("call Primitive.primitiveHostProgramTimeStamp");
+			Primitive.primitiveHostProgramTimeStamp2(timestamp1);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function timestamp1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing timestamp1 value");
+            LogResult.assertTimestampEqual("Fail timestamp1", "2017/07/16 22:59:39", timestamp1);
+		end
+	end
+end

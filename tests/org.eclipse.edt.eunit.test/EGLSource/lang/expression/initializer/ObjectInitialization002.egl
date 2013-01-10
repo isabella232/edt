@@ -1,0 +1,86 @@
+package lang.expression.initializer;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+// basic library
+library ObjectInitialization002
+
+    function runNullConditionTest01(){@Test}
+        objects any[]?;
+        try
+            myAssert((objects == null));
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end       
+    end
+
+    function runNullConditionTest02(){@Test}
+        objects int[]?;
+        try
+            myAssert((objects == null));
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end  
+    end
+
+    function runNullConditionTest03(){@Test}
+        object any?;
+        try
+            myAssert((object == null));
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end
+    end
+
+    function runNullConditionTest04(){@Test}
+        object number?;
+        try
+            myAssert((object == null));
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end
+    end
+
+    function runNullConditionTest05(){@Test}
+        object number?;
+        try
+            if((object == null))
+                LogResult.passed("OK");
+            else
+                LogResult.failed("not null");
+            end
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end
+    end
+
+    function runNullConditionTest06(){@Test}
+         object int?;
+        try
+            myAssert((object == null));
+        onException(oops AnyException)
+            if(oops isa NullValueException)
+                LogResult.failed("unexpected Null Exception");
+            end
+        end
+    end
+
+    function myAssert(conditional boolean in)
+        if(conditional)
+        	LogResult.passed("OK");
+        else
+        	LogResult.failed("not null");
+        end
+    end
+end

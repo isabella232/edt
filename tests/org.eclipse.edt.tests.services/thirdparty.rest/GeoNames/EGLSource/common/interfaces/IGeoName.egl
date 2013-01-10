@@ -1,0 +1,38 @@
+/*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package common.interfaces;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
+
+
+
+//Put EGL Source File Contents Here
+library IGeoName 
+  	function search(query string in) returns(GeoNamesData) 
+   		{
+   			@Rest {
+   				method = HttpMethod._GET,
+   				uriTemplate="http://ws.geonames.org/search?q={query}", 
+   				responseFormat=xml
+   			}
+   		}
+   	end
+  	function searchJSON(query string in) returns(GeoNamesData) 
+   		{
+   			@Rest {
+   				method = HttpMethod._GET,
+   				uriTemplate="http://ws.geonames.org/searchJSON?q={query}", 
+   				responseFormat=JSON
+   			}
+   		}
+   	end
+end 
+

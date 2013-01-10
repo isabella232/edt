@@ -1,0 +1,32 @@
+package test.client;
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoButton;
+import test.server.SqlTestService;
+
+handler SqlJndiConnectionTest type RUIhandler{initialUI =[ui], cssFile = "css/org.eclipse.edt.tests.sql.jndi.css", title = "SQL JNDI ConnectionTest"}
+
+    ui GridLayout{columns = 3, rows = 4, cellPadding = 4, children = [ status, runTest ]};
+    runTest DojoButton{ layoutData = new GridLayoutData{ row = 2, column = 2 }, text="Run Test", onClick ::= startTest };
+    status TextLabel{ layoutData = new GridLayoutData{ row = 3, column = 2 }, color = "black", backgroundColor = "#D3D3D3", text = "Status: Not started" };
+    
+    function startTest( e Event in )
+    	status.backgroundColor = "LightBlue";
+    	status.text = "Status: Test is running...";
+    	
+    	SqlTestService SqlTestService? {@DedicatedService};
+    	call SqlTestService.runTest() returning to testRan onException testFailed;
+    end
+    
+    function testRan()
+    	status.backgroundColor = "#90EE90";
+    	status.text = "Status: Test finished";
+    end
+    
+    function testFailed( x AnyException )
+    	status.backgroundColor = "red";
+    	status.text = "Status: Test failed to run: " :: x.message;
+    end
+end

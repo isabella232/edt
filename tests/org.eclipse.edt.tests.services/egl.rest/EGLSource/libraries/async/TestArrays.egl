@@ -1,0 +1,809 @@
+package libraries.async;
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.ArrayContainingRecord;
+import data.SimpleRecord;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import interfaces.IArrayPassing;
+import services.ArrayPassing;
+import utilities.CommonUtilities;
+
+
+
+library TestArrays
+
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end	
+	
+	private function initStringArray(ar string[])
+		ar.removeAll();
+		ar.appendElement("index1");
+		ar.appendElement("index2");
+		ar.appendElement("index3");
+	end	
+		
+	private function initIntArray(ar int[] inout)
+		ar = new int[];
+		ar.appendElement(10);
+		ar.appendElement(13);
+		ar.appendElement(27);
+	end	
+		
+	private function initBigintArray(ar bigint[] inout)
+		ar = new bigint[];
+		ar.appendElement(10);
+		ar.appendElement(13);
+		ar.appendElement(27);
+	end	
+		
+	private function initDecimalArray(ar decimal[] inout)
+		ar = new decimal[];
+		ar.appendElement(10.1);
+		ar.appendElement(13.1);
+		ar.appendElement(27.1);
+	end	
+		
+	private function initDateArray(ar date[] inout)
+		ar = new date[];
+		ar.appendElement("01/19/1976");
+		ar.appendElement("10/17/1942");
+		ar.appendElement("12/16/2006");
+	end	
+		
+	private function initTimeStampArray(_array timestamp("yyyyMMddHHmmss")[] inout)
+		_array = new Timestamp("yyyyMMddHHmmss")[];
+		_array.appendElement("1976/01/19 12:56:41");
+		_array.appendElement("1942/10/17 17:41:13");
+		_array.appendElement("2006/12/16 01:18:59");
+	end	
+		
+	function testSingleIn() {@Test}
+		_array string[];
+		initStringArray(_array);
+		call IArrayPassing.singleIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleIn onException handleServiceException;
+	end
+	
+	function testSingleInout() {@Test}
+		_array string[];
+		initStringArray(_array);
+		call IArrayPassing.singleInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleInout onException handleServiceException;	
+	end
+	
+	function testSingleOut() {@Test}
+		_array string[];
+		initStringArray(_array);
+		call IArrayPassing.singleOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleOut onException handleServiceException;
+	end
+	
+	function testSingleAll() {@Test}
+		_array, _array2, _array3 string[];
+		initStringArray(_array);
+		initStringArray(_array2);
+		initStringArray(_array3);
+		call IArrayPassing.singleAll(_array, _array2, _array3) using CommonUtilities.getResource("arrays") returning to verifySingleAll onException handleServiceException;
+	end
+	
+	function testSingleIntIn() {@Test}
+		_array Int[];
+		initIntArray(_array);
+		call ArrayPassing.singleIntIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleIntIn onException handleServiceException;
+	end
+	
+	function testSingleIntInout() {@Test}
+		_array int[];
+		initIntArray(_array);
+		call ArrayPassing.singleIntInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleIntInout onException handleServiceException;	
+	end
+	
+	function testSingleIntOut() {@Test}
+		_array int[];
+		initIntArray(_array);
+		call ArrayPassing.singleIntOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleIntOut onException handleServiceException;
+	end
+	
+	function testSingleIntAll() {@Test}
+		_array, _array2, _array3 int[];
+		initIntArray(_array);
+		initIntArray(_array2);
+		initIntArray(_array3);
+		call ArrayPassing.singleIntAll(_array, _array2, _array3) using CommonUtilities.getResource("arrays") returning to verifySingleIntAll onException handleServiceException;
+	end
+	
+	function testSingleBigintIn() {@Test}
+		_array bigint[];
+		initBigintArray(_array);
+		call ArrayPassing.singleBigintIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleBigintIn onException handleServiceException;
+	end
+	
+	function testSingleBigintInout() {@Test}
+		_array bigint[];
+		initBigintArray(_array);
+		call ArrayPassing.singleBigintInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleBigintInout onException handleServiceException;	
+	end
+	
+	function testSingleBigintOut() {@Test}
+		_array bigint[];
+		initBigintArray(_array);
+		call ArrayPassing.singleBigintOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleBigintOut onException handleServiceException;
+	end
+	
+	function testSingleBigintAll() {@Test}
+		_array, _array2, _array3 bigint[];
+		initBigintArray(_array);
+		initBigintArray(_array2);
+		initBigintArray(_array3);
+		call ArrayPassing.singleBigintAll(_array, _array2, _array3)	using CommonUtilities.getResource("arrays") returning to verifySingleBigintAll onException handleServiceException;
+	end
+	
+	function testSingleDecimalIn() {@Test}
+		_array decimal[];
+		initDecimalArray(_array);
+		call ArrayPassing.singleDecimalIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDecimalIn onException handleServiceException;
+	end
+	
+	function testSingleDecimalInout() {@Test}
+		_array decimal[];
+		initDecimalArray(_array);
+		call ArrayPassing.singleDecimalInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDecimalInout onException handleServiceException;	
+	end
+	
+	function testSingleDecimalOut() {@Test}
+		_array decimal[];
+		initDecimalArray(_array);
+		call ArrayPassing.singleDecimalOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDecimalOut onException handleServiceException;
+	end
+	
+	function testSingleDecimalAll() {@Test}
+		_array, _array2, _array3 decimal[];
+		initDecimalArray(_array);
+		initDecimalArray(_array2);
+		initDecimalArray(_array3);
+		call ArrayPassing.singleDecimalAll(_array, _array2, _array3) using CommonUtilities.getResource("arrays") returning to verifySingleDecimalAll onException handleServiceException;
+	end
+	
+	function testSingleDateIn() {@Test}
+		_array date[];
+		initDateArray(_array);
+		call ArrayPassing.singleDateIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDateIn onException handleServiceException;
+	end
+	
+	function testSingleDateInout() {@Test}
+		_array date[];
+		initDateArray(_array);
+		call ArrayPassing.singleDateInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDateInout onException handleServiceException;	
+	end
+	
+	function testSingleDateOut() {@Test}
+		_array date[];
+		initDateArray(_array);
+		call ArrayPassing.singleDateOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleDateOut onException handleServiceException;
+	end
+	
+	function testSingleDateAll() {@Test}
+		_array, _array2, _array3 date[];
+		initDateArray(_array);
+		initDateArray(_array2);
+		initDateArray(_array3);
+		call ArrayPassing.singleDateAll(_array, _array2, _array3) using CommonUtilities.getResource("arrays") returning to verifySingleDateAll onException handleServiceException;
+	end
+	
+	function testSingleTimestampIn() {@Test}
+		_array timestamp("yyyyMMddHHmmss")[];
+		initTimestampArray(_array);
+		call ArrayPassing.singleTimestampIn(_array) using CommonUtilities.getResource("arrays") returning to verifySingleTimestampIn onException handleServiceException;
+	end
+	
+	function testSingleTimestampInout() {@Test}
+		_array timestamp("yyyyMMddHHmmss")[];
+		initTimestampArray(_array);
+		call ArrayPassing.singleTimestampInout(_array) using CommonUtilities.getResource("arrays") returning to verifySingleTimestampInout onException handleServiceException;	
+	end
+	
+	function testSingleTimestampOut() {@Test}
+		_array timestamp("yyyyMMddHHmmss")[];
+		initTimestampArray(_array);
+		call ArrayPassing.singleTimestampOut(_array) using CommonUtilities.getResource("arrays") returning to verifySingleTimestampOut onException handleServiceException;
+	end
+	
+	function testSingleTimestampAll() {@Test}
+		_array, _array2, _array3 timestamp("yyyyMMddHHmmss")[];
+		initTimestampArray(_array);
+		initTimestampArray(_array2);
+		initTimestampArray(_array3);
+		call ArrayPassing.singleTimestampAll(_array, _array2, _array3) using CommonUtilities.getResource("arrays") returning to verifySingleTimestampAll onException handleServiceException;
+	end
+	
+	function testSimpleRecordArrayIn() {@Test}
+		simpleRecArray SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(simpleRecArray);
+		call IArrayPassing.simpleRecordArrayIn(simpleRecArray) using CommonUtilities.getResource("arrays") returning to verifySimpleRecordArrayIn onException handleServiceException;
+	end
+	
+	function testSimpleRecordArrayInout() {@Test}
+		simpleRecArray SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(simpleRecArray);
+		call IArrayPassing.simpleRecordArrayInout(simpleRecArray) using CommonUtilities.getResource("arrays") returning to verifySimpleRecordArrayInout onException handleServiceException;		
+	end
+	
+	function testSimpleRecordArrayOut() {@Test}
+		simpleRecArray SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(simpleRecArray);
+		call IArrayPassing.simpleRecordArrayOut(simpleRecArray) using CommonUtilities.getResource("arrays") returning to verifySimpleRecordArrayOut onException handleServiceException;		
+	end
+	
+	function testSimpleRecordArrayAll() {@Test}
+		simpleRecArray, simpleRecArray2, simpleRecArray3 SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(simpleRecArray);
+		CommonUtilities.initSimpleRecordArray(simpleRecArray2);
+		CommonUtilities.initSimpleRecordArray(simpleRecArray3);		
+		call IArrayPassing.simpleRecordArrayAll(simpleRecArray, simpleRecArray2, simpleRecArray3) using CommonUtilities.getResource("arrays") returning to verifySimpleRecordArrayAll onException handleServiceException;
+	end
+	
+	function testArrayContainingRecordArrayIn() {@Test}
+		arrayContainingRecArray ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray);
+		call IArrayPassing.arrayContainingRecordArrayIn(arrayContainingRecArray) using CommonUtilities.getResource("arrays") returning to verifyArrayContainingRecordArrayIn onException handleServiceException;
+	end
+	
+	function testArrayContainingRecordArrayInout() {@Test}
+		arrayContainingRecArray ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray);
+		call IArrayPassing.arrayContainingRecordArrayInout(arrayContainingRecArray) using CommonUtilities.getResource("arrays") returning to verifyArrayContainingRecordArrayInout onException handleServiceException;	
+	end
+	
+	function testArrayContainingRecordArrayOut() {@Test}
+		arrayContainingRecArray ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray);
+		call IArrayPassing.arrayContainingRecordArrayOut(arrayContainingRecArray) using CommonUtilities.getResource("arrays") returning to verifyArrayContainingRecordArrayOut onException handleServiceException;
+	end
+	
+	function testArrayContainingRecordArrayAll() {@Test}
+		arrayContainingRecArray, arrayContainingRecArray2, arrayContainingRecArray3 ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray);
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray2);
+		CommonUtilities.initArrayContainingRecordArray(arrayContainingRecArray3);
+		call IArrayPassing.arrayContainingRecordArrayAll(arrayContainingRecArray, arrayContainingRecArray2, arrayContainingRecArray3) using CommonUtilities.getResource("arrays") returning to verifyArrayContainingRecordArrayAll onException handleServiceException;
+	end
+	
+	function verifySingleIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "index1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleInout(_array string[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertStringEqual(":_array[1]", "outdex1", _array[1]);
+			LogResult.assertStringEqual(":_array[2]", "outdex2", _array[2]);
+			LogResult.assertStringEqual(":_array[3]", "outdex3", _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleOut(_array string[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertStringEqual(":_array[1]", "outdex1", _array[1]);
+			LogResult.assertStringEqual(":_array[2]", "outdex2", _array[2]);
+			LogResult.assertStringEqual(":_array[3]", "outdex3", _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleAll(_array2 string[] in, _array3 string[] in, retResult string[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 3, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 3, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			LogResult.assertStringEqual(":_array2[1]", "outdex1", _array2[1]);
+			LogResult.assertStringEqual(":_array2[2]", "outdex2", _array2[2]);
+			LogResult.assertStringEqual(":_array2[3]", "outdex3", _array2[3]);
+			
+			LogResult.assertStringEqual(":_array3[1]", "outdex1", _array3[1]);
+			LogResult.assertStringEqual(":_array3[2]", "outdex2", _array3[2]);
+			LogResult.assertStringEqual(":_array3[3]", "outdex3", _array3[3]);		
+			
+			LogResult.assertStringEqual(":retResult[1]", "index1", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "index2", retResult[2]);
+			LogResult.assertStringEqual(":retResult[3]", "index3", retResult[3]);	
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySingleIntIn(retResult int in)
+		try
+			LogResult.assertBigintEqual("", 10, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleIntInout(_array int[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertBigintEqual(":_array[1]", 10, _array[1]);
+			LogResult.assertBigintEqual(":_array[2]", 13, _array[2]);
+			LogResult.assertBigintEqual(":_array[3]", 27, _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleIntOut(_array int[] in)
+		try
+			expected int[];
+			initIntArray(expected);
+			LogResult.assertBigintEqual(":_array[1]", expected[1], _array[1]);
+			LogResult.assertBigintEqual(":_array[2]", expected[2], _array[2]);
+			LogResult.assertBigintEqual(":_array[3]", expected[3], _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleIntAll(_array2 int[] in, _array3 int[] in, retResult int[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 3, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 3, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			LogResult.assertBigintEqual(":_array2[1]", 15, _array2[1]);
+			LogResult.assertBigintEqual(":_array2[2]", 22, _array2[2]);
+			LogResult.assertBigintEqual(":_array2[3]", 78, _array2[3]);
+			
+			LogResult.assertBigintEqual(":_array3[1]", 19, _array3[1]);
+			LogResult.assertBigintEqual(":_array3[2]", 90, _array3[2]);
+			LogResult.assertBigintEqual(":_array3[3]", -7, _array3[3]);		
+			
+			LogResult.assertBigintEqual(":retResult[1]", 10, retResult[1]);
+			LogResult.assertBigintEqual(":retResult[2]", 13, retResult[2]);
+			LogResult.assertBigintEqual(":retResult[3]", 27, retResult[3]);	
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySingleBigintIn(retResult bigint in)
+		try
+			LogResult.assertBigintEqual("", 10, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleBigintInout(_array bigint[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertBigintEqual(":_array[1]", 10, _array[1]);
+			LogResult.assertBigintEqual(":_array[2]", 13, _array[2]);
+			LogResult.assertBigintEqual(":_array[3]", 27, _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleBigintOut(_array bigint[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			expected bigint[];
+			initBigintArray(expected);
+			LogResult.assertBigintEqual(":_array[1]", expected[1], _array[1]);
+			LogResult.assertBigintEqual(":_array[2]", expected[2], _array[2]);
+			LogResult.assertBigintEqual(":_array[3]", expected[3], _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleBigintAll(_array2 bigint[] in, _array3 bigint[] in, retResult bigint[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 3, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 3, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			LogResult.assertBigintEqual(":_array2[1]", 15, _array2[1]);
+			LogResult.assertBigintEqual(":_array2[2]", 22, _array2[2]);
+			LogResult.assertBigintEqual(":_array2[3]", 78, _array2[3]);
+			
+			LogResult.assertBigintEqual(":_array3[1]", 19, _array3[1]);
+			LogResult.assertBigintEqual(":_array3[2]", 90, _array3[2]);
+			LogResult.assertBigintEqual(":_array3[3]", -7, _array3[3]);		
+			
+			LogResult.assertBigintEqual(":retResult[1]", 10, retResult[1]);
+			LogResult.assertBigintEqual(":retResult[2]", 13, retResult[2]);
+			LogResult.assertBigintEqual(":retResult[3]", 27, retResult[3]);	
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySingleDecimalIn(retResult decimal in)
+		try
+			LogResult.assertDecimalEqual("", 10.1, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleDecimalInout(_array decimal[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertDecimalEqual(":_array[1]", 11.2, _array[1]);
+			LogResult.assertDecimalEqual(":_array[2]", 14.2, _array[2]);
+			LogResult.assertDecimalEqual(":_array[3]", 28.2, _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleDecimalOut(_array decimal[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			expected decimal[];
+			initDecimalArray(expected);
+			LogResult.assertBigintEqual(":_array[1]", expected[1] + 1.1, _array[1]);
+			LogResult.assertBigintEqual(":_array[2]", expected[2] + 1.1, _array[2]);
+			LogResult.assertBigintEqual(":_array[3]", expected[3] + 1.1, _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleDecimalAll(_array2 decimal[] in, _array3 decimal[] in, retResult decimal[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 3, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 3, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			LogResult.assertDecimalEqual(":_array2[1]", 11.2, _array2[1]);
+			LogResult.assertDecimalEqual(":_array2[2]", 14.2, _array2[2]);
+			LogResult.assertDecimalEqual(":_array2[3]", 28.2, _array2[3]);
+			
+			LogResult.assertDecimalEqual(":_array3[1]", 20.2, _array3[1]);
+			LogResult.assertDecimalEqual(":_array3[2]", 91.2, _array3[2]);
+			LogResult.assertDecimalEqual(":_array3[3]", -6.0, _array3[3]);		
+			
+			LogResult.assertDecimalEqual(":retResult[1]", 10.1, retResult[1]);
+			LogResult.assertDecimalEqual(":retResult[2]", 13.1, retResult[2]);
+			LogResult.assertDecimalEqual(":retResult[3]", 27.1, retResult[3]);	
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySingleDateIn(retResult date in)
+		try
+			LogResult.assertDateEqual("", "01/19/1976", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleDateInout(_array date[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertDateEqual(":_array[1]", "01/19/1976", _array[1]);
+			LogResult.assertDateEqual(":_array[2]", "10/17/1942", _array[2]);
+			LogResult.assertDateEqual(":_array[3]", "12/16/2006", _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleDateOut(_array date[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			expected date[];
+			initDateArray(expected);
+			LogResult.assertDateEqual(":_array[1]", expected[1], _array[1]);
+			LogResult.assertDateEqual(":_array[2]", expected[2], _array[2]);
+			LogResult.assertDateEqual(":_array[3]", expected[3], _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleDateAll(_array2 date[] in, _array3 date[] in, retResult date[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 4, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 1, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			expected date[];
+			initDateArray(expected);
+			LogResult.assertDateEqual(":_array2[1]", expected[1], _array2[1]);
+			LogResult.assertDateEqual(":_array2[2]", expected[2], _array2[2]);
+			LogResult.assertDateEqual(":_array2[3]", expected[3], _array2[3]);
+			LogResult.assertDateEqual(":_array2[4]", "07/13/2006", _array2[4]);
+			
+			LogResult.assertDateEqual(":_array3[1]", "07/12/2006", _array3[1]);
+			
+			LogResult.assertDateEqual(":retResult[1]", expected[1], retResult[1]);
+			LogResult.assertDateEqual(":retResult[2]", expected[2], retResult[2]);
+			LogResult.assertDateEqual(":retResult[3]", expected[3], retResult[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySingleTimestampIn(retResult timestamp in)
+		try
+			LogResult.assertTimestampEqual("", "1976/01/19 12:56:41", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();				
+	end
+	
+	function verifySingleTimestampInout(_array timestamp("yyyyMMddHHmmss")[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertTimestampEqual(":_array[1]", "1976/01/19 12:56:41", _array[1]);
+			LogResult.assertTimestampEqual(":_array[2]", "1942/10/17 17:41:13", _array[2]);
+			LogResult.assertTimestampEqual(":_array[3]", "1976/12/16 01:18:59", _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleTimestampOut(_array timestamp("yyyyMMddHHmmss")[] in)
+		try
+			LogResult.assertBigintEqual(":_array.getSize()", 3, _array.getSize());
+			LogResult.assertTimestampEqual(":_array[1]", "1976/01/19 00:00:59", _array[1]);
+			LogResult.assertTimestampEqual(":_array[2]", "1942/10/17 17:43:44", _array[2]);
+			LogResult.assertTimestampEqual(":_array[3]", "1976/12/16 09:56:31", _array[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	function verifySingleTimestampAll(_array2 timestamp("yyyyMMddHHmmss")[] in, _array3 timestamp("yyyyMMddHHmmss")[] in, retResult timestamp("yyyyMMddHHmmss")[] in)
+		try
+			LogResult.assertBigintEqual(":_array2.getSize()", 4, _array2.getSize());
+			LogResult.assertBigintEqual(":_array3.getSize()", 1, _array3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+
+			expected timestamp("yyyyMMddHHmmss")[];
+			initTimestampArray(expected);
+			LogResult.assertTimestampEqual(":_array2[1]", expected[1], _array2[1]);
+			LogResult.assertTimestampEqual(":_array2[2]", expected[2], _array2[2]);
+			LogResult.assertTimestampEqual(":_array2[3]", expected[3], _array2[3]);
+			LogResult.assertTimestampEqual(":_array2[4]", "2006/07/13 00:41:52", _array2[4]);
+			
+			LogResult.assertTimestampEqual(":_array3[1]", "2006/07/12 06:05:09", _array3[1]);
+			
+			LogResult.assertTimestampEqual(":retResult[1]", expected[1], retResult[1]);
+			LogResult.assertTimestampEqual(":retResult[2]", expected[2], retResult[2]);
+			LogResult.assertTimestampEqual(":retResult[3]", expected[3], retResult[3]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifySimpleRecordArrayIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "Index 1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	
+	end
+	
+	function verifySimpleRecordArrayInout(recArray SimpleRecord[] in)
+		try
+			LogResult.assertStringEqual("", "Value changed", recArray[3].item1);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	
+	end
+	
+	function verifySimpleRecordArrayOut(recArray SimpleRecord[] in)
+		expected SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(expected);				
+		try	
+			LogResult.assertBigIntEqual(":recArray.getSize()", 3, recArray.getSize());
+			compareSimpleRecordArray(expected, recArray);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	
+	end
+	
+	private function compareSimpleRecordArray(expected SimpleRecord[], actual SimpleRecord[])
+		for (i int from 1 to 3)
+			msg String = "arrayElem[" + i + "]";
+			LogResult.assertStringEqual(msg + ".item1", expected[i].item1, actual[i].item1);
+			LogResult.assertBigIntEqual(msg + ".item2", expected[i].item2, actual[i].item2);
+			LogResult.assertDecimalEqual(msg + ".item3", expected[i].item3, actual[i].item3);
+		end
+	end
+	
+	function verifySimpleRecordArrayAll(recArray2 SimpleRecord[] in, recArray3 SimpleRecord[] in, retResult SimpleRecord[] in)
+		expected SimpleRecord[];
+		CommonUtilities.initSimpleRecordArray(expected);		
+		try	
+			LogResult.assertBigintEqual(":simpleRecArray2.getSize()", 3, recArray2.getSize());
+			LogResult.assertBigintEqual(":simpleRecArray3.getSize()", 3, recArray3.getSize());
+			LogResult.assertBigintEqual(":retResult.getSize()", 3, retResult.getSize());
+			LogResult.assertStringEqual("", "Value changed", recArray2[3].item1);
+			compareSimpleRecordArray(expected, recArray3);
+			compareSimpleRecordArray(expected, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyArrayContainingRecordArrayIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "recArray[3].item1[3]", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyArrayContainingRecordArrayInout(recArray ArrayContainingRecord[] in)
+		expected ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(expected);
+		expected[3].item1[3] = "Value changed";
+		
+		try
+			LogResult.assertBigintEqual(":recArray.getSize()", 3 ,  recArray.getSize());
+			compareArrayContainingRecordArray(expected, recArray);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();
+	end
+	
+	
+	private function compareArrayContainingRecordArray(expected ArrayContainingRecord[], actual ArrayContainingRecord[])
+		theSame boolean = true;
+		for (i int from 1 to 3)
+			for (j int from 1 to 3)
+				msg1 String = "arrayElem[" + i + "].item1[" + j + "]";
+				msg2 String = "arrayElem[" + i + "].item2[" + j + "]";
+				msg3 String = "arrayElem[" + i + "].item3[" + j + "]";
+				LogResult.assertStringEqual(msg1, expected[i].item1[j], actual[i].item1[j]);
+				LogResult.assertTrue(msg2, expected[i].item2[j] == actual[i].item2[j]);
+				LogResult.assertDecimalEqual(msg3, expected[i].item3[j], actual[i].item3[j]);
+			end
+			compareSimpleRecordArray(expected[i].item4, actual[i].item4);				
+		end		
+	end
+	
+	function verifyArrayContainingRecordArrayOut(recArray ArrayContainingRecord[] in)
+		expected ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(expected);
+		try
+			LogResult.assertTrue(":recArray.getSize()", 3 == recArray.getSize());
+			compareArrayContainingRecordArray(expected, recArray);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();
+	end
+	
+	function verifyArrayContainingRecordArrayAll(recArray2 ArrayContainingRecord[] in, recArray3 ArrayContainingRecord[] in, retResult ArrayContainingRecord[] in)
+		expected2, expected3 ArrayContainingRecord[];
+		CommonUtilities.initArrayContainingRecordArray(expected2);
+		expected2[3].item1[3] = "Value changed";
+		CommonUtilities.initArrayContainingRecordArray(expected3);		
+		try
+			LogResult.assertTrue(":recArray2.getSize()", 3 == recArray2.getSize());
+			LogResult.assertTrue(":recArray3.getSize()", 3 == recArray3.getSize());
+			LogResult.assertTrue(":retResult.getSize()", 3 == retResult.getSize());
+			compareArrayContainingRecordArray(expected2, recArray2);
+			compareArrayContainingRecordArray(expected3, recArray3);
+			compareArrayContainingRecordArray(expected3, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end			
+		TestListMgr.nextTest();
+	end
+	
+
+	
+	
+end

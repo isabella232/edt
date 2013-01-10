@@ -1,0 +1,152 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestBooleanAndStringLib
+* @title The function test program for Boolean and string in EDT for RichUI
+* @keywords Boolean And String
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* Test the initialization, value-assign, and comparison for Boolean and String datatype,
+* also test the string array's functionality. 
+*/
+
+library TestBooleanAndStringLib
+
+    b boolean;
+    s string;
+    //    ux string[12] =[UX"00FC0075005500750075", UX"003F003F003F003F003F",
+    //                    UX"00B700B700B700B700B7", UX"00310031003100310031",
+    //                    UX"000A000A000A000A0042", //newline
+    //                    UX"000D000D000D000D0042", //carriage return
+    //                    UX"00220022002200220022", //double quote
+    //                    UX"005C005C005C005C005C", //backslash: oneven number of backslashes escapes the terminating double quote in java
+    //                    UX"00A800A800A800A80022", //0022: double quote
+    //                    UX"02DD02DD02DD02DD0022", //0022: double quote
+    //                    UX"201C201C201C201C0022", //double quote
+    //                    UX"201D201D201D201D0022"  //double quote
+    //            ];
+    ux string[] =[UX"00FC0075005500750075", UX"003F003F003F003F003F", UX"00B700B700B700B700B7", UX"00310031003100310031", UX"000A000A000A000A0042", //newline
+                    UX"000D000D000D000D0042", //carriage return
+                    UX"00220022002200220022", //double quote
+                    UX"005C005C005C005C005C", //backslash: oneven number of backslashes escapes the terminating double quote in java
+                    UX"00A800A800A800A80022", //0022: double quote
+                    UX"02DD02DD02DD02DD0022", //0022: double quote
+                    UX"201C201C201C201C0022", //double quote
+                    UX"201D201D201D201D0022"  //double quote
+            ];
+
+    function testForBoolean1(){@Test}
+        LogResult.logStdOut("Initial value of boolean");
+        LogResult.assertTrue1(!b);
+    end
+
+    function testForBoolean2(){@Test}
+        LogResult.logStdOut("Assign to boolean #1");
+        b = true;
+        LogResult.assertTrue1(b);
+    end
+
+    function testForBoolean3(){@Test}
+        LogResult.logStdOut("Assign to boolean #2");
+        b = false;
+        LogResult.assertTrue1(!b);
+    end
+
+    function testForString1(){@Test}
+        LogResult.logStdOut("Initial value of string");
+        LogResult.assertTrue1(checkString(s, "", 0));
+    end
+
+    function testForString2(){@Test}
+        LogResult.logStdOut("Assign to string #1");
+        s = "hi";
+        LogResult.assertTrue1(checkString(s, "hi", 2));
+    end
+
+    function testForString3(){@Test}
+        LogResult.logStdOut("Assign to string #2");
+        s = " z dsf  lkjlkj   slfkjeojcn9893n l9non lfdp9jpnk l9j 0n ;in09 noin   \b\f\n\r\t\\\"   !";
+        LogResult.assertTrue1(checkString(s, " z dsf  lkjlkj   slfkjeojcn9893n l9non lfdp9jpnk l9j 0n ;in09 noin   \b\f\n\r\t\\\"   !", 80));
+    end
+
+    function testForString4(){@Test}
+        LogResult.logStdOut("String escape sequences #1");
+        s = ux[1];
+        LogResult.assertTrue1(checkString(s, UX"00FC0075005500750075", 5));
+    end
+
+    function testForString5(){@Test}
+        LogResult.logStdOut("String escape sequences #2");
+        s = ux[2];
+        LogResult.assertTrue1(checkString(s, UX"003F003F003F003F003F", 5));
+    end
+
+    function testForString6(){@Test}
+        LogResult.logStdOut("String escape sequences #3");
+        s = ux[3];
+        LogResult.assertTrue1(checkString(s, UX"00B700B700B700B700B7", 5));
+    end
+
+    function testForString7(){@Test}
+        LogResult.logStdOut("String escape sequences #4");
+        s = ux[4];
+        LogResult.assertTrue1(checkString(s, UX"00310031003100310031", 5));
+    end
+
+    function testForString8(){@Test}
+        LogResult.logStdOut("String escape sequences #5");
+        s = ux[5];
+        LogResult.assertTrue1(checkString(s, UX"000A000A000A000A0042", 5));
+    end
+
+    function testForString9(){@Test}
+        LogResult.logStdOut("String escape sequences #6");
+        s = ux[6];
+        LogResult.assertTrue1(checkString(s, UX"000D000D000D000D0042", 5));
+    end
+
+    function testForString10(){@Test}
+        LogResult.logStdOut("String escape sequences #7");
+        s = ux[7];
+        LogResult.assertTrue1(checkString(s, UX"00220022002200220022", 5));
+    end
+
+    function testForString11(){@Test}
+        LogResult.logStdOut("String escape sequences #8");
+        s = ux[8];
+        LogResult.assertTrue1(checkString(s, UX"005C005C005C005C005C", 5));
+    end
+
+    function testForString12(){@Test}
+        LogResult.logStdOut("String escape sequences #9");
+        s = ux[9];
+        LogResult.assertTrue1(checkString(s, UX"00A800A800A800A80022", 5));
+    end
+
+    function testForString13(){@Test}
+        LogResult.logStdOut("String escape sequences #10");
+        s = ux[10];
+        LogResult.assertTrue1(checkString(s, UX"02DD02DD02DD02DD0022", 5));
+    end
+
+    function testForString14(){@Test}
+        LogResult.logStdOut("String escape sequences #11");
+        s = ux[11];
+        LogResult.assertTrue1(checkString(s, UX"201C201C201C201C0022", 5));
+    end
+
+    function testForString15(){@Test}
+        LogResult.logStdOut("String escape sequences #12");
+        s = ux[12];
+        LogResult.assertTrue1(checkString(s, UX"201D201D201D201D0022", 5));
+    end
+
+    function checkString(s string in, s2 string in, len int in) returns(boolean)
+        return(s == s2 && characterLen(s) == len);
+    end
+
+end

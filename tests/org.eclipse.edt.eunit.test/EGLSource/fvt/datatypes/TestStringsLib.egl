@@ -1,0 +1,581 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestStringsLib
+* @title TestStringsLib - RunStringsFunctions
+* @description test case for "String" data type behavior
+* @testcases runStrBasics, runStrLike, runStrMatches, runStrCompr, runStrSysLibFunctions, runStrParameters, runStrSubstrings, runStrArrays
+* @sources TestStringsLib.egl
+* @keywords string functions
+**/
+
+library TestStringsLib
+
+    aFlexRec FlxFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    //aString, bString, cString, dString, hiString, loString string;
+    aString string;
+    bString string;
+    cString string;
+    dString string;
+    hiString string;
+    loString string; 
+    str string;
+    myVar01 string;
+
+    stringExtender string;
+    i int;
+
+    function runStrBasics1(){@Test}
+        LogResult.logStdOut("String Basics 0");
+        LogResult.assertTrue("aString == \"\" ", aString == "");
+    end
+
+    function runStrBasics2(){@Test}
+        aString = "string value";
+        LogResult.logStdOut("String Basics 1");
+        LogResult.assertTrue("aString == \"string value\" ", aString == "string value");
+    end
+
+    function runStrBasics3(){@Test}
+        aString = "string value";
+        LogResult.logStdOut("String Basics 2");
+        LogResult.assertTrue("aString == \"string value\" && aString <= \"string value\" && aString >= \"string value\" ", aString ==
+                        "string value" && aString <= "string value" && aString >= "string value");
+    end
+
+    function runStrBasics4(){@Test}
+        LogResult.logStdOut("String Basics 3");
+        LogResult.assertTrue("!(aString == \"different value\" || aString != \"string value\") ", !(aString == "different value" || aString !=
+                                "string value"));
+    end
+
+    function runStrBasics5(){@Test}
+        LogResult.logStdOut("String Basics 4");
+        LogResult.assertStringEqual1("string value", aString);
+    end
+
+    function runStrBasics6(){@Test}
+        hiString = "z - high value";
+        loString = "a - low value";
+        strcompareString(hiString, loString);
+    end
+
+    function runStrBasics7(){@Test}
+        hiString = "string value ";
+        loString = "string value";
+        strcompareString(hiString, loString);
+    end
+
+    function runStrBasics8(){@Test}
+        hiString = "string value ";
+        strcompareString(hiString, "string value");
+    end
+
+    function runStrLike1(){@Test}
+        aString = "EGLTESTstring";
+        bString = "%EGL%string";
+        LogResult.logStdOut("String Like operator 1");
+        //LogResult.assertTrue("aString like bString ", aString like bString);
+        LogResult.assertTrue("aString like bString ", aString.isLike(bString));
+    end
+
+    function runStrLike2(){@Test}
+        bString = "%EGL%string";
+        LogResult.logStdOut("String Like operator 2");
+        //LogResult.assertTrue("\"EGLTESTstring\" like bString )", "EGLTESTstring" like bString);
+        LogResult.assertTrue("\"EGLTESTstring\" like bString )", "EGLTESTstring".isLike(bString));
+    end
+
+    function runStrLike3(){@Test}
+        aString = "EGLTESTstring";
+        LogResult.logStdOut("String Like operator 3");
+        //LogResult.assertTrue("aString like \"%EGL%strin_\" ", aString like "%EGL%strin_");
+        LogResult.assertTrue("aString like \"%EGL%strin_\" ", aString.isLike("%EGL%strin_"));
+    end
+
+    function runStrLike4(){@Test}
+        str = "ab^cdef";
+        LogResult.logStdOut("String Like operator 4");
+        //LogResult.assertTrue("str like \"ab^cdef\" ", str like "ab^cdef");
+        LogResult.assertTrue("str like \"ab^cdef\" ", str.isLike("ab^cdef"));
+    end
+
+    function runStrLike5(){@Test}
+        str = "abc?def";
+        LogResult.logStdOut("String Like operator 5");
+        //LogResult.assertTrue("str like \"a_c?d%\" ", str like "a_c?d%");
+        LogResult.assertTrue("str like \"a_c?d%\" ", str.isLike("a_c?d%"));
+    end
+
+    function runStrLike6(){@Test}
+        str = "jabcdefgh12i";
+        LogResult.logStdOut("String Like operator 6");
+        //LogResult.assertTrue("str like \"jja_cd%\" escape \"j\" ", str like "jja_cd%" escape "j");
+        LogResult.assertTrue("str like \"jja_cd%\" escape \"j\" ", str.isLike("jja_cd%", "j"));
+    end
+
+    function runStrLike7(){@Test}
+        str = "aj_c";
+        LogResult.logStdOut("String Like operator 7");
+        //LogResult.assertTrue("str like \"ajjj_c\" escape \"j\" ", str like "ajjj_c" escape "j");
+        LogResult.assertTrue("str like \"ajjj_c\" escape \"j\" ", str.isLike("ajjj_c", "j"));
+    end
+
+    function runStrLike8(){@Test}
+        str = "ab%de_";
+        LogResult.logStdOut("String Like operator 8");
+        //LogResult.assertTrue("str like \"ab\\%de\\_\" ", str like "ab\\%de\\_");
+        LogResult.assertTrue("str like \"ab\\%de\\_\" ", str.isLike("ab\\%de\\_"));
+    end
+
+    function runStrLike9(){@Test}
+        LogResult.logStdOut("String Like operator 9");
+        //LogResult.assertTrue("str like \"abj%dej_\" escape \"j\" ", str like "abj%dej_" escape "j");
+        LogResult.assertTrue("str like \"abj%dej_\" escape \"j\" ", str.isLike("abj%dej_", "j"));
+    end
+
+    function runStrLike10(){@Test}
+        str = "a\\b";
+        LogResult.logStdOut("String Like operator 10");
+        //LogResult.assertTrue("str like \"a\\b\" escape \"j\" ", str like "a\\b" escape "j");
+        LogResult.assertTrue("str like \"a\\b\" escape \"j\" ", str.isLike("a\\b", "j"));
+    end
+
+    function runStrLike11(){@Test}
+        str = "+abcdef";
+        LogResult.logStdOut("String Like operator 11");
+        //LogResult.assertTrue("str like \"++a_cd%\" escape \"+\" ", str like "++a_cd%" escape "+");
+        LogResult.assertTrue("str like \"++a_cd%\" escape \"+\" ", str.isLike("++a_cd%", "+"));
+    end
+
+    function runStrLike12(){@Test}
+        str = "a+_c";
+        LogResult.logStdOut("String Like operator 12");
+        //LogResult.assertTrue("str like \"a+++_c\" escape \"+\" ", str like "a+++_c" escape "+");
+        LogResult.assertTrue("str like \"a+++_c\" escape \"+\" ", str.isLike("a+++_c", "+"));
+    end
+
+    function runStrLike13(){@Test}
+        str = "abcdef";
+        LogResult.logStdOut("String Like operator 13");
+        //LogResult.assertTrue("str like \"a%f\" ", str like "a%f");
+        LogResult.assertTrue("str like \"a%f\" ", str.isLike("a%f"));
+    end
+
+    function runStrLike14(){@Test}
+        str = "ab";
+        LogResult.logStdOut("String Like operator 14");
+        //LogResult.assertTrue("str like \"a%b\" ", str like "a%b");
+        LogResult.assertTrue("str like \"a%b\" ", str.isLike("a%b"));
+    end
+
+    function runStrLike15(){@Test}
+        str = "a	b";
+        LogResult.logStdOut("String Like operator 15");
+        //LogResult.assertTrue("str like \"a\\tb\" ", str like "a\\tb");
+        LogResult.assertTrue("str like \"a\\tb\" ", str.isLike("a\\tb"));
+    end
+
+    function runStrLike16(){@Test}
+        str = "atb";
+        LogResult.logStdOut("String Like operator 16");
+        //LogResult.assertTrue("str like \"ajtb\" escape \"j\" ", str like "ajtb" escape "j");
+        LogResult.assertTrue("str like \"ajtb\" escape \"j\" ", str.isLike("ajtb", "j"));
+    end
+
+    function runStrLike17(){@Test}
+        myVar01 = "abcdef";
+        LogResult.logStdOut("String Like operator 17");
+        //LogResult.assertTrue("myVar01 like \"a_c%\"", myVar01 like "a_c%");
+        LogResult.assertTrue("myVar01 like \"a_c%\"", myVar01.isLike("a_c%"));
+    end
+
+    function runStrLike18(){@Test}
+        myVar01 = "ab%def";
+        LogResult.logStdOut("String Like operator 18");
+        //LogResult.assertTrue("myVar01 like \"ab\\%def\"", myVar01 like "ab\\%def");
+        LogResult.assertTrue("myVar01 like \"ab\\%def\"", myVar01.isLike("ab\\%def"));
+    end
+
+    function runStrLike19(){@Test}
+        myVar01 = "ab%def";
+        LogResult.logStdOut("String Like operator 19");
+        //LogResult.assertTrue("myVar01 like \"ab+%def\" escape \"+\"", myVar01 like "ab+%def" escape "+");
+        LogResult.assertTrue("myVar01 like \"ab+%def\" escape \"+\"", myVar01.isLike("ab+%def", "+"));
+    end
+
+    function runStrLike20(){@Test}
+        LogResult.logStdOut("String Like operator 20");
+        //LogResult.assertTrue("\"hello \" LIKE \"hello \"", "hello " like "hello ");
+        LogResult.assertTrue("\"hello \" LIKE \"hello \"", "hello ".isLike("hello "));
+    end
+
+    function runStrMatches1(){@Test}
+        aString = "EGLTESTstring";
+        bString = "*EGL*strin?";
+        LogResult.logStdOut("String matches operator 1");
+        //LogResult.assertTrue("aString matches bString ", aString matches bString);
+        LogResult.assertTrue("aString matches bString ", aString.matchesPattern(bString));
+    end
+
+    function runStrMatches2(){@Test}
+        bString = "*EGL*strin?";
+        LogResult.logStdOut("String matches operator 2");
+        //LogResult.assertTrue("\"EGLTESTstring\" matches bString ", "EGLTESTstring" matches bString);
+        LogResult.assertTrue("\"EGLTESTstring\" matches bString ", "EGLTESTstring".matchesPattern(bString));
+    end
+
+    function runStrMatches3(){@Test}
+        aString = "EGLTESTstring";
+        LogResult.logStdOut("String matches operator 3");
+        //LogResult.assertTrue("aString matches \"*EGL*strin?\" ", aString matches "*EGL*strin?");
+        LogResult.assertTrue("aString matches \"*EGL*strin?\" ", aString.matchesPattern("*EGL*strin?"));
+    end
+
+    function runStrMatches4(){@Test}
+        str = "ab^cdef";
+        LogResult.logStdOut("String matches operator 4");
+        //LogResult.assertTrue("str matches \"ab^cdef\" ", str matches "ab^cdef");
+        LogResult.assertTrue("str matches \"ab^cdef\" ", str.matchesPattern("ab^cdef"));
+    end
+
+    function runStrMatches5(){@Test}
+        str = "abc$def";
+        LogResult.logStdOut("String matches operator 5");
+        //LogResult.assertTrue("str matches \"a?c$d*\" ", str matches "a?c$d*");
+        LogResult.assertTrue("str matches \"a?c$d*\" ", str.matchesPattern("a?c$d*"));
+    end
+
+    function runStrMatches6(){@Test}
+        str = "jabcdefgh";
+        LogResult.logStdOut("String matches operator 6");
+        //LogResult.assertTrue("str matches \"jja?cd*\" escape \"j\" ", str matches "jja?cd*" escape "j");
+        LogResult.assertTrue("str matches \"jja?cd*\" escape \"j\" ", str.matchesPattern("jja?cd*", "j"));
+    end
+
+    function runStrMatches7(){@Test}
+        str = "aj?c";
+        LogResult.logStdOut("String matches operator 7");
+        //LogResult.assertTrue("str matches \"ajjj?c\" escape \"j\" ", str matches "ajjj?c" escape "j");
+        LogResult.assertTrue("str matches \"ajjj?c\" escape \"j\" ", str.matchesPattern("ajjj?c", "j"));
+    end
+
+    function runStrMatches8(){@Test}
+        str = "ab*de?";
+        LogResult.logStdOut("String matches operator 8");
+        //LogResult.assertTrue("str matches \"ab\\*de\\?\" ", str matches "ab\\*de\\?");
+        LogResult.assertTrue("str matches \"ab\\*de\\?\" ", str.matchesPattern("ab\\*de\\?"));
+    end
+
+    function runStrMatches9(){@Test}
+        LogResult.logStdOut("String matches operator 9");
+        //LogResult.assertTrue("str matches \"abj*dej?\" escape \"j\" ", str matches "abj*dej?" escape "j");
+        LogResult.assertTrue("str matches \"abj*dej?\" escape \"j\" ", str.matchesPattern("abj*dej?", "j"));
+    end
+
+    function runStrMatches10(){@Test}
+        str = "a\\b";
+        LogResult.logStdOut("String matches operator 10");
+        //LogResult.assertTrue("str matches \"a\\b\" escape \"j\" ", str matches "a\\b" escape "j");
+        LogResult.assertTrue("str matches \"a\\b\" escape \"j\" ", str.matchesPattern("a\\b", "j"));
+    end
+
+    function runStrMatches11(){@Test}
+        str = "+abcdef";
+        LogResult.logStdOut("String matches operator 11");
+        //LogResult.assertTrue("str matches \"++a?cd*\" escape \"+\" ", str matches "++a?cd*" escape "+");
+        LogResult.assertTrue("str matches \"++a?cd*\" escape \"+\" ", str.matchesPattern("++a?cd*", "+"));
+    end
+
+    function runStrMatches12(){@Test}
+        str = "a+?c";
+        LogResult.logStdOut("String matches operator 12");
+        //LogResult.assertTrue("str matches \"a+++?c\" escape \"+\" ", str matches "a+++?c" escape "+");
+        LogResult.assertTrue("str matches \"a+++?c\" escape \"+\" ", str.matchesPattern("a+++?c", "+"));
+    end
+
+    function runStrMatches13(){@Test}
+        str = "abcdef";
+        LogResult.logStdOut("String matches operator 13");
+        //LogResult.assertTrue("str matches \"a*f\" ", str matches "a*f");
+        LogResult.assertTrue("str matches \"a*f\" ", str.matchesPattern("a*f"));
+    end
+
+    function runStrMatches14(){@Test}
+        str = "ab";
+        LogResult.logStdOut("String matches operator 14");
+        //LogResult.assertTrue("str matches \"a*b\" ", str matches "a*b");
+        LogResult.assertTrue("str matches \"a*b\" ", str.matchesPattern("a*b"));
+    end
+
+    function runStrMatches15(){@Test}
+        str = "xyz";
+        LogResult.logStdOut("String matches operator 15");
+        //LogResult.assertTrue("str matches \"x[abyc]z\" ", str matches "x[abyc]z");
+        LogResult.assertTrue("str matches \"x[abyc]z\" ", str.matchesPattern("x[abyc]z"));
+    end
+
+    function runStrMatches16(){@Test}
+        str = "1d2";
+        LogResult.logStdOut("String matches operator 16");
+        //LogResult.assertTrue("str matches \"1[a-z]2\" ", str matches "1[a-z]2");
+        LogResult.assertTrue("str matches \"1[a-z]2\" ", str.matchesPattern("1[a-z]2"));
+    end
+
+    function runStrMatches17(){@Test}
+        str = "1z2";
+        LogResult.logStdOut("String matches operator 17");
+        //LogResult.assertTrue("str matches \"1[^abc]2\" ", str matches "1[^abc]2");
+        LogResult.assertTrue("str matches \"1[^abc]2\" ", str.matchesPattern("1[^abc]2"));
+    end
+
+    function runStrMatches18(){@Test}
+        str = "1*2";
+        LogResult.logStdOut("String matches operator 18");
+        //LogResult.assertTrue("str matches \"1[abc*]2\" ", str matches "1[abc*]2");
+        LogResult.assertTrue("str matches \"1[abc*]2\" ", str.matchesPattern("1[abc*]2"));
+    end
+
+    function runStrMatches19(){@Test}
+        str = "{1?2}";
+        LogResult.logStdOut("String matches operator 19");
+        //LogResult.assertTrue("str matches \"{1[a?c*]2}\" ", str matches "{1[a?c*]2}");
+        LogResult.assertTrue("str matches \"{1[a?c*]2}\" ", str.matchesPattern("{1[a?c*]2}"));
+    end
+
+    function runStrMatches20(){@Test}
+        str = "123[45";
+        LogResult.logStdOut("String matches operator 20");
+        //LogResult.assertTrue("str matches \"123[45\" ", str matches "123[45");
+        LogResult.assertTrue("str matches \"123[45\" ", str.matchesPattern("123[45"));
+    end
+
+    function runStrMatches21(){@Test}
+        str = "123[^";
+        LogResult.logStdOut("String matches operator 21");
+        //LogResult.assertTrue("str matches \"123[^\" ", str matches "123[^");
+        LogResult.assertTrue("str matches \"123[^\" ", str.matchesPattern("123[^"));
+    end
+
+    function runStrMatches22(){@Test}
+        str = "123[";
+        LogResult.logStdOut("String matches operator 22");
+        //LogResult.assertTrue("str matches \"123[\" ", str matches "123[");
+        LogResult.assertTrue("str matches \"123[\" ", str.matchesPattern("123["));
+    end
+
+    function runStrMatches23(){@Test}
+        str = "a	b";
+        LogResult.logStdOut("String matches operator 23");
+        //LogResult.assertTrue("str matches \"a\\tb\" ", str matches "a\\tb");
+        LogResult.assertTrue("str matches \"a\\tb\" ", str.matchesPattern("a\\tb"));
+    end
+
+    function runStrMatches24(){@Test}
+        str = "atb";
+        LogResult.logStdOut("String matches operator 24");
+        //LogResult.assertTrue("str matches \"ajtb\" escape \"j\" ", str matches "ajtb" escape "j");
+        LogResult.assertTrue("str matches \"ajtb\" escape \"j\" ", str.matchesPattern("ajtb", "j"));
+    end
+
+    function runStrMatches25(){@Test}
+        myVar01 = "abcdef";
+        LogResult.logStdOut("String matches operator 25");
+        //LogResult.assertTrue("myVar01 matches \"a?c*\"", myVar01 matches "a?c*");
+        LogResult.assertTrue("myVar01 matches \"a?c*\"", myVar01.matchesPattern("a?c*"));
+    end
+
+    function runStrMatches26(){@Test}
+        myVar01 = "ab*def";
+        LogResult.logStdOut("String matches operator 26");
+        //LogResult.assertTrue("myVar01 matches \"ab\\*[abcd][abcde][^a-e]\"", myVar01 matches "ab\\*[abcd][abcde][^a-e]");
+        LogResult.assertTrue("myVar01 matches \"ab\\*[abcd][abcde][^a-e]\"", myVar01.matchesPattern("ab\\*[abcd][abcde][^a-e]"));
+    end
+
+    function runStrMatches27(){@Test}
+        LogResult.logStdOut("String matches operator 27");
+        //LogResult.assertTrue("myVar01 matches \"ab+*def\" escape \"+\"", myVar01 matches "ab+*def" escape "+");
+        LogResult.assertTrue("myVar01 matches \"ab+*def\" escape \"+\"", myVar01.matchesPattern("ab+*def", "+"));
+    end
+
+    function runStrCompr1(){@Test}
+        aString, bString string;
+        aString = "abcd    ";
+        bString = "abcd    ";
+        LogResult.logStdOut("string and string comparison");
+        LogResult.assertTrue("aString== bString ", aString == bString);
+    end
+
+    function runStrSysLibFunctions1(){@Test}
+        aString = "abcd";
+        bString = aString.toUpperCase();
+        LogResult.logStdOut("test for uppercase function with string");
+        LogResult.assertTrue("bString == \"ABCD\" ", bString == "ABCD");
+    end
+
+    function runStrSysLibFunctions2(){@Test}
+        aString = "abcd";
+        bString = aString.toUpperCase();
+        cString = bString.toLowerCase();
+        LogResult.logStdOut("test for lowercase function with string");
+        LogResult.assertTrue("cString == \"abcd\" ", cString == "abcd");
+    end
+
+    function runStrSysLibFunctions3(){@Test}
+        aString = StringLib.spaces(5) + "abcd";
+        LogResult.logStdOut("test for space function with string");
+        LogResult.assertTrue("aString ==\"     abcd\" ", aString == "     abcd");
+    end
+
+    function runStrSysLibFunctions4(){@Test}
+        aString = "abc     ";
+        bString = aString.clip();
+        LogResult.logStdOut("test for IntegerAsChar with string");
+        LogResult.assertTrue("bString == \"abc\" ", bString == "abc");
+    end
+
+    function runStrParameters1(){@Test}
+        aString = "test";
+        bString = "test ";
+        cString = "test";
+        dString = "test";
+        strPaDefault(aString);
+        strPaIn(bString);
+        strPaOut(cString);
+        strPaInOut(dString);
+        LogResult.logStdOut("default modifier with string");
+        LogResult.assertTrue("aString == \"test\" ", aString == "test");
+    end
+
+    function runStrParameters2(){@Test}
+        aString = "test";
+        bString = "test ";
+        cString = "test";
+        dString = "test";
+        strPaDefault(aString);
+        strPaIn(bString);
+        strPaOut(cString);
+        strPaInOut(dString);
+        LogResult.logStdOut("in modifier with string");
+        LogResult.assertTrue("bString == \"test \" ", bString == "test ");
+    end
+
+    function runStrParameters3(){@Test}
+        aString = "test";
+        bString = "test ";
+        cString = "test";
+        dString = "test";
+        strPaDefault(aString);
+        strPaIn(bString);
+        strPaOut(cString);
+        strPaInOut(dString);
+        LogResult.logStdOut("out modifier with string");
+        LogResult.assertTrue("cString == \"EGL\" ", cString == "EGL");
+    end
+
+    function runStrParameters4(){@Test}
+        aString = "test";
+        bString = "test ";
+        cString = "test";
+        dString = "test";
+        strPaDefault(aString);
+        strPaIn(bString);
+        strPaOut(cString);
+        strPaInOut(dString);
+        LogResult.logStdOut("inout modifier with string");
+        LogResult.assertTrue("dString == \"testEGL\" ", dString == "testEGL");
+    end
+
+    function runStrSubstrings1(){@Test}
+        aString = "1234567890";
+        bString = aString[4 : 9];
+        LogResult.logStdOut("String Substring 1");
+        LogResult.assertStringEqual1("456789", bString);
+    end
+
+    function runStrSubstrings2(){@Test}
+        aString = "1234567890";
+        bString = aString[4 : 9];
+        LogResult.logStdOut("String Substring 2");
+        LogResult.assertTrue("aString[5:8] == bString[2:5] ", aString[5 : 8] == bString[2 : 5]);
+    end
+
+    function runStrArrays1(){@Test}
+        //        aString string[3];
+        //    bString string[0];
+        aString string[] = new string[3];
+        bString string[] = new string[0];
+        for(i from 1 to 3)
+            stringExtender = stringExtender + "***";
+            aString[i] = "Element " + i // formatNumber(i, "<#")
+            + " " + stringExtender;
+            bString.appendElement(aString[i]);
+        end
+        LogResult.logStdOut("String Array 1");
+        LogResult.assertStringEqual1("Element 1 ***", aString[1]);
+    end
+
+    function runStrArrays2(){@Test}
+        //        aString string[3];
+        //    bString string[0];
+        stringExtender = "";
+        aString string[] = new string[3];
+        bString string[] = new string[0];
+        for(i from 1 to 3)
+            stringExtender = stringExtender + "***";
+            aString[i] = "Element " + i // formatNumber(i, "<#")
+            + " " + stringExtender;
+            bString.appendElement(aString[i]);
+        end
+        LogResult.logStdOut("String Array Substring 2");
+        LogResult.assertStringEqual1("Element 2 ******", bString[2]);
+    end
+
+    function runStrArrays3(){@Test}
+        //        aString string[3];
+        //    bString string[0];
+        aString string[] = new string[3];
+        bString string[] = new string[0];
+        for(i from 1 to 3)
+            stringExtender = stringExtender + "***";
+            aString[i] = "Element " + i // formatNumber(i, "<#")
+            + " " + stringExtender;
+            bString.appendElement(aString[i]);
+        end
+        LogResult.logStdOut("String Array Substring 3");
+        LogResult.assertStringEqual1(bString[3], aString[3]);
+    end
+
+    function strPaIn(string1 string in)
+        string1 = string1 + "EGL";
+    end
+
+    function strPaOut(string1 string out)
+        string1 = string1 + "EGL";
+    end
+
+    function strPaInOut(string1 string inOut)
+        string1 = string1 + "EGL";
+    end
+
+    function strPaDefault(string1 string)
+        string1 = string1 + "EGL";
+    end
+
+    function strcompareString(hiString string in, loString string in)
+        if(hiString == loString || hiString < loString || hiString <= loString || loString > hiString || loString >= hiString)
+            LogResult.assertTrue("false", false);
+        else
+            if(hiString != loString && hiString > loString && loString < hiString)
+                LogResult.assertTrue("true ", true);
+            else
+                LogResult.assertTrue(" false ", false);
+            end
+        end
+    end
+end

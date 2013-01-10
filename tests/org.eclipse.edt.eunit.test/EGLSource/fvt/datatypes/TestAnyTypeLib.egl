@@ -1,0 +1,881 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+  * @name TestAnyTypeLib
+  * @title TestAnyTypeLib - RunAnyTypeFunctions
+  * @description testing any type
+  * @sources TestAnyTypeLib.egl
+  * @keywords any type, functions
+ **/
+
+library TestAnyTypeLib{}
+
+    //thing, aThing, bThing any;
+    //thing, aThing, bThing any?;
+    thing any?;
+    aThing any?;
+    bThing any?;
+    
+    //aString, bString, cString string;
+    aString string;
+    bString string;
+    cString string;
+    aInt int;
+
+    function runAnyStringFunction01(){ @Test}
+        LogResult.logStdOut("Initial Value of Any");
+        LogResult.assertTrue("aThing == null", aThing == null);
+    end
+
+    function runAnyStringFunction02(){ @Test}
+        thing = "string literal";
+        LogResult.logStdOut("Any String 1");
+        LogResult.assertTrue("thing isa string", thing isa string);
+    end
+
+    function runAnyStringFunction03(){ @Test}
+        thing = "string literal";
+        LogResult.logStdOut("Any String 2");
+        LogResult.assertTrue("!(thing isa int)", !(thing isa int));
+    end
+
+    function runAnyStringFunction04(){ @Test}
+        thing = "string literal";
+        aString = thing;
+        LogResult.logStdOut("Any String 3");
+        LogResult.assertTrue("compareString(aString, \"string literal\")", aString == "string literal");
+    end
+
+    function runAnyStringFunction05(){ @Test}
+        bString = "string variable";
+        thing = bString;
+        LogResult.logStdOut("Any String 4");
+        LogResult.assertTrue("thing isa string", thing isa string);
+    end
+
+    function runAnyStringFunction06(){ @Test}
+        bString = "string variable";
+        thing = bString;
+        LogResult.logStdOut("Any String 5");
+        LogResult.assertTrue("!(thing isa int)", !(thing isa int));
+    end
+
+    function runAnyStringFunction07(){ @Test}
+        bString = "string variable";
+        thing = bString;
+        aString = thing;
+        LogResult.logStdOut("Any String 6");
+        LogResult.assertTrue("compareString(aString, bString)", aString == bString);
+    end
+
+    function runAnyStringFunction08(){ @Test}
+        bString = "string variable";
+        thing = bString;
+        LogResult.logStdOut("Any String 7");
+        LogResult.assertTrue("compareString(thing, bString)", thing == bString);
+    end
+
+    function runAnyStringFunction09(){ @Test}
+        aString = "string";
+        thing = aString;
+        bString = thing as string + " value";
+        cString = astring + " value";
+        LogResult.logStdOut("Any String 8");
+        LogResult.assertTrue("compareString(bString, cString)", bString == cString);
+    end
+
+    function runAnyStringFunction10(){ @Test}
+        aString = "20";
+        aInt = aString as int;
+        LogResult.logStdOut("Any String 9");
+        LogResult.assertTrue("compareInt(aInt, 20)", aInt == 20);
+    end
+
+    function runAnyStringFunction11(){ @Test}
+        aString = "020";
+        aInt = aString as int;
+        LogResult.logStdOut("Any String 10");
+        LogResult.assertTrue("compareInt(aInt, 20)", aInt == 20);
+    end
+    
+    function runAnyLimitedStringFunction01(){ @Test}
+        aLimited string(5) = "wisdom";
+        answer boolean = aLimited isa string(5);
+        LogResult.assertTrue("LimitedString ISA String(5)", answer);
+    end
+    
+    function runAnyLimitedStringFunction02(){ @Test}
+        aLimited string(5) = "wise";
+        answer boolean = aLimited isa string(5);
+        LogResult.assertTrue("LimitedString ISA String(5) short", answer);
+    end
+    
+    function runAnyLimitedStringFunction03(){ @Test}
+        aLimited string(5) = "wise";
+        answer boolean = aLimited isa string;
+        LogResult.assertTrue("LimitedString ISA String", answer);
+    end
+    
+    function runAnyLimitedStringFunction04(){ @Test}
+        aLimited string(5) = "wisdom";
+        generic any = aLimited;
+        answer boolean = generic isa string(5);
+        LogResult.assertTrue("generic/LimitedString ISA String(5)", answer);
+    end
+    
+    function runAnyLimitedStringFunction05(){ @Test}
+        aLimited string(5) = "wise";
+        generic any = aLimited;
+        answer boolean = generic isa string(5);
+        LogResult.assertTrue("generic/LimitedString ISA String(5) short", answer);
+    end
+    
+    function runAnyLimitedStringFunction06(){ @Test}
+        aLimited string(5) = "wise";
+        generic any = aLimited;
+        answer boolean = aLimited isa string;
+        LogResult.assertTrue("LimitiedString ISA String", answer);
+    end
+
+    //    function runAnyDecimalFunction01(){@Test}
+    //        thing = 255.47;
+    //        LogResult.logStdOut("Any Decimal 1");
+    //        LogResult.assertTrue("thing as num(15, 2) == 255.47",
+    //                thing as num(15, 2) == 255.47);
+    //    end
+    
+    function runAnyDecimalFunction02(){ @Test}
+        thing = 255.47;
+        LogResult.logStdOut("Any Decimal 2");
+        LogResult.assertTrue("thing isa decimal(5, 2)", thing isa decimal(5, 2));
+    end
+
+    function runAnyDecimalFunction03(){ @Test}
+        thing = 255.47;
+        LogResult.logStdOut("Any Decimal 3");
+        LogResult.assertTrue("!(thing isa int)", !(thing isa int));
+    end
+
+    function runAnyDecimalFunction04(){ @Test}
+        aDecimal decimal(14, 2);
+        thing = 255.47;
+        aDecimal = thing;
+        LogResult.logStdOut("Any Decimal 4");
+        LogResult.assertTrue("aDecimal == 255.47", aDecimal == 255.47);
+    end
+
+    //    function runAnyDecimalFunction05(){@Test}
+    //        aDecimal, bDecimal decimal(14, 2);
+    //        aDecimal = thing;
+    //        bDecimal = 350.5555;
+    //        thing = bDecimal;
+    //        LogResult.logStdOut("Any Decimal 5");
+    //        LogResult.assertTrue("thing as num(15, 2) == 350.55",
+    //                thing as num(15, 2) == 350.55);
+    //    end
+    
+    function runAnyDecimalFunction06(){ @Test}
+        aDecimal, bDecimal decimal(14, 2);
+        aDecimal = thing;
+        bDecimal = 350.5555;
+        thing = bDecimal;
+        LogResult.logStdOut("Any Decimal 6");
+        LogResult.assertTrue("thing isa decimal(14, 2)", thing isa decimal(14, 2));
+    end
+
+    function runAnyDecimalFunction07(){ @Test}
+        aDecimal, bDecimal decimal(14, 2);
+        aDecimal = thing;
+        bDecimal = 350.5555;
+        thing = bDecimal;
+        LogResult.logStdOut("Any Decimal 7");
+        LogResult.assertTrue("!(thing isa int)", !(thing isa int));
+    end
+
+    function runAnyDecimalFunction08(){ @Test}
+        aDecimal, bDecimal decimal(14, 2);
+        aDecimal = thing;
+        bDecimal = 350.5555;
+        thing = bDecimal;
+        LogResult.logStdOut("Any Decimal 8");
+        LogResult.assertTrue("thing isa decimal(14, 2)", thing isa decimal(14, 2));
+        LogResult.assertTrue("!(thing isa decimal(12, 2))", !(thing isa decimal(12, 2)));
+    end
+
+    function runAnyDecimalFunction09(){ @Test}
+        aDecimal, bDecimal decimal(14, 2);
+        bDecimal = 350.5555;
+        thing = bDecimal;
+        aDecimal = thing;
+        LogResult.logStdOut("Any Decimal 9");
+        LogResult.assertTrue("aDecimal == 350.55 bug362834", aDecimal == 350.55);
+    end
+
+    function runAnyDecimalFunction10(){ @Test}
+        aDecimal, bDecimal decimal(14, 2);
+        bDecimal = 350.5555;
+        thing = bDecimal;
+        aDecimal = thing;
+        LogResult.logStdOut("Any Decimal 10");
+        LogResult.assertTrue("aDecimal == bDecimal", aDecimal == bDecimal);
+    end
+
+    //    function runAnyDecimalFunction11(){@Test}
+    //        aDecimal, bDecimal, cDecimal decimal(14, 2);
+    //        aDecimal = 100.00;
+    //        thing = aDecimal - .023;
+    //        bDecimal = thing as decimal(14, 2) + .06;
+    //        cDecimal = aDecimal + -.023 + .06;
+    //        LogResult.logStdOut("Any Decimal 11");
+    //        LogResult.assertTrue("thing as num(15, 2) == 99.97",
+    //                thing as num(15, 2) == 99.97);
+    //    end
+    
+    function runAnyDecimalFunction12(){ @Test}
+        aDecimal, bDecimal, cDecimal decimal(14, 2);
+        aDecimal = 100.00;
+        thing = aDecimal - .023;
+        bDecimal = thing as decimal(14, 2) + .06;
+        cDecimal = aDecimal + -.023 + .06;
+        LogResult.logStdOut("Any Decimal 12");
+        LogResult.assertTrue("100.03 == bDecimal bug362834", 100.03 == bDecimal);
+    end
+
+    function runAnyDecimalFunction13(){ @Test}
+        aDecimal, bDecimal, cDecimal decimal(14, 2);
+        aDecimal = 100.00;
+        thing = aDecimal - .023;
+        bDecimal = thing as decimal(14, 2) + .06;
+        cDecimal = aDecimal + -.023 + .06;
+        LogResult.logStdOut("Any Decimal 13");
+        LogResult.assertTrue("100.03 == cDecimal bug362834", 100.03 == cDecimal);
+    end
+    
+    function runAnySizedDecimalFunction01(){ @Test}
+        aSizedDec decimal(5) = 12345;
+        answer boolean = aSizedDec isa decimal(5);
+        LogResult.assertTrue("SizedDecimal ISA Decimal(5)", answer);
+    end
+    
+    function runAnySizedDecimalFunction02(){ @Test}
+        aSizedDec decimal(5) = 123;
+        answer boolean = aSizedDec isa decimal(5);
+        LogResult.assertTrue("SizedDecimal ISA Decimal(5) short", answer);
+    end
+    
+    function runAnySizedDecimalFunction03(){ @Test}
+        aSizedDec decimal(5) = 123;
+        answer boolean = aSizedDec isa decimal;
+        LogResult.assertTrue("SizedDecimal ISA Decimal", answer);
+    end
+    
+    function runAnySizedDecimalFunction04(){ @Test}
+        aSizedDec decimal(5) = 12345;
+        generic any = aSizedDec;
+        answer boolean = generic isa decimal(5);
+        LogResult.assertTrue("generic/SizedDecimal ISA Decimal(5)", answer);
+    end
+    
+    function runAnySizedDecimalFunction05(){ @Test}
+        aSizedDec decimal(5) = 123;
+        generic any = aSizedDec;
+        answer boolean = generic isa decimal(5);
+        LogResult.assertTrue("generic/SizedDecimal ISA Decimal(5) short", answer);
+    end
+    
+    function runAnySizedDecimalFunction06(){ @Test}
+        aSizedDec decimal(5) = 123;
+        generic any = aSizedDec;
+        answer boolean = aSizedDec isa decimal;
+        LogResult.assertTrue("generiic/SizedDecimal ISA Decimal", answer);
+    end
+    
+    function runAnySizedDecimalFunction07(){ @Test}
+        aSizedDec decimal(5) = 12345;
+        answer boolean = aSizedDec isa number;
+        LogResult.assertTrue("SizedDecimal ISA number", answer);
+    end
+       
+    function runAnySizedDecimalFunction08(){ @Test}
+        aSizedDec decimal(5) = 12345;
+        generic any = aSizedDec;
+        answer boolean = generic isa number;
+       	LogResult.assertTrue("generic/SizedDecimal ISA number", answer);
+    end
+    
+    function runAnySizedDecimalFunction09(){ @Test}
+        aSizedDec decimal(5)?;
+        generic any? = aSizedDec;
+        answer boolean = generic isa number;
+        LogResult.assertTrue("null generic/SizedDecimal ISA number", (answer == false));
+    end    
+    
+    function runAnyFlexRecordsFunction01(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        LogResult.logStdOut("Any Flex Record 1");
+        LogResult.assertTrue("thing isa anyFlexRecord", thing isa anyFlexRecord);
+    end
+
+    function runAnyFlexRecordsFunction02(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        LogResult.logStdOut("Any Flex Record 2");
+        LogResult.assertTrue("thing isa ANYFlexRecord", thing isa ANYFlexRecord);
+    end
+
+    function runAnyFlexRecordsFunction03(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        LogResult.logStdOut("Any Flex Record 3");
+        LogResult.assertTrue("thing isa anyFlexRecord", thing isa anyFlexRecord);
+    end
+
+    function runAnyFlexRecordsFunction04(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        LogResult.logStdOut("Any Flex Record 4");
+        LogResult.assertTrue("!(thing isa int)", !(thing isa int));
+    end
+
+    function runAnyFlexRecordsFunction05(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 5");
+        LogResult.assertTrue("aSingleThing isa date", aSingleThing isa date);
+    end
+
+    function runAnyFlexRecordsFunction06(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 6");
+        LogResult.assertTrue("aFlexRec.aThing isa date", aFlexRec.aThing isa date);
+    end
+
+    function runAnyFlexRecordsFunction07(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 7");
+        LogResult.assertTrue("thing.aThing isa date", thing.aThing isa date);
+    end
+
+    function runAnyFlexRecordsFunction08(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 8");
+        LogResult.assertTrue("!(thing.aThing isa int)", !(thing.aThing isa int));
+    end
+
+    function runAnyFlexRecordsFunction09(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 9");
+        LogResult.assertTrue("thing.aString as string == \"string value\"", thing.aString as string == "string value");
+    end
+
+    function runAnyFlexRecordsFunction10(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        LogResult.logStdOut("Any Flex Record 10");
+        LogResult.assertTrue("thing.aString as string == aFlexRec.aString", thing.aString as string == aFlexRec.aString);
+    end
+
+    function runAnyFlexRecordsFunction11(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        thing.aString = "anotherStringValue";
+        LogResult.logStdOut("Any Flex Record 11");
+        LogResult.assertTrue("!(thing.aString as string == aFlexRec.aString)", !(thing.aString as string == aFlexRec.aString));
+    end
+
+    function runAnyFlexRecordsFunction12(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        thing.aString = "anotherStringValue";
+        LogResult.logStdOut("Any Flex Record 12");
+        LogResult.assertTrue("compareDate(thing.aDate, aDate)", thing.aDate == aDate);
+    end
+
+    function runAnyFlexRecordsFunction13(){ @Test}
+        aDate date;
+        aFlexRec AnyFlexRecord;
+        //aSingleThing any;
+        aSingleThing any?;
+        //aDate = currentDate();
+        aFlexRec.aString = "string value";
+        aFlexRec.aDate = aDate;
+        aFlexRec.aThing = aDate;
+        thing = aFlexRec;
+        aSingleThing = aDate;
+        thing.aString = "anotherStringValue";
+        aFlexRec.aString = "FlexRecord";
+        thing.aString = aFlexRec.aString + " value";
+        aFlexRec.aString =(thing as anyFlexRecord).aString + " value";
+        thing.aString =(thing as anyFlexRecord).aString + " value";
+        LogResult.logStdOut("Any Flex Record 13");
+        LogResult.assertTrue("compareString(thing.aString, aFlexRec.aString)", thing.aString == aFlexRec.aString);
+    end
+
+    function runAnyParametersFunctions(){ @Test}
+        aString string;
+        thing = "Another Money value";
+        aString = thing;
+        LogResult.logStdOut("Any Parameters 1");
+        LogResult.assertTrue("compareAnyText(thing, aString)", thing == aString);
+    end
+
+    function runAnyArraysFunction01(){ @Test}
+        //a any;
+        a any?;
+        aa any[];
+        a =[1, 2, 3];
+        LogResult.logStdOut("Math with elements of an array stored in an Any 1");
+       	LogResult.assertTrue("((a[2] as smallInt) *(a[3] as smallInt)) == 6",((a[2] as smallInt) *(a[3] as smallInt)) == 6);
+    end
+
+    function runAnyArraysFunction02(){ @Test}
+        a any? = [1i, 2i, 3i];
+        LogResult.logStdOut("Math with elements of an array stored in an Any2");
+        LogResult.assertTrue("((a[3] as smallInt) *(a[2] as smallInt)) == 1.5", ((a as smallInt[])[3] /(a as smallInt[])[2]) == 1.5);
+    end
+
+    function runAnyArraysFunction03(){ @Test}
+        //a any;
+        a any?;
+        aa any[];
+        a =[1, 2, 3];
+        aa =[1, 2, 3];
+        LogResult.logStdOut("Math with elements of an Any array");
+        LogResult.assertTrue("((aa[1] as smallInt) +(aa[2] as smallInt)) == 3",((aa[1] as smallInt) +(aa[2] as smallInt)) == 3);
+    end
+
+    function runConvertToAnyFunction01(){ @Test}
+        //a any;
+        a any?;
+        i int = 1;
+        a = i;
+        LogResult.logStdOut("Convert to any 1");
+        LogResult.assertTrue("a isa int && !(a isa smallInt) && a as int == 1", a isa int && !(a isa smallInt) && a as int == 1);
+    end
+
+    function runConvertToAnyFunction02(){ @Test}
+        //a any;
+        a any?;
+        si smallInt = 2;
+        a = si;
+        LogResult.logStdOut("Convert to any 2");
+        LogResult.assertTrue("a isa smallInt", a isa smallInt);
+        LogResult.assertTrue("!(a isa int)", !(a isa int));
+        LogResult.assertTrue("a as smallInt == 2", a as smallInt == 2);
+    end
+
+    function runConvertToAnyFunction03(){ @Test}
+        //a any;
+        a any?;
+        b bigInt = 3;
+        a = b;
+        LogResult.logStdOut("Convert to any 3");
+        LogResult.assertTrue("a isa bigInt", a isa bigInt);
+        LogResult.assertTrue("!(a isa int)", !(a isa int));
+        LogResult.assertTrue("a as bigInt == 3", a as bigInt == 3);
+    end
+
+    //    function runConvertToAnyFunction04(){@Test}
+    //        a any;
+    //        n9 num(9) = 4;
+    //        a = n9;
+    //        LogResult.logStdOut("Convert to any 4");
+    //        LogResult.assertTrue("a isa num(9)", a isa num(9));
+    //        LogResult.assertTrue("!(a isa num(7))", !(a isa num(7)));
+    //        LogResult.assertTrue("a as num(9) == 4", a as num(9) == 4);
+    //    end
+    
+    //    function runConvertToAnyFunction05(){@Test}
+    //        a any;
+    //        n9_2 num(9, 2) = 5.67;
+    //        a = n9_2;
+    //        LogResult.logStdOut("Convert to any 5");
+    //        LogResult.assertTrue("a isa num(9, 2)", a isa num(9, 2));
+    //        LogResult.assertTrue("!(a isa num(7, 2))", !(a isa num(7, 2)));
+    //        LogResult.assertTrue("a as num(9, 2) == 5.67", a as num(9, 2) == 5.67);
+    //    end
+    
+    function runConvertToAnyFunction06(){ @Test}
+        //a any;
+        a any?;
+        d9 decimal(9) = 8;
+        a = d9;
+        LogResult.logStdOut("Convert to any 6");
+        LogResult.assertTrue("a isa decimal(9)", a isa decimal(9));
+        LogResult.assertTrue("!(a isa decimal(7))", !(a isa decimal(7)));
+        LogResult.assertTrue("a as decimal(9) == 8", a as decimal(9) == 8);
+    end
+
+    function runConvertToAnyFunction07(){ @Test}
+        //a any;
+        a any?;
+        d9_2 decimal(9, 2) = 9.01;
+        a = d9_2;
+        LogResult.logStdOut("Convert to any 7");
+        LogResult.assertTrue("a isa decimal(9, 2)", a isa decimal(9, 2));
+        LogResult.assertTrue("!(a isa decimal(7, 2))", !(a isa decimal(7, 2)));
+        LogResult.assertTrue("a as decimal(9, 2) == 9.01", a as decimal(9, 2) == 9.01);
+    end
+
+    //    function runConvertToAnyFunction08(){@Test}
+    //        a any;
+    //        m9 money(9, 0) = 2;
+    //        a = m9;
+    //        LogResult.logStdOut("Convert to any 8");
+    //        LogResult.assertTrue("a isa money(9, 0)", a isa money(9, 0));
+    //        LogResult.assertTrue("!(a isa money(7, 0))", !(a isa money(7, 0)));
+    //        LogResult.assertTrue("a as money(9, 0) == 2", a as money(9, 0) == 2);
+    //    end
+    //
+    //    function runConvertToAnyFunction09(){@Test}
+    //        a any;
+    //        m9_2 money(9, 2) = 3.45;
+    //        a = m9_2;
+    //        LogResult.logStdOut("Convert to any 9");
+    //        LogResult.assertTrue("a isa money(9, 2)", a isa money(9, 2));
+    //        LogResult.assertTrue("!(a isa money(7, 2))", !(a isa money(7, 2)));
+    //        LogResult.assertTrue("a as money(9, 2) == 3.45", a as money(9, 2) ==
+    //                        3.45);
+    //    end
+    
+    function runConvertToAnyFunction10(){ @Test}
+        //a any;
+        a any?;
+        d date = "12/31/1972";
+        a = d;
+        LogResult.logStdOut("Convert to any 10");
+        LogResult.assertTrue("a isa date", a isa date);
+        LogResult.assertTrue("!(a isa timeStamp)", !(a isa timeStamp));
+        LogResult.assertTrue("a as date == \"12/31/1972\"", a as date == "12/31/1972");
+    end
+
+    //    function runConvertToAnyFunction11(){@Test}
+    //        a any;
+    //        t time = "08:13:47";
+    //        a = t;
+    //        LogResult.logStdOut("Convert to any 11");
+    //        LogResult.assertTrue("a isa time && !(a isa timeStamp) && a as time == \"08:13:47\"",
+    //                a isa time && !(a isa timeStamp) && a as time == "08:13:47");
+    //    end
+    
+    function runConvertToAnyFunction12_a(){ @Test}
+        a any?;
+        ts timeStamp("yyyyMM") = "1999 02";
+        a = ts;
+        LogResult.logStdOut("Convert to any 12_a");
+        test1 boolean = a isa timeStamp("yyyyMM");
+        LogResult.assertTrue("a isa timeStamp(\"yyyyMM\")", test1);
+    end
+    
+    function runConvertToAnyFunction12_b(){ @Test}
+        a any?;
+        ts timeStamp("yyyyMM") = "1999 02";
+        a = ts;
+        LogResult.logStdOut("Convert to any 12_b");
+        test1 boolean = (a isa timeStamp);
+        LogResult.assertTrue("(a isa timeStamp)", test1);
+    end
+    
+    function runConvertToAnyFunction12_c(){ @Test}
+        a any?;
+        ts timeStamp("yyyyMM") = "1999 02";
+        a = ts;
+        LogResult.logStdOut("Convert to any 12 c");
+        test1 boolean = a as timeStamp("yyyyMM") == "1999-02";
+        LogResult.assertTrue("a as timeStamp(\"yyyyMM\") == \"1999 02\"", test1);
+    end
+
+    function runConvertToAnyFunction13(){ @Test}
+        //a any;
+        a any?;
+        s string = "I'm a string";
+        a = s;
+        LogResult.logStdOut("Convert to any 13");
+        LogResult.assertTrue("a isa string && !(a isa int) && a as string == \"I'm a string\"", a isa string && !(a isa int) && a as string ==
+                                "I'm a string");
+    end
+
+    function runConvertToAnyFunction14(){ @Test}
+        //a any;
+        a any?;
+        bo boolean = true;
+        a = bo;
+        LogResult.logStdOut("Convert to any 14");
+        LogResult.assertTrue("a isa boolean", a isa boolean);
+        LogResult.assertTrue("!(a isa smallInt)", !(a isa smallInt));
+        LogResult.assertTrue("a as boolean == true", a as boolean == true);
+    end
+
+    function runConvertToAnyFunction15(){ @Test}
+        //a any;
+        a any?;
+        f float = 12.34e40;
+        a = f;
+        LogResult.logStdOut("Convert to any 15");
+        LogResult.assertTrue("a isa float", a isa float);
+        LogResult.assertTrue("!(a isa smallInt)", !(a isa smallInt));
+        LogResult.assertTrue("a as float == 12.34e40", a as float == 12.34e40);
+    end
+
+    function runConvertToAnyFunction16(){ @Test}
+        //a any;
+        a any?;
+        sf smallFloat = 3.2e20;
+        a = sf;
+        LogResult.logStdOut("Convert to any 16");
+        LogResult.assertTrue("a isa smallFloat", a isa smallFloat);
+        LogResult.assertTrue("!(a isa float)", !(a isa float));
+        actual smallfloat = a as smallFloat;
+        expected smallfloat = 3.2e20;
+        LogResult.assertFloatEqual("a as smallFloat == 3.2e20", expected, actual);
+    end
+
+    function runConvertFromAny01(){ @Test}
+        //a any;
+        a any?;
+        i int = 111;
+        a = 1 as int;
+        i = a;
+        LogResult.logStdOut("Convert from any 1");
+        LogResult.assertTrue("i == 1", i == 1);
+    end
+
+    function runConvertFromAny02(){ @Test}
+        //a any;
+        a any?;
+        si smallInt = 211;
+        a = 2 as smallInt;
+        si = a;
+        LogResult.logStdOut("Convert from any 2");
+        LogResult.assertTrue("si == 2", si == 2);
+    end
+
+    function runConvertFromAny03(){ @Test}
+        //a any;
+        a any?;
+        b bigInt = 311;
+        a = 3 as bigInt;
+        b = a;
+        LogResult.logStdOut("Convert from any 3");
+        LogResult.assertTrue("b == 3", b == 3);
+    end
+
+    //    function runConvertFromAny04(){@Test}
+    //        a any;
+    //        n9 num(9) = 411;
+    //        a = 4 as num(9);
+    //        n9 = a;
+    //        LogResult.logStdOut("Convert from any 4");
+    //        LogResult.assertTrue("n9 == 4", n9 == 4);
+    //    end
+    //
+    //    function runConvertFromAny05(){@Test}
+    //        a any;
+    //        n9_2 num(9, 2) = 115.67;
+    //        a = 5.67 as num(9, 2);
+    //        n9_2 = a;
+    //        LogResult.logStdOut("Convert from any 5");
+    //        LogResult.assertTrue("n9_2 == 5.67", n9_2 == 5.67);
+    //    end
+    
+    function runConvertFromAny06(){ @Test}
+        //a any;
+        a any?;
+        d9 decimal(9) = 118;
+        a = 8 as decimal(9);
+        d9 = a;
+        LogResult.logStdOut("Convert from any 6");
+        LogResult.assertTrue("d9 == 8", d9 == 8);
+    end
+
+    function runConvertFromAny07(){ @Test}
+        //a any;
+        a any?;
+        d9_2 decimal(9, 2) = 119.01;
+        a = 9.01 as decimal(9, 2);
+        d9_2 = a;
+        LogResult.logStdOut("Convert from any 7");
+        LogResult.assertTrue("d9_2 == 9.01", d9_2 == 9.01);
+    end
+
+    //    function runConvertFromAny08(){@Test}
+    //        a any;
+    //        m9 money(9, 0) = 112;
+    //        a = 2 as money(9, 0);
+    //        m9 = a;
+    //        LogResult.logStdOut("Convert from any 8");
+    //        LogResult.assertTrue("m9 == 2", m9 == 2);
+    //    end
+    //
+    //    function runConvertFromAny09(){@Test}
+    //        a any;
+    //        m9_2 money(9, 2) = 113.45;
+    //        a = 3.45 as money(9, 2);
+    //        m9_2 = a;
+    //        LogResult.logStdOut("Convert from any 9");
+    //        LogResult.assertTrue("m9_2 == 3.45", m9_2 == 3.45);
+    //    end
+    
+    function runConvertFromAny10(){ @Test}
+        //a any;
+        a any?;
+        d date = "11/30/1972";
+        a = "12/31/1972" as date;
+        d = a;
+        LogResult.logStdOut("Convert from any 10");
+        LogResult.assertTrue("d == \"12/31/1972\"", d == "12/31/1972");
+    end
+
+    //    function runConvertFromAny11(){@Test}
+    //        a any;
+    //        t time = "06:13:47";
+    //        a = "08:13:47" as time;
+    //        t = a;
+    //        LogResult.logStdOut("Convert from any 11");
+    //        LogResult.assertTrue("t == \"08:13:47\"", t == "08:13:47");
+    //    end
+    
+    function runConvertFromAny12(){ @Test}
+        //a any;
+        a any?;
+        ts timeStamp("yyyyMM") = "1988 02";
+        a = "1999 02" as timeStamp("yyyyMM");
+        ts = a;
+        LogResult.logStdOut("Convert from any 12");
+        LogResult.assertTrue("ts == \"1999 02\"", ts == "1999-02");
+    end
+
+    function runConvertFromAny13(){ @Test}
+        //a any;
+        a any?;
+        s string = "I'm a different string";
+        a = "I'm a string";
+        s = a;
+        LogResult.logStdOut("Convert from any 13");
+        LogResult.assertTrue("s == \"I'm a string\"", s == "I'm a string");
+    end
+
+    function runConvertFromAny14(){ @Test}
+        //a any;
+        a any?;
+        bo boolean = false;
+        a = true;
+        bo = a;
+        LogResult.logStdOut("Convert from any 14");
+        LogResult.assertTrue("bo", bo);
+    end
+
+    function runConvertFromAny15(){ @Test}
+        // a any;
+        a any?;
+        f float = 103e103;
+        a = 2.3e104;
+        f = a;
+        LogResult.logStdOut("Convert from any 15");
+        LogResult.assertTrue("f == 2.3e104", f == 2.3e104);
+    end
+
+    function runConvertFromAny16(){ @Test}
+        //a any;
+        a any?;
+        sf smallFloat = 32e32;
+        a = 3.21e14 as smallFloat;
+        sf = a;
+        LogResult.logStdOut("Convert from any 16");
+        LogResult.assertTrue("sf == 3.21e14 as smallFloat", sf == 3.21e14 as smallFloat);
+    end
+
+end
+

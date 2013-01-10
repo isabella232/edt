@@ -1,0 +1,148 @@
+package server.test.calls;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.jtopen.IBMiConnection;
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.lang.AnyException;
+import server.host.programs.ServiceProgram;
+
+// basic library
+library CallTests
+	
+	function test1(){@Test {}}//call with using function no return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+		try
+        	LogResult.logStdOut("call with using function no return");
+  		  	call h1.TestProc(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#conn3") as IBMiConnection; 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+   		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test2(){@Test {}}//call with using variable no return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+    	conn IBMiConnection = Resources.getResource("binding:file:thirdparty_programs#conn1");
+		try
+        	LogResult.logStdOut("call with using variable no return");
+  		  	call h1.func1(IPARM, i2) using conn; 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test3(){@Test {}}//call with using function and return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+    	result int = -1;
+		try
+        	LogResult.logStdOut("call with using function and return");
+  		  	call h1.TestProc2(IPARM, i2) using Resources.getResource("binding:file:thirdparty_programs#conn3") as IBMiConnection returns(result); 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 			LogResult.logStdOut("Test return value");
+  		  	LogResult.assertBigIntEqual("FAIL return", 7, result);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test4(){@Test {}}//call with using variable and return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+    	conn IBMiConnection = Resources.getResource("binding:file:thirdparty_programs#conn1");
+    	result int = -1;
+		try
+        	LogResult.logStdOut("call with using variable and return");
+  		  	call h1.func2(IPARM, i2) using conn returns(result); 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 			LogResult.logStdOut("Test return value");
+  		  	LogResult.assertBigIntEqual("FAIL return", 7, result);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test5(){@Test {}}//call with no using no return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+		try
+        	LogResult.logStdOut("call with no using no return");
+  		  	call h1.TestProc(IPARM, i2); 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test6(){@Test {}}//call with no using and return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+    	result int = -1;
+		try
+        	LogResult.logStdOut("call with no using and return");
+  		  	call h1.TestProc2(IPARM, i2) returns(result); 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 			LogResult.logStdOut("Test return value");
+  		  	LogResult.assertBigIntEqual("FAIL return", 7, result);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+	function test7(){@Test {}}//call with no using and return
+    	IPARM int = 7;
+    	i2 int = 0;
+    	h1 ServiceProgram;
+    	result int = -1;
+		try
+        	LogResult.logStdOut("call with no using and return");
+  		  	call TestProc2(IPARM, i2) returns(result); 
+ 			LogResult.logStdOut("Test IPARM value");
+  		  	LogResult.assertBigIntEqual("FAIL IPARM", 7, IPARM);
+ 			LogResult.logStdOut("Test RETDATA value");
+  		  	LogResult.assertBigIntEqual("FAIL RETDATA", 7, i2);
+ 			LogResult.logStdOut("Test return value");
+  		  	LogResult.assertBigIntEqual("FAIL return", 7, result);
+ 		onException(exception AnyException)
+ 			LogResult.logStdOut(exception.message);
+            LogResult.assertTrue1(false);
+		end
+	end
+ 	function TestProc2(IPARM int inout, RETDATA int inout)returns(int){@ExternalName {value = "TestProc"},
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+end

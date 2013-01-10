@@ -1,0 +1,446 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestDynamicAccessLib
+* @title TestDynamicAccessLib - RunDynamicAccessFunctions
+* @description test case for Dynamic Access behavior
+* @sources TestDynamicAccessLib.egl
+* @keywords DynamicAccess, functions
+**/
+
+library TestDynamicAccessLib
+
+	//aMap, bMap Dictionary{};
+    aMap Dictionary{aString = "thing isa string"};
+    bMap Dictionary{};
+    
+
+    thing any?;
+    anInt int;
+    //aString, bString string;
+    aString string; 
+    bString string; 
+    //aFlexRec, bFlexRec clnFlexRecord;
+    aFlexRec clnFlexRecord;
+    bFlexRec clnFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    //anAny any;
+    anAny any?;
+
+    function runTestDictionaryCasesFunction01(){@Test}
+        //thing any;
+        thing any?;
+        thing = aMap["aString"];
+        LogResult.logStdOut("Collections - Basic Dictionary 0");
+        LogResult.assertTrue("thing isa string", thing isa string);
+    end
+
+    function runTestDictionaryCasesFunction02(){@Test}
+        //thing any;
+        thing any?;
+        thing = aMap["aString"];
+        LogResult.logStdOut("Collections - Basic Dictionary 1");
+        LogResult.assertTrue("aMap[\"aString\"] isa string", aMap["aString"] isa string);
+    end
+
+    function runTestDictionaryCasesFunction03(){@Test}
+        aMap.aString = "string value";
+        aString = aMap.aString;
+        LogResult.logStdOut("Collections - Basic Dictionary 2");
+        LogResult.assertStringEqual1("string value", aString);
+    end
+
+    function runTestDictionaryCasesFunction04(){@Test}
+        aMap.anInt = 100;
+        anInt = aMap.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 3");
+        LogResult.assertTrue("compareInt(anInt, 200)", anInt == 100);
+    end
+
+    function runTestDictionaryCasesFunction05(){@Test}
+    	aFlexRec.aString = "flex record string";
+    	aMap.aflex = aFlexRec;
+        aString = aMap["aflex"]["aString"];
+        LogResult.logStdOut("Collections - Basic Dictionary 4");
+        LogResult.assertStringEqual1("flex record string", aString);
+    end
+
+    function runTestDictionaryCasesFunction06(){@Test}
+        bString = aMap.aflex["aString"];
+        LogResult.logStdOut("Collections - Basic Dictionary 5a");
+        LogResult.assertStringEqual1("flex record string", bString);
+    end
+
+    function runTestDictionaryCasesFunction07(){@Test}
+        aFlexRec.anInt = 5000;
+        aMap.aFlex = aFlexRec;
+        bString = aMap.aflex["aString"];
+        anInt = aMap.AFLEX.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 5b");
+        LogResult.assertTrue("compareInt(anInt, 5000)", anInt == 5000);
+    end
+
+    function runTestDictionaryCasesFunction08(){@Test}
+        aFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.anAny = aFlexRec;
+        LogResult.logStdOut("Collections - Basic Dictionary 6");
+        LogResult.assertTrue("aMap.anAny isa ClnFlexRecord", aMap.anAny isa ClnFlexRecord);
+    end
+
+    function runTestDictionaryCasesFunction09(){@Test}
+        aFlexRec.aString = "flex record string";
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = aFlexRec;
+        LogResult.logStdOut("Collections - Basic Dictionary 7");
+        LogResult.assertTrue("aMap.anAny.aString as string == aMap.aFlex.aString as string", aMap.anAny.aString as string ==
+                        aMap.aFlex.aString as string);
+    end
+
+    function runTestDictionaryCasesFunction10(){@Test}
+        aFlexRec.aString = "flex record string";
+        aMap.anAny = aFlexRec;
+        aMap.aFlex.aString = "secondValue";
+        LogResult.logStdOut("Collections - Basic Dictionary 8");
+        LogResult.assertTrue("aMap.anAny.aString != aMap.aFlex.aString", aMap.anAny.aString != aMap.aFlex.aString);
+    end
+
+    function runTestDictionaryCasesFunction11(){@Test}
+        aFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.aString = "string value";
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = aFlexRec;
+        aMap.aFlex.aString = "secondValue";
+        mapSize int;
+        mapSize = aMap.size();
+        LogResult.logStdOut("Collections - Basic Dictionary 9");
+        LogResult.assertTrue("compareInt(mapSize, 4)", mapSize == 4);
+    end
+
+    function runTestDictionaryCasesFunction12(){@Test}
+        aFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.aString = "string value";
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = aFlexRec;
+        aMap.aFlex.aString = "secondValue";
+        mapSize int;
+        aMap.removeElement("anAny");
+        mapSize = aMap.size();
+        LogResult.logStdOut("Collections - Basic Dictionary 10 ");
+        LogResult.assertTrue("compareInt(mapSize, 3)", mapSize == 3);
+    end
+
+    function runTestDictionaryCasesFunction13(){@Test}
+        aFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.aString = "string value";
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = aFlexRec;
+        aMap.aFlex.aString = "secondValue";
+        mapSize int;
+        aMap.removeElement("anAny");
+        LogResult.logStdOut("Collections - Basic Dictionary 11");
+        LogResult.assertTrue("!aMap.containsKey(\"anAny\")", !aMap.containsKey("anAny"));
+    end
+
+    function runTestDictionaryCasesFunction14(){@Test}
+        aFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.aString = "string value";
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = aFlexRec;
+        aMap.aFlex.aString = "secondValue";
+        LogResult.logStdOut("Collections - Basic Dictionary 12 ");
+        LogResult.assertTrue("aMap.containsKey(\"AString\")", aMap.containsKey("AString"));
+    end
+
+    function runTestDictionaryCasesFunction15(){@Test}
+    	myHold dictionary = aMap;
+    	aMap = new Dictionary;
+        aMap.aString = "string value";
+        bMap.bString = aMap.aString;
+        aMap.anInta = 5000;
+        bMap.anInt = 10000;
+        bMap.insertAll(aMap);
+        mapSize int;
+        mapSize = bMap.size();
+        aMap = myHold;
+        LogResult.logStdOut("Collections - Basic Dictionary 13");
+        LogResult.assertBigIntEqual("compareInt(mapSize, 4)", 4, mapSize);
+    end
+
+    function runTestDictionaryCasesFunction16(){@Test}
+        aMap.aString = "string value";
+        bMap.bString = aMap.aString;
+        aString = aMap.aString;
+        bString = bMap.bString;
+        LogResult.logStdOut("Collections - Basic Dictionary 14");
+        LogResult.assertStringEqual1(bString, aString);
+    end
+
+    function runTestDictionaryCasesFunction17(){@Test}
+        intA int;
+        bMap.anInt = 5000;
+        intA = bMap.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 15");
+        LogResult.assertTrue("compareInt(intA, 5000)", intA == 5000);
+    end
+
+    function runTestDictionaryCasesFunction18(){@Test}
+        aFlexRec.anInt = 5000;
+        intA, intB int;
+        bMap.bString = aMap.aString;
+        aMap.anInt = 5000;
+        bMap.anInt = 10000;
+        bMap.insertAll(aMap);
+        intB = bMap.aFlex.anInt;
+        intA = aMap.aFlex.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 16");
+        LogResult.assertTrue("compareInt(intB, intA)", intB == intA);
+    end
+
+    function runTestDictionaryCasesFunction19(){@Test}
+        intB int;
+        bMap.aFlex.anInt = 30000;
+        intB = bMap.aFlex.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 17");
+        LogResult.assertTrue("compareInt(intB, 30000)", intB == 30000);
+    end
+
+    function runTestDictionaryCasesFunction20(){@Test}
+    	// Everything in a dictonary is a reference not a value
+        intB int;
+        aMap.aFlex.anInt = 30000;
+        intB = bMap.aFlex.anInt;
+        //move aMap.aFlex to bMap.aFlex ;
+        bMap.aFlex = aMap.aFlex;
+        bMap.aFlex.anInt = 5000;
+        intB = bMap.aFlex.anInt;
+        intB = aMap.aFlex.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 18");
+		LogResult.assertBigIntEqual("compareInt(intB, 5000)", 5000, intB);
+    end
+
+    function runTestDictionaryCasesFunction21(){@Test}
+        aMap.anInt = 5000;
+        bMap.anInt = 10000;
+        bMap.insertAll(aMap);
+        aMap.anInt = 1;
+        intB int = bMap.anInt;
+        LogResult.logStdOut("Collections - Basic Dictionary 19");
+        LogResult.assertTrue("compareInt(intB, 5000)", intB == 5000);
+    end
+
+    function runTestDictionaryCasesFunction22(){@Test}
+        aMap.aString = "string value";
+        bMap.insertAll(aMap);
+        aMap.aString = "Check for by value or by ref";
+        bString = bMap.aString;
+        LogResult.logStdOut("Collections - Basic Dictionary 20");
+        LogResult.assertStringEqual1("string value", bString);
+    end
+
+    function runTestDictionaryCasesFunction23(){@Test}
+        aMap.aString = "string value";
+        aMap.anInt = 100;
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = bFlexRec;
+        bMap.bString = aMap.aString;
+        bMap.insertAll(aMap);
+        bMap.removeAll();
+        mapSize int = bMap.size();
+        LogResult.logStdOut("Collections - Basic Dictionary 21");
+        LogResult.assertTrue("compareInt(mapSize, 0)", mapSize == 0);
+    end
+
+    function runTestDictionaryCasesFunction24(){@Test}
+        arrayA string[] = new string[0];
+        arrayB any[] = new any[0];
+        cMap Dictionary{a = "aaa", b = "bbb", c = "ccc"};
+        cMap.a = "aaa";
+        cMap.b = "bbb";
+        cMap.c = "ccc";
+        arrayA = cMap.getkeys();
+        dMap Dictionary{a = 100, b = 12.25, c = 314e-2};
+        arrayB = dMap.getvalues();
+        LogResult.logStdOut("Collections - Basic Dictionary 22");
+        LogResult.assertTrue("isIn(100, arrayB) && isIn(12.25, arrayB)", isIn(100, arrayB) && isIn(12.25, arrayB));
+        LogResult.assertTrue("isIn(314e-2, arrayB)", isIn(314e-2, arrayB));
+    end
+
+    function runTestDictionaryCasesFunction25(){@Test}
+        cMap Dictionary{a = "aaa", b = "bbb", c = "ccc"};
+        cMap.a = "aaa";
+        cMap.b = "bbb";
+        cMap.c = "ccc";
+        cMap["d d"] = "ddd";
+        aString = cMap["d d"];
+        LogResult.logStdOut("Collections - Basic Dictionary 23");
+        LogResult.assertStringEqual1("ddd", aString);
+    end
+
+    function runTestHandlerFunctions1(){@Test}
+        users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+        anInt = users["ID"];
+        LogResult.assertTrue("compareInt(anInt, 1)", anInt == 1);
+    end
+
+    function runTestHandlerFunctions2(){@Test}
+        users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+        aDate date?;
+        aDate = users["LAST_LOGIN"];
+        LogResult.assertTrue("Date should be null", aDate == null);
+    end
+
+    function runTestHandlerFunctions3(){@Test}
+        users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+        s string?;
+        s = users["PASSWORD"];	      
+		LogResult.assertTrue("Password should be null", s == null);  
+    end
+
+    function runTestHandlerFunctions4(){@Test}
+       	success boolean = false;
+        aDate date?;
+        try
+            users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+            aDate = users["LAST_LOGON"]; // mispelled on purpose
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestHandlerFunctions5(){@Test}
+       	success boolean = false;
+        aDate date?;
+        try
+            users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+            aDate = users["LAST_login"]; // using the wrong case on purpose
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestHandlerFunctions6(){@Test}
+       	success boolean = false;
+        aDate date?;
+        try
+            users USERS{ID = 1, NAME = "John", Email = "John@us.ibm.com"};
+            aDate = users["fish"]; // there is no field with this name
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestExceptionFunctions1(){@Test}
+    	x DynamicAccessTestException { field0 = 7, fIeLd2 = 9 };
+        anInt = x["field0"];
+        LogResult.assertTrue("compareInt(anInt, 1)", anInt == 7);
+    end
+
+    function runTestExceptionFunctions2(){@Test}
+    	x DynamicAccessTestException { field0 = 7, fIeLd2 = 9 };
+        a int? = x["FiElD1"];
+        LogResult.assertTrue("Int should be null", a == null);
+    end
+
+    function runTestExceptionFunctions3(){@Test}
+       	success boolean = false;
+        try
+	    	x DynamicAccessTestException { field0 = 7, fIeLd2 = 9 };
+            anInt = x["Sield0"]; // mispelled on purpose
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestExceptionFunctions4(){@Test}
+       	success boolean = false;
+        try
+	    	x DynamicAccessTestException { field0 = 7, fIeLd2 = 9 };
+            anInt = x["field1"]; // using the wrong case on purpose
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestExceptionFunctions5(){@Test}
+       	success boolean = false;
+        try
+	    	x DynamicAccessTestException { field0 = 7, fIeLd2 = 9 };
+            anInt = x["fish"]; // there is no field with this name
+        onException(ex AnyException)
+        	success = true;
+        end
+        LogResult.assertTrue("want exception to be thrown", success);            
+    end
+
+    function runTestAnyFunctions1(){@Test}
+        anAny = new Dictionary;
+        anAny.aString = "string value";
+        thing = anAny["aString"];
+        LogResult.assertTrue("thing isa string", thing isa string);
+    end
+
+    function runTestAnyFunctions2(){@Test}
+        anAny = new Dictionary;
+        anAny.aString = "string value";
+        LogResult.assertTrue("anAny[\"aString\"] isa string", anAny["aString"] isa string);
+    end
+
+    function runTestAnyFunctions3(){@Test}
+        anAny = new Dictionary;
+        anAny.aString = "string value";
+        aString = anAny.aString;
+        LogResult.assertStringEqual1("string value", aString);
+    end
+
+    function runTestAnyFunctions4(){@Test}
+        anAny = new Dictionary;
+        anAny["anInt"] = 200;
+        anInt = anAny.anInt;
+        LogResult.assertTrue("compareInt(anInt, 200)", anInt == 200);
+    end
+
+    function runTestAnyFunctions5(){@Test}
+        anAny = new Dictionary;
+        anAny.aString = "string value";
+        aString = anAny["aString"];
+        LogResult.assertStringEqual1("string value", aString);
+    end
+
+    function isIn(item any in, array any[] in) returns(boolean)
+        i int = 1;
+        while(i <= array.getSize())
+            //			if ((item isa decimal(4,2) && item as decimal(5,2) == array[i] as decimal(5,2)) || item == array[i])
+            if(item as float == array[i] as float)
+                return(true);
+            end
+            i += 1;
+        end
+        return(false);
+    end
+
+end
+
+record DynamicAccessTestException type Exception
+	field0 int;
+	FiElD1 int?;
+	fIeLd2 int;
+end

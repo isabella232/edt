@@ -1,0 +1,216 @@
+package libraries.async;
+
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.OuterFlexibleRecordMultiDim;
+import eglx.http.IHttp;
+import interfaces.IArrayPassingMultiDim;
+import services.ArrayPassingMultiDim;
+import utilities.CommonUtilities;
+import utilities.CommonUtilitiesMultiDim;
+
+
+// basic library
+library TestArraysMultiDim
+	
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end	
+	
+	function testDoubleIn() {@Test}
+		_2DArray string[][];
+		CommonUtilitiesMultiDim.init2DStringArray(_2DArray);
+		call ArrayPassingMultiDim.doubleIn(_2DArray) using CommonUtilities.getResource("multiDim") returning to verifyDoubleIn onException handleServiceException;
+	end
+	
+	function testDoubleInout() {@Test}
+		_2DArray string[][];
+		CommonUtilitiesMultiDim.init2DStringArray(_2DArray);
+		call ArrayPassingMultiDim.doubleInout(_2DArray) using CommonUtilities.getResource("multiDim") returning to verifyDoubleInout onException handleServiceException;
+	end
+	
+	function testDoubleOut() {@Test}
+		_2DArray string[][];
+		call ArrayPassingMultiDim.doubleOut(_2DArray) using CommonUtilities.getResource("multiDim") returning to verifyDoubleOut onException handleServiceException;					
+	end
+	
+	function testDoubleAll() {@Test}
+		_2DArray, _2DArray2, _2DArray3 String[][];
+		CommonUtilitiesMultiDim.init2DStringArray(_2DArray);
+		CommonUtilitiesMultiDim.init2DStringArray(_2DArray2);
+		CommonUtilitiesMultiDim.init2DStringArray(_2DArray3);
+		call ArrayPassingMultiDim.doubleAll(_2DArray, _2DArray2, _2DArray3) using CommonUtilities.getResource("multiDim") returning to verifyDoubleAll onException handleServiceException;		
+	end
+	
+	function testOuterFlexRecordMultiDimIn() {@Test}
+		flex1 OuterFlexibleRecordMultiDim;
+		CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(flex1);
+		call IArrayPassingMultiDim.outerFlexibleRecordMultiDimIn(flex1) using CommonUtilities.getResource("multiDim") returning to verifyOuterFlexRecordMultiDimIn onException handleServiceException;
+	end
+	
+	function testOuterFlexRecordMultiDimInout() {@Test}
+		flex1 OuterFlexibleRecordMultiDim;
+		CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(flex1);
+		call IArrayPassingMultiDim.outerFlexibleRecordMultiDimInout(flex1) using CommonUtilities.getResource("multiDim") returning to verifyOuterFlexRecordMultiDimInout onException handleServiceException;
+	end
+
+	function testOuterFlexRecordMultiDimOut() {@Test}
+		flex1 OuterFlexibleRecordMultiDim;
+		call IArrayPassingMultiDim.outerFlexibleRecordMultiDimOut(flex1) using CommonUtilities.getResource("multiDim") returning to verifyOuterFlexRecordMultiDimOut onException handleServiceException;
+	end
+	
+	function testOuterFlexRecordMultiDimAll() {@Test}
+		flex1, flex2, flex3 OuterFlexibleRecordMultiDim;
+        CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(flex1);
+        CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(flex2);
+		call IArrayPassingMultiDim.outerFlexibleRecordMultiDimAll(flex1, flex2, flex3) using CommonUtilities.getResource("multiDim") returning to verifyOuterFlexRecordMultiDimAll onException handleServiceException;
+	end
+
+	function verifyDoubleIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "1.1", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyDoubleInout(_array string[][] in)
+		try
+			LogResult.assertStringEqual("", "Value changed", _array[1][1]);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyDoubleOut(_array string[][] in)
+		try
+			expected String[][];
+			CommonUtilitiesMultiDim.init2DStringArray(expected);
+			LogResult.assertTrue(":_array.getSize()", 3==_array.getSize());
+			compareDoubleArray(expected, _array);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+	end
+	
+	
+     function compareDoubleArray(expected string[][], actual String[][])
+     	for (i int from 1 to 3)
+     		for (j int from 1 to 3)
+     			msg string = ":element[" + i + "][" + j + "]";
+     			LogResult.assertStringEqual(msg, expected[i][j], actual[i][j]);
+     		end
+     	end
+     end
+     
+     function verifyDoubleAll(_array2 string[][] in, _array3 string[][] in, retResult string[][] in)
+		try
+			expected String[][];
+			CommonUtilitiesMultiDim.init2DStringArray(expected);
+			LogResult.assertTrue(":_array2.getSize()", 3==_array2.getSize());
+			LogResult.assertTrue(":_array3.getSize()", 3==_array3.getSize());
+			LogResult.assertTrue(":retResult.getSize()", 3==retResult.getSize());
+			LogResult.assertStringEqual("", "Value changed", _array2[1][1]);
+			compareDoubleArray(expected, _array3);
+			compareDoubleArray(expected, retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	     	
+     end
+     
+     function verifyOuterFlexRecordMultiDimIn(retResult string in)
+		try
+			LogResult.assertStringEqual("", "flex.item4.item1[1] = flex.item4.item1[1]", retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	     	
+     end
+     
+     function verifyOuterFlexRecordMultiDimInout(flex OuterFlexibleRecordMultiDim in)
+		try
+			expected OuterFlexibleRecordMultiDim;
+			CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(expected);
+			compareFlexRec(expected, flex);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();			
+     end
+     
+     
+    private function compareFlexRec(expected OuterFlexibleRecordMultiDim, actual OuterFlexibleRecordMultiDim)        
+        LogResult.assertStringEqual(":OuterFlexibleRecordMultiDim.item1", expected.item1, actual.item1);
+		LogResult.assertStringArrayEqual(":OuterFlexibleRecordMultiDim.item2", expected.item2, actual.item2);
+		LogResult.assertStringArrayEqual(":OuterFlexibleRecordMultiDim.item4.item1", expected.item4.item1, actual.item4.item1);
+
+		LogResult.assertStringEqual(":OuterFlexibleRecordMultiDim.item4.item2", expected.item4.item2, actual.item4.item2);
+
+		LogResult.assertBigIntEqual(":OuterFlexibleRecordMultiDim.item4.item3", expected.item4.item3, actual.item4.item3);
+		LogResult.assertBigIntEqual(":OuterFlexibleRecordMultiDim.item5.getSize()", expected.item5.getSize(), actual.item5.getSize());
+				
+		lp1, lp2, lp3 int;
+		lp1Sz, lp2Sz, lp3Sz int;
+		lp1Sz = expected.item5.getSize();
+		for( lp1 from 1 to lp1Sz )
+			lp2Sz = expected.item5[lp1].getSize();
+			for( lp2 from 1 to lp2Sz )
+				lp3Sz = expected.item5[lp1][lp2].getSize();
+				for( lp3 from 1 to lp3Sz )
+					msg String = ":OuterFlexibleRecordMultiDim.item5["+lp1+"]["+lp2+"]["+lp3+"]";
+					LogResult.assertStringEqual(msg, expected.item5[lp1][lp2][lp3], actual.item5[lp1][lp2][lp3]);
+				end
+			end
+		end
+     end
+    
+    function verifyOuterFlexRecordMultiDimOut(flex OuterFlexibleRecordMultiDim in)
+		try
+			expected OuterFlexibleRecordMultiDim;
+			CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(expected);
+			compareFlexRec(expected, flex);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();		
+    end
+    
+    function verifyOuterFlexRecordMultiDimAll(flex2 OuterFlexibleRecordMultiDim in, flex3 OuterFlexibleRecordMultiDim in, retResult string in)
+		try
+			expected OuterFlexibleRecordMultiDim;
+			CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(expected);
+			compareFlexRec(expected, flex2);
+			compareFlexRec(expected, flex3);
+			LogResult.assertStringEqual("", expected.item4.item1[1], retResult);
+		OnException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);				
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end						
+		TestListMgr.nextTest();	    	
+    end
+    
+
+     
+end

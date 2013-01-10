@@ -1,0 +1,62 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.ibmiprogram;
+import server.host.programs.data.handlers.Handler1;
+import server.host.programs.data.handlers.Handler2;
+import server.host.programs.data.handlers.Handler3;
+import server.host.programs.data.records.Record1;
+import server.host.programs.data.records.Record2;
+import server.host.programs.data.records.Record3;
+
+
+/// basic library
+library ComplexTypes
+	
+	function primitiveHostProgram(rec1 Record1 inout){
+		@IBMiProgram {programName = "EDTTSTR" },
+		@Resource{uri = "binding:file:thirdparty_programs#conn2"}
+	}
+	end
+	
+	function primitiveHostProgram2(rec1 Record2 inout){
+		@IBMiProgram {programName = "EDTTSTR",
+						libraryName = "this would cause an error"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn2"}
+	}
+	end
+	
+	function primitiveHostProgram3(rec1 Record3 inout){
+		@IBMiProgram {programName = "EDTTSTR",
+						libraryName = "/QSYS.LIB/EVANSM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	function primitiveHostProgram11(rec1 Handler1 inout){
+		@IBMiProgram {programName = "/EDTTSTR",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	function primitiveHostProgram12(rec1 Handler2 inout){
+		@IBMiProgram {programName = "/EDTTSTR",
+						libraryName = "/QSYS.LIB/EVANSM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	function primitiveHostProgram13(rec1 Handler3 inout){
+		@IBMiProgram {programName = "EDTTSTR",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	
+end
+

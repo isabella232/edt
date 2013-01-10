@@ -1,0 +1,205 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+// basic library
+library CaseAnyNumberParam
+	toggleValue int;
+	
+	function testCaseOnNumberIn1() {@Test}
+		toggleValue = 1;
+        switchOnInParameter(1);
+    end	
+    
+  	function testCaseOnNumberIn2() {@Test}
+  		toggleValue = 2;
+        switchOnInParameter(2);
+    end	
+    
+    function testCaseOnNumberIn3() {@Test}
+    	toggleValue = 3;
+        switchOnInParameter(3);
+    end	
+/*    investigate TODO  related to defect 359856
+    function testCaseOnNumberInOut1() {@Test}
+    	toggleValue = 1;
+        switchOnInOutParameter(1 as number);
+    end
+    
+    function testCaseOnNumberInOut2() {@Test}
+    	toggleValue = 2;
+    	switchOnInOutParameter(2 as number);
+    end
+           
+    function testCaseOnNumberInOut3() {@Test}         
+    	toggleValue = 3;  
+        switchOnInOutParameter(3 as number);
+    end
+*/        
+	function testCaseOnNumberDefault1() {@Test}
+		toggleValue = 1;
+        switchOnDefaultParameter(1);
+    end
+    
+    function testCaseOnNumberDefault2() {@Test}
+   		toggleValue = 2;
+        switchOnDefaultParameter(2);  
+    end
+    
+    function testCaseOnNumberDefault3() {@Test}  
+    	toggleValue = 3;                                            
+        switchOnDefaultParameter(3);
+    end
+
+	function testCaseOnAnyIn1() {@Test}
+		toggleValue = 1;
+        switchOnAnyInParameter(1);
+    end	
+    
+  	function testCaseOnAnyIn2() {@Test}
+  		toggleValue = 2;
+        switchOnAnyInParameter(2);
+    end	
+    
+    function testCaseOnAnyIn3() {@Test}
+    	toggleValue = 3;
+        switchOnAnyInParameter(3);
+    end	
+   
+    function testCaseOnAnyInOut1()  
+//    	Produces validation error
+//    	toggleValue = 1;
+//      switchOnAnyInOutParameter(1);
+    end
+    
+    function testCaseOnAnyInOut2()  
+//    	Produces validation error
+//    	toggleValue = 2;
+//    	switchOnAnyInOutParameter(2);
+    end
+           
+    function testCaseOnAnyInOut3()   
+//    	Produces validation error       
+//    	toggleValue = 3;
+//        switchOnAnyInOutParameter(3);
+    end
+        
+	function testCaseOnAnyDefault1() {@Test}
+		toggleValue = 1;
+        switchOnAnyDefaultParameter(1);
+    end
+    
+    function testCaseOnAnyDefault2() {@Test}
+   		toggleValue = 2;
+        switchOnAnyDefaultParameter(2);  
+    end
+    
+    function testCaseOnAnyDefault3() {@Test}  
+    	toggleValue = 3;                                            
+        switchOnAnyDefaultParameter(3);
+    end
+    
+    function switchOnInParameter(localLen number in)
+    	// IWN.VAL.4949.e 18/34 IN modifier is not allowed to be specified with NUMBER or any of the loose primitive types.
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnInOutParameter(localLen number inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnDefaultParameter(localLen number)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnAnyInParameter(localLen any in)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnAnyInOutParameter(localLen any inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnAnyDefaultParameter(localLen any)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                syslib.writestdout("one");
+                resolved = 1;
+            when(2)
+                syslib.writestdout("two");
+                resolved = 2;
+            otherwise
+                syslib.writestdout("otherwise");
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+end

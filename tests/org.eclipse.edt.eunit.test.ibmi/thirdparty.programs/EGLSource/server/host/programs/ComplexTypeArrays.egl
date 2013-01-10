@@ -1,0 +1,83 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+import eglx.jtopen.annotations.StructArray;
+import server.host.programs.data.handlers.Handler11;
+import server.host.programs.data.handlers.Handler12;
+import server.host.programs.data.handlers.Handler13;
+import server.host.programs.data.records.Record11;
+import server.host.programs.data.records.Record12;
+import server.host.programs.data.records.Record13;
+
+ 
+// basic library
+library ComplexTypeArrays
+	
+	function primitiveHostProgram(rec1 Record11[] inout, validCount int inout){
+			@IBMiProgram {programName = "EDTTSTRA",
+						parameterAnnotations = [@StructArray{elementCount = 5},
+							null
+						]
+			},
+			@Resource{uri = "binding:file:thirdparty_programs#conn2"}
+			
+	}
+	end
+	
+	function primitiveHostProgram2(rec1 Record12[] inout, validCount int inout){
+			@IBMiProgram {programName = "EDTTSTRA",
+						libraryName = "this would cause an error",
+						parameterAnnotations = [@StructArray{elementCount = 5},
+							null
+						]
+			},
+			@Resource{uri = "binding:file:thirdparty_programs#conn2"}
+	}
+	end
+	
+	function primitiveHostProgram3(rec1 Record13[] inout, validCount int inout){
+		@IBMiProgram {programName = "EDTTSTRA",
+						libraryName = "/QSYS.LIB/EVANSM.LIB",
+						parameterAnnotations = [@StructArray{elementCount = 5, returnCountVariable = validCount},
+							null
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	function primitiveHostProgram11(rec1 Handler11[] inout, validCount int inout){
+		@IBMiProgram {programName = "/EDTTSTRA",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/",
+						parameterAnnotations = [@StructArray{elementCount = 5},
+							null
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	function primitiveHostProgram12(rec1 Handler12[] inout, validCount int inout){
+		@IBMiProgram {programName = "/EDTTSTRA",
+						libraryName = "/QSYS.LIB/EVANSM.LIB",
+						parameterAnnotations = [@StructArray{elementCount = 5},
+							null
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	function primitiveHostProgram13(rec1 Handler13[] inout, validCount int inout){
+		@IBMiProgram {programName = "EDTTSTRA",
+						libraryName = "/QSYS.LIB/EVANSM.LIB/",
+						parameterAnnotations = [@StructArray{elementCount = 5, returnCountVariable = validCount},
+							null
+						]
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	end
+	
+	
+end
+

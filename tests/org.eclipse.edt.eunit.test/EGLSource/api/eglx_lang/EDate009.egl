@@ -1,0 +1,154 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate009
+  * @title EdtDate009 - runInvalidAssignmentFunction
+  * @description testing TypeCastException when assignment invalid dates
+  * @testcases runInvalidAssignmentFunction01 - runInvalidAssignmentFunction12
+  * @sources EdtDate009.egl
+  * @keywords date, assignemnt, invalid, TypeCastException
+ **/
+library EDate009 {}
+
+	function runInvalidAssignmentFunction01(){@Test}
+		try
+			invalidDate date = "invalid date";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction02(){@Test}
+		try
+			invalidDate date = "12345678";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction03(){@Test}
+		try
+			invalidDate date = "!@#$%^&*";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction04(){@Test}
+		try
+			invalidDate date = "!@-#$-%^&*";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction05(){@Test}
+		try
+			invalidDate date = "12-34-5678";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction06(){@Test}
+		try
+			invalidDate date = "02-29-2011";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction07(){@Test}
+		try
+			invalidDate date = "2011-09-21";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction08(){@Test}
+		try
+			invalidDate date = "24-04-2011";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction09(){@Test}
+		try
+			invalidDate date = "";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction10(){@Test}
+		try
+			invalidDate date = "          ";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction11(){@Test}
+		try
+			invalidDate date = "87654321";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+		
+		
+	function runInvalidAssignmentFunction12(){@Test}
+		try
+			invalidDate date = "40-40-2011";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+end

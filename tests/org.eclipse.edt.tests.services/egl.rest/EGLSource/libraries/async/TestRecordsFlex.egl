@@ -1,0 +1,699 @@
+package libraries.async;
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.IntArrayFlexRecord;
+import data.IntFlexRecord;
+import data.OuterFlexibleRecord;
+import data.StringArrayFlexRecord;
+import data.StringFlexRecord;
+import data.StringRec;
+import data.bigIntArrayFlexRecord;
+import data.bigIntFlexRecord;
+import data.booleanArrayFlexRecord;
+import data.booleanFlexRecord;
+import data.dateArrayFlexRecord;
+import data.dateFlexRecord;
+import data.decimalArrayFlexRecord;
+import data.decimalFlexRecord;
+import data.floatArrayFlexRecord;
+import data.floatFlexRecord;
+import data.lStringArrayFlexRecord;
+import data.lStringFlexRecord;
+import data.smallFloatArrayFlexRecord;
+import data.smallFloatFlexRecord;
+import data.smallIntArrayFlexRecord;
+import data.smallIntFlexRecord;
+import data.timeArrayFlexRecord;
+import data.timeFlexRecord;
+import data.timeStampArrayFlexRecord;
+import data.timestampFlexRecord;
+import eglx.http.IHttp;
+import interfaces.IRecordPassingFlex;
+import services.RecordPassingFlex;
+import utilities.CommonUtilities;
+
+// basic library
+library TestRecordsFlex 
+
+	private function handleServiceException(e AnyException in, http IHttp in)
+		TestListMgr.handleCallBackException(e, http);
+	end					
+		
+	function testBigintFlex_all() {@Test}
+        bigIntFlex1 bigIntFlexRecord{item1 = 1};
+        bigIntFlex2 bigIntFlexRecord{item1 = 2};
+        bigIntFlex3 bigIntFlexRecord{item1 = 3};
+		call RecordPassingFlex.bigIntFlexAll(bigIntFlex1, bigIntFlex2, bigIntFlex3) using CommonUtilities.getResource("records") returning to verify_bigIntFlexAll onException handleServiceException;
+	end
+	
+	function testBigintArrayFlex_all() {@Test}
+		bigIntArrayFlex1 bigIntArrayFlexRecord{item1=[2, 5]};
+		bigIntArrayFlex2 bigIntArrayFlexRecord{item1=[3]};
+		bigIntArrayFlex3 bigIntArrayFlexRecord{item1=[4, 6]};
+		call RecordPassingFlex.bigIntArrayFlexAll(bigIntArrayFlex1, bigIntArrayFlex2, bigIntArrayFlex3) using CommonUtilities.getResource("records") returning to verify_bigIntArrayFlexAll onException handleServiceException;	
+	end
+
+	function testIntFlex_all() {@Test}
+        IntFlex1 IntFlexRecord{item1 = 1};
+        intFlex2 intFlexRecord{item1 = 2};
+        intFlex3 intFlexRecord{item1 = 3};	
+        call IRecordPassingFlex.intFlexAll(intFlex1, intFlex2, intFlex3) using CommonUtilities.getResource("records") returning to verifyIntFlex_all onException handleServiceException;
+	end
+	
+	function testIntArrayFlex_all() {@Test}
+		intArrayFlex1 intArrayFlexRecord{item1=[2, 5]};
+		intArrayFlex2 intArrayFlexRecord{item1=[3]};
+		intArrayFlex3 intArrayFlexRecord{item1=[4, 6]};
+		call IRecordPassingFlex.intArrayFlexAll(intArrayFlex1, intArrayFlex2, intArrayFlex3) using CommonUtilities.getResource("records") returning to verifyIntArrayFlex_all onException handleServiceException;
+	end
+
+	function testSmallintFlex_all() {@Test}
+		sIntFlex1 smallIntFlexRecord{item1 = 9};
+		sIntFlex2 smallIntFlexRecord{item1 = 4};
+		sIntFlex3 smallIntFlexRecord{item1 = 7};	
+		call IRecordPassingFlex.smallIntFlexAll(sIntFlex1, sIntFlex2, sIntFlex3) using CommonUtilities.getResource("records") returning to verifySmallintFlex_all onException handleServiceException;			
+	end
+	
+	function testSmallintArrayFlex_all() {@Test}
+		sIntArrayFlex1 smallIntArrayFlexRecord{item1=[7,4]};
+		sIntArrayFlex2 smallIntArrayFlexRecord{item1=[2]};
+		sIntArrayFlex3 smallIntArrayFlexRecord{item1=[3, 6, 8]};	
+		call IRecordPassingFlex.smallIntArrayFlexAll(sIntArrayFlex1, sIntArrayFlex2, sIntArrayFlex3) using CommonUtilities.getResource("records") returning to verifySmallintArrayFlex_all onException handleServiceException;
+	end
+	
+	function testSmallfloatFlex_all() {@Test}
+		sFloatFlex1 smallFloatFlexRecord{item1 = 1.7};
+		sFloatFlex2 smallFloatFlexRecord{item1 = 4.1};			
+		sFloatFlex3 smallFloatFlexRecord{item1 = 1.3};
+		call IRecordPassingFlex.smallFloatFlexAll(sFloatFlex1, sFloatFlex2, sFloatFlex3) using CommonUtilities.getResource("records") returning to verifySmallfloatFlex_all onException handleServiceException;
+	end
+
+	function testSmallfloatArrayFlex_all() {@Test}
+		sFloatArrayFlex1 smallFloatArrayFlexRecord{item1=[1.7, 2.1]};
+		sFloatArrayFlex2 smallFloatArrayFlexRecord{item1=[2.4]};
+		sFloatArrayFlex3 smallFloatArrayFlexRecord{item1=[2.4, 3.5]};
+		call IRecordPassingFlex.smallFloatArrayFlexAll(sFloatArrayFlex1, sFloatArrayFlex2, sFloatArrayFlex3) using CommonUtilities.getResource("records") returning to verifySmallfloatArrayFlex_all onException handleServiceException;	
+	end
+	
+	function testFloatFlex_all() {@Test}
+		floatFlex1 floatFlexRecord{item1 = 1.7};
+		floatFlex2 floatFlexRecord{item1 = 4.1};			
+		floatFlex3 floatFlexRecord{item1 = 1.3};
+		call IRecordPassingFlex.floatFlexAll(floatFlex1, floatFlex2, floatFlex3) using CommonUtilities.getResource("records") returning to verifyFloatFlex_all onException handleServiceException;
+	
+	end
+	
+	function testFloatArrayFlex_all() {@Test}
+		floatArrayFlex1 floatArrayFlexRecord{item1=[1.7, 2.1]};
+		floatArrayFlex2 floatArrayFlexRecord{item1=[2.4]};
+		floatArrayFlex3 floatArrayFlexRecord{item1=[2.4, 3.5]};
+		
+		call IRecordPassingFlex.floatArrayFlexAll(floatArrayFlex1, floatArrayFlex2, floatArrayFlex3) using CommonUtilities.getResource("records") returning to verifyFloatArrayFlex_all onException handleServiceException;		
+	end
+	
+	function testDecimalFlex_all() {@Test}
+		decimalFlex1 decimalFlexRecord{item1 = 1.7};
+		decimalFlex2 decimalFlexRecord{item1 = 4.1};			
+		decimalFlex3 decimalFlexRecord{item1 = 1.3};
+		call IRecordPassingFlex.decimalFlexAll(decimalFlex1, decimalFlex2, decimalFlex3) using CommonUtilities.getResource("records") returning to verifyDecimalFlex_all onException handleServiceException;
+	
+	end
+	
+	function testDecimalArrayFlex_all() {@Test}
+		decimalArrayFlex1 decimalArrayFlexRecord{item1=[1.7, 2.1]};
+		decimalArrayFlex2 decimalArrayFlexRecord{item1=[2.4]};
+		decimalArrayFlex3 decimalArrayFlexRecord{item1=[2.4, 3.5]};
+		call IRecordPassingFlex.deciamlArrayFlexAll(decimalArrayFlex1, decimalArrayFlex2, decimalArrayFlex3) using CommonUtilities.getResource("records") returning to verifyDecimalArrayFlex_all onException handleServiceException;
+		
+	end
+	
+	function testStringFlex_all() {@Test}
+		stringFlex1 stringFlexRecord{item1 = "a"};
+		stringFlex2 stringFlexRecord{item1 = "b"};			
+		stringFlex3 stringFlexRecord{item1 = "c"};
+		call IRecordPassingFlex.stringFlexAll(stringFlex1, stringFlex2, stringFlex3) using CommonUtilities.getResource("records") returning to verifyStringFlex_all onException handleServiceException;		
+	end
+	
+	function testStringArrayFlex_all() {@Test}
+		stringArrayFlex1 stringArrayFlexRecord{item1=["a", "b"]};
+		stringArrayFlex2 stringArrayFlexRecord{item1=["c"]};
+		stringArrayFlex3 stringArrayFlexRecord{item1=["d", "e"]};
+		call IRecordPassingFlex.stringArrayFlexAll(stringArrayFlex1, stringArrayFlex2, stringArrayFlex3) using CommonUtilities.getResource("records") returning to verifyStringArrayFlex_all onException handleServiceException;		
+	end
+
+	function testlStringFlex_all() {@Test}
+		stringFlex1 LstringFlexRecord{item1 = "a"};
+		stringFlex2 LstringFlexRecord{item1 = "b"};			
+		stringFlex3 LstringFlexRecord{item1 = "c"};
+		call IRecordPassingFlex.LstringFlexAll(stringFlex1, stringFlex2, stringFlex3) using CommonUtilities.getResource("records") returning to verifyLStringFlex_all onException handleServiceException;		
+	end
+	
+	function testlStringArrayFlex_all() {@Test}
+		stringArrayFlex1 LstringArrayFlexRecord{item1=["a", "b"]};
+		stringArrayFlex2 LstringArrayFlexRecord{item1=["c"]};
+		stringArrayFlex3 LstringArrayFlexRecord{item1=["d", "e"]};
+		call IRecordPassingFlex.LstringArrayFlexAll(stringArrayFlex1, stringArrayFlex2, stringArrayFlex3) using CommonUtilities.getResource("records") returning to verifyLStringArrayFlex_all onException handleServiceException;		
+	end
+
+	function testTimestampFlex_all() {@Test}
+		timeStampFlex1 timeStampFlexRecord{item1 = "2006/05/24-12:05:45"};
+		timeStampFlex2 timeStampFlexRecord{item1 = "2003/02/17-14:48:52"};			
+		call IRecordPassingFlex.timeStampFlexAll(timeStampFlex1, timeStampFlex2) using CommonUtilities.getResource("records") returning to verifyTimestampFlex_all onException handleServiceException;                
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();			
+	end
+	
+	function testTimestampArrayFlex_all() {@Test}
+		timeStampArrayFlex1 timeStampArrayFlexRecord{item1=["2005/12/05-01:15:41" as timestamp, "1996/07/14-04:27:54" as timestamp]};
+		timeStampArrayFlex2 timeStampArrayFlexRecord{item1=["2002/09/18-03:58:35" as timestamp]};
+		timeStampArrayFlex3 timeStampArrayFlexRecord{item1=["2000/12/04-10:16:21" as timestamp, "2006/03/28-23:47:46" as timestamp]};
+		call IRecordPassingFlex.timeStampArrayFlexAll(timeStampArrayFlex1, timeStampArrayFlex2, timeStampArrayFlex3) using CommonUtilities.getResource("records") returning to verifyTimestampArrayFlex_all onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();					
+	end
+
+	function testTimeFlex_all() {@Test}
+		timeFlex1 timeFlexRecord{item1 = "12:05:45"};
+		timeFlex2 timeFlexRecord{item1 = "14:48:52"};			
+		call IRecordPassingFlex.timeFlexAll(timeFlex1, timeFlex2) using CommonUtilities.getResource("records") returning to verifyTimeFlex_all onException handleServiceException;                
+	end
+	
+	function testTimeArrayFlex_all() {@Test}
+		timeArrayFlex1 timeArrayFlexRecord{item1=["01:15:41" as time, "04:27:54" as time]};
+		timeArrayFlex2 timeArrayFlexRecord{item1=["03:58:35" as time]};
+		timeArrayFlex3 timeArrayFlexRecord{item1=["10:16:21" as time, "23:47:46" as time]};
+		call IRecordPassingFlex.timeArrayFlexAll(timeArrayFlex1, timeArrayFlex2, timeArrayFlex3) using CommonUtilities.getResource("records") returning to verifyTimeArrayFlex_all onException handleServiceException;
+	end
+
+	function testBooleanFlex_all() {@Test}
+		booleanFlex1 booleanFlexRecord{item1 = true};
+		booleanFlex2 booleanFlexRecord{item1 = false};			
+		booleanFlex3 booleanFlexRecord{item1 = false};
+
+		call IRecordPassingFlex.booleanFlexAll(booleanFlex1, booleanFlex2, booleanFlex3) using CommonUtilities.getResource("records") returning to verifyBooleanFlex_all onException handleServiceException;	
+	end
+	
+	function testBooleanArrayFlex_all() {@Test}
+		booleanArrayFlex1 booleanArrayFlexRecord{item1=[true, false]};
+		booleanArrayFlex2 booleanArrayFlexRecord{item1=[true]};
+		booleanArrayFlex3 booleanArrayFlexRecord{item1=[false, true]};
+		call IRecordPassingFlex.booleanArrayFlexAll(booleanArrayFlex1, booleanArrayFlex2, booleanArrayFlex3) using CommonUtilities.getResource("records") returning to verifyBooleanArrayFlex_all onException handleServiceException;
+			
+	end
+	
+	function testDateFlex_all() {@Test}
+		dateFlex1 dateFlexRecord{item1 = "03/02/2010"};
+		dateFlex2 dateFlexRecord{item1 = "04/06/2009"};
+		dateFlex3 dateFlexRecord{item1 = "09/30/2007"};
+
+		call RecordPassingFlex.dateFlexAll(dateFlex1, dateFlex2, dateFlex3) using CommonUtilities.getResource("records") returning to verifyDateFlex_all onException handleServiceException;	
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();	
+	end
+	
+	function testDateArrayFlex_all() {@Test}
+		dateArrayFlex1 dateArrayFlexRecord{item1=["12/05/2005" as date, "07/14/1996" as date]};
+		dateArrayFlex2 dateArrayFlexRecord{item1=["09/18/2002" as date]};
+		dateArrayFlex3 dateArrayFlexRecord{item1=["12/04/2000" as date, "03/28/2006" as date]};	
+		call RecordPassingFlex.dateArrayFlexAll(dateArrayFlex1, dateArrayFlex2, dateArrayFlex3) using CommonUtilities.getResource("records") returning to verifyDateArrayFlex_all onException handleServiceException;
+//		LogResult.skipped("bug360558");
+//		TestListMgr.nextTest();	
+	end
+	
+	function testOuterFlexRecord_inParm() {@Test}
+		flex1 OuterFlexibleRecord;
+		CommonUtilities.initOuterFlexibleRecord(flex1);
+		call IRecordPassingFlex.outerFlexibleRecordIn(flex1) using CommonUtilities.getResource("records") returning to verifyOuterFlexRecord_inParm onException handleServiceException;
+	end
+	
+	function testOuterFlexRecord_inoutParm() {@Test}
+		flex1 OuterFlexibleRecord;
+        CommonUtilities.initOuterFlexibleRecord(flex1);
+		call IRecordPassingFlex.outerFlexibleRecordInout(flex1) using CommonUtilities.getResource("records") returning to verifyOuterFlexRecord_inoutParm onException handleServiceException;		
+	end
+
+	function testOuterFlexRecord_outParm() {@Test}
+		flex1 OuterFlexibleRecord;
+        CommonUtilities.initOuterFlexibleRecord(flex1);
+        call IRecordPassingFlex.outerFlexibleRecordOut(flex1) using CommonUtilities.getResource("records") returning to verifyOuterFlexRecord_outParm onException handleServiceException;        
+	end
+	
+	function testOuterFlexRecord_allParm() {@Test}
+		flex1, flex2, flex3 OuterFlexibleRecord;
+        CommonUtilities.initOuterFlexibleRecord(flex1);
+        CommonUtilities.initOuterFlexibleRecord(flex2);
+		call IRecordPassingFlex.outerFlexibleRecordAll(flex1, flex2, flex3) using CommonUtilities.getResource("records") returning to verifyOuterFlexRecord_allParm onException handleServiceException;		
+	end	
+	
+	function testRatlc01399882StringRec() {@Test}
+		param1 StringRec = CommonUtilities.getStringRec(1);
+		param3 StringRec = CommonUtilities.getStringRec(3);		
+		param2 StringRec = param3;
+		call IRecordPassingFlex.ratlc01399882StringRec(param1, param2, param3) using CommonUtilities.getResource("records") returning to verifyRatlc01399882StringRec onException handleServiceException;
+	
+	end
+
+
+	function verify_bigIntFlexAll(flex2 bigIntFlexRecord in, flex3 bigIntFlexRecord in, retResult bigInt[] in)
+		try
+			LogResult.assertBigIntEqual(":flex2", 3, flex2.item1);
+			LogResult.assertBigIntEqual(":flex3", 100, flex3.item1);
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 3, retResult[2]);
+			LogResult.assertBigIntEqual(":ret[3]", 100, retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verify_bigIntArrayFlexAll(flexArray2 bigIntArrayFlexRecord in, flexArray3 bigIntArrayFlexRecord in, retResult bigInt[] in)
+		try
+			LogResult.assertBigIntEqual(":retResult[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":retResult[2]", 5, retResult[2]);
+			LogResult.assertBigIntEqual(":flexArray2.item1[1]", 3, flexArray2.item1[1]);
+			LogResult.assertBigIntEqual(":flexArray2.item1[2]", 1, flexArray2.item1[2]);
+			LogResult.assertBigIntEqual(":flexArray3.item1[1]", 100, flexArray3.item1[1]);
+			LogResult.assertBigIntEqual(":flexArray3.item1.size", 1, flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyIntFlex_all(flex2 intFlexRecord in, flex3 intFlexRecord in, retResult int[] in)
+		try
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 3, retResult[2]);
+			LogResult.assertBigIntEqual(":ret[3]", 100, retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyIntArrayFlex_all(flexArray2 intArrayFlexRecord in, flexArray3 intArrayFlexRecord in, retResult int[] in)
+		try
+			LogResult.assertBigIntEqual(":ret[1]", 2, retResult[1]);
+			LogResult.assertBigIntEqual(":ret[2]", 5, retResult[2]);
+			LogResult.assertBigIntEqual(":flex2.item1[1]", 3, flexArray2.item1[1]);
+			LogResult.assertBigIntEqual(":flex2.item1[2]", 1, flexArray2.item1[2]);
+			LogResult.assertBigIntEqual(":flex3.item1[1]", 100, flexArray3.item1[1]);
+			LogResult.assertBigIntEqual(":flex3.item1.size", 1, flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallintFlex_all(flex2 smallIntFlexRecord in, flex3 smallIntFlexRecord in, retResult smallInt[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", 1==retResult[1]);
+			LogResult.assertTrue(":retResult[2]", 4==retResult[2]);
+			Logresult.assertTrue(":retResult[3]", 8==retResult[3]);
+			Logresult.assertBigIntEqual(":retResult[4]", 5, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallintArrayFlex_all(flexArray2 smallIntArrayFlexRecord in, flexArray3 smallIntArrayFlexRecord in, retResult smallInt[] in)
+		try
+			LogResult.assertTrue("retResult[1]", 7==retResult[1]);
+			LogResult.assertTrue("retResult[2]", 4==retResult[2]);
+			Logresult.assertTrue("flexArray2.item1[1]", 2==flexArray2.item1[1]);
+			LogResult.assertTrue("flexArray2.item1[2]", 1==flexArray2.item1[2]);
+			LogResult.assertTrue("flexArray3.item1[1]", 10==flexArray3.item1[1]);
+			LogResult.assertTrue("flexArray3.item1.getSize()", 1==flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloatFlex_all(flex2 smallFloatFlexRecord in, flex3 smallFloatFlexRecord in, retResult smallFloat[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertFloatEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertFloatEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifySmallfloatArrayFlex_all(flexArray2 smallFloatArrayFlexRecord in, flexArray3 smallFloatArrayFlexRecord in, retResult smallFloat[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertFloatEqual(":flexArray2.item1[1]", 2.4, flexArray2.item1[1]);
+			LogResult.assertFloatEqual(":flexArray2.item1[2]", 2.7, flexArray2.item1[2]);
+			LogResult.assertFloatEqual(":flexArray3.item1[1]", 9.4, flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyFloatFlex_all(flex2 floatFlexRecord in, flex3 floatFlexRecord in, retResult float[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertFloatEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertFloatEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyFloatArrayFlex_all(flexArray2 floatArrayFlexRecord in, flexArray3 floatArrayFlexRecord in, retResult float[] in)
+		try
+			LogResult.assertFloatEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertFloatEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertFloatEqual(":flexArray2.item1[1]", 2.4, flexArray2.item1[1]);
+			LogResult.assertFloatEqual(":flexArray2.item1[2]", 23.2, flexArray2.item1[2]);
+			LogResult.assertFloatEqual(":flexArray3.item1[1]", 7.3, flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getsize()", 1==flexArray3.item1.getsize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();			
+	end
+	
+	function verifyDecimalFlex_all(flex2 decimalFlexRecord in, flex3 decimalFlexRecord in, retResult decimal(10,2)[] in)
+		try
+			LogResult.assertDecimalEqual(":retResult[1]", 1.1, retResult[1]);
+			LogResult.assertDecimalEqual(":retResult[2]", 4.1, retResult[2]);
+			LogResult.assertDecimalEqual(":retResult[3]", 2.4, retResult[3]);
+			LogResult.assertDecimalEqual(":retResult[4]", 5.2, retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();						
+	end
+	
+	function verifyDecimalArrayFlex_all(flexArray2 decimalArrayFlexRecord in, flexArray3 decimalArrayFlexRecord in, retResult decimal(10,2)[] in)
+		try
+			LogResult.assertDecimalEqual(":retResult[1]", 1.7, retResult[1]);
+			LogResult.assertDecimalEqual(":retResult[2]", 2.1, retResult[2]);
+			LogResult.assertDecimalEqual(":flexArray2.item1[1]", 2.4, flexArray2.item1[1]);
+			LogResult.assertDecimalEqual(":flexArray2.item1[2]", 3.4, flexArray2.item1[2]);
+			LogResult.assertDecimalEqual(":flexArray3.item1[1]", 7.3, flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();									
+	end
+	
+	function verifyStringFlex_all(flex2 stringFlexRecord in, flex3 stringFlexRecord in, retResult string[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "Hi", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":retResult[3]", "Hi c", retResult[3]);
+			LogResult.assertStringEqual(":retResult[4]", "Hi b", retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyStringArrayFlex_all(flexArray2 stringArrayFlexRecord in, flexArray3 stringArrayFlexRecord in, retResult string[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "a", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":flexArray2.item1[1]", "c", flexArray2.item1[1]);
+			LogResult.assertStringEqual(":flexArray2.item1[2]", "Yahoo", flexArray2.item1[2]);
+			LogResult.assertStringEqual(":flexArray3.item1[1]", "HiHi", flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1==flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifylStringFlex_all(flex2 LstringFlexRecord in, flex3 LstringFlexRecord in, retResult string(7)[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "Hi12345", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":retResult[3]", "Hi c123", retResult[3]);
+			LogResult.assertStringEqual(":retResult[4]", "Hi b", retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifylStringArrayFlex_all(flexArray2 LstringArrayFlexRecord in, flexArray3 LstringArrayFlexRecord in, retResult string(5)[] in)
+		try
+			LogResult.assertStringEqual(":retResult[1]", "a", retResult[1]);
+			LogResult.assertStringEqual(":retResult[2]", "b", retResult[2]);
+			LogResult.assertStringEqual(":flexArray2.item1[1]", "c", flexArray2.item1[1]);
+			LogResult.assertStringEqual(":flexArray2.item1[2]", "Yahoo", flexArray2.item1[2]);
+			LogResult.assertStringEqual(":flexArray3.item1[1]", "HiHi1", flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1==flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimestampFlex_all(flex2 timestampFlexRecord in, retResult timeStamp[] in)
+		try
+			retExpected timestamp = "2006/05/24 12:05:45";
+			LogResult.assertTimestampEqual(":retResult[1]", retExpected, retResult[1]);
+			LogResult.assertTimestampEqual(":retResult[2]", "2003/02/17 14:48:52", retResult[2]);
+			LogResult.assertTimestampEqual(":retResult[3]", "2006/05/24 12:05:45", retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimestampArrayFlex_all(flexArray2 timeStampArrayFlexRecord in, flexArray3 timeStampArrayFlexRecord in, retResult timeStamp("yyyyMMddHHmmss")[] in)
+		try
+			LogResult.assertTimestampEqual(":retResult[1]", "2005/12/05 01:15:41", retResult[1]);
+			LogResult.assertTimestampEqual(":retResult[2]", "1996/07/14 04:27:54", retResult[2]);
+			LogResult.assertTimestampEqual(":flexArray2.item1[1]", "2002/09/18 03:58:35", flexArray2.item1[1]);
+			LogResult.assertTimestampEqual(":flexArray2.item1[2]", "2006/07/13 18:30:23", flexArray2.item1[2]);
+			LogResult.assertTimestampEqual(":flexArray3.item1[1]", "2006/07/12 20:23:54", flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimeFlex_all(flex2 timeFlexRecord in, retResult time[] in)
+		try
+			retExpected time = "12:05:45";
+			LogResult.assertTimeEqual(":retResult[1]", retExpected, retResult[1]);
+			LogResult.assertTimeEqual(":retResult[2]", "14:48:52", retResult[2]);
+			LogResult.assertTimeEqual(":retResult[3]", "12:05:45", retResult[3]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyTimeArrayFlex_all(flexArray2 timeArrayFlexRecord in, flexArray3 timeArrayFlexRecord in, retResult time[] in)
+		try
+			LogResult.assertTimeEqual(":retResult[1]", "01:15:41", retResult[1]);
+			LogResult.assertTimeEqual(":retResult[2]", "04:27:54", retResult[2]);
+			LogResult.assertTimeEqual(":flexArray2.item1[1]", "03:58:35", flexArray2.item1[1]);
+			LogResult.assertTimeEqual(":flexArray2.item1[2]", "18:30:23", flexArray2.item1[2]);
+			LogResult.assertTimeEqual(":flexArray3.item1[1]", "20:23:54", flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBooleanFlex_all(flex2 booleanFlexRecord in, flex3 booleanFlexRecord in, retResult boolean[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", false == retResult[1]);
+			LogResult.assertTrue(":retResult[2]", false == retResult[2]);
+			LogResult.assertTrue(":retResult[3]", true == retResult[3]);
+			LogResult.assertTrue(":retResult[4]", true == retResult[4]);
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyBooleanArrayFlex_all(flexArray2 booleanArrayFlexRecord in, flexArray3 booleanArrayFlexRecord in, retResult boolean[] in)
+		try
+			LogResult.assertTrue(":retResult[1]", true == retResult[1]);
+			LogResult.assertTrue(":retResult[2]", false == retResult[2]);
+			LogResult.assertTrue(":flexArray2.item1[1]", true == flexArray2.item1[1]);
+			LogResult.assertTrue(":flexArray2.item1[2]", true == flexArray2.item1[2]);
+			LogResult.assertTrue(":flexArray3.item1[1]", false == flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());
+		onException (e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();				
+	end
+	
+	function verifyDateFlex_all(flex2 dateFlexRecord in, flex3 dateFlexRecord in, retResult date[] in)
+		try
+			LogResult.assertDateEqual(":retResult[1]", "04/24/2007", retResult[1]);
+			LogResult.assertDateEqual(":retResult[2]", "04/06/2009", retResult[2]);
+			LogResult.assertDateEqual(":retResult[3]", "10/01/2007", retResult[3]);
+			LogResult.assertDateEqual(":retResult[4]", "04/07/2009", retResult[4]);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();		
+	end
+	
+	function verifyDateArrayFlex_all(flexArray2 dateArrayFlexRecord in, flexArray3 dateArrayFlexRecord in, retResult date[] in)
+		try			
+			LogResult.assertDateEqual(":retResult[1]", "12/05/2005", retResult[1]);
+			LogResult.assertDateEqual(":retResult[2]", "07/14/1996", retResult[2]);
+			LogResult.assertDateEqual(":flexArray2.item1[1]", "09/18/2002", flexArray2.item1[1]);
+			LogResult.assertDateEqual(":flexArray2.item1[2]", "07/13/2006", flexArray2.item1[2]);
+			LogResult.assertDateEqual(":flexArray3.item1[1]", "07/12/2006", flexArray3.item1[1]);
+			LogResult.assertTrue(":flexArray3.item1.getSize()", 1 == flexArray3.item1.getSize());			
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyOuterFlexRecord_inParm(retResult string in)
+		try
+		LogResult.assertStringEqual("", "flex.item4.item1[1] = flex.item4.item1[1]", retResult);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);
+		end		
+		TestListMgr.nextTest();
+	end
+	
+	function verifyOuterFlexRecord_inoutParm(flex OuterFlexibleRecord in)
+		expected OuterFlexibleRecord;
+		CommonUtilities.initOuterFlexibleRecord(expected);
+		try
+			compareOuterFlexRecord(expected, flex);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();					
+	end
+	
+	function verifyOuterFlexRecord_outParm(flex OuterFlexibleRecord in)
+		expected OuterFlexibleRecord;
+		CommonUtilities.initOuterFlexibleRecord(expected);
+		try
+			compareOuterFlexRecord(expected, flex);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end	
+		TestListMgr.nextTest();
+	end
+	
+	//caller needs to catch AssertionFailedException
+	private function compareOuterFlexRecord(expected OuterFlexibleRecord in, actual OuterFlexibleRecord in)
+		LogResult.assertStringEqual(":flex.item1", expected.item1, actual.item1);
+		LogResult.assertStringArrayEqual(":flex.item2", expected.item2, actual.item2);
+		LogResult.assertStringEqual(":flex.item4.item2", expected.item4.item2, actual.item4.item2);
+		LogResult.assertBigIntEqual(":flex.item4.item3", expected.item4.item3, actual.item4.item3);		
+	end
+	
+	function verifyOuterFlexRecord_allParm(flex2 OuterFlexibleRecord in, flex3 OuterFlexibleRecord in, retResult string in)
+		expected OuterFlexibleRecord;
+		CommonUtilities.initOuterFlexibleRecord(expected);
+		try
+			compareOuterFlexRecord(expected, flex2);
+			compareOuterFlexRecord(expected, flex3);
+			LogResult.assertStringEqual(":retResult", expected.item4.item1[1], retResult);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end		
+		TestListMgr.nextTest();	
+	end
+	
+	function verifyRatlc01399882StringRec(param2 StringRec in, param3 StringRec in, retResult StringRec in)
+		try
+			compareStringRec(CommonUtilities.getStringRec(3), param2);
+			compareStringRec(CommonUtilities.getStringRec(1), param3);
+			compareStringRec(CommonUtilities.getStringRec(4), retResult);
+		onException(e1 AssertionFailedException)
+			TestListMgr.caughtFailedAssertion(e1);
+		onException (e AnyException)
+			TestListMgr.caughtAnyException(e);			
+		end				
+		TestListMgr.nextTest();
+	end
+	
+	//caller needs to catch AssertionFailedException
+	private function compareStringRec(expected StringRec in, actual StringRec in)
+		LogResult.assertStringEqual(":field1", expected.field1, actual.field1);
+		LogResult.assertStringEqual(":field4[1]", expected.field4[1], actual.field4[1]);
+		LogResult.assertStringEqual(":field4[2]", expected.field4[2], actual.field4[2]);
+	end	
+	
+end
+

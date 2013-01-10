@@ -1,0 +1,102 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtBoolean001
+  * @title EdtBoolean001 - RunTypeFunctions
+  * @description testing boolean functions
+  * @testcases runTestTypeFunctions01 - runTestTypeFunctions12
+  * @sources EdtBoolean001.egl
+  * @keywords boolean, functions
+ **/
+library EBoolean001 {}
+
+	myT boolean = true;
+	myF boolean = false;
+
+	function runTestTypeFunctions01(){@Test}
+		LogResult.assertTrue("(myT != myF) != false", ((myT != myF) != false) );
+	end
+	
+	function runTestTypeFunctions02(){@Test}
+		LogResult.assertTrue("(myT != myT) != true", ((myT != myT) != true) );
+	end
+		
+	function runTestTypeFunctions03(){@Test}
+		LogResult.assertTrue("(myF != myF) != true", ((myF != myF) != true) );
+	end	
+
+	function runTestTypeFunctions04(){@Test}
+		LogResult.assertTrue("(myT == myF) != true", ((myT == myF) != true) );
+	end		
+
+	function runTestTypeFunctions05(){@Test}
+		LogResult.assertTrue("(myT == myT) != false", ((myT == myT) != false) );
+	end		
+
+	function runTestTypeFunctions06(){@Test}
+		LogResult.assertTrue("(myF == myF) != false", ((myF == myF) != false) );
+	end		
+
+	function runTestTypeFunctions07(){@Test}
+		LogResult.assertTrue("(myT && myF) == false", ((myT && myF) == false) );
+	end		
+
+	function runTestTypeFunctions08(){@Test}
+		LogResult.assertTrue("(myT && myT) == true", ((myT && myT) == true) );
+	end		
+	
+	function runTestTypeFunctions09(){@Test}
+		LogResult.assertTrue("(myF && myF) == false", ((myF && myF) == false) );
+	end	
+	
+	function runTestTypeFunctions10(){@Test}
+		LogResult.assertTrue("(myT || myF) == true", ((myT || myF) == true) );
+	end		
+	
+	function runTestTypeFunctions11(){@Test}
+		LogResult.assertTrue("(myT || myT) == true", ((myT || myT) == true) );
+	end		
+	
+	function runTestTypeFunctions12(){@Test}
+		LogResult.assertTrue("(myF || myF) == false", ((myF || myF) == false) );
+	end		
+		
+	function runTestTypeFunctions13(){@Test}
+		LogResult.assertTrue("(myT xor myT) == false", (myT xor myT) == false );
+	end		
+		
+	function runTestTypeFunctions14(){@Test}
+		LogResult.assertTrue("(myF xor myF) == false", (myF xor myF) == false );
+	end		
+		
+	function runTestTypeFunctions15(){@Test}
+		LogResult.assertTrue("(myT xor myF) == true", (myT xor myF) == true );
+	end		
+		
+	function runTestTypeFunctions16(){@Test}
+		LogResult.assertTrue("(myF xor myT) == true", (myF xor myT) == true );
+	end		
+	
+	function runTestTypeFunctions17(){@Test}
+	    nLocalT boolean? = true;
+	    nLocalF boolean? = false;
+		LogResult.assertTrue("(nLocalT xor nLocalF) == true", (nLocalT xor nLocalF) == true );
+	end		
+		
+	function runTestTypeFunctions18(){@Test}
+	    nLocalT boolean? = null;
+	    nLocalF boolean? = false;
+	    answer boolean = false;
+	    try
+	    	temp boolean = (nLocalT xor nLocalF) == true;
+	    onException(exception NullValueException)
+	    	answer = true;
+	    end
+	    
+		LogResult.assertTrue("Expecting NullValueException",  answer);
+	end		
+end

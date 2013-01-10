@@ -1,0 +1,22 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLSchemaType;
+
+handler primitiveArrayFlex
+    paf1 bigInt[];
+    paf2 int[];
+    paf3 smallInt[];
+    paf4 float[];
+    paf5 smallFloat[];
+    paf9 decimal(4)[];
+    paf10 decimal(10)[];
+    paf11 decimal(20)[];
+    paf12 decimal(6, 2)[];
+    paf13 string[];
+    paf14 string(6)[];
+    paf19 date[];
+    paf20 time[]; 
+    paf21 timeStamp[];
+    paf25 boolean[];
+    paf26 bytes(3)[]{@XMLSchemaType{name="hexBinary"}};
+end

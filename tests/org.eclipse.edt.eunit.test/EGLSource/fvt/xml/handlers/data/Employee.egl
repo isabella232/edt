@@ -1,0 +1,16 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+handler Employee{@XMLValue{kind = xmlStructurekind.sequence}, @XMLRootElement{name = "stump"}}
+    EmpNo EmpNumber;
+    //array EmpNumber[0]{@XMLElement{nillable = true}};
+    array EmpNumber[]{@XMLElement{nillable = true}} = new EmpNumber[0];
+    //dicta Dictionary[0];
+    dicta Dictionary[] = new Dictionary[0];
+    dict Dictionary{};
+    LastName string;
+end

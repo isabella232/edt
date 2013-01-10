@@ -1,0 +1,370 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString005
+  * @title EdtString005 - runPatternUtilFunction
+  * @description testing string pattern matching with and without wildcards
+  * @testcases runPatternUtilFunction01 - runPatternUtilFunction36
+  * @sources EdtString005.egl
+  * @keywords string, indexOf, startsWith, endsWith, replaceStr
+ **/
+library EString005 {}
+	
+	s1 string;
+	s2 string;
+	s3 string;
+	nS1 string?;
+	nS2 string?;
+	nS3 string?;
+	actualInt int;
+	expectedInt int;
+	actualBoolean boolean;
+	expectedBoolean boolean;
+	actualStr string?;
+	expectedStr string?;
+	
+	// find index of substring
+	function runPatternUtilFunction01(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "abc";
+		expectedInt = 1;
+		actualInt = s1.indexOf(s2);
+		LogResult.assertTrue("indexOf at beginning", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction02(){@Test}
+		try
+			nS1 = null;
+			s2 = "abc";
+			expectedInt = 1;
+			actualInt = nS1.indexOf(s2);
+			LogResult.failed("null receiver indexOf ");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+		
+	function runPatternUtilFunction03(){@Test}
+		try
+			s1 = "abc";
+			nS2 = null;
+			expectedInt = 1;
+			actualInt = s1.indexOf(nS2);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction04(){@Test}
+		s1 = "abc";
+		s2 = "";
+		expectedInt = 1;
+		actualInt = s1.indexOf(s2);
+		LogResult.assertTrue("empty parameter indexOf ", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction05(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cde";
+		expectedInt = 9;
+		actualInt = s1.indexOf(s2,5);
+		LogResult.assertTrue("indexOf after index", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction06(){@Test}
+		try
+			s1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			expectedInt = 5;
+			actualInt = s1.indexOf(nS2,5);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction07(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cde";
+		expectedInt = 9;
+		actualInt = s1.indexOf(s2,5);
+		LogResult.assertTrue("indexOf after index", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction08(){@Test}
+		try
+			nS1 = null;
+			s2 = "cde";
+			expectedInt = 9;
+			actualInt = nS1.indexOf(s2,5);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction09(){@Test}
+		try
+			s1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			expectedInt = 9;
+			actualInt = nS1.indexOf(nS2,5);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction10(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cde";
+		expectedInt = 15;
+		actualInt = s1.lastIndexOf(s2);
+		LogResult.assertTrue("lastIndexOf", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction11(){@Test}
+		try
+			nS1 = null;
+			s2 = "cde";
+			expectedInt = 15;
+			actualInt = nS1.lastIndexOf(s2);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction12(){@Test}
+		try
+			s1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			expectedInt = 19;
+			actualInt = s1.lastIndexOf(nS2);
+ 			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	// Tests using string literals
+	function runPatternUtilFunction13(){@Test}
+		expectedInt = 1;
+		actualInt = "abcdefabcdefabcdef".indexOf("abc");
+		LogResult.assertTrue("indexOf at beginning with literals", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction14(){@Test}
+		expectedInt = 9;
+		actualInt = "abcdefabcdefabcdef".indexOf("cde",5);
+		LogResult.assertTrue("indexOf after index with literals", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction15(){@Test}
+		expectedInt = 9;
+		actualInt = "abcdefabcdefabcdef".indexOf("cde",5);
+		LogResult.assertTrue("indexOf after index with literals", (actualInt == expectedInt) );
+	end
+	
+	function runPatternUtilFunction16(){@Test}
+		expectedInt = 15;
+		actualInt = "abcdefabcdefabcdef".lastIndexOf("cde");
+		LogResult.assertTrue("lastIndexOf", (actualInt == expectedInt) );
+	end
+
+	// endsWith variations with literals
+	function runPatternUtilFunction17(){@Test}
+		actualBoolean = "abcdefabcdefabcdef".startsWith("abc");
+		expectedBoolean = true;
+		LogResult.assertTrue("startsWith with literals true", (actualBoolean == expectedBoolean) );
+	end
+	
+	function runPatternUtilFunction18(){@Test}
+		actualBoolean = "abcdefabcdefabcdef".startsWith("cde");
+		expectedBoolean = false;
+		LogResult.assertTrue("startsWith with literals false", (actualBoolean == expectedBoolean) );
+	end
+
+	// endsWith variations with variables
+	function runPatternUtilFunction19(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cdef";
+		actualBoolean = s1.endsWith(s2);
+		expectedBoolean = true;
+		LogResult.assertTrue("endsWith with variables true", (actualBoolean == expectedBoolean) );
+	end
+	
+	function runPatternUtilFunction20(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cde";
+		actualBoolean = s1.endsWith(s2);
+		expectedBoolean = false;
+		LogResult.assertTrue("endsWith with variables false", (actualBoolean == expectedBoolean) );
+	end
+	
+	// endsWith variations with null variables
+	function runPatternUtilFunction21(){@Test}
+		try
+			nS1 = null;
+			nS2 = "cdef";
+			actualBoolean = nS1.endsWith(nS2);
+			expectedBoolean = true;
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction22(){@Test}
+		try
+			nS1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			actualBoolean = nS1.endsWith(nS2);
+			expectedBoolean = true;
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+
+	// startsWith variations with literals
+	function runPatternUtilFunction23(){@Test}
+		actualBoolean = "abcdefabcdefabcdef".startsWith("abc");
+		expectedBoolean = true;
+		LogResult.assertTrue("startsWith with literals true", (actualBoolean == expectedBoolean) );
+	end
+	
+	function runPatternUtilFunction24(){@Test}
+		actualBoolean = "abcdefabcdefabcdef".startsWith("bcd");
+		expectedBoolean = false;
+		LogResult.assertTrue("startsWith with literals false", (actualBoolean == expectedBoolean) );
+	end
+
+	// startsWith variations with variables
+	function runPatternUtilFunction25(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "abcd";
+		actualBoolean = s1.startsWith(s2);
+		expectedBoolean = true;
+		LogResult.assertTrue("startsWith with variables true", (actualBoolean == expectedBoolean) );
+	end
+	
+	function runPatternUtilFunction26(){@Test}
+		s1 = "abcdefabcdefabcdef";
+		s2 = "cde";
+		actualBoolean = s1.startsWith(s2);
+		expectedBoolean = false;
+		LogResult.assertTrue("startsWith with variables false", (actualBoolean == expectedBoolean) );
+	end
+	
+	// startsWith variations with null variables
+	function runPatternUtilFunction27(){@Test}
+		try
+			nS1 = null;
+			nS2 = "abcde";
+			actualBoolean = nS1.startsWith(nS2);
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction28(){@Test}
+		try
+			nS1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			actualBoolean = nS1.startsWith(nS2);
+			expectedBoolean = true;
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	// replaceStr variations with literals
+	function runPatternUtilFunction29(){@Test}
+		actualStr = "abcdefabcdefabcdefab".replaceStr("abc", "xyz");
+		expectedStr = "xyzdefxyzdefxyzdefab";
+		LogResult.assertTrue("replaceStr with literals", (actualStr == expectedStr) );
+	end
+	
+	function runPatternUtilFunction30(){@Test}
+		actualStr = "abcdefabcdefabcdefab".replaceStr("cbc", "xyz");
+		expectedStr = "abcdefabcdefabcdefab";
+		LogResult.assertTrue("replaceStr with literals nrf", (actualBoolean == expectedBoolean) );
+	end
+
+	// startsWith variations with variables
+	function runPatternUtilFunction31(){@Test}
+		s1 = "abcdefabcdefabcdefab";
+		s2 = "abc";
+		s3 = "wxyz";
+		actualStr = s1.replaceStr(s2,s3);
+		expectedStr = "wxyzdefwxyzdefwxyzdefab";
+		LogResult.assertTrue("replaceStr with variables ", (actualStr == expectedStr) );
+	end
+	
+	function runPatternUtilFunction32(){@Test}
+		s1 = "abcdefabcdefabcdefab";
+		s2 = "bbc";
+		s3 = "xyz";
+		actualStr = s1.replaceStr(s2,s3);
+		expectedStr = "abcdefabcdefabcdefab";
+		LogResult.assertTrue("replaceStr with variables nrf", (actualStr == expectedStr) );
+	end
+	
+	function runPatternUtilFunction33(){@Test}
+		s1 = "abcdefabcdefabcdefab";
+		s2 = "abc";
+		s3 = "wxyz";
+		actualStr = (s1.replaceStr(s2,s3)).replaceStr("zdef", "mnop");
+		expectedStr = "wxymnopwxymnopwxymnopab";
+		LogResult.assertTrue("replaceStr with variables complex", (actualStr == expectedStr) );
+	end
+	
+	// startsWith variations with null variables
+	function runPatternUtilFunction34(){@Test}
+		try
+			nS1 = null;
+			s2 = "abc";
+			s3 = "wxyz";
+			actualStr = nS1.replaceStr(s2,s3);
+			expectedStr = "wxyzdefwxyzdefwxyzdefab";
+			LogResult.failed("replaceStr with null receiver ");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction35(){@Test}
+		try
+			s1 = "abcdefabcdefabcdef";
+			nS2 = null;
+			s3 = "wxyz";
+			actualStr = s1.replaceStr(nS2,s3);		
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runPatternUtilFunction36(){@Test}
+		try
+			s1 = "abcdefabcdefabcdef";
+			s2 = "abc";
+			nS3 = null;
+			actualStr = s1.replaceStr(s2,nS3);
+			expectedStr = "defdefdef";
+			LogResult.failed("no exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+
+	
+end // EdtString005
+

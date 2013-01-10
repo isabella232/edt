@@ -1,0 +1,116 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate010
+  * @title EdtDate001 - runParameterFunction
+  * @description testing use of date as a parameter
+  * @testcases runParameterFunction01 - runParameterFunction2
+  * @sources EdtDate010.egl
+  * @keywords date, functions, parameter
+ **/
+library EDate010 {}
+
+	// Constant Declarations
+	const constDate1 date="04-24-2004";
+	
+	const febNonLeap date = "02-28-1999";
+	const febLeap date = "02-29-2000";
+	const marFirst date = "03-01-2000";
+	const marFirst1999 date = "03-01-1999";
+	
+	// Variable Declarations
+	varDate date;
+	varDateNullable date?;
+	
+	function runParameterFunction01(){@Test}
+		varDate = febNonLeap;
+		passValueAsIn(varDate);
+		LogResult.assertDateEqual("Date passed as in parameter", febNonLeap, varDate);
+
+	end
+	
+	function runParameterFunction02(){@Test}
+		varDate = febNonLeap;
+		passValueAsInOut(varDate);
+		LogResult.assertDateEqual("Date passed as inout parameter", marFirst, varDate);
+
+	end
+	
+	function runParameterFunction03(){@Test}
+		varDate = febNonLeap;
+		passValueAsOut(varDate);
+		LogResult.assertDateEqual("Date returned as out parameter", marFirst, varDate);
+
+	end
+	
+	function runParameterFunction04(){@Test}
+		varDate = febNonLeap;
+		varDate = returnADateValue();
+		LogResult.assertDateEqual("Date returned as out parameter", marFirst, varDate);
+
+	end
+	
+	function runParameterFunction05(){@Test}
+		varDateNullable = febNonLeap;
+		passNullableValueAsIn(varDateNullable);
+		LogResult.assertDateEqual("Nullable Date passed as in parameter", febNonLeap, varDateNullable);
+
+	end
+	
+	
+	function runParameterFunction06(){@Test}
+		varDateNullable = febNonLeap;
+		passNullableValueAsInOut(varDateNullable);
+		LogResult.assertDateEqual("Nullable Date passed as inout parameter", marFirst, varDateNullable);
+
+	end
+	
+	function runParameterFunction07(){@Test}
+		varDateNullable = febNonLeap;
+		passNullableValueAsOut(varDateNullable);
+		LogResult.assertDateEqual("Nullable Date returned as out parameter", marFirst, varDateNullable);
+
+	end
+	
+	function runParameterFunction08(){@Test}
+		varDateNullable = febNonLeap;
+		varDateNullable = returnANullableDateValue();
+		LogResult.assertDateEqual("Nullable Date returned as out parameter", marFirst, varDateNullable);
+	end
+	
+	function passValueAsIn(inDate date in)
+		inDate = marFirst;
+	end
+	
+	function passValueAsInOut(inDate date inout)
+		inDate = marFirst;
+	end
+	
+	function passValueAsOut(outDate date out)
+		outDate = marFirst;
+	end
+	
+	function returnADateValue() returns (date)
+		return (marFirst);
+	end
+	
+	function passNullableValueAsIn(inDate date? in)
+		inDate = marFirst;
+	end
+	
+	function passNullableValueAsInOut(inDate date? inout)
+		inDate = marFirst;
+	end
+	
+	function passNullableValueAsOut(outDate date? out)
+		outDate = marFirst;
+	end
+	
+	function returnANullableDateValue() returns (date?)
+		return (marFirst);
+	end
+end

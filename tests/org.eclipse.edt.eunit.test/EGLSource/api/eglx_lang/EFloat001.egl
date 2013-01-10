@@ -1,0 +1,250 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EFloat001
+  * @title EFloat001 - runAssignmentFunction
+  * @description testing float assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction27
+  * @sources EFloat001.egl
+  * @keywords float, assignment, initialization
+ **/
+library EFloat001 {}
+
+	// Constant Declarations
+	const constFloat float = 8.723e4;
+	
+	// Variable Declarations
+	float1 float;
+	float2 float = 2.539E7;
+	float1n float?;
+	float2n float? = -34.892934e4;
+	variation string;
+
+	function runAssignmentFunction01(){@Test}
+		variation = "constant initialization";
+		LogResult.assertTrue1(constFloat == 8.723e4 );
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		variation = "variable default initialization";
+		LogResult.assertTrue1( float1 == 0);
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		variation = "variable initialization";
+		LogResult.assertTrue1( float2 == 2.539E7 );
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		variation = "nullable variable default initialization";
+		LogResult.assertTrue1( float1n == null  );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		variation = "nullable variable initialization";
+		LogResult.assertTrue1(float2n == -34.892934e4 );
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		variation = "nullable reset to null";
+		myInt float?;
+		myInt = float2;
+		myInt = null;
+		LogResult.assertTrue1( myInt == null );
+	end
+		
+	function runAssignmentFunction07(){@Test}
+		variation = "nullable indirectly set to null";
+		localInt, another float?;
+		localInt = float2;
+		localInt = another;
+		LogResult.assertTrue1( localInt == null );
+	end
+	
+	function runAssignmentFunction08(){@Test}
+		variation = "assignment w/ addition";
+		localInt float = float2;
+		localInt += 1.3E2;
+		LogResult.assertTrue1( localInt == 2.539013E7  );
+	end
+	
+	function runAssignmentFunction09(){@Test}
+		localInt float = float2;
+		localInt -= 1.3E2;
+		variation = "assignment w/ subtraction";
+		LogResult.assertTrue1(localInt == 2.538987E7 );
+	end
+	
+	function runAssignmentFunction10(){@Test}
+		localInt float = float2;
+		localInt -= -1.3E2;
+		variation = "assignment w/ negative subtraction";
+		LogResult.assertTrue1( localInt == 2.539013E7 );
+	end
+	
+	function runAssignmentFunction11(){@Test}
+		localInt float = float2;
+		localInt *= -1;
+		variation = "assignment w/ negative multiplication";
+		LogResult.assertTrue1( localInt == -2.539E7 );
+	end
+	
+	function runAssignmentFunction12(){@Test}
+		localInt float = float2;
+		localInt /= 1.3E2;
+		variation = "assignment w/ division";
+		LogResult.assertTrue1( localInt == 195307.6923076923 );
+	end
+	
+	function runAssignmentFunction13(){@Test}
+		localInt float = float2;
+		localInt %= 6;
+		variation = "assignment w/ modulous";
+		LogResult.assertTrue1( localInt == 4 );
+	end
+	
+	function runAssignmentFunction14(){@Test}	 
+		localInt float = 3;
+		localInt **= 3;
+		variation = "assignment w/ power";
+		LogResult.assertTrue1( localInt == 27 );
+	end
+	
+	function runAssignmentFunction15(){@Test}
+		localInt float = float2;
+		operand float = 1.3E2;
+		localInt += operand;
+		variation = "assignment w/ addition var";
+		LogResult.assertTrue1( localInt == 2.539013E7 );
+	end
+	
+	function runAssignmentFunction16(){@Test}
+		localInt float = float2;
+		operand float = 1.3E2;
+		localInt -= operand;
+		variation = "assignment w/ subtraction var";
+		LogResult.assertTrue1( localInt == 2.538987E7 );
+	end
+	
+	function runAssignmentFunction17(){@Test}
+		localInt float = float2;
+		operand float = -1.3E2;
+		localInt -= operand;
+		variation = "assignment w/ negative subtraction var";
+		LogResult.assertTrue1( localInt == 2.539013E7 );
+	end
+	
+	function runAssignmentFunction18(){@Test}
+		localInt float = float2;
+		operand float = -1;
+		localInt *= operand;
+		variation = "assignment w/ negative multiplication var"; 
+		LogResult.assertTrue("", (localInt == -2.539E7 ));
+	end
+	
+	function runAssignmentFunction19(){@Test}
+		localInt float = float2;
+		operand float = 1.3E2;
+		localInt /= operand;
+		variation = "assignment w/ division var";
+		LogResult.assertTrue1(localInt == 195307.6923076923 );
+	end
+	
+	function runAssignmentFunction20(){@Test}
+		localInt float = float2;
+		operand float = 6;
+		localInt %= operand;
+		variation = "assignment w/ modulous var";
+		LogResult.assertTrue1( localInt == 4 );
+	end
+	
+	function runAssignmentFunction21(){@Test}
+		localInt float = 3;
+		operand float = 3;
+		localInt **= operand;
+		variation = "assigment w/ power var";
+		LogResult.assertTrue1( localInt == 27 );
+	end
+	
+	function runAssignmentFunction22(){@Test}
+		localInt float = +23.539E7;
+		variation = "assignment w/ uninary +";
+		LogResult.assertTrue1( localInt == 23.539E7 );
+	end
+	
+	function runAssignmentFunction23(){@Test}
+		localInt float = -23.539E7;
+		variation = "assigment w/ uninary -";
+		LogResult.assertTrue1( localInt == -23.539E7 );
+	end
+		
+	function runAssignmentFunction24(){@Test}
+		localInt float = +0;
+		variation = "assignment w/ uninary + zero";
+		LogResult.assertTrue1( localInt == 0);
+	end
+	
+	function runAssignmentFunction25(){@Test}
+		localInt float = -0;
+		variation = "assignment w/ uninary - zero";
+		LogResult.assertTrue1( localInt == 0);
+	end
+	
+	function runAssignmentFunction26() {@Test}
+	 	variation string = "assigment overflow";
+ 		try
+			overflow float = 9223372036854775810.;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed("OK");
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+ 
+	function runAssignmentFunction27() {@Test}
+	 	variation string = "operation into overflow";
+		try
+			overflow float = 9223372036854775700.;
+			overflow += 23423;
+			variation += " no exception. Bug 356228 - EDT 1.0";
+			LogResult.skipped(variation);
+		onException(oops AnyException)
+			if ( oops isa NumericOverflowException)
+				LogResult.passed("OK");
+			else
+				variation += " wrong exception";
+				LogResult.failed(variation);
+			end
+		end
+	end
+	
+	function checkFloatConstants1() {@Test}
+		inf bytes(8) = EFloat.Infinity;
+		LogResult.assertTrue( "check EFloat.Infinity", inf == 0x7ff0000000000000 );
+	end
+	
+	function checkFloatConstants2() {@Test}
+		neginf bytes(8) = EFloat.NegativeInfinity;
+		LogResult.assertTrue( "check EFloat.NegativeInfinity", neginf == 0xfff0000000000000 );
+	end
+	
+	function checkFloatConstants3() {@Test}
+		nan bytes(8) = EFloat.NaN;
+		LogResult.assertTrue( "check EFloat.NaN", nan == 0x7ff8000000000000 );
+	end
+	
+	function checkFloatConstants4() {@Test}
+		nz bytes(8) = EFloat.NegativeZero;
+		// Implementations are allowed to use the same representation for zero and EFloat.NegativeZero.
+		LogResult.assertTrue( "check EFloat.NegativeZero", nz == 0x8000000000000000 || nz == 0x0000000000000000 );
+	end
+
+end  // EFloat001 library

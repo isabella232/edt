@@ -1,0 +1,131 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString007
+  * @title EdtString007 - runIsLikeFunction
+  * @description testing string pattern matching with and without wildcards
+  * @testcases runIsLikeFunction01 - runIsLikeFunction12
+  * @sources EdtString007.egl
+  * @keywords string, isLike 
+ **/
+library EString007 {}
+	
+	s1 string;
+	pattern string;
+	escapeStr string;
+	nS1 string?;
+	nPattern string?;
+	actual boolean;
+	expected boolean;
+
+	// do isLike with string literals
+	function runIsLikeFunction01(){@Test}	
+		actual = "abcdef".isLike("a_c%");
+		expected = true;
+		LogResult.assertTrue("isLike with literals true", (actual == expected) );
+	end
+	
+	function runIsLikeFunction02(){@Test}	
+		actual = "abcdef".isLike("ax?cf*");
+		expected = false;
+		LogResult.assertTrue("isLike with literals false", (actual == expected) );
+	end
+	
+	function runIsLikeFunction03(){@Test}
+		s1 = "ab%def";
+		pattern = "ab\\%def";
+		actual = s1.isLike(pattern);
+		expected = true;
+		LogResult.assertTrue("isLike with complex pattern", (actual == expected) );
+	end
+		
+	function runIsLikeFunction04(){@Test} 			
+		s1 = "ab%def";
+		pattern = "ab+%def";
+		escapeStr = "+";
+		actual = s1.isLike(pattern, escapeStr);
+		expected = true;
+		LogResult.assertTrue("isLike with complex pattern & escapeStr", (actual == expected) );
+		
+	end
+
+	function runIsLikeFunction05(){@Test} 	
+		s1 = "hello ";
+		pattern = "hello      ";
+		actual = s1.isLike(pattern);
+		expected = true;
+		LogResult.assertTrue("isLike with trailing spaces", (actual == expected) );
+	end
+	
+	function runIsLikeFunction06(){@Test}
+		s1 = "abbcdef";
+		pattern = "a_c%";
+		actual = s1.isLike(pattern);
+		expected = false;
+		LogResult.assertTrue("isLike no match", (actual == expected) );
+	end
+	
+	function runIsLikeFunction07(){@Test}	
+		s1 = "ab%defd";
+		pattern = "ab\\%def";
+		actual = s1.isLike(pattern);
+		expected = false;
+		LogResult.assertTrue("isLike with escape no match", (actual == expected) );
+	end
+
+	function runIsLikeFunction08(){@Test}	
+		s1 = "ab%defd";
+		pattern = "ab+%def";
+		escapeStr = "+";
+		actual = s1.isLike(pattern, escapeStr);
+		expected = false;
+		LogResult.assertTrue("isLike with escapeStr no match", (actual == expected) );
+	end
+	
+	function runIsLikeFunction09(){@Test}
+		s1 = "  hello";
+		pattern = "     hello";
+		actual = s1.isLike(pattern);
+		expected = false;
+		LogResult.assertTrue("isLike with leading spaces", (actual == expected) );
+
+	end
+	
+	function runIsLikeFunction10(){@Test}
+		try
+			s1 = "ab*def";
+			nPattern = null;
+			actual = s1.isLike(nPattern);
+			expected = false;
+			LogResult.failed("Expecting Exception");
+		onException (ex NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runIsLikeFunction11(){@Test}
+		s1 = "ab*def";
+		pattern = "";
+		actual = s1.isLike(pattern);
+		expected = false;
+		LogResult.assertTrue("isLike with empty parameter", (actual == expected) );
+	end
+	
+	// Test InvalidPatternException
+	function runIsLikeFunction12(){@Test}
+		try
+			s1 = "abcd";
+			pattern = "b\\"; // The pattern is invalid because there's nothing after the escape character.
+			actual = s1.isLike(pattern);
+			LogResult.failed("isLike throwing exception");
+		onException(oops InvalidPatternException)
+			LogResult.passed("isLike throwing exception");
+		end
+	end
+	
+	
+end // EdtString007
+

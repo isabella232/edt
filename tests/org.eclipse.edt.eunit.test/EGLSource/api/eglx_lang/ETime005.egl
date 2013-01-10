@@ -1,0 +1,112 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime005
+  * @title EdtTime005 - runParameterFunction
+  * @description testing use of Time as a parameter
+  * @testcases runParameterFunction01 - runParameterFunction2
+  * @sources EdtTime005.egl
+  * @keywords Time, functions, parameter, return
+ **/
+library ETime005 {}
+
+	// Constant Declarations
+	const constTime1 Time="23:01:30";
+	const constTime2 Time ="08:13:01";
+	
+	// Variable Declarations
+	varTime time;
+	varTimeNullable time?;
+	
+	function runParameterFunction01(){@Test}
+		varTime = constTime1;
+		passValueAsIn(varTime);
+		LogResult.assertTimeEqual("Time passed as in parameter", constTime1, varTime);
+	end
+	
+	function runParameterFunction02(){@Test}
+		varTime = constTime1;
+		passValueAsInOut(varTime);
+		LogResult.assertTimeEqual("Time passed as inout parameter", constTime2, varTime);
+
+	end
+	
+	function runParameterFunction03(){@Test}
+		varTime = constTime1;
+		passValueAsOut(varTime);
+		LogResult.assertTimeEqual("Time returned as out parameter", constTime2, varTime);
+
+	end
+	
+	function runParameterFunction04(){@Test}
+		varTime = constTime1;
+		varTime = returnATimeValue();
+		LogResult.assertTimeEqual("Time returned as out parameter", constTime2, varTime);
+
+	end
+	
+	function runParameterFunction05(){@Test}
+		varTimeNullable = constTime1;
+		passNullableValueAsIn(varTimeNullable);
+		LogResult.assertTimeEqual("Nullable Time passed as in parameter", constTime1, varTimeNullable);
+
+	end
+	
+	
+	function runParameterFunction06(){@Test}
+		varTimeNullable = constTime1;
+		passNullableValueAsInOut(varTimeNullable);
+		LogResult.assertTimeEqual("Nullable Time passed as inout parameter", constTime2, varTimeNullable);
+
+	end
+	
+	function runParameterFunction07(){@Test}
+		varTimeNullable = constTime1;
+		passNullableValueAsOut(varTimeNullable);
+		LogResult.assertTimeEqual("Nullable Time returned as out parameter", constTime2, varTimeNullable);
+
+	end
+	
+	function runParameterFunction08(){@Test}
+		varTimeNullable = constTime1;
+		varTimeNullable = returnANullableTimeValue();
+		LogResult.assertTimeEqual("Nullable Time returned as out parameter", constTime2, varTimeNullable);
+
+	end
+	
+	function passValueAsIn(inTime time in)
+		inTime = constTime2;
+	end
+	
+	function passValueAsInOut(inTime time inout)
+		inTime = constTime2;
+	end
+	
+	function passValueAsOut(outTime time out)
+		outTime = constTime2;
+	end
+	
+	function returnATimeValue() returns (time)
+		return (constTime2);
+	end
+	
+	function passNullableValueAsIn(inTime time? in)
+		inTime = constTime2;
+	end
+	
+	function passNullableValueAsInOut(inTime time? inout)
+		inTime = constTime2;
+	end
+	
+	function passNullableValueAsOut(outTime time? out)
+		outTime = constTime2;
+	end
+	
+	function returnANullableTimeValue() returns (time?)
+		return (constTime2);
+	end
+end

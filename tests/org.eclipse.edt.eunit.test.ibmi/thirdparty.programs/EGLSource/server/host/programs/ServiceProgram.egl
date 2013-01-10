@@ -1,0 +1,44 @@
+package server.host.programs;
+
+import eglx.jtopen.annotations.IBMiProgram;
+
+// basic library
+Handler ServiceProgram
+	
+ 	function TestProc(IPARM int inout, RETDATA int inout){
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+ 	function TestProc2(IPARM int inout, RETDATA int inout)returns(int){@ExternalName {value = "TestProc"},
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "binding:file:thirdparty_programs#conn1"}
+	}
+	END// /
+ 	function func1(IPARM int inout, RETDATA int inout){@ExternalName {value = "TestProc"},
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		},
+		@Resource{uri = "issaifiahf"}
+	}
+	END// /
+ 	function func2(IPARM int inout, RETDATA int inout)returns(int){@ExternalName {value = "TestProc"},
+		@IBMiProgram {
+			isServiceProgram=true, 
+			programName="TSTSRVMME",
+			libraryName = "/QSYS.LIB/TSTSRVPGM.LIB"
+		}
+	}
+	END// / 
+	
+end

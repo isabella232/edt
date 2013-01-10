@@ -1,0 +1,185 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime004
+  * @title EdtTime004 - runInvalidAssignmentFunction
+  * @description testing TypeCastException when assignment invalid times
+  * @testcases runInvalidAssignmentFunction01 - runInvalidAssignmentFunction15
+  * @sources EdtTime004.egl
+  * @keywords time, assignemnt, invalid, TypeCastException
+ **/
+library ETime004 {}
+
+	function runInvalidAssignmentFunction01(){@Test}
+		try
+			invalidTime Time = "invalid Time";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction02(){@Test}
+		try
+			invalidTime Time = "123456";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction03(){@Test}
+		try
+			invalidTime Time = "!@#$%^";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction04(){@Test}
+		try
+			invalidTime Time = "!@:#$:%^";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction05(){@Test}
+		try
+			invalidTime Time = "12-34-56";  // Invalid separator
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction06(){@Test}
+		try
+			invalidTime Time = "02:61:00";  // Invalid Minutes
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	
+	function runInvalidAssignmentFunction07(){@Test}
+		try
+			invalidTime Time = "25:09:21"; // Invalid Hours
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction08(){@Test}
+		try
+			invalidTime Time = "15:04:61";  // Invalid Seconds
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction09(){@Test}
+		try
+			invalidTime Time = "";  // Empty String
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction10(){@Test}
+		try
+			invalidTime Time = "        ";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction11(){@Test}
+		try
+			invalidTime time = "654321";
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+		
+		
+	function runInvalidAssignmentFunction12(){@Test}
+		try
+			invalidTime Time = "25:61:00";  // Two invalid values (Hours and Minutes)
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction13(){@Test}
+		try
+			invalidTime Time = "22:03";  // Missing Seconds
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction14(){@Test}
+		try
+			invalidTime Time = "22:03:";  // Missing Seconds
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+	
+	function runInvalidAssignmentFunction15(){@Test}
+		try
+			invalidTime Time = ":04:59";  // MissingHours
+			LogResult.failed("exception should have been thrown");
+		onException(exception TypeCastException)			
+			LogResult.passed("correct exception thrown");
+		onException(exception AnyException)
+			LogResult.failed("wrong exception thrown");
+		end
+	end
+end

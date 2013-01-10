@@ -1,0 +1,3603 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.lang.NullValueException;
+
+/**
+* @name TestNullableNumericLib
+* @title TestNullableNumericLib 
+* @description test case for NullableNumeric data type behavior
+* @sources TestNullableNumericLib.egl
+* @keywords TestNullableNumericLib, functions
+**/
+
+library TestNullableNumericLib
+
+    aFlexRec FlxFlexRecord;
+    nInt int?;
+    nInt2 int?;
+    nFloat float?;
+    nFloat2 float?;
+    aFloat float;
+    anInt int;
+    nSFloat smallFloat?;
+    nSFloat2, aSFloat float?;
+
+    function testNullableIntDefs1(){@Test}
+        LogResult.logStdOut("Local INT? definition - 1");
+        LogResult.assertTrue1(nInt == null);
+    end
+
+    function testNullableIntDefs2(){@Test}
+    	nInt = 5;
+        LogResult.logStdOut("Local INT? definition - 2");
+        LogResult.assertTrue1(nInt != null);  	
+    end
+
+    function testNullableIntDefs3(){@Test}
+    	nInt = 0;
+        LogResult.logStdOut("Local INT? definition - 3");
+        LogResult.assertTrue1(nInt != null); 	
+    end
+    
+    function testNullableIntDefs4(){@Test}
+        nInt3 int?{};
+        LogResult.logStdOut("Local INT? definition - 4");
+        LogResult.assertTrue1(nInt3 == null);
+    end
+    
+    function testNullableIntAssignmentToInt1(){@Test}
+        anInt int = -1;
+        nInt = null;
+        LogResult.logStdOut("Null INT? used in assignment to INT");
+        try
+            anInt = nInt;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt2(){@Test}
+        try
+        	anInt = 1 + nInt;
+        	LogResult.logStdOut("Null INT? used in addition expression to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt3(){@Test}
+        try
+        	anInt = nInt + 1;
+        	LogResult.logStdOut("Null INT? used in addition expression to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+    
+    function testNullableIntAssignmentToInt4(){@Test}
+        try
+        	anInt = 5 - nInt;
+        	LogResult.logStdOut("Null INT? used in subtraction expression to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt5(){@Test}
+        try
+        	anInt = nInt - 5;
+        	LogResult.logStdOut("Null INT? used in subtraction expression to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function testNullableIntAssignmentToInt6(){@Test}
+    	try
+        	anInt = 5 * nInt;
+        	LogResult.logStdOut("Null INT? used in multiplication expression to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	      	
+    end
+
+    function testNullableIntAssignmentToInt7(){@Test}
+        try
+        	anInt = nInt * 5;
+        	LogResult.logStdOut("Null INT? used in multiplication expression to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt8(){@Test}
+    	try
+        	anInt = 5 / nInt;
+        	LogResult.logStdOut("Null INT? used in division expression  to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	      	
+    end
+
+    function testNullableIntAssignmentToInt9(){@Test}
+    	try
+        	anInt = nInt / 5;
+        	LogResult.logStdOut("Null INT? used in division expression  to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt10(){@Test}
+    	try
+        	anInt = 5 % nInt;
+	        LogResult.logStdOut("Null INT? used in modulo expression  to INT - 1");
+    	    wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	    
+    end
+
+    function testNullableIntAssignmentToInt11(){@Test}
+    	try
+        	anInt = nInt % 5;
+	        LogResult.logStdOut("Null INT? used in modulo expression  to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToInt12(){@Test}
+        try 
+        	anInt = 5 ** nInt;
+        	LogResult.logStdOut("Null INT? used in power of expression  to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	     	
+    end
+
+    function testNullableIntAssignmentToInt13(){@Test}
+    	try
+        	anInt = nInt ** 5;
+        	LogResult.logStdOut("Null INT? used in power of expression  to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	     	
+    end
+
+    function testNullableIntAssignmentToInt14(){@Test}
+    	try
+    		LogResult.logStdOut("Null INT? used in + unary expression  to INT");
+	        anInt = 1;
+	        anInt = +nInt;
+	     	wantNVE();
+	    onException(nve NullValueException)
+	    	LogResult.passed("OK");
+	    end
+    end
+
+    function testNullableIntAssignmentToInt15(){@Test}
+    	try
+        	anInt = 1;
+        	anInt = -nInt;
+        	LogResult.logStdOut("Null INT? used in - unary expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end  	     	
+    end
+
+    function testNullableIntAssignmentToInt16(){@Test}
+    	try
+        	anInt = 1;
+        	anInt += nInt + 1;
+        	LogResult.logStdOut("Null INT? used in += expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToInt17(){@Test}
+        try 
+        	anInt = 1;
+        	anInt -= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in -= expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToInt18(){@Test}
+    	try
+        	anInt = 1;
+        	anInt *= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in *= expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToInt19(){@Test}
+        try
+        	anInt = 1;
+        	anInt /= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in /= expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	      	
+    end
+
+    function testNullableIntAssignmentToInt20(){@Test}
+    	try
+        	anInt = 1;
+        	anInt %= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in %= expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToInt21(){@Test}
+        try
+        	anInt = 1;
+        	anInt **= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in **= expression  to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt22(){@Test}
+    	try
+        	anInt = -localTestInt(true);
+	        LogResult.logStdOut("Function returning null INT? used in - unary expression to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	     	
+    end
+
+    function testNullableIntAssignmentToInt23(){@Test}
+    	try
+        	anInt = 1 + localTestInt(true);
+       		LogResult.logStdOut("Function returning null INT? used in expression to INT");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToInt24(){@Test}
+        nInt = 1;
+        anInt = nInt;
+        LogResult.logStdOut("Non-null INT? used in assignment to INT");
+        LogResult.assertTrue1((anInt == 1));
+    end
+
+    function testNullableIntAssignmentToInt25(){@Test}
+        nInt = 1;
+        anInt = 1 + nInt;
+        LogResult.logStdOut("Non-null INT? used in addition expression to INT - 1");
+        LogResult.assertTrue1((anInt == 2));
+    end
+
+    function testNullableIntAssignmentToInt26(){@Test}
+        nInt = 1;
+        anInt = nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in addition expression to INT - 2");
+        LogResult.assertTrue1((anInt == 2));
+    end
+
+    function testNullableIntAssignmentToInt27(){@Test}
+        nInt = 1;
+        anInt = 5 - nInt;
+        LogResult.logStdOut("Non-null INT? used in subtraction expression to INT - 1");
+        LogResult.assertTrue1((anInt == 4));
+    end
+
+    function testNullableIntAssignmentToInt28(){@Test}
+        nInt = 1;
+        anInt = nInt - 5;
+        LogResult.logStdOut("Non-null INT? used in subtraction expression to INT - 2");
+        LogResult.assertTrue1((anInt == -4));
+    end
+
+    function testNullableIntAssignmentToInt29(){@Test}
+        nInt = 1;
+        anInt = 5 * nInt;
+        LogResult.logStdOut("Non-null INT? used in multiplication expression to INT - 1");
+        LogResult.assertTrue1((anInt == 5));
+    end
+
+    function testNullableIntAssignmentToInt30(){@Test}
+        nInt = 1;
+        anInt = nInt * 5;
+        LogResult.logStdOut("Non-null INT? used in multiplication expression to INT - 2");
+        LogResult.assertTrue1((anInt == 5));
+    end
+
+    function testNullableIntAssignmentToInt31(){@Test}
+        nInt = 1;
+        anInt = 5 / nInt;
+        LogResult.logStdOut("Non-null INT? used in division expression  to INT - 1");
+        LogResult.assertTrue1((anInt == 5));
+    end
+
+    function testNullableIntAssignmentToInt32(){@Test}
+        nInt = 1;
+        nInt = 5;
+        anInt = nInt / 5;
+        LogResult.logStdOut("Non-null INT? used in division expression  to INT - 2");
+        LogResult.assertTrue1((anInt == 1));
+    end
+
+    function testNullableIntAssignmentToInt33(){@Test}
+        nInt = 1;
+        nInt = 3;
+        anInt = 5 % nInt;
+        LogResult.logStdOut("Non-null INT? used in modulo expression  to INT - 1");
+        LogResult.assertTrue1((anInt == 2));
+    end
+
+    function testNullableIntAssignmentToInt34(){@Test}
+        nInt = 1;
+        anInt = nInt % 2;
+        LogResult.logStdOut("Non-null INT? used in modulo expression  to INT - 2");
+        LogResult.assertTrue1((anInt == 1));
+    end
+
+    function testNullableIntAssignmentToInt35(){@Test}
+       	nInt = 3;
+       	anInt = 5 ** nInt;
+       	LogResult.logStdOut("Non-null INT? used in power of expression  to INT - 1");
+       	LogResult.assertTrue1((anInt == 125));
+    end
+
+    function testNullableIntAssignmentToInt36(){@Test}
+        nInt = 3;
+        anInt = nInt ** 5;
+        LogResult.logStdOut("Non-null INT? used in power of expression  to INT - 2");
+        LogResult.assertTrue1((anInt == 243));          	
+    end
+
+    function testNullableIntAssignmentToInt37(){@Test}
+        nInt = 5;
+        anInt = 1;
+        anInt = +nInt;
+        LogResult.logStdOut("Non-null INT? used in + unary expression  to INT");
+        LogResult.assertTrue1((anInt == 5));
+    end
+
+    function testNullableIntAssignmentToInt38(){@Test}
+       	anInt = 5;
+       	anInt = -anInt;
+       	LogResult.logStdOut("Non-null INT? used in - unary expression  to INT");
+       	LogResult.assertTrue1((anInt == -5));
+    end
+
+    function testNullableIntAssignmentToInt39(){@Test}
+    	anInt = 0;
+        nInt = 6;
+        anInt += nInt + 1;
+	    LogResult.logStdOut("Non-null INT? used in += expression  to INT");
+        LogResult.assertTrue1((anInt == 7)); 
+    end
+
+    function testNullableIntAssignmentToInt40(){@Test}
+    	anInt = 2;
+       	nInt = 6;
+       	anInt -= nInt + 1;
+       	LogResult.logStdOut("Non-null INT? used in -= expression  to INT");
+       	LogResult.assertTrue1((anInt == -5));
+    end
+
+    function testNullableIntAssignmentToInt41(){@Test}
+    	nInt = 5;
+       	anInt = 1;
+       	anInt *= nInt + 1;
+       	LogResult.logStdOut("Non-null INT? used in *= expression  to INT");
+       	LogResult.assertTrue1((anInt == 6));          	
+    end
+
+    function testNullableIntAssignmentToInt42(){@Test}
+    		nInt = 5;
+        	anInt = 12;
+        	anInt /= nInt + 1;
+        	LogResult.logStdOut("Non-null INT? used in /= expression  to INT");
+        	LogResult.assertBigIntEqual1(2, anInt);         	
+    end
+
+    function testNullableIntAssignmentToInt43(){@Test}  
+    		nInt = 1;
+        	anInt = 7;
+        	anInt %= nInt + 1;
+        	LogResult.logStdOut("Non-null INT? used in %= expression  to INT");
+        	LogResult.assertBigIntEqual1(1, anInt); 
+    end
+
+    function testNullableIntAssignmentToInt44(){@Test}
+   			nInt = 5;
+        	anInt = 2;
+        	anInt **= nInt + 1;
+        	LogResult.logStdOut("Non-null INT? used in **= expression  to INT"); 
+        	LogResult.assertBigIntEqual1(64, anInt);      	
+    end
+
+    function testNullableIntAssignmentToInt45(){@Test}
+        anInt = 1 + localTestInt(false);
+        LogResult.logStdOut("Function returning non-null INT? used in expression to INT - 1");
+        LogResult.assertBigIntEqual1(6, anInt); 
+    end
+
+    function testNullableIntAssignmentToInt46(){@Test}
+        anInt = localTestInt(false) + 1;
+        LogResult.logStdOut("Function returning non-null INT? used in expression to INT - 2");
+        LogResult.assertTrue1((anInt == 6));
+    end
+
+    function testNullableIntAssignmentToNullableInt1(){@Test}
+        nInt = null;
+        nInt2 = nInt;
+        LogResult.logStdOut("Null INT? used in assignment to INT?");
+        LogResult.assertTrue1(nInt2 == null);
+    end
+
+    function testNullableIntAssignmentToNullableInt2(){@Test}
+    	try
+	        nInt = null;
+	        nInt2 = 1 + nInt;
+	        LogResult.logStdOut("Null INT? used in addition expression to INT? - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableIntAssignmentToNullableInt3(){@Test}
+    	try
+        	nInt = null;
+        	nInt2 = nInt + 1;
+        	LogResult.logStdOut("Null INT? used in addition expression to INT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignmentToNullableInt4(){@Test}
+      	try
+      		nInt = null;
+        	nInt2 = 5 - nInt;
+        	LogResult.logStdOut("Null INT? used in subtraction expression to INT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+      end
+
+    function testNullableIntAssignmentToNullableInt5(){@Test}
+    	try
+        	nInt = null;
+        	nInt2 = nInt - 5;
+    	    LogResult.logStdOut("Null INT? used in subtraction expression to INT? - 2");
+	      	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToNullableInt6(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 5 * nInt;
+        	LogResult.logStdOut("Null INT? used in multiplication expression to INT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignmentToNullableInt7(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = nInt * 5;
+        	LogResult.logStdOut("Null INT? used in multiplication expression to INT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToNullableInt8(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 5 / nInt;
+        	LogResult.logStdOut("Null INT? used in division expression  to INT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableIntAssignmentToNullableInt9(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = nInt / 5;
+        	LogResult.logStdOut("Null INT? used in division expression  to INT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableIntAssignmentToNullableInt10(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 5 % nInt;
+        	LogResult.logStdOut("Null INT? used in modulo expression  to INT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignmentToNullableInt11(){@Test}
+		try    
+        	nInt = null;
+        	nInt2 = nInt % 5;
+        	LogResult.logStdOut("Null INT? used in modulo expression  to INT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	     	
+    end
+
+    function testNullableIntAssignmentToNullableInt12(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 5 ** nInt;
+        	LogResult.logStdOut("Null INT? used in power of expression  to INT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToNullableInt13(){@Test}
+        try
+      		nInt = null;
+	        nInt2 = nInt ** 5;
+    	    LogResult.logStdOut("Null INT? used in power of expression  to INT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableIntAssignmentToNullableInt14(){@Test}
+        nInt = null;
+        nInt2 = 1;
+        nInt2 = +nInt;
+        LogResult.logStdOut("Null INT? used in + unary expression  to INT?");
+        LogResult.assertTrue1(nInt2 == null);
+    end
+
+    function testNullableIntAssignmentToNullableInt15(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+        	nInt2 = -nInt;
+        	LogResult.logStdOut("Null INT? used in - unary expression  to INT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end  	        	
+    end
+
+    function testNullableIntAssignmentToNullableInt16(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+        	nInt2 += nInt + 1;
+        	LogResult.logStdOut("Null INT? used in += expression  to INT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableIntAssignmentToNullableInt17(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+        	nInt2 -= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in -= expression  to INT?");
+	        wantNVE();wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToNullableInt18(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+        	nInt2 *= nInt + 1;
+	        LogResult.logStdOut("Null INT? used in *= expression  to INT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignmentToNullableInt19(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+    	    nInt2 /= nInt + 1;
+	        LogResult.logStdOut("Null INT? used in /= expression  to INT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableIntAssignmentToNullableInt20(){@Test}
+        try
+        	nInt = null;
+        	nInt2 = 1;
+        	nInt2 %= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in %= expression  to INT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end          	
+    end
+
+    function testNullableIntAssignmentToNullableInt21(){@Test}
+		try    
+        	nInt = null;
+        	nInt2 = 1;
+	        nInt2 **= nInt + 1;
+        	LogResult.logStdOut("Null INT? used in **= expression  to INT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableIntAssignmentToNullableInt22(){@Test}
+    	try
+        	nInt = null;
+        	nInt2 = 1 + localTestInt(true);
+	        LogResult.logStdOut("Function returning null INT? used in expression to INT?");
+    	    wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		    
+    end
+
+    function testNullableIntAssignmentToNullableInt23(){@Test}
+        nInt = 1;
+        nInt2 = nInt;
+        LogResult.logStdOut("Non-null INT? used in assignment to INT?");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 1));
+    end
+
+    function testNullableIntAssignmentToNullableInt24(){@Test}
+        nInt = 1;
+        nInt2 = 1 + nInt;
+        LogResult.logStdOut("Non-null INT? used in addition expression to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 2));
+    end
+
+    function testNullableIntAssignmentToNullableInt25(){@Test}
+        nInt = 1;
+        nInt2 = nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in addition expression to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 2));
+    end
+
+    function testNullableIntAssignmentToNullableInt26(){@Test}
+        nInt = 1;
+        nInt2 = 5 - nInt;
+        LogResult.logStdOut("Non-null INT? used in subtraction expression to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 4));
+    end
+
+    function testNullableIntAssignmentToNullableInt27(){@Test}
+        nInt = 1;
+        nInt2 = nInt - 5;
+        LogResult.logStdOut("Non-null INT? used in subtraction expression to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == -4));
+    end
+
+    function testNullableIntAssignmentToNullableInt28(){@Test}
+        nInt = 1;
+        nInt2 = 5 * nInt;
+        LogResult.logStdOut("Non-null INT? used in multiplication expression to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 5));
+    end
+
+    function testNullableIntAssignmentToNullableInt29(){@Test}
+        nInt = 1;
+        nInt2 = nInt * 5;
+        LogResult.logStdOut("Non-null INT? used in multiplication expression to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 5));
+    end
+
+    function testNullableIntAssignmentToNullableInt30(){@Test}
+        nInt = 1;
+        nInt2 = 5 / nInt;
+        LogResult.logStdOut("Non-null INT? used in division expression  to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 5));
+    end
+
+    function testNullableIntAssignmentToNullableInt31(){@Test}
+        nInt = 1;
+        nInt = 5;
+        nInt2 = nInt / 5;
+        LogResult.logStdOut("Non-null INT? used in division expression  to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 1));
+    end
+
+    function testNullableIntAssignmentToNullableInt32(){@Test}
+        nInt = 1;
+        nInt = 3;
+        nInt2 = 5 % nInt;
+        LogResult.logStdOut("Non-null INT? used in modulo expression  to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 2));
+    end
+
+    function testNullableIntAssignmentToNullableInt33(){@Test}
+        nInt = 1;
+        nInt2 = nInt % 2;
+        LogResult.logStdOut("Non-null INT? used in modulo expression  to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 1));
+    end
+
+    function testNullableIntAssignmentToNullableInt34(){@Test}
+        nInt = 3;
+        nInt2 = 5 ** nInt;
+        LogResult.logStdOut("Non-null INT? used in power of expression  to INT? - 1");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 125));
+    end
+
+    function testNullableIntAssignmentToNullableInt35(){@Test}
+        nInt = 3;
+        nInt2 = nInt ** 5;
+        LogResult.logStdOut("Non-null INT? used in power of expression  to INT? - 2");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 243));
+    end
+
+    function testNullableIntAssignmentToNullableInt36(){@Test}
+        nInt = 5;
+        nInt2 = 1;
+        nInt2 = +nInt;
+        LogResult.logStdOut("Non-null INT? used in + unary expression  to INT?");
+        LogResult.assertTrue1((nInt2 != null) &&(nInt2 == 5));
+    end
+
+    function testNullableIntAssignmentToNullableInt37(){@Test }
+       	nInt = 5;
+       	nInt2 = - nInt;
+       	LogResult.logStdOut("Non-null INT? used in - unary expression  to INT?");
+       	LogResult.assertBigIntEqual1(-5, nInt2);
+    end
+
+    function testNullableIntAssignmentToNullableInt38(){@Test}
+        nInt2 = 1;
+        nInt2 += nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in += expression  to INT?");
+        LogResult.assertBigIntEqual1(7, nInt2);  
+    end
+
+    function testNullableIntAssignmentToNullableInt39(){@Test}
+        nInt2 = 1;
+        nInt2 -= nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in -= expression  to INT?");
+        LogResult.assertBigIntEqual1(-5, nInt2);  
+    end
+
+    function testNullableIntAssignmentToNullableInt40(){@Test}
+        nInt2 = 1;
+        nInt2 *= nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in *= expression  to INT?");
+        LogResult.assertBigIntEqual1(6, nInt2);  
+    end
+
+    function testNullableIntAssignmentToNullableInt41(){@Test}
+        nInt2 = 12;
+        nInt2 /= nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in /= expression  to INT?");
+        LogResult.assertBigIntEqual1(2, nInt2);  
+    end
+
+    function testNullableIntAssignmentToNullableInt42(){@Test}
+        nInt2 = 7;
+        nInt2 %= nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in %= expression  to INT?");
+        LogResult.assertBigIntEqual1(1, nInt2);          
+    end
+
+    function testNullableIntAssignmentToNullableInt43(){@Test}
+        nInt2 = 2;
+        nInt2 **= nInt + 1;
+        LogResult.logStdOut("Non-null INT? used in **= expression  to INT?");
+        LogResult.assertBigIntEqual1(64, nInt2);          
+    end
+
+    function testNullableIntAssignmentToNullableInt44(){@Test}
+        nInt2 = 1 + localTestInt(false);
+        LogResult.logStdOut("Function returning non-null INT? used in expression to INT?");
+        LogResult.assertBigIntEqual1(6, nInt2);          
+    end
+
+    function testNullableIntAssignedToIntComplex1(){@Test}
+    	try
+        	nInt int?;
+        	nInt2 int? = 1;
+        	anInt int;
+        	anInt2 int = 5;
+        	nInt = null;
+        	anInt = nInt + nInt2;
+        	LogResult.logStdOut("Null INT? used in expression assigned to INT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignedToIntComplex2(){@Test}
+        try
+        	nInt int?;
+        	nInt2 int? = 1;
+        	anInt int;
+        	anInt2 int = 5;
+        	anInt = nInt +(nInt2 + 2);
+        	LogResult.logStdOut("Null INT? used in expression assigned to INT - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableIntAssignedToIntComplex3(){@Test}
+        try
+        	nInt int?;
+        	nInt2 int? = 1;
+        	anInt int;
+        	anInt2 int = 5;
+        	i1 int = 5;
+        	anInt =(i1 + 10) *(nInt +(nInt2 + 2));
+        	LogResult.logStdOut("Null INT? used in expression assigned to INT - 3");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableDecimalDefs1(){@Test}
+        nDecimal decimal(7, 2)?;
+        nDecimal2 decimal(7, 2)?;
+        LogResult.logStdOut("Local DECIMAL? definition - 1");
+        LogResult.assertTrue1(nDecimal == null);
+    end
+
+    function testNullableDecimalDefs2(){@Test}
+        nDecimal decimal(7, 2)?;
+        nDecimal2 decimal(7, 2)?;
+        nDecimal = 5.2345;
+        LogResult.logStdOut("Local DECIMAL? definition - 2");
+        LogResult.assertTrue1(nDecimal != null);
+    end
+
+    function testNullableDecimalDefs3(){@Test}
+        nDecimal decimal(7, 2)?;
+        nDecimal2 decimal(7, 2)?;
+        nDecimal = 0;
+        LogResult.logStdOut("Local DECIMAL? definition - 3");
+        LogResult.assertTrue1(nDecimal != null);
+    end
+
+    function testNullableDecimalDefs4(){@Test}
+        nDecimal decimal(7, 2)?;
+        nDecimal2 decimal(7, 2)?;
+        nDec decimal(5, 2)?{};
+        LogResult.logStdOut("Local DECIMAL? definition - 4");
+        LogResult.assertTrue1(nDec == null);
+    end
+
+    function testNullableDecimalAssignmentToDecimal1(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = null;
+        LogResult.logStdOut("Null DECIMAL? used in assignment to DECIMAL");
+        try
+            // Begin null tests
+            aDecimal = nDecimal;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableDecimalAssignmentToDecimal2(){@Test}
+        try
+        	nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 1 + nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in addition expression to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableDecimalAssignmentToDecimal3(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal + 1;
+	        LogResult.logStdOut("Null DECIMAL? used in addition expression to DECIMAL - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignmentToDecimal4(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 5 - nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in subtraction expression to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableDecimalAssignmentToDecimal5(){@Test}
+		try    
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal - 5;
+	        LogResult.logStdOut("Null DECIMAL? used in subtraction expression to DECIMAL - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignmentToDecimal6(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 5 * nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in multiplication expression to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableDecimalAssignmentToDecimal7(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal * 5;
+	        LogResult.logStdOut("Null DECIMAL? used in multiplication expression to DECIMAL - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableDecimalAssignmentToDecimal8(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 5 / nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in division expression  to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableDecimalAssignmentToDecimal9(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal / 5;
+	        LogResult.logStdOut("Null DECIMAL? used in division expression  to DECIMAL - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableDecimalAssignmentToDecimal10(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 5 % nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in modulo expression  to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignmentToDecimal11(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal % 5;
+	        LogResult.logStdOut("Null DECIMAL? used in modulo expression  to DECIMAL - 2");
+	       	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableDecimalAssignmentToDecimal12(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 5 ** nDecimal;
+	        LogResult.logStdOut("Null DECIMAL? used in power of expression  to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignmentToDecimal13(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = nDecimal ** 5;
+	        LogResult.logStdOut("Null DECIMAL? used in power of expression  to DECIMAL - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignmentToDecimal14(){@Test}
+		try    
+	        nDecimal decimal(7, 2)?;
+	        aDecimal decimal(7, 2) = -1.2345;
+	        nDecimal = null;
+	        aDecimal = 1 + localTestDecimal(true);
+	        LogResult.logStdOut("Function returning null DECIMAL? used in expression to DECIMAL");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  
+    end
+
+    function testNullableDecimalAssignmentToDecimal15(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in assignment to DECIMAL");
+        LogResult.assertDecimalEqual1(1, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal16(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 1 + nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in addition expression to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(2, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal17(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = nDecimal + 1;
+        LogResult.logStdOut("Non-null DECIMAL? used in addition expression to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(2, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal18(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 5 - nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in subtraction expression to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(4, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal19(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = nDecimal - 5;
+        LogResult.logStdOut("Non-null DECIMAL? used in subtraction expression to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(-4, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal20(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 5 * nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in multiplication expression to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(5, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal21(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = nDecimal * 5;
+        LogResult.logStdOut("Non-null DECIMAL? used in multiplication expression to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(5, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal22(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 5 / nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in division expression  to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(5, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal23(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 5;
+        aDecimal = nDecimal / 5;
+        LogResult.logStdOut("Non-null DECIMAL? used in division expression  to DECIMAL - 2");
+        if (.2 == aDecimal)
+        	LogResult.assertTrue1(.2 == aDecimal);
+        else
+        	LogResult.skipped("Bug 382587");
+        end
+    end
+
+    function testNullableDecimalAssignmentToDecimal24(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        nDecimal = 3;
+        aDecimal = 5 % nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in modulo expression  to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(2, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal25(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = nDecimal % 2;
+        LogResult.logStdOut("Non-null DECIMAL? used in modulo expression  to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(1, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal26(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 3;
+        aDecimal = 5 ** nDecimal;
+        LogResult.logStdOut("Non-null DECIMAL? used in power of expression  to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(125, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal27(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 3;
+        aDecimal = nDecimal ** 5;
+        LogResult.logStdOut("Non-null DECIMAL? used in power of expression  to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(243, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal28(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = 1 + localTestDecimal(false);
+        LogResult.logStdOut("Function returning non-null DECIMAL? used in expression to DECIMAL - 1");
+        LogResult.assertDecimalEqual1(6.67, aDecimal);
+    end
+
+    function testNullableDecimalAssignmentToDecimal29(){@Test}
+        nDecimal decimal(7, 2)?;
+        aDecimal decimal(7, 2) = -1.2345;
+        nDecimal = 1;
+        aDecimal = localTestDecimal(false) + 1;
+        LogResult.logStdOut("Function returning non-null DECIMAL? used in expression to DECIMAL - 2");
+        LogResult.assertDecimalEqual1(6.67, aDecimal);
+    end
+
+    //    function testNullableDecimalAssignmentToNullableDecimal1(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        // Begin null tests
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in assignment to DECIMAL?");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal2(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 1 + nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in addition expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal3(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal + 1;
+    //        LogResult.logStdOut("Null DECIMAL? used in addition expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal4(){@Test}
+    //       nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 5 - nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in subtraction expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal5(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal - 5;
+    //        LogResult.logStdOut("Null DECIMAL? used in subtraction expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal6(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 5 * nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in multiplication expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal7(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal * 5;
+    //        LogResult.logStdOut("Null DECIMAL? used in multiplication expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal8(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 5 / nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in division expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal9(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal / 5;
+    //        LogResult.logStdOut("Null DECIMAL? used in division expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal10(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 5 % nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in modulo expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal11(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal % 5;
+    //        LogResult.logStdOut("Null DECIMAL? used in modulo expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal12(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 5 ** nDecimal;
+    //        LogResult.logStdOut("Null DECIMAL? used in power of expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal13(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = nDecimal ** 5;
+    //        LogResult.logStdOut("Null DECIMAL? used in power of expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal14(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = null;
+    //        nDecimal2 = 1 + localTestDecimal(true);
+    //        LogResult.logStdOut("Function returning null DECIMAL? used in expression to DECIMAL?");
+    //        LogResult.assertTrue1(nDecimal2 == null);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal15(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in assignment to DECIMAL?");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(1, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal16(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 1 + nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in addition expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(2, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal17(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal + 1;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in addition expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(2, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal18(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 5 - nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in subtraction expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(4, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal19(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal - 5;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in subtraction expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(-4, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal20(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 5 * nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in multiplication expression to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(5, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal21(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal * 5;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in multiplication expression to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(5, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal22(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 5 / nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in division expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(5, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal23(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal = 5;
+    //        nDecimal2 = nDecimal / 5;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in division expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(1, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal24(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal = 3;
+    //        nDecimal2 = 5 % nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in modulo expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(2, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal25(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal % 2;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in modulo expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(1, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal26(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 5 ** nDecimal;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in power of expression  to DECIMAL? - 1");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(125, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal27(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = nDecimal ** 5;
+    //        LogResult.logStdOut("Non-null DECIMAL? used in power of expression  to DECIMAL? - 2");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(243, nDecimal2);
+    //    end
+    //
+    //    function testNullableDecimalAssignmentToNullableDecimal28(){@Test}
+    //        nDecimal num(5)?;
+    //        nDecimal2 num(5)?;
+    //        nDecimal = 1;
+    //        nDecimal2 = 1 + localTestDecimal(false);
+    //        LogResult.logStdOut("Function returning non-null DECIMAL? used in expression to DECIMAL?");
+    //        LogResult.assertTrue1(nDecimal2 != null);
+    //        LogResult.assertDecimalEqual1(6, nDecimal2);
+    //    end
+    
+    function testNullableDecimalAssignedToDecimalComplex1(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        nDecimal2 decimal(7, 2)? = 1.2345;
+	        anDecimal decimal(7, 2);
+	        anDecimal2 decimal(7, 2) = 5.6789;
+	        nDecimal = null;
+	        anDecimal = nDecimal + nDecimal2;
+	        LogResult.logStdOut("Null DECIMAL? used in expression assigned to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableDecimalAssignedToDecimalComplex2(){@Test}
+    	try
+	        nDecimal decimal(7, 2)?;
+	        nDecimal2 decimal(7, 2)? = 1.2345;
+	        anDecimal decimal(7, 2);
+	        anDecimal2 decimal(7, 2) = 5.6789;
+	        nDecimal = null;
+	        anDecimal = nDecimal +(nDecimal2 + 2);
+	        LogResult.logStdOut("Null DECIMAL? used in expression assigned to DECIMAL - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatDefs1(){@Test}
+       LogResult.logStdOut("Local FLOAT? definition - 1");
+       LogResult.assertTrue1(null == nFloat);
+    end
+
+    function testNullableFloatDefs2(){@Test}
+        nFloat = 5;
+        LogResult.logStdOut("Local FLOAT? definition - 2");
+        LogResult.assertTrue1(nFloat != null);
+    end
+
+    function testNullableFloatDefs3(){@Test}
+        nFloat = 0;
+        LogResult.logStdOut("Local FLOAT? definition - 3");
+        LogResult.assertTrue1(nFloat != null);
+    end
+
+    function testNullableFloatDefs4(){@Test}
+        nFlt float?{};
+        LogResult.logStdOut("Local FLOAT? definition - 4");
+        LogResult.assertTrue1(nFlt == null);
+    end
+
+    function testNullableFloatAssignmentToFloat1(){@Test}
+        aFloat float = -1;
+        nFloat = null;
+        LogResult.logStdOut("Null FLOAT? used in assignment to FLOAT");
+        try
+            aFloat = nFloat;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableFloatAssignmentToFloat2(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1 + nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in addition expression to FLOAT - 1");
+	       	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  
+    end
+
+    function testNullableFloatAssignmentToFloat3(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in addition expression to FLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat4(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 5 - nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in subtraction expression to FLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableFloatAssignmentToFloat5(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = nFloat - 5;
+	        LogResult.logStdOut("Null FLOAT? used in subtraction expression to FLOAT - 2");
+	      	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  	        
+    end
+
+    function testNullableFloatAssignmentToFloat6(){@Test}
+		try    
+	        nFloat = null;
+	        aFloat = 5 * nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in multiplication expression to FLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  	        
+    end
+
+    function testNullableFloatAssignmentToFloat7(){@Test}
+		try    
+	        nFloat = null;
+	        aFloat = nFloat * 5;
+	        LogResult.logStdOut("Null FLOAT? used in multiplication expression to FLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat8() {@Test}
+    	try
+        	nFloat = null;
+            aFloat = 5 / nFloat;
+            LogResult.logStdOut("Null FLOAT? used in division expression  to FLOAT - 1");
+            wantNVE();
+        onException (nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function testNullableFloatAssignmentToFloat9(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = nFloat / 5;
+	        LogResult.logStdOut("Null FLOAT? used in division expression  to FLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat10(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 5 ** nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in power of expression  to FLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat11(){@Test}
+		try    
+	        nFloat = null;
+	        aFloat = nFloat ** 5;
+	        LogResult.logStdOut("Null FLOAT? used in power of expression  to FLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToFloat12(){@Test}
+    	try
+        	nFloat = null;
+            aFloat = 1;
+            aFloat = +nFloat;
+            LogResult.logStdOut("Null FLOAT? used in + unary expression  to FLOAT");
+            wantNVE();
+		onException(nve NullValueException)
+			LogResult.passed("OK");
+		end            
+    end
+
+    function testNullableFloatAssignmentToFloat13(){@Test}
+        nFloat = null;
+        aFloat = 1;
+        LogResult.logStdOut("Null FLOAT? used in - unary expression  to FLOAT");
+        try
+            aFloat = nFloat;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableFloatAssignmentToFloat14(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1;
+	        aFloat += nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in += expression  to FLOAT");
+	       wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToFloat15(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1;
+	        aFloat -= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in -= expression  to FLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat16(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1;
+	        aFloat *= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in *= expression  to FLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableFloatAssignmentToFloat17(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1;
+	        aFloat /= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in /= expression  to FLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToFloat18(){@Test}
+	   try
+	   		nFloat = null;
+	        aFloat = 1;
+	        aFloat **= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in **= expression  to FLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    
+    function testNullableFloatAssignmentToFloat19(){@Test}
+    	try
+	        nFloat = null;
+	        aFloat = 1 + localTestFloat(true);
+	        LogResult.logStdOut("Function returning null FLOAT? used in expression to FLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToFloat20(){@Test}
+        nFloat = 1;
+        aFloat = nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in assignment to FLOAT");
+        LogResult.assertFloatEqual1(1, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat21(){@Test}
+        nFloat = 1;
+        aFloat = 1 + nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in addition expression to FLOAT - 1");
+        LogResult.assertFloatEqual1(2, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat22(){@Test}
+        nFloat = 1;
+        aFloat = nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in addition expression to FLOAT - 2");
+        LogResult.assertFloatEqual1(2, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat23(){@Test}
+        nFloat = 1;
+        aFloat = 5 - nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in subtraction expression to FLOAT - 1");
+        LogResult.assertFloatEqual1(4, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat24(){@Test}
+        nFloat = 1;
+        aFloat = nFloat - 5;
+        LogResult.logStdOut("Non-null FLOAT? used in subtraction expression to FLOAT - 2");
+        LogResult.assertFloatEqual1(-4, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat25(){@Test}
+        nFloat = 1;
+        aFloat = 5 * nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in multiplication expression to FLOAT - 1");
+        LogResult.assertFloatEqual1(5, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat26(){@Test}
+        nFloat = 1;
+        aFloat = nFloat * 5;
+        LogResult.logStdOut("Non-null FLOAT? used in multiplication expression to FLOAT - 2");
+        LogResult.assertFloatEqual1(5, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat27(){@Test}
+        nFloat = 1;
+        aFloat = 5 / nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in division expression  to FLOAT - 1");
+        LogResult.assertFloatEqual1(5, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat28(){@Test}
+        nFloat = 1;
+        nFloat = 5;
+        aFloat = nFloat / 5;
+        LogResult.logStdOut("Non-null FLOAT? used in division expression  to FLOAT - 2");
+        LogResult.assertFloatEqual1(1, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat29(){@Test}
+        nFloat = 1;
+        nFloat = 3;
+        aFloat = 5 % nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in modulo expression  to FLOAT - 1");
+        LogResult.assertTrue1(aFloat == 2); //(aFloat==2));
+     end
+
+    function testNullableFloatAssignmentToFloat30(){@Test}
+        nFloat = 3;
+        aFloat = 5 ** nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in power of expression  to FLOAT - 1");
+        LogResult.assertFloatEqual1(125, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat31(){@Test}
+        nFloat = 3;
+        aFloat = nFloat ** 5;
+        LogResult.logStdOut("Non-null FLOAT? used in power of expression  to FLOAT - 2");
+        LogResult.assertFloatEqual1(243, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat32(){@Test}
+        nFloat = 5;
+        aFloat = 1;
+        aFloat = +nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in + unary expression  to FLOAT");
+        LogResult.assertFloatEqual1(5, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat33(){@Test}
+    	nFloat = 5;
+	    aFloat = 1;
+	    aFloat = -nFloat;
+	    LogResult.logStdOut("Non-null FLOAT? used in - unary expression  to FLOAT");
+	    LogResult.assertFloatEqual1(-5, aFloat);  
+    end
+
+    function testNullableFloatAssignmentToFloat34(){@Test}
+        nFloat = 5;
+        aFloat = 1;
+        aFloat += nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in += expression  to FLOAT");
+        LogResult.assertFloatEqual1(7, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat35(){@Test}
+        nFloat = 5;
+        aFloat = 1;
+        aFloat -= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in -= expression  to FLOAT");
+        LogResult.assertFloatEqual1(-5, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat36(){@Test}
+        nFloat = 5;
+        aFloat = 1;
+        aFloat *= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in *= expression  to FLOAT");
+        LogResult.assertFloatEqual1(6, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat37(){@Test}
+        nFloat = 5;
+        aFloat = 12;
+        aFloat /= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in /= expression  to FLOAT");
+        LogResult.assertFloatEqual1(2, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat38(){@Test}
+        nFloat = 5;
+        aFloat = 2;
+        aFloat **= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in **= expression  to FLOAT");
+        LogResult.assertFloatEqual1(64, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat39(){@Test}
+        nFloat = 5;
+        aFloat = 1 + localTestFloat(false);
+        LogResult.logStdOut("Function returning non-null FLOAT? used in expression to FLOAT - 1");
+        LogResult.assertFloatEqual1(6, aFloat);
+    end
+
+    function testNullableFloatAssignmentToFloat40(){@Test}
+        nFloat = 5;
+        aFloat = localTestFloat(false) + 1;
+        LogResult.logStdOut("Function returning non-null FLOAT? used in expression to FLOAT - 2");
+        LogResult.assertFloatEqual1(6, aFloat);
+    end
+
+    function testNullableFloatAssignmentToNullableFloat1(){@Test}
+        nFloat = null;
+        nFloat2 = nFloat;
+        LogResult.logStdOut("Null FLOAT? used in assignment to FLOAT?");
+        LogResult.assertTrue1(nFloat2 == null);
+    end
+
+    function testNullableFloatAssignmentToNullableFloat2(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1 + nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in addition expression to FLOAT? - 1");
+	       	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		       	
+    end
+
+    function testNullableFloatAssignmentToNullableFloat3(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in addition expression to FLOAT? - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableFloatAssignmentToNullableFloat4(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 5 - nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in subtraction expression to FLOAT? - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableFloatAssignmentToNullableFloat5(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = nFloat - 5;
+	        LogResult.logStdOut("Null FLOAT? used in subtraction expression to FLOAT? - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat6(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = 5 * nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in multiplication expression to FLOAT? - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       
+    end
+
+    function testNullableFloatAssignmentToNullableFloat7(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = nFloat * 5;
+	        LogResult.logStdOut("Null FLOAT? used in multiplication expression to FLOAT? - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	    
+    end
+
+    function testNullableFloatAssignmentToNullableFloat8(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = 5 / nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in division expression  to FLOAT? - 1");
+	       wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	      
+    end
+
+    function testNullableFloatAssignmentToNullableFloat9(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = nFloat / 5;
+	        LogResult.logStdOut("Null FLOAT? used in division expression  to FLOAT? - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat10(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = 5 ** nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in power of expression  to FLOAT? - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat11(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = nFloat ** 5;
+	        LogResult.logStdOut("Null FLOAT? used in power of expression  to FLOAT? - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat12(){@Test}
+        nFloat = null;
+        nFloat2 = 1;
+        nFloat2 = +nFloat;
+        LogResult.logStdOut("Null FLOAT? used in + unary expression  to FLOAT?");
+        LogResult.assertTrue1(nFloat2 == null);
+    end
+
+    function testNullableFloatAssignmentToNullableFloat13(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 = -nFloat;
+	        LogResult.logStdOut("Null FLOAT? used in - unary expression  to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat14(){@Test}
+		try    
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 += nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in += expression  to FLOAT?");
+	       wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat15(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 -= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in -= expression  to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat16(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 *= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in *= expression  to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  
+    end
+
+    function testNullableFloatAssignmentToNullableFloat17(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 /= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in /= expression  to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat18(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1;
+	        nFloat2 **= nFloat + 1;
+	        LogResult.logStdOut("Null FLOAT? used in **= expression  to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  	        
+    end
+
+    function testNullableFloatAssignmentToNullableFloat19(){@Test}
+    	try
+	        nFloat = null;
+	        nFloat2 = 1 + localTestFloat(true);
+	        LogResult.logStdOut("Function returning null FLOAT? used in expression to FLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableFloatAssignmentToNullableFloat20(){@Test}
+        nFloat = 1;
+        nFloat2 = nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in assignment to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 1));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat21(){@Test}
+        nFloat = 1;
+        nFloat2 = 1 + nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in addition expression to FLOAT? - 1");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 2));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat22(){@Test}
+        nFloat = 1;
+        nFloat2 = nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in addition expression to FLOAT? - 2");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 2));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat23(){@Test}
+        nFloat = 1;
+        nFloat2 = 5 - nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in subtraction expression to FLOAT? - 1");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 4));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat24(){@Test}
+        nFloat = 1;
+        nFloat2 = nFloat - 5;
+        LogResult.logStdOut("Non-null FLOAT? used in subtraction expression to FLOAT? - 2");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == -4));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat25(){@Test}
+        nFloat = 1;
+        nFloat2 = 5 * nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in multiplication expression to FLOAT? - 1");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 5));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat26(){@Test}
+        nFloat = 1;
+        nFloat2 = nFloat * 5;
+        LogResult.logStdOut("Non-null FLOAT? used in multiplication expression to FLOAT? - 2");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 5));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat27(){@Test}
+        nFloat = 1;
+        nFloat2 = 5 / nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in division expression  to FLOAT? - 1");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 5));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat28(){@Test}
+        nFloat = 5;
+        nFloat2 = nFloat / 5;
+        LogResult.logStdOut("Non-null FLOAT? used in division expression  to FLOAT? - 2");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 1));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat29(){@Test}
+        nFloat = 3;
+        nFloat2 = 5 % nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in modulo expression  to FLOAT? - 1");
+        LogResult.assertTrue1(nFloat2 == 2); //(nFloat2!=null) && (nFloat2==2));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat30(){@Test}
+        nFloat = 3;
+        nFloat2 = 5 ** nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in power of expression  to FLOAT? - 1");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 125));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat31(){@Test}
+        nFloat = 3;
+        nFloat2 = nFloat ** 5;
+        LogResult.logStdOut("Non-null FLOAT? used in power of expression  to FLOAT? - 2");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 243));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat32(){@Test}
+        nFloat = 5;
+        nFloat2 = 1;
+        nFloat2 = +nFloat;
+        LogResult.logStdOut("Non-null FLOAT? used in + unary expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 5));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat33(){@Test}
+	   nFloat = 5;
+	   nFloat2 = 1;
+	   nFloat2 = -nFloat;
+	   LogResult.logStdOut("Non-null FLOAT? used in - unary expression  to FLOAT?");
+	   LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == -5));    
+    end
+
+    function testNullableFloatAssignmentToNullableFloat34(){@Test}
+        nFloat = 5;
+        nFloat2 = 1;
+        nFloat2 += nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in += expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 7));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat35(){@Test}
+        nFloat = 5;
+        nFloat2 = 1;
+        nFloat2 -= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in -= expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == -5));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat36(){@Test}
+        nFloat = 5;
+        nFloat2 = 1;
+        nFloat2 *= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in *= expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 6));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat37(){@Test}
+        nFloat = 5;
+        nFloat2 = 12;
+        nFloat2 /= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in /= expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 2));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat38(){@Test}
+        nFloat = 5;
+        nFloat2 = 2;
+        nFloat2 **= nFloat + 1;
+        LogResult.logStdOut("Non-null FLOAT? used in **= expression  to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 64));
+    end
+
+    function testNullableFloatAssignmentToNullableFloat39(){@Test}
+        nFloat = 5;
+        nFloat2 = 1 + localTestFloat(false);
+        LogResult.logStdOut("Function returning non-null FLOAT? used in expression to FLOAT?");
+        LogResult.assertTrue1((nFloat2 != null) &&(nFloat2 == 6));
+    end
+
+    function testNullableFloatAssignedToFloatComplex1(){@Test}
+    	try
+	        nFloat2 float? = 1;
+	        aFloat2 float = 5;
+	        nFloat = null;
+	        aFloat = nFloat + nFloat2;
+	        LogResult.logStdOut("Null FLOAT? used in expression assigned to FLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	  	        
+    end
+
+    function testNullableFloatAssignedToFloatComplex2(){@Test}
+    	try
+	        nFloat2 float? = 1;
+	        aFloat2 float = 5;
+	        nFloat = null;
+	        aFloat = nFloat +(nFloat2 + 2);
+	        LogResult.logStdOut("Null FLOAT? used in expression assigned to FLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableIntComparisons() //{@Test}
+        nInt = null;
+        anInt = 1;
+        LogResult.logStdOut("Null INT? used in == expression - 1");
+        //LogResult.assertTrue1((nInt == true) == false);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableFloatAssignedToFloatComplex4() //{@Test}
+        nInt = null;
+        LogResult.logStdOut("Null INT? used in == expression - 2");
+        //LogResult.assertTrue1(((nInt != false) == true) == false);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableFloatAssignedToFloatComplex5(){@Test}
+        nInt = null;
+        anInt = 1;
+        LogResult.logStdOut("Null INT? used in == expression - 3");
+        LogResult.assertTrue1(((nInt == anInt) == false));
+    end
+
+    function testNullableFloatAssignedToFloatComplex6(){@Test}
+        nInt = null;
+        anInt = 1;
+        LogResult.logStdOut("Null INT? used in != expression");
+        LogResult.assertTrue1(((nInt != anInt)));
+    end
+
+    function testNullableFloatAssignedToFloatComplex7(){@Test}
+    	try
+	        nInt = null;
+	        anInt = 1;
+	        LogResult.logStdOut("Null INT? used in >= expression");
+	        answer boolean = nInt >= anInt;
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignedToFloatComplex8(){@Test}
+    	try
+	        nInt = null;
+	        anInt = 1;
+	        LogResult.logStdOut("Null INT? used in > expression");
+	        answer boolean = nInt > anInt;
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignedToFloatComplex9(){@Test}
+    	try
+	        nInt = null;
+	        anInt = 1;
+	        LogResult.logStdOut("Null INT? used in <= expression");
+	        LogResult.assertTrue1(((nInt <= anInt) == false));
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableFloatAssignedToFloatComplex10(){@Test}
+    	try
+	        nInt = null;
+	        anInt = 1;
+	        LogResult.logStdOut("Null INT? used in < expression");
+	        LogResult.assertTrue1(((nInt < anInt) == false));
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableFloatAssignedToFloatComplex11() //{@Test}
+        nInt = null;
+        anInt = 1;
+        LogResult.logStdOut("Function returning null INT? used in ! unary expression to INT");
+        //LogResult.assertTrue1((!localTestInt(true) == false) == false);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableFloatAssignedToFloatComplex12() //{@Test}
+        anInt = 1;
+        nInt = 1;
+        LogResult.logStdOut("Non-null INT? used in == expression - 1");
+        //LogResult.assertTrue1(((nInt == true) == true));
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableFloatAssignedToFloatComplex13() //{@Test}
+        anInt = 1;
+        nInt = 1;
+        LogResult.logStdOut("Non-null INT? used in == expression - 2");
+        //LogResult.assertTrue1((((nInt != false) == true) == true));
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableFloatAssignedToFloatComplex14(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in == expression - 3");
+        LogResult.assertTrue1(((nInt == anInt) == true));
+    end
+
+    function testNullableFloatAssignedToFloatComplex15(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in != expression");
+        LogResult.assertTrue1(((nInt != anInt) == false));
+    end
+
+    function testNullableFloatAssignedToFloatComplex16(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in >= expression");
+        LogResult.assertTrue1(((nInt >= anInt) == true));
+    end
+
+    function testNullableFloatAssignedToFloatComplex17(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in > expression");
+        LogResult.assertTrue1(((nInt > anInt) == false));
+    end
+
+    function testNullableFloatAssignedToFloatComplex18(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in <= expression");
+        LogResult.assertTrue1(((nInt <= anInt) == true));
+    end
+
+    function testNullableFloatAssignedToFloatComplex19(){@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Non-null INT? used in < expression");
+        LogResult.assertTrue1(((nInt < anInt) == false));
+    end
+
+    function testNullableFloatAssignedToFloatComplex20() //{@Test}
+        nInt = 1;
+        anInt = 1;
+        LogResult.logStdOut("Function returning null INT? used in ! unary expression to INT");
+        //LogResult.assertTrue1((!localTestInt(false) == false) == true);
+        LogResult.skipped("In EDT, numeric types are incompatible with booleans");
+    end
+
+    function testNullableSmallFloatDefs1(){@Test}
+        LogResult.logStdOut("Local SMALLFLOAT? definition - 1");
+        LogResult.assertTrue1(nSFloat == null);
+    end
+
+    function testNullableSmallFloatDefs2(){@Test}
+        nSFloat = 5;
+        LogResult.logStdOut("Local SMALLFLOAT? definition - 2");
+        LogResult.assertTrue1(nSFloat != null);
+    end
+
+    function testNullableSmallFloatDefs3(){@Test}
+        nSFloat = 0;
+        LogResult.logStdOut("Local SMALLFLOAT? definition - 3");
+        LogResult.assertTrue1(nSFloat != null);
+    end
+
+    function testNullableSmallFloatDefs4(){@Test}
+        nsFlt smallFloat?{};
+        LogResult.logStdOut("Local SMALLFLOAT? definition - 4");
+        LogResult.assertTrue1(nsFlt == null);
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat1(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = null;
+        LogResult.logStdOut("Null SMALLFLOAT? used in assignment to SMALLFLOAT");
+        try
+            aSFloat = nSFloat;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat2(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1 + nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in addition expression to SMALLFLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat3(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in addition expression to SMALLFLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat4(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 5 - nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in subtraction expression to SMALLFLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat5(){@Test}
+		try    
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = nSFloat - 5;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in subtraction expression to SMALLFLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat6(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 5 * nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in multiplication expression to SMALLFLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat7(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = nSFloat * 5;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in multiplication expression to SMALLFLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 	        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat8(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 5 / nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in division expression  to SMALLFLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat9(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = nSFloat / 5;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in division expression  to SMALLFLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat10(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 5 ** nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in power of expression  to SMALLFLOAT - 1");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat11(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = nSFloat ** 5;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in power of expression  to SMALLFLOAT - 2");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat12(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat = +nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in + unary expression  to SMALLFLOAT");
+	        wantNVE();
+		onException(nve NullValueException)
+			LogResult.passed("OK");
+		end	        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat13(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = null;
+        aSFloat = 1;
+        LogResult.logStdOut("Null SMALLFLOAT? used in - unary expression  to SMALLFLOAT");
+        try
+            aSFloat = nSFloat;
+            wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat14(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat += nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in += expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat15(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat -= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in -= expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat16(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat *= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in *= expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat17(){@Test}
+		try    
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat /= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in /= expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat18(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat %= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in %= expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat19(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1;
+	        aSFloat **= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in **= expression  to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat20(){@Test}
+    	try
+	        aSFloat smallFloat = -1;
+	        nSFloat = null;
+	        aSFloat = 1 + localTestFloat(true);
+	        LogResult.logStdOut("Function returning null SMALLFLOAT? used in expression to SMALLFLOAT");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  		        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat21(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in assignment to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 1));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat22(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = 1 + nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in addition expression to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 2));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat23(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in addition expression to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == 2));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat24(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = 5 - nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in subtraction expression to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 4));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat25(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = nSFloat - 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in subtraction expression to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == -4));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat26(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = 5 * nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in multiplication expression to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat27(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = nSFloat * 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in multiplication expression to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat28(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        aSFloat = 5 / nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in division expression  to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat29(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 1;
+        nSFloat = 5;
+        aSFloat = nSFloat / 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in division expression  to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == 1));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat30(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 3;
+        aSFloat = 5 ** nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in power of expression  to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 125));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat31(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 3;
+        aSFloat = nSFloat ** 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in power of expression  to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == 243));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat32(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 1;
+        aSFloat = +nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in + unary expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat33(){@Test}
+	    aSFloat smallFloat = -1;
+	    nSFloat = 5;
+	    aSFloat = 1;
+	    aSFloat = -nSFloat;
+	    LogResult.logStdOut("Non-null SMALLFLOAT? used in - unary expression  to SMALLFLOAT");
+	    LogResult.assertTrue1((aSFloat == -5));        
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat34(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 1;
+        aSFloat += nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in += expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 7));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat35(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 1;
+        aSFloat -= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in -= expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == -5));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat36(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 1;
+        aSFloat *= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in *= expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 6));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat37(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 12;
+        aSFloat /= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in /= expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 2));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat38(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 7;
+        aSFloat %= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in %= expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 1));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat39(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 2;
+        aSFloat **= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in **= expression  to SMALLFLOAT");
+        LogResult.assertTrue1((aSFloat == 64));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat40(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = 1 + localTestFloat(false);
+        LogResult.logStdOut("Function returning non-null SMALLFLOAT? used in expression to SMALLFLOAT - 1");
+        LogResult.assertTrue1((aSFloat == 6));
+    end
+
+    function testNullableSmallFloatAssignmentToSmallFloat41(){@Test}
+        aSFloat smallFloat = -1;
+        nSFloat = 5;
+        aSFloat = localTestFloat(false) + 1;
+        LogResult.logStdOut("Function returning non-null SMALLFLOAT? used in expression to SMALLFLOAT - 2");
+        LogResult.assertTrue1((aSFloat == 6));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat1(){@Test}
+        nSFloat = null;
+        nSFloat2 = nSFloat;
+        LogResult.logStdOut("Null SMALLFLOAT? used in assignment to SMALLFLOAT?");
+        LogResult.assertTrue1(nSFloat2 == null);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat2(){@Test}
+    	try
+        	nSFloat = null;
+        	nSFloat2 = 1 + nSFloat;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in addition expression to SMALLFLOAT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	       	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat3(){@Test}
+    	try
+        	nSFloat = null;
+        	nSFloat2 = nSFloat + 1;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in addition expression to SMALLFLOAT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end          	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat4(){@Test}
+    	try
+        	nSFloat = null;
+        	nSFloat2 = 5 - nSFloat;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in subtraction expression to SMALLFLOAT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	   
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat5(){@Test}
+        try
+        	nSFloat = null;
+        	nSFloat2 = nSFloat - 5;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in subtraction expression to SMALLFLOAT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	         	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat6(){@Test}
+ 		try
+ 			nSFloat = null;
+        	nSFloat2 = 5 * nSFloat;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in multiplication expression to SMALLFLOAT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	 
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat7(){@Test}
+		try
+			nSFloat = null;
+        	nSFloat2 = nSFloat * 5;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in multiplication expression to SMALLFLOAT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat8(){@Test}
+        try
+        	nSFloat = null;
+        	nSFloat2 = 5 / nSFloat;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in division expression  to SMALLFLOAT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	      	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat9(){@Test}
+        try
+        	nSFloat = null;
+        	nSFloat2 = nSFloat / 5;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in division expression  to SMALLFLOAT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat10(){@Test}
+        try
+	        nSFloat = null;
+	        nSFloat2 = 5 ** nSFloat;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in power of expression  to SMALLFLOAT? - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat11(){@Test}
+    	try
+	        nSFloat = null;
+	        nSFloat2 = nSFloat ** 5;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in power of expression  to SMALLFLOAT? - 2");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat12(){@Test}
+        nSFloat = null;
+        nSFloat2 = 1;
+        nSFloat2 = +nSFloat;
+        LogResult.logStdOut("Null SMALLFLOAT? used in + unary expression  to SMALLFLOAT?");
+        LogResult.assertTrue1(nSFloat2 == null);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat13(){@Test}
+    	try
+        	nSFloat = null;
+        	nSFloat2 = 1;
+        	nSFloat2 = -nSFloat;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in - unary expression  to SMALLFLOAT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end  			        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat14(){@Test}
+        try 
+        	nSFloat = null;
+        	nSFloat2 = 1;
+        	nSFloat2 += nSFloat + 1;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in += expression  to SMALLFLOAT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	          	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat15(){@Test}
+        try
+        	nSFloat = null;
+        	nSFloat2 = 1;
+        	nSFloat2 -= nSFloat + 1;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in -= expression  to SMALLFLOAT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat16(){@Test}
+        try
+        	nSFloat = null;
+        	nSFloat2 = 1;
+        	nSFloat2 *= nSFloat + 1;
+	        LogResult.logStdOut("Null SMALLFLOAT? used in *= expression  to SMALLFLOAT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);
+        end  	        	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat17(){@Test}
+        try
+       		nSFloat = null;
+	        nSFloat2 = 1;
+    	    nSFloat2 /= nSFloat + 1;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in /= expression  to SMALLFLOAT?");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end          	
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat18(){@Test}
+        try 
+        	nSFloat = null;
+        	nSFloat2 = 1;
+        	nSFloat2 **= nSFloat + 1;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in **= expression  to SMALLFLOAT?");
+    	    wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end      	    
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat19(){@Test}
+    	try
+	        nSFloat = null;
+	        nSFloat2 = 1 + localTestFloat(true);
+	        LogResult.logStdOut("Function returning null SMALLFLOAT? used in expression to SMALLFLOAT?");
+	        wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end       
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat20(){@Test}
+        nSFloat = 1;
+        nSFloat2 = nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in assignment to SMALLFLOAT?");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 1));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat21(){@Test}
+        nSFloat = 1;
+        nSFloat2 = 1 + nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in addition expression to SMALLFLOAT? - 1");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 2));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat22(){@Test}
+        nSFloat = 1;
+        nSFloat2 = nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in addition expression to SMALLFLOAT? - 2");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 2));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat23(){@Test}
+        nSFloat = 1;
+        nSFloat2 = 5 - nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in subtraction expression to SMALLFLOAT? - 1");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 4));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat24(){@Test}
+        nSFloat = 1;
+        nSFloat2 = nSFloat - 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in subtraction expression to SMALLFLOAT? - 2");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == -4));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat25(){@Test}
+        nSFloat = 1;
+        nSFloat2 = 5 * nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in multiplication expression to SMALLFLOAT? - 1");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat26(){@Test}
+        nSFloat = 1;
+        nSFloat2 = nSFloat * 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in multiplication expression to SMALLFLOAT? - 2");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat27(){@Test}
+        nSFloat = 1;
+        nSFloat2 = 5 / nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in division expression  to SMALLFLOAT? - 1");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 5));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat28(){@Test}
+        nSFloat = 5;
+        nSFloat2 = nSFloat / 5;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in division expression  to SMALLFLOAT? - 2");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 1));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat29(){@Test}
+        nSFloat = 3;
+        nSFloat2 = 5 ** nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in power of expression  to SMALLFLOAT? - 1");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 125));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat30() {@Test}
+       nSFloat = 3;
+       nSFloat2 = nSFloat ** 5;
+       LogResult.logStdOut("Non-null SMALLFLOAT? used in power of expression  to SMALLFLOAT? - 2");
+       LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 243));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat31(){@Test}
+        nSFloat = 3;
+        nSFloat2 = 1;
+        nSFloat2 = +nSFloat;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in + unary expression  to SMALLFLOAT?");
+        LogResult.assertTrue1((nSFloat2 != null) &&(nSFloat2 == 3));
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat32(){@Test}
+    	nSFloat = 5;
+	    nSFloat2 = 1;
+	    nSFloat2 = -nSFloat;
+	    LogResult.logStdOut("Non-null SMALLFLOAT? used in - unary expression  to SMALLFLOAT?");
+	    LogResult.assertBigIntEqual1(-5, nSFloat2);      
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat33(){@Test}
+        nSFloat = 5;
+        nSFloat2 = 1;
+        nSFloat2 += nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in += expression  to SMALLFLOAT?");
+        LogResult.assertBigIntEqual1(7, nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat34(){@Test}
+        nSFloat = 5;
+        nSFloat2 = 1;
+        nSFloat2 -= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in -= expression  to SMALLFLOAT?");
+        LogResult.assertBigIntEqual1(-5, nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat35(){@Test}
+        nSFloat = 5;
+        nSFloat2 = 1;
+        nSFloat2 *= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in *= expression  to SMALLFLOAT?");
+        LogResult.assertTrue1(6 == nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat36() // {@Test}
+        nSFloat = 1;
+        nSFloat2 = 12;
+        nSFloat2 /= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in /= expression  to SMALLFLOAT?");
+        LogResult.assertTrue1(2 == nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat37() // {@Test}
+        nSFloat = 4;
+        nSFloat2 = 2;
+        nSFloat2 **= nSFloat + 1;
+        LogResult.logStdOut("Non-null SMALLFLOAT? used in **= expression  to SMALLFLOAT?");
+        LogResult.assertTrue1(64 == nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignmentToNullableSmallFloat38(){@Test}
+        nSFloat = 3;
+        nSFloat2 = 1 + localTestFloat(false);
+        LogResult.logStdOut("Function returning non-null SMALLFLOAT? used in expression to SMALLFLOAT?");
+        LogResult.assertBigIntEqual1(6, nSFloat2);
+    end
+
+    function testNullableSmallFloatAssignedToSmallFloatComplex1(){@Test}
+		try 
+        	nSFloat2 float? = 1;
+        	aSFloat2 float = 5;
+        	nSFloat = null;
+        	aSFloat = nSFloat + nSFloat2;
+        	LogResult.logStdOut("Null SMALLFLOAT? used in expression assigned to SMALLFLOAT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex);	         	
+        end          
+    end
+
+    function testNullableSmallFloatAssignedToSmallFloatComplex2(){@Test}
+    	try
+        	nSFloat2 float? = 1;
+        	aSFloat2 float = 5;
+        	nSFloat = null;
+        	aSFloat = nSFloat +(nSFloat2 + 2);
+        	LogResult.logStdOut("Null SMALLFLOAT? used in expression assigned to SMALLFLOAT - 1");
+        	wantNVE();
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        onException(ex AnyException)
+        	wrongException(ex); 	         	
+        end          
+    end
+
+    function localTestSmallFloat(bRetNull boolean in) returns(smallFloat?)
+        if(bRetNull)
+            return(null);
+        else
+            return(5.5);
+        end
+    end
+
+    function localTestFloat(bRetNull boolean in) returns(float?)
+        if(bRetNull)
+            return(null);
+        else
+            return(5);
+        end
+    end
+
+    function localTestInt(bRetNull boolean in) returns(int?)
+        if(bRetNull)
+            return(null);
+        else
+            return(5);
+        end
+    end
+
+    function localTestDecimal(bRetNull boolean in) returns(decimal(7, 2)?)
+        if(bRetNull)
+            return(null);
+        else
+            return(5.6789);
+        end
+    end
+    
+    function wantNVE()
+    	LogResult.failed("Expecting NullValueException");
+    end
+    
+    function wrongException(ex AnyException)
+    	LogResult.failed("Wrong exception) " + ex.message);
+    end
+
+end

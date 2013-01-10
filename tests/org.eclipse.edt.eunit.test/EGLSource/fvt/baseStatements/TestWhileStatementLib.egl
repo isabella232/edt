@@ -1,0 +1,30 @@
+package fvt.baseStatements;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.rbd.StrLib;
+
+// This is the function test program for valid FOR in EGLV7 for RichUI
+//
+// The testFor function tests use of each data type valid as an integer, as well as numeric literals and
+// expressions for the controls of the for statement. In addition, the data items used as
+// controls may come from a standalone data item, an item of a record, a dynamic item array, 
+// an item of a fixed array of a record, an item of a library, an item of a record within
+// a library, or a dynamic item array element.
+
+Library TestWhileStatementLib
+
+	Function testWhileStatement(){@Test}
+		
+		LogResult.logStdOut("Test function calls in while condition");		
+		s string = "100";
+		totChars int = 10;
+		len int = 1;
+		while(StrLib.characterLen(s) < totChars && len < 10)
+			s = "0" + s;
+			sysLib.writeStdOut("" + (StrLib.characterLen(s) < totChars));
+ 			len = len +1;
+		end
+		LogResult.assertTrue1(StrLib.characterLen(s) == totChars);
+	end	
+end

@@ -1,0 +1,349 @@
+package server.test.rpg.primitive.arrays;
+
+import org.eclipse.edt.eunit.runtime.logresult;
+import org.eclipse.edt.eunit.runtime.test;
+import eglx.lang.anyexception;
+import server.host.rpg.programs.PrimitiveArrays;
+
+
+// basic library
+library Parameters3
+	
+	char20 string[]; 
+	lchar20 string(20)[]; 
+	unicode20 string[]; 
+	lunicode20 string(20)[]; 
+	bin1sign smallint[];
+	bin2sign smallint[];
+	bin4sign int[];
+	bin8sign bigint[];
+	dec174 decimal(17,4)[];
+	dec80 decimal(8,0)[];
+	num150 decimal(15)[];
+	num112 decimal(11,2)[];
+	bin1 smallint[];
+	bin2 int[];
+	bin4 bigint[];
+	bin8 decimal(20)[];
+	date1 date[];
+	date2 date[];
+	date3 date[];
+	time1 time[];
+	time2 time[];
+	time3 time[];
+	timestamp1 timestamp("yyyyMMddHHmmss")[];
+	float4 smallfloat[];
+	float8 float[];
+	testParameters boolean = true;
+	function call1(){@Test}
+		char20 = ["abcd", "EFG"]; 
+		unicode20 = ["xyz", "1234"]; 
+		lchar20 = ["ABCD", "efg"]; 
+		lunicode20 = ["XYZ", "4321"]; 
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramText3");
+			PrimitiveArrays.primitiveHostProgramText3(char20, lchar20, unicode20, lunicode20, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function char20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail char20.getSize()", 2, char20.getSize());
+            LogResult.assertStringEqual("Fail char20[1]", "abcdYYYYY           ", char20[1]);
+            LogResult.assertStringEqual("Fail char20[2]", "EFGYYYYY            ", char20[2]);
+		end
+	end
+	function lchar20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail lchar20.getSize()", 2, lchar20.getSize());
+            LogResult.assertStringEqual("Fail lchar20[1]", "ABCDYYYYY           ", lchar20[1]);
+            LogResult.assertStringEqual("Fail lchar20[2]", "efgYYYYY            ", lchar20[2]);
+		end
+	end
+	function unicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail unicode20.getSize()", 2, unicode20.getSize());
+            LogResult.assertStringEqual("Fail unicode20[1]", "xyz ZZZZZZZZZZ      ", unicode20[1]);
+            LogResult.assertStringEqual("Fail unicode20[2]", "1234ZZZZZZZZZZ      ", unicode20[2]); 
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail lunicode20.getSize()", 2, lunicode20.getSize());
+            LogResult.assertStringEqual("Fail lunicode20[1]", "XYZ ZZZZZZZZZZ      ", lunicode20[1]);
+            LogResult.assertStringEqual("Fail lunicode20[2]", "4321ZZZZZZZZZZ      ", lunicode20[2]); 
+		end
+	end
+	function call2(){@Test}
+		bin1sign = [-1,-2];
+		bin2sign = [1,2];
+		bin4sign = [3,4];
+		bin8sign = [4,5];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramInt3");
+			PrimitiveArrays.primitiveHostProgramInt3(bin1sign, bin2sign, bin4sign, bin8sign, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function bin1signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin1sign.getSize()", 2, bin1sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin1sign[1]", 97, bin1sign[1]);
+            LogResult.assertBigIntEqual("Fail bin1sign[2]", 96, bin1sign[2]);
+		end
+	end
+	function bin2signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin2sign.getSize()", 2, bin2sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin2sign[1]", 999, bin2sign[1]);
+            LogResult.assertBigIntEqual("Fail bin2sign[2]", 1000, bin2sign[2]);
+		end
+	end
+	function bin4signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin4sign.getSize()", 2, bin4sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin4sign[1]", 10001, bin4sign[1]);
+            LogResult.assertBigIntEqual("Fail bin4sign[2]", 10002, bin4sign[2]);
+		end
+	end
+	function bin8signTest(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin8sign.getSize()", 2, bin8sign.getSize());
+            LogResult.assertBigIntEqual("Fail bin8sign[1]", 100002, bin8sign[1]);
+            LogResult.assertBigIntEqual("Fail bin8sign[2]", 100003, bin8sign[2]);
+		end
+	end
+	function call8(){@Test}
+		float4 = [14,15];
+		float8 = [16,17];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramFloat3");
+			PrimitiveArrays.primitiveHostProgramFloat3(float4, float8, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function float4Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail float4.getSize()", 2, float4.getSize());
+            LogResult.assertFloatEqual("Fail float4[1]", 14.99 as smallfloat, float4[1]);
+            LogResult.assertFloatEqual("Fail float4[2]", 15.99 as smallfloat, float4[2]);
+		end
+	end
+	function float8Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail float8.getSize()", 2, float8.getSize());
+            LogResult.assertFloatEqual("Fail float8[1]", 16.99, float8[1]);
+            LogResult.assertFloatEqual("Fail float8[2]", 17.99, float8[2]);
+		end
+	end
+	function call3(){@Test}
+		dec174 = [45.67, 64.97];
+		dec80 = [6,7];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramPack3");
+			PrimitiveArrays.primitiveHostProgramPack3(dec174, dec80, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function dec174Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail dec174.getSize()", 2, dec174.getSize());
+            LogResult.assertDecimalEqual("Fail dec174[1]", 10043.67, dec174[1]);
+            LogResult.assertDecimalEqual("Fail dec174[2]", 10062.97, dec174[2]);
+		end
+	end
+	function dec80Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail dec80.getSize()", 2, dec80.getSize());
+            LogResult.assertDecimalEqual("Fail dec80[1]", 100004, dec80[1]);
+            LogResult.assertDecimalEqual("Fail dec80[2]", 100005, dec80[2]);
+		end
+	end
+	function call4(){@Test}
+		num150 = [8,9];
+		num112 = [11.61, 56.72];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramZone3");
+			PrimitiveArrays.primitiveHostProgramZone3(num150, num112, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function num150Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail num150.getSize()", 2, num150.getSize());
+            LogResult.assertDecimalEqual("Fail num150[1]", 1006, num150[1]);
+            LogResult.assertDecimalEqual("Fail num150[2]", 1007, num150[2]);
+		end
+	end
+	function num112Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail num112.getSize()", 2, num112.getSize());
+            LogResult.assertDecimalEqual("Fail num112[1]", 109.61, num112[1]);
+            LogResult.assertDecimalEqual("Fail num112[2]", 154.72, num112[2]);
+		end
+	end
+	function call5(){@Test}
+		bin1 = [8,9];
+		bin2 = [10,11];
+		bin4  = [12,13];
+		bin8  = [14,15];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramUInt3");
+			PrimitiveArrays.primitiveHostProgramUInt3(bin1, bin2, bin4, bin8, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function bin1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin1.getSize()", 2, bin1.getSize());
+            LogResult.assertBigIntEqual("Fail bin1[1]", 106, bin1[1]);
+            LogResult.assertBigIntEqual("Fail bin1[2]", 107, bin1[2]);
+		end
+	end
+	function bin2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin2.getSize()", 2, bin2.getSize());
+            LogResult.assertBigIntEqual("Fail bin2[1]", 1008, bin2[1]);
+            LogResult.assertBigIntEqual("Fail bin2[2]", 1009, bin2[2]);
+		end
+	end
+
+	function bin4Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin4.getSize()", 2, bin4.getSize());
+            LogResult.assertBigIntEqual("Fail bin4[1]", 10010, bin4[1]);
+            LogResult.assertBigIntEqual("Fail bin4[2]", 10011, bin4[2]);
+		end
+	end
+	function bin8Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail bin8.getSize()", 2, bin8.getSize());
+            LogResult.assertBigIntEqual("Fail bin8[1]", 100012, bin8[1]);
+            LogResult.assertBigIntEqual("Fail bin8[2]", 100013, bin8[2]);
+		end
+	end
+	function call6(){@Test}
+		date1 = ["06/24/2011" ,"03/12/1011"];
+		date2 = ["05/19/1997", "01/02/1947"];
+		date3 = ["04/03/1922", "07/24/1822"];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramDate3");
+			PrimitiveArrays.primitiveHostProgramDate3(date1, date2, date3, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function date1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date1.getSize()", 2, date1.getSize());
+            LogResult.assertDateEqual("Fail date1[1]", "11/29/2016", date1[1]);
+            LogResult.assertDateEqual("Fail date1[2]", "08/17/1016", date1[2]);
+		end
+	end
+	function date2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date2.getSize()", 2, date2.getSize());
+            LogResult.assertDateEqual("Fail date2[1]", "10/24/2002", date2[1]);
+            LogResult.assertDateEqual("Fail date2[2]", "06/07/1952", date2[2]);
+		end
+	end
+
+	function date3Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail date3.getSize()", 2, date3.getSize());
+            LogResult.assertDateEqual("Fail date3[1]", "09/08/1927", date3[1]);
+            LogResult.assertDateEqual("Fail date3[2]", "12/29/1827", date3[2]);
+		end
+	end
+	function call6a(){@Test}
+		time1 = ["06:24:20" ,"13:12:11"];
+		time2 = ["05:19:19", "11:02:47"];
+		time3 = ["04:03:22", "17:24:22"];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramTime");
+			PrimitiveArrays.primitiveHostProgramTime(time1, time2, time3, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function time1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time1.getSize()", 4, time1.getSize());
+            LogResult.assertTimeEqual("Fail time1[1]", "11:29:25", time1[1]);
+            LogResult.assertTimeEqual("Fail time1[2]", "18:17:16", time1[2]);
+		end
+	end
+	function time2Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time2.getSize()", 4, time2.getSize());
+            LogResult.assertTimeEqual("Fail time2[1]", "10:24:24", time2[1]);
+            LogResult.assertTimeEqual("Fail time2[2]", "16:07:52", time2[2]);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail time3.getSize()", 4, time3.getSize());
+            LogResult.assertTimeEqual("Fail time3[1]", "09:08:27", time3[1]);
+            LogResult.assertTimeEqual("Fail time3[2]", "22:29:27", time3[2]);
+		end
+	end
+	function call7(){@Test}
+		timestamp1 = ["2012/02/11 17:54:34", "1812/06/01 08:45:26"];
+		validCount int;
+		try
+	       	LogResult.logStdOut("call PrimitiveArrays.primitiveHostProgramTimestamp3");
+			PrimitiveArrays.primitiveHostProgramTimestamp3(timestamp1, validCount);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function timestamp1Test(){@Test {}}
+		if(testParameters)
+            LogResult.assertBigIntEqual("Fail timestamp1.getSize()", 2, timestamp1.getSize());
+            LogResult.assertTimestampEqual("Fail timestamp1[1]", "2017/07/16 22:59:39", timestamp1[1]);
+            LogResult.assertTimestampEqual("Fail timestamp1[2]", "1817/11/06 13:50:31", timestamp1[2]);
+		end
+	end
+end

@@ -1,0 +1,2258 @@
+package fvt.librarySupport.extensiveMathLibTests;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestDecimalsLib
+* @title The function test program for Decimal in EDT for RichUI
+* @keywords array
+* @author EDT team
+* @createDate 2011/08/27
+* @description 
+* Test the functions defined for Decimal, include serveral kind of precision
+* , and also test the money and num datatype.
+*/
+
+library TestDecimalsLib
+
+    b boolean;
+    d92 decimal(9, 2);
+    d97 decimal(9, 7);
+
+    d25_2 decimal(25, 2);
+    d25_7 decimal(25, 7);
+
+    //    m9_2 money(9, 2);
+    //    m9_7 money(9, 7);
+    //    m25_2 money(25, 2);
+    //    m25_7 money(25, 7);
+    //    n9_2 num(9, 2);
+    //    n9_7 num(9, 7);
+    //    n25_2 num(25, 2);
+    //    n25_7 num(25, 7);
+    
+    b9_0 decimal(9, 0);
+
+    d25_0 decimal(25, 0);
+
+    //    m90_0 money(9, 0);
+    //    m25_0 money(25, 0);
+    //    n9_0 num(9, 0);
+    //    n25_0 num(25, 0);
+    
+    function testForDecimal9x1(){@Test}
+        LogResult.logStdOut("Initial value of decimal(9,2)");
+        LogResult.assertTrue1(d92 == 0);
+    end
+
+    function testForDecimal9x2(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #1");
+        d92 = 1;
+        LogResult.assertTrue1(d92 == 1);
+    end
+
+    function testForDecimal9x3(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #2");
+        d92 = -1;
+        LogResult.assertTrue1(d92 == -1);
+    end
+
+    function testForDecimal9x4(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #3");
+        d92 = 2147483.47;
+        LogResult.assertTrue1(d92 == 2147483.47);
+    end
+
+    function testForDecimal9x5(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #4");
+        d92 = -2147483.48;
+        LogResult.assertTrue1(d92 == -2147483.48);
+    end
+
+    function testForDecimal9x6(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #5 (overflow)");
+        try
+            d92 = 21474836.48;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal9x7(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #6 (overflow)");
+        try
+            d92 = -21474836.49;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal9x8(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #7");
+        d92 = 1.23456789;
+        LogResult.assertTrue1(d92 == 1.23);
+    end
+
+    function testForDecimal9x9(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #8");
+        d92 = 1.23456789e2;
+        LogResult.assertTrue1(d92 == 123.46);
+    end
+
+    function testForDecimal9x10(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #9");
+        d92 = 2.9999;
+        LogResult.assertTrue1(d92 == 2.99);
+    end
+
+    function testForDecimal9x11(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #10");
+        d92 = 2.0001;
+        LogResult.assertTrue1(d92 == 2.00);
+    end
+
+    function testForDecimal9x12(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #11");
+        d92 = -2.9999;
+        LogResult.assertTrue1(d92 == -2.99);
+    end
+
+    function testForDecimal9x13(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #12");
+        d92 = -2.0001;
+        LogResult.assertTrue1(d92 == -2.00);
+    end
+
+    function testForDecimal9x14(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #13");
+        d92 = 2.9999e0;
+        LogResult.assertTrue1(d92 == 3.00);
+    end
+
+    function testForDecimal9x15(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #14");
+        d92 = 2.231e0;
+        LogResult.assertTrue1(d92 == 2.23);
+    end
+
+    function testForDecimal9x16(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #15");
+        d92 = -2.9999e0;
+        LogResult.assertTrue1(d92 == -3.00);
+    end
+
+    function testForDecimal9x17(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #16");
+        d92 = -2.231e0;
+        LogResult.assertTrue1(d92 == -2.23);
+    end
+
+    function testForDecimal9x18(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #17");
+        d92 = 2.99999999999999e0;
+        LogResult.assertTrue1(d92 == 3.00);
+    end
+
+    function testForDecimal9x19(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,2) #18");
+        d92 = 2.99999999999999;
+        LogResult.assertTrue1(d92 == 2.99);
+    end
+
+    function testForDecimal9x20(){@Test}
+        LogResult.logStdOut("Initial value of decimal(9,7)");
+        LogResult.assertTrue1(d97 == 0);
+    end
+
+    function testForDecimal9x21(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #1");
+        d97 = 1;
+        LogResult.assertTrue1(d97 == 1);
+    end
+
+    function testForDecimal9x22(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #2");
+        d97 = -1;
+        LogResult.assertTrue1(d97 == -1);
+    end
+
+    function testForDecimal9x23(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #3");
+        d97 = 21.4748364;
+        LogResult.assertTrue1(d97 == 21.4748364);
+    end
+
+    function testForDecimal9x24(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #4");
+        d97 = -21.4748364;
+        LogResult.assertTrue1(d97 == -21.4748364);
+    end
+
+    function testForDecimal9x25(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #5 (overflow)");
+        try
+            d97 = 215;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal9x26(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #6 (overflow)");
+        try
+            d97 = -215;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal9x27(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #7");
+        d97 = 1.23456789;
+        LogResult.assertTrue1(d97 == 1.2345678);
+    end
+
+    function testForDecimal9x28(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #8");
+        d97 = 1.23456789e1;
+        LogResult.assertTrue1(d97 == 12.3456789);
+    end
+
+    function testForDecimal9x29(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #9");
+        d97 = 2.9999;
+        LogResult.assertTrue1(d97 == 2.9999000);
+    end
+
+    function testForDecimal9x30(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #10");
+        d97 = 2.0001;
+        LogResult.assertTrue1(d97 == 2.0001000);
+    end
+
+    function testForDecimal9x31(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #11");
+        d97 = -2.9999;
+        LogResult.assertTrue1(d97 == -2.9999000);
+    end
+
+    function testForDecimal9x32(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #12");
+        d97 = -2.0001;
+        LogResult.assertTrue1(d97 == -2.0001000);
+    end
+
+    function testForDecimal9x33(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #13");
+        d97 = 2.9999e0;
+        LogResult.assertTrue1(d97 == 2.9999000);
+    end
+
+    function testForDecimal9x34(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #14");
+        d97 = 2.231e0;
+        LogResult.assertTrue1(d97 == 2.2310000);
+    end
+
+    function testForDecimal9x35(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #15");
+        d97 = -2.9999e0;
+        LogResult.assertTrue1(d97 == -2.9999000);
+    end
+
+    function testForDecimal9x36(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #16");
+        d97 = -2.231e0;
+        LogResult.assertTrue1(d97 == -2.2310000);
+    end
+
+    function testForDecimal9x37(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #17");
+        d97 = 2.99999999999999e0;
+        LogResult.assertTrue1(d97 == 3.0000000);
+    end
+
+    function testForDecimal9x38(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,7) #18");
+        d97 = 2.99999999999999;
+        LogResult.assertTrue1(d97 == 2.9999999);
+    end
+
+    function testForDecimal25x1(){@Test}
+        LogResult.logStdOut("Initial value of decimal(25,2)");
+        LogResult.assertTrue1(d25_2 == 0);
+    end
+
+    function testForDecimal25x2(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #1");
+        d25_2 = 1;
+        LogResult.assertTrue1(d25_2 == 1);
+    end
+
+    function testForDecimal25x3(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #2");
+        d25_2 = -1;
+        LogResult.assertTrue1(d25_2 == -1);
+    end
+
+    function testForDecimal25x4(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #3");
+        d25_2 = 99999999999999999999999.99;
+        LogResult.assertTrue1(d25_2 == 99999999999999999999999.99);
+    end
+
+    function testForDecimal25x5(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #4");
+        d25_2 = -99999999999999999999999.99;
+        LogResult.assertTrue1(d25_2 == -99999999999999999999999.99);
+    end
+
+    function testForDecimal25x6(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #5 (overflow)");
+        try
+            d25_2 = 100000000000000000000000.00;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal25x7(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #6 (overflow)");
+        try
+            d25_2 = -100000000000000000000000.00;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal25x8(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #7");
+        d25_2 = 1.23456789;
+        LogResult.assertTrue1(d25_2 == 1.23);
+    end
+
+    function testForDecimal25x9(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #8");
+        d25_2 = 1.23456789e2;
+        LogResult.assertTrue1(d25_2 == 123.46);
+    end
+
+    function testForDecimal25x10(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #9");
+        d25_2 = 2.9999;
+        LogResult.assertTrue1(d25_2 == 2.99);
+    end
+
+    function testForDecimal25x11(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #10");
+        d25_2 = 2.0001;
+        LogResult.assertTrue1(d25_2 == 2.00);
+    end
+
+    function testForDecimal25x12(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #11");
+        d25_2 = -2.9999;
+        LogResult.assertTrue1(d25_2 == -2.99);
+    end
+
+    function testForDecimal25x13(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #12");
+        d25_2 = -2.0001;
+        LogResult.assertTrue1(d25_2 == -2.00);
+    end
+
+    function testForDecimal25x14(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #13");
+        d25_2 = 2.9999e0;
+        LogResult.assertTrue1(d25_2 == 3.00);
+    end
+
+    function testForDecimal25x15(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #14");
+        d25_2 = 2.231e0;
+        LogResult.assertTrue1(d25_2 == 2.23);
+    end
+
+    function testForDecimal25x16(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #15");
+        d25_2 = -2.9999e0;
+        LogResult.assertTrue1(d25_2 == -3.00);
+    end
+
+    function testForDecimal25x17(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #16");
+        d25_2 = -2.231e0;
+        LogResult.assertTrue1(d25_2 == -2.23);
+    end
+
+    function testForDecimal25x18(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #17");
+        d25_2 = 2.99999999999999e0;
+        LogResult.assertTrue1(d25_2 == 3.00);
+    end
+
+    function testForDecimal25x19(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,2) #18");
+        d25_2 = 2.99999999999999;
+        LogResult.assertTrue1(d25_2 == 2.99);
+    end
+
+    function testForDecimal25x20(){@Test}
+        LogResult.logStdOut("Initial value of decimal(25,7)");
+        LogResult.assertTrue1(d25_7 == 0);
+    end
+
+    function testForDecimal25x21(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #1");
+        d25_7 = 1;
+        LogResult.assertTrue1(d25_7 == 1);
+    end
+
+    function testForDecimal25x22(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #2");
+        d25_7 = -1;
+        LogResult.assertTrue1(d25_7 == -1);
+    end
+
+    function testForDecimal25x23(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #3");
+        d25_7 = 999999999999999999.9999999;
+        LogResult.assertTrue1(d25_7 == 999999999999999999.9999999);
+    end
+
+    function testForDecimal25x24(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #4");
+        d25_7 = -999999999999999999.9999999;
+        LogResult.assertTrue1(d25_7 == -999999999999999999.9999999);
+    end
+
+    function testForDecimal25x25(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #5 (overflow)");
+        try
+            d25_7 = 1000000000000000000.0000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal25x26(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #6 (overflow)");
+        try
+            d25_7 = -1000000000000000000.0000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal25x27(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #7");
+        d25_7 = 1.23456789;
+        LogResult.assertTrue1(d25_7 == 1.2345678);
+    end
+
+    function testForDecimal25x28(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #8");
+        d25_7 = 1.23456789e1;
+        LogResult.assertTrue1(d25_7 == 12.3456789);
+    end
+
+    function testForDecimal25x29(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #9");
+        d25_7 = 2.9999;
+        LogResult.assertTrue1(d25_7 == 2.9999000);
+    end
+
+    function testForDecimal25x30(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #10");
+        d25_7 = 2.0001;
+        LogResult.assertTrue1(d25_7 == 2.0001000);
+    end
+
+    function testForDecimal25x31(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #11");
+        d25_7 = -2.9999;
+        LogResult.assertTrue1(d25_7 == -2.9999000);
+    end
+
+    function testForDecimal25x32(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #12");
+        d25_7 = -2.0001;
+        LogResult.assertTrue1(d25_7 == -2.0001000);
+    end
+
+    function testForDecimal25x33(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #13");
+        d25_7 = 2.9999e0;
+        LogResult.assertTrue1(d25_7 == 2.9999000);
+    end
+
+    function testForDecimal25x34(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #14");
+        d25_7 = 2.231e0;
+        LogResult.assertTrue1(d25_7 == 2.2310000);
+    end
+
+    function testForDecimal25x35(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #15");
+        d25_7 = -2.9999e0;
+        LogResult.assertTrue1(d25_7 == -2.9999000);
+    end
+
+    function testForDecimal25x36(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #16");
+        d25_7 = -2.231e0;
+        LogResult.assertTrue1(d25_7 == -2.2310000);
+    end
+
+    function testForDecimal25x37(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #17");
+        d25_7 = 2.99999999999999e0;
+        LogResult.assertTrue1(d25_7 == 3.0000000);
+    end
+
+    function testForDecimal25x38(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,7) #18");
+        d25_7 = 2.99999999999999;
+        LogResult.assertTrue1(d25_7 == 2.9999999);
+    end
+
+    //    function testForMoney9x1(){@Test}
+    //        LogResult.logStdOut("Initial value of money(9,2)");
+    //        LogResult.assertTrue1(m9_2 == 0);
+    //    end
+    //
+    //    function testForMoney9x2(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #1");
+    //        m9_2 = 1;
+    //        LogResult.assertTrue1(m9_2 == 1);
+    //    end
+    //
+    //    function testForMoney9x3(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #2");
+    //        m9_2 = -1;
+    //        LogResult.assertTrue1(m9_2 == -1);
+    //    end
+    //
+    //    function testForMoney9x4(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #3");
+    //        m9_2 = 2147483.47;
+    //        LogResult.assertTrue1(m9_2 == 2147483.47);
+    //    end
+    //
+    //    function testForMoney9x5(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #4");
+    //        m9_2 = -2147483.48;
+    //        LogResult.assertTrue1(m9_2 == -2147483.48);
+    //    end
+    //
+    //    function testForMoney9x6(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #5 (overflow)");
+    //        try
+    //            m9_2 = 21474836.48;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney9x7(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #6 (overflow)");
+    //        try
+    //            m9_2 = -21474836.49;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney9x8(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #7");
+    //        m9_2 = 1.23456789;
+    //        LogResult.assertTrue1(m9_2 == 1.23);
+    //    end
+    //
+    //    function testForMoney9x9(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #8");
+    //        m9_2 = 1.23456789e2;
+    //        LogResult.assertTrue1(m9_2 == 123.46);
+    //    end
+    //
+    //    function testForMoney9x10(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #9");
+    //        m9_2 = 2.9999;
+    //        LogResult.assertTrue1(m9_2 == 2.99);
+    //    end
+    //
+    //    function testForMoney9x11(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #10");
+    //        m9_2 = 2.0001;
+    //        LogResult.assertTrue1(m9_2 == 2.00);
+    //    end
+    //
+    //    function testForMoney9x12(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #11");
+    //        m9_2 = -2.9999;
+    //        LogResult.assertTrue1(m9_2 == -2.99);
+    //    end
+    //
+    //    function testForMoney9x13(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #12");
+    //        m9_2 = -2.0001;
+    //        LogResult.assertTrue1(m9_2 == -2.00);
+    //    end
+    //
+    //    function testForMoney9x14(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #13");
+    //        m9_2 = 2.9999e0;
+    //        LogResult.assertTrue1(m9_2 == 3.00);
+    //    end
+    //
+    //    function testForMoney9x15(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #14");
+    //        m9_2 = 2.231e0;
+    //        LogResult.assertTrue1(m9_2 == 2.23);
+    //    end
+    //
+    //    function testForMoney9x16(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #15");
+    //        m9_2 = -2.9999e0;
+    //        LogResult.assertTrue1(m9_2 == -3.00);
+    //    end
+    //
+    //    function testForMoney9x17(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #16");
+    //        m9_2 = -2.231e0;
+    //        LogResult.assertTrue1(m9_2 == -2.23);
+    //    end
+    //
+    //    function testForMoney9x18(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #17");
+    //        m9_2 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m9_2 == 3.00);
+    //    end
+    //
+    //    function testForMoney9x19(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,2) #18");
+    //        m9_2 = 2.99999999999999;
+    //        LogResult.assertTrue1(m9_2 == 2.99);
+    //    end
+    //
+    //    function testForMoney9x20(){@Test}
+    //        LogResult.logStdOut("Initial value of money(9,7)");
+    //        LogResult.assertTrue1(m9_7 == 0);
+    //    end
+    //
+    //    function testForMoney9x21(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #1");
+    //        m9_7 = 1;
+    //        LogResult.assertTrue1(m9_7 == 1);
+    //    end
+    //
+    //    function testForMoney9x22(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #2");
+    //        m9_7 = -1;
+    //        LogResult.assertTrue1(m9_7 == -1);
+    //    end
+    //
+    //    function testForMoney9x23(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #3");
+    //        m9_7 = 21.4748364;
+    //        LogResult.assertTrue1(m9_7 == 21.4748364);
+    //    end
+    //
+    //    function testForMoney9x24(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #4");
+    //        m9_7 = -21.4748364;
+    //        LogResult.assertTrue1(m9_7 == -21.4748364);
+    //    end
+    //
+    //    function testForMoney9x25(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #5 (overflow)");
+    //        try
+    //            m9_7 = 215;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney9x26(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #6 (overflow)");
+    //        try
+    //            m9_7 = -215;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney9x27(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #7");
+    //        m9_7 = 1.23456789;
+    //        LogResult.assertTrue1(m9_7 == 1.2345678);
+    //    end
+    //
+    //    function testForMoney9x28(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #8");
+    //        m9_7 = 1.23456789e1;
+    //        LogResult.assertTrue1(m9_7 == 12.3456789);
+    //    end
+    //
+    //    function testForMoney9x29(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #9");
+    //        m9_7 = 2.9999;
+    //        LogResult.assertTrue1(m9_7 == 2.9999000);
+    //    end
+    //
+    //    function testForMoney9x30(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #10");
+    //        m9_7 = 2.0001;
+    //        LogResult.assertTrue1(m9_7 == 2.0001000);
+    //    end
+    //
+    //    function testForMoney9x31(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #11");
+    //        m9_7 = -2.9999;
+    //        LogResult.assertTrue1(m9_7 == -2.9999000);
+    //    end
+    //
+    //    function testForMoney9x32(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #12");
+    //        m9_7 = -2.0001;
+    //        LogResult.assertTrue1(m9_7 == -2.0001000);
+    //    end
+    //
+    //    function testForMoney9x33(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #13");
+    //        m9_7 = 2.9999e0;
+    //        LogResult.assertTrue1(m9_7 == 2.9999000);
+    //    end
+    //
+    //    function testForMoney9x34(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #14");
+    //        m9_7 = 2.231e0;
+    //        LogResult.assertTrue1(m9_7 == 2.2310000);
+    //    end
+    //
+    //    function testForMoney9x35(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #15");
+    //        m9_7 = -2.9999e0;
+    //        LogResult.assertTrue1(m9_7 == -2.9999000);
+    //    end
+    //
+    //    function testForMoney9x36(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #16");
+    //        m9_7 = -2.231e0;
+    //        LogResult.assertTrue1(m9_7 == -2.2310000);
+    //    end
+    //
+    //    function testForMoney9x37(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #17");
+    //        m9_7 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m9_7 == 3.0000000);
+    //    end
+    //
+    //    function testForMoney9x38(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,7) #18");
+    //        m9_7 = 2.99999999999999;
+    //        LogResult.assertTrue1(m9_7 == 2.9999999);
+    //    end
+    //
+    //    function testForMoney25x1(){@Test}
+    //        LogResult.logStdOut("Initial value of money(25,2)");
+    //        LogResult.assertTrue1(m25_2 == 0);
+    //    end
+    //
+    //    function testForMoney25x2(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #1");
+    //        m25_2 = 1;
+    //        LogResult.assertTrue1(m25_2 == 1);
+    //    end
+    //
+    //    function testForMoney25x3(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #2");
+    //        m25_2 = -1;
+    //        LogResult.assertTrue1(m25_2 == -1);
+    //    end
+    //
+    //    function testForMoney25x4(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #3");
+    //        m25_2 = 99999999999999999999999.99;
+    //        LogResult.assertTrue1(m25_2 == 99999999999999999999999.99);
+    //    end
+    //
+    //    function testForMoney25x5(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #4");
+    //        m25_2 = -99999999999999999999999.99;
+    //        LogResult.assertTrue1(m25_2 == -99999999999999999999999.99);
+    //    end
+    //
+    //    function testForMoney25x6(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #5 (overflow)");
+    //        try
+    //            m25_2 = 100000000000000000000000.00;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney25x7(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #6 (overflow)");
+    //        try
+    //            m25_2 = -100000000000000000000000.00;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney25x8(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #7");
+    //        m25_2 = 1.23456789;
+    //        LogResult.assertTrue1(m25_2 == 1.23);
+    //    end
+    //
+    //    function testForMoney25x9(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #8");
+    //        m25_2 = 1.23456789e2;
+    //        LogResult.assertTrue1(m25_2 == 123.46);
+    //    end
+    //
+    //    function testForMoney25x10(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #9");
+    //        m25_2 = 2.9999;
+    //        LogResult.assertTrue1(m25_2 == 2.99);
+    //    end
+    //
+    //    function testForMoney25x11(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #10");
+    //        m25_2 = 2.0001;
+    //        LogResult.assertTrue1(m25_2 == 2.00);
+    //    end
+    //
+    //    function testForMoney25x12(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #11");
+    //        m25_2 = -2.9999;
+    //        LogResult.assertTrue1(m25_2 == -2.99);
+    //    end
+    //
+    //    function testForMoney25x13(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #12");
+    //        m25_2 = -2.0001;
+    //        LogResult.assertTrue1(m25_2 == -2.00);
+    //    end
+    //
+    //    function testForMoney25x14(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #13");
+    //        m25_2 = 2.9999e0;
+    //        LogResult.assertTrue1(m25_2 == 3.00);
+    //    end
+    //
+    //    function testForMoney25x15(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #14");
+    //        m25_2 = 2.231e0;
+    //        LogResult.assertTrue1(m25_2 == 2.23);
+    //    end
+    //
+    //    function testForMoney25x16(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #15");
+    //        m25_2 = -2.9999e0;
+    //        LogResult.assertTrue1(m25_2 == -3.00);
+    //    end
+    //
+    //    function testForMoney25x17(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #16");
+    //        m25_2 = -2.231e0;
+    //        LogResult.assertTrue1(m25_2 == -2.23);
+    //    end
+    //
+    //    function testForMoney25x18(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #17");
+    //        m25_2 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m25_2 == 3.00);
+    //    end
+    //
+    //    function testForMoney25x19(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,2) #18");
+    //        m25_2 = 2.99999999999999;
+    //        LogResult.assertTrue1(m25_2 == 2.99);
+    //    end
+    //
+    //    function testForMoney25x20(){@Test}
+    //        LogResult.logStdOut("Initial value of money(25,7)");
+    //        LogResult.assertTrue1(m25_7 == 0);
+    //    end
+    //
+    //    function testForMoney25x21(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #1");
+    //        m25_7 = 1;
+    //        LogResult.assertTrue1(m25_7 == 1);
+    //    end
+    //
+    //    function testForMoney25x22(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #2");
+    //        m25_7 = -1;
+    //        LogResult.assertTrue1(m25_7 == -1);
+    //    end
+    //
+    //    function testForMoney25x23(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #3");
+    //        m25_7 = 999999999999999999.9999999;
+    //        LogResult.assertTrue1(m25_7 == 999999999999999999.9999999);
+    //    end
+    //
+    //    function testForMoney25x24(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #4");
+    //        m25_7 = -999999999999999999.9999999;
+    //        LogResult.assertTrue1(m25_7 == -999999999999999999.9999999);
+    //    end
+    //
+    //    function testForMoney25x25(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #5 (overflow)");
+    //        try
+    //            m25_7 = 1000000000000000000.0000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney25x26(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #6 (overflow)");
+    //        try
+    //            m25_7 = -1000000000000000000.0000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney25x27(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #7");
+    //        m25_7 = 1.23456789;
+    //        LogResult.assertTrue1(m25_7 == 1.2345678);
+    //    end
+    //
+    //    function testForMoney25x28(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #8");
+    //        m25_7 = 1.23456789e1;
+    //        LogResult.assertTrue1(m25_7 == 12.3456789);
+    //    end
+    //
+    //    function testForMoney25x29(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #9");
+    //        m25_7 = 2.9999;
+    //        LogResult.assertTrue1(m25_7 == 2.9999000);
+    //    end
+    //
+    //    function testForMoney25x30(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #10");
+    //        m25_7 = 2.0001;
+    //        LogResult.assertTrue1(m25_7 == 2.0001000);
+    //    end
+    //
+    //    function testForMoney25x31(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #11");
+    //        m25_7 = -2.9999;
+    //        LogResult.assertTrue1(m25_7 == -2.9999000);
+    //    end
+    //
+    //    function testForMoney25x32(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #12");
+    //        m25_7 = -2.0001;
+    //        LogResult.assertTrue1(m25_7 == -2.0001000);
+    //    end
+    //
+    //    function testForMoney25x33(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #13");
+    //        m25_7 = 2.9999e0;
+    //        LogResult.assertTrue1(m25_7 == 2.9999000);
+    //    end
+    //
+    //    function testForMoney25x34(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #14");
+    //        m25_7 = 2.231e0;
+    //        LogResult.assertTrue1(m25_7 == 2.2310000);
+    //    end
+    //
+    //    function testForMoney25x35(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #15");
+    //        m25_7 = -2.9999e0;
+    //        LogResult.assertTrue1(m25_7 == -2.9999000);
+    //    end
+    //
+    //    function testForMoney25x36(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #16");
+    //        m25_7 = -2.231e0;
+    //        LogResult.assertTrue1(m25_7 == -2.2310000);
+    //    end
+    //
+    //    function testForMoney25x37(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #17");
+    //        m25_7 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m25_7 == 3.0000000);
+    //    end
+    //
+    //    function testForMoney25x38(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,7) #18");
+    //        m25_7 = 2.99999999999999;
+    //        LogResult.assertTrue1(m25_7 == 2.9999999);
+    //    end
+    //
+    //    function testForNum9x1(){@Test}
+    //        LogResult.logStdOut("Initial value of num(9,2)");
+    //        LogResult.assertTrue1(n9_2 == 0);
+    //    end
+    //
+    //    function testForNum9x2(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #1");
+    //        n9_2 = 1;
+    //        LogResult.assertTrue1(n9_2 == 1);
+    //    end
+    //
+    //    function testForNum9x3(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #2");
+    //        n9_2 = -1;
+    //        LogResult.assertTrue1(n9_2 == -1);
+    //    end
+    //
+    //    function testForNum9x4(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #3");
+    //        n9_2 = 2147483.47;
+    //        LogResult.assertTrue1(n9_2 == 2147483.47);
+    //    end
+    //
+    //    function testForNum9x5(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #4");
+    //        n9_2 = -2147483.48;
+    //        LogResult.assertTrue1(n9_2 == -2147483.48);
+    //    end
+    //
+    //    function testForNum9x6(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #5 (overflow)");
+    //        try
+    //            n9_2 = 21474836.48;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum9x7(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #6 (overflow)");
+    //        try
+    //            n9_2 = -21474836.49;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum9x8(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #7");
+    //        n9_2 = 1.23456789;
+    //        LogResult.assertTrue1(n9_2 == 1.23);
+    //    end
+    //
+    //    function testForNum9x9(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #8");
+    //        n9_2 = 1.23456789e2;
+    //        LogResult.assertTrue1(n9_2 == 123.46);
+    //    end
+    //
+    //    function testForNum9x10(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #9");
+    //        n9_2 = 2.9999;
+    //        LogResult.assertTrue1(n9_2 == 2.99);
+    //    end
+    //
+    //    function testForNum9x11(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #10");
+    //        n9_2 = 2.0001;
+    //        LogResult.assertTrue1(n9_2 == 2.00);
+    //    end
+    //
+    //    function testForNum9x12(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #11");
+    //        n9_2 = -2.9999;
+    //        LogResult.assertTrue1(n9_2 == -2.99);
+    //    end
+    //
+    //    function testForNum9x13(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #12");
+    //        n9_2 = -2.0001;
+    //        LogResult.assertTrue1(n9_2 == -2.00);
+    //    end
+    //
+    //    function testForNum9x14(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #13");
+    //        n9_2 = 2.9999e0;
+    //        LogResult.assertTrue1(n9_2 == 3.00);
+    //    end
+    //
+    //    function testForNum9x15(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #14");
+    //        n9_2 = 2.231e0;
+    //        LogResult.assertTrue1(n9_2 == 2.23);
+    //    end
+    //
+    //    function testForNum9x16(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #15");
+    //        n9_2 = -2.9999e0;
+    //        LogResult.assertTrue1(n9_2 == -3.00);
+    //    end
+    //
+    //    function testForNum9x17(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #16");
+    //        n9_2 = -2.231e0;
+    //        LogResult.assertTrue1(n9_2 == -2.23);
+    //    end
+    //
+    //    function testForNum9x18(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #17");
+    //        n9_2 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n9_2 == 3.00);
+    //    end
+    //
+    //    function testForNum9x19(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,2) #18");
+    //        n9_2 = 2.99999999999999;
+    //        LogResult.assertTrue1(n9_2 == 2.99);
+    //    end
+    //
+    //    function testForNum9x20(){@Test}
+    //        LogResult.logStdOut("Initial value of num(9,7)");
+    //        LogResult.assertTrue1(n9_7 == 0);
+    //    end
+    //
+    //    function testForNum9x21(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #1");
+    //        n9_7 = 1;
+    //        LogResult.assertTrue1(n9_7 == 1);
+    //    end
+    //
+    //    function testForNum9x22(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #2");
+    //        n9_7 = -1;
+    //        LogResult.assertTrue1(n9_7 == -1);
+    //    end
+    //
+    //    function testForNum9x23(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #3");
+    //        n9_7 = 21.4748364;
+    //        LogResult.assertTrue1(n9_7 == 21.4748364);
+    //    end
+    //
+    //    function testForNum9x24(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #4");
+    //        n9_7 = -21.4748364;
+    //        LogResult.assertTrue1(n9_7 == -21.4748364);
+    //    end
+    //
+    //    function testForNum9x25(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #5 (overflow)");
+    //        try
+    //            n9_7 = 215;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum9x26(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #6 (overflow)");
+    //        try
+    //            n9_7 = -215;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum9x27(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #7");
+    //        n9_7 = 1.23456789;
+    //        LogResult.assertTrue1(n9_7 == 1.2345678);
+    //    end
+    //
+    //    function testForNum9x28(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #8");
+    //        n9_7 = 1.23456789e1;
+    //        LogResult.assertTrue1(n9_7 == 12.3456789);
+    //    end
+    //
+    //    function testForNum9x29(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #9");
+    //        n9_7 = 2.9999;
+    //        LogResult.assertTrue1(n9_7 == 2.9999000);
+    //    end
+    //
+    //    function testForNum9x30(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #10");
+    //        n9_7 = 2.0001;
+    //        LogResult.assertTrue1(n9_7 == 2.0001000);
+    //    end
+    //
+    //    function testForNum9x31(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #11");
+    //        n9_7 = -2.9999;
+    //        LogResult.assertTrue1(n9_7 == -2.9999000);
+    //    end
+    //
+    //    function testForNum9x32(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #12");
+    //        n9_7 = -2.0001;
+    //        LogResult.assertTrue1(n9_7 == -2.0001000);
+    //    end
+    //
+    //    function testForNum9x33(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #13");
+    //        n9_7 = 2.9999e0;
+    //        LogResult.assertTrue1(n9_7 == 2.9999000);
+    //    end
+    //
+    //    function testForNum9x34(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #14");
+    //        n9_7 = 2.231e0;
+    //        LogResult.assertTrue1(n9_7 == 2.2310000);
+    //    end
+    //
+    //    function testForNum9x35(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #15");
+    //        n9_7 = -2.9999e0;
+    //        LogResult.assertTrue1(n9_7 == -2.9999000);
+    //    end
+    //
+    //    function testForNum9x36(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #16");
+    //        n9_7 = -2.231e0;
+    //        LogResult.assertTrue1(n9_7 == -2.2310000);
+    //    end
+    //
+    //    function testForNum9x37(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #17");
+    //        n9_7 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n9_7 == 3.0000000);
+    //    end
+    //
+    //    function testForNum9x38(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,7) #18");
+    //        n9_7 = 2.99999999999999;
+    //        LogResult.assertTrue1(n9_7 == 2.9999999);
+    //    end
+    //
+    //    function testForNum25x1(){@Test}
+    //        LogResult.logStdOut("Initial value of num(25,2)");
+    //        LogResult.assertTrue1(n25_2 == 0);
+    //    end
+    //
+    //    function testForNum25x2(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #1");
+    //        n25_2 = 1;
+    //        LogResult.assertTrue1(n25_2 == 1);
+    //    end
+    //
+    //    function testForNum25x3(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #2");
+    //        n25_2 = -1;
+    //        LogResult.assertTrue1(n25_2 == -1);
+    //    end
+    //
+    //    function testForNum25x4(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #3");
+    //        n25_2 = 99999999999999999999999.99;
+    //        LogResult.assertTrue1(n25_2 == 99999999999999999999999.99);
+    //    end
+    //
+    //    function testForNum25x5(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #4");
+    //        n25_2 = -99999999999999999999999.99;
+    //        LogResult.assertTrue1(n25_2 == -99999999999999999999999.99);
+    //    end
+    //
+    //    function testForNum25x6(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #5 (overflow)");
+    //        try
+    //            n25_2 = 100000000000000000000000.00;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum25x7(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #6 (overflow)");
+    //        try
+    //            n25_2 = -100000000000000000000000.00;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum25x8(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #7");
+    //        n25_2 = 1.23456789;
+    //        LogResult.assertTrue1(n25_2 == 1.23);
+    //    end
+    //
+    //    function testForNum25x9(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #8");
+    //        n25_2 = 1.23456789e2;
+    //        LogResult.assertTrue1(n25_2 == 123.46);
+    //    end
+    //
+    //    function testForNum25x10(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #9");
+    //        n25_2 = 2.9999;
+    //        LogResult.assertTrue1(n25_2 == 2.99);
+    //    end
+    //
+    //    function testForNum25x11(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #10");
+    //        n25_2 = 2.0001;
+    //        LogResult.assertTrue1(n25_2 == 2.00);
+    //    end
+    //
+    //    function testForNum25x12(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #11");
+    //        n25_2 = -2.9999;
+    //        LogResult.assertTrue1(n25_2 == -2.99);
+    //    end
+    //
+    //    function testForNum25x13(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #12");
+    //        n25_2 = -2.0001;
+    //        LogResult.assertTrue1(n25_2 == -2.00);
+    //    end
+    //
+    //    function testForNum25x14(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #13");
+    //        n25_2 = 2.9999e0;
+    //        LogResult.assertTrue1(n25_2 == 3.00);
+    //    end
+    //
+    //    function testForNum25x15(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #14");
+    //        n25_2 = 2.231e0;
+    //        LogResult.assertTrue1(n25_2 == 2.23);
+    //    end
+    //
+    //    function testForNum25x16(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #15");
+    //        n25_2 = -2.9999e0;
+    //        LogResult.assertTrue1(n25_2 == -3.00);
+    //    end
+    //
+    //    function testForNum25x17(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #16");
+    //        n25_2 = -2.231e0;
+    //        LogResult.assertTrue1(n25_2 == -2.23);
+    //    end
+    //
+    //    function testForNum25x18(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #17");
+    //        n25_2 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n25_2 == 3.00);
+    //    end
+    //
+    //    function testForNum25x19(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,2) #18");
+    //        n25_2 = 2.99999999999999;
+    //        LogResult.assertTrue1(n25_2 == 2.99);
+    //    end
+    //
+    //    function testForNum25x20(){@Test}
+    //        LogResult.logStdOut("Initial value of num(25,7)");
+    //        LogResult.assertTrue1(n25_7 == 0);
+    //    end
+    //
+    //    function testForNum25x21(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #1");
+    //        n25_7 = 1;
+    //        LogResult.assertTrue1(n25_7 == 1);
+    //    end
+    //
+    //    function testForNum25x22(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #2");
+    //        n25_7 = -1;
+    //        LogResult.assertTrue1(n25_7 == -1);
+    //    end
+    //
+    //    function testForNum25x23(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #3");
+    //        n25_7 = 999999999999999999.9999999;
+    //        LogResult.assertTrue1(n25_7 == 999999999999999999.9999999);
+    //    end
+    //
+    //    function testForNum25x24(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #4");
+    //        n25_7 = -999999999999999999.9999999;
+    //        LogResult.assertTrue1(n25_7 == -999999999999999999.9999999);
+    //    end
+    //
+    //    function testForNum25x25(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #5 (overflow)");
+    //        try
+    //            n25_7 = 1000000000000000000.0000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum25x26(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #6 (overflow)");
+    //        try
+    //            n25_7 = -1000000000000000000.0000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum25x27(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #7");
+    //        n25_7 = 1.23456789;
+    //        LogResult.assertTrue1(n25_7 == 1.2345678);
+    //    end
+    //
+    //    function testForNum25x28(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #8");
+    //        n25_7 = 1.23456789e1;
+    //        LogResult.assertTrue1(n25_7 == 12.3456789);
+    //    end
+    //
+    //    function testForNum25x29(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #9");
+    //        n25_7 = 2.9999;
+    //        LogResult.assertTrue1(n25_7 == 2.9999000);
+    //    end
+    //
+    //    function testForNum25x30(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #10");
+    //        n25_7 = 2.0001;
+    //        LogResult.assertTrue1(n25_7 == 2.0001000);
+    //    end
+    //
+    //    function testForNum25x31(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #11");
+    //        n25_7 = -2.9999;
+    //        LogResult.assertTrue1(n25_7 == -2.9999000);
+    //    end
+    //
+    //    function testForNum25x32(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #12");
+    //        n25_7 = -2.0001;
+    //        LogResult.assertTrue1(n25_7 == -2.0001000);
+    //    end
+    //
+    //    function testForNum25x33(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #13");
+    //        n25_7 = 2.9999e0;
+    //        LogResult.assertTrue1(n25_7 == 2.9999000);
+    //    end
+    //
+    //    function testForNum25x34(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #14");
+    //        n25_7 = 2.231e0;
+    //        LogResult.assertTrue1(n25_7 == 2.2310000);
+    //    end
+    //
+    //    function testForNum25x35(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #15");
+    //        n25_7 = -2.9999e0;
+    //        LogResult.assertTrue1(n25_7 == -2.9999000);
+    //    end
+    //
+    //    function testForNum25x36(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #16");
+    //        n25_7 = -2.231e0;
+    //        LogResult.assertTrue1(n25_7 == -2.2310000);
+    //    end
+    //
+    //    function testForNum25x37(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #17");
+    //        n25_7 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n25_7 == 3.0000000);
+    //    end
+    //
+    //    function testForNum25x38(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,7) #18");
+    //        n25_7 = 2.99999999999999;
+    //        LogResult.assertTrue1(n25_7 == 2.9999999);
+    //    end
+    
+    function testForDecimal91(){@Test}
+        LogResult.logStdOut("Initial value of decimal(9,0)");
+        LogResult.assertTrue1(b9_0 == 0);
+    end
+
+    function testForDecimal92(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #1");
+        b9_0 = 1;
+        LogResult.assertTrue1(b9_0 == 1);
+    end
+
+    function testForDecimal93(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #2");
+        b9_0 = -1;
+        LogResult.assertTrue1(b9_0 == -1);
+    end
+
+    function testForDecimal94(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #3");
+        b9_0 = 999999999;
+        LogResult.assertTrue1(b9_0 == 999999999);
+    end
+
+    function testForDecimal95(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #4");
+        b9_0 = -999999999;
+        LogResult.assertTrue1(b9_0 == -999999999);
+    end
+
+    function testForDecimal96(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #5 (overflow)");
+        try
+            b9_0 = 1000000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal97(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #6 (overflow)");
+        try
+            b9_0 = -1000000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal98(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #7");
+        b9_0 = 123456789;
+        LogResult.assertTrue1(b9_0 == 123456789);
+    end
+
+    function testForDecimal99(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #8");
+        b9_0 = 1.23456789e2;
+        LogResult.assertTrue1(b9_0 == 123);
+    end
+
+    function testForDecimal910(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #9");
+        b9_0 = 2.9999;
+        LogResult.assertTrue1(b9_0 == 2);
+    end
+
+    function testForDecimal911(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #10");
+        b9_0 = 2.0001;
+        LogResult.assertTrue1(b9_0 == 2);
+    end
+
+    function testForDecimal912(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #11");
+        b9_0 = -2.9999;
+        LogResult.assertTrue1(b9_0 == -2);
+    end
+
+    function testForDecimal913(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #12");
+        b9_0 = -2.0001;
+        LogResult.assertTrue1(b9_0 == -2);
+    end
+
+    function testForDecimal914(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #13");
+        b9_0 = 2.9999e0;
+        LogResult.assertTrue1(b9_0 == 3);
+    end
+
+    function testForDecimal915(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #14");
+        b9_0 = 2.231e0;
+        LogResult.assertTrue1(b9_0 == 2);
+    end
+
+    function testForDecimal916(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #15");
+        b9_0 = -2.9999e0;
+        LogResult.assertTrue1(b9_0 == -3);
+    end
+
+    function testForDecimal917(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #16");
+        b9_0 = -2.231e0;
+        LogResult.assertTrue1(b9_0 == -2);
+    end
+
+    function testForDecimal918(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #17");
+        b9_0 = 2.99999999999999e0;
+        LogResult.assertTrue1(b9_0 == 3);
+    end
+
+    function testForDecimal919(){@Test}
+        LogResult.logStdOut("Assign to decimal(9,0) #18");
+        b9_0 = 2.99999999999999;
+        LogResult.assertTrue1(b9_0 == 2);
+    end
+
+    function testForDecimal251(){@Test}
+        LogResult.logStdOut("Initial value of decimal(25,0)");
+        LogResult.assertTrue1(d25_0 == 0);
+    end
+
+    function testForDecimal252(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #1");
+        d25_0 = 1;
+        LogResult.assertTrue1(d25_0 == 1);
+    end
+
+    function testForDecimal253(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #2");
+        d25_0 = -1;
+        LogResult.assertTrue1(d25_0 == -1);
+    end
+
+    function testForDecimal254(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #3");
+        d25_0 = 9999999999999999999999999;
+        LogResult.assertTrue1(d25_0 == 9999999999999999999999999);
+    end
+
+    function testForDecimal255(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #4");
+        d25_0 = -9999999999999999999999999;
+        LogResult.assertTrue1(d25_0 == -9999999999999999999999999);
+    end
+
+    function testForDecimal256(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #5 (overflow)");
+        try
+            d25_0 = 10000000000000000000000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal257(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #6 (overflow)");
+        try
+            d25_0 = -10000000000000000000000000;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForDecimal258(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #7");
+        d25_0 = 1.23456789;
+        LogResult.assertTrue1(d25_0 == 1);
+    end
+
+    function testForDecimal259(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #8");
+        d25_0 = 1.23456789e2;
+        LogResult.assertTrue1(d25_0 == 123);
+    end
+
+    function testForDecimal2510(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #9");
+        d25_0 = 2.9999;
+        LogResult.assertTrue1(d25_0 == 2);
+    end
+
+    function testForDecimal2511(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #10");
+        d25_0 = 2.0001;
+        LogResult.assertTrue1(d25_0 == 2);
+    end
+
+    function testForDecimal2512(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #11");
+        d25_0 = -2.9999;
+        LogResult.assertTrue1(d25_0 == -2);
+    end
+
+    function testForDecimal2513(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #12");
+        d25_0 = -2.0001;
+        LogResult.assertTrue1(d25_0 == -2);
+    end
+
+    function testForDecimal2514(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #13");
+        d25_0 = 2.9999e0;
+        LogResult.assertTrue1(d25_0 == 3);
+    end
+
+    function testForDecimal2515(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #14");
+        d25_0 = 2.231e0;
+        LogResult.assertTrue1(d25_0 == 2);
+    end
+
+    function testForDecimal2516(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #15");
+        d25_0 = -2.9999e0;
+        LogResult.assertTrue1(d25_0 == -3);
+    end
+
+    function testForDecimal2517(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #16");
+        d25_0 = -2.231e0;
+        LogResult.assertTrue1(d25_0 == -2);
+    end
+
+    function testForDecimal2518(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #17");
+        d25_0 = 2.99999999999999e0;
+        LogResult.assertTrue1(d25_0 == 3);
+    end
+
+    function testForDecimal2519(){@Test}
+        LogResult.logStdOut("Assign to decimal(25,0) #18");
+        d25_0 = 2.99999999999999;
+        LogResult.assertTrue1(d25_0 == 2);
+    end
+
+    //    function testForMoney91(){@Test}
+    //        LogResult.logStdOut("Initial value of money(9,0)");
+    //        LogResult.assertTrue1(m90_0 == 0);
+    //    end
+    //
+    //    function testForMoney92(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #1");
+    //        m90_0 = 1;
+    //        LogResult.assertTrue1(m90_0 == 1);
+    //    end
+    //
+    //    function testForMoney93(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #2");
+    //        m90_0 = -1;
+    //        LogResult.assertTrue1(m90_0 == -1);
+    //    end
+    //
+    //    function testForMoney94(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #3");
+    //        m90_0 = 999999999;
+    //        LogResult.assertTrue1(m90_0 == 999999999);
+    //    end
+    //
+    //    function testForMoney95(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #4");
+    //        m90_0 = -999999999;
+    //        LogResult.assertTrue1(m90_0 == -999999999);
+    //    end
+    //
+    //    function testForMoney96(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #5 (overflow)");
+    //        try
+    //            m90_0 = 1000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney97(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #6 (overflow)");
+    //        try
+    //            m90_0 = -1000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney98(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #7");
+    //        m90_0 = 1.23456789;
+    //        LogResult.assertTrue1(m90_0 == 1);
+    //    end
+    //
+    //    function testForMoney99(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #8");
+    //        m90_0 = 1.23456789e2;
+    //        LogResult.assertTrue1(m90_0 == 123);
+    //    end
+    //
+    //    function testForMoney910(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #9");
+    //        m90_0 = 2.9999;
+    //        LogResult.assertTrue1(m90_0 == 2);
+    //    end
+    //
+    //    function testForMoney911(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #10");
+    //        m90_0 = 2.0001;
+    //        LogResult.assertTrue1(m90_0 == 2);
+    //    end
+    //
+    //    function testForMoney912(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #11");
+    //        m90_0 = -2.9999;
+    //        LogResult.assertTrue1(m90_0 == -2);
+    //    end
+    //
+    //    function testForMoney913(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #12");
+    //        m90_0 = -2.0001;
+    //        LogResult.assertTrue1(m90_0 == -2);
+    //    end
+    //
+    //    function testForMoney914(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #13");
+    //        m90_0 = 2.9999e0;
+    //        LogResult.assertTrue1(m90_0 == 3);
+    //    end
+    //
+    //    function testForMoney915(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #14");
+    //        m90_0 = 2.231e0;
+    //        LogResult.assertTrue1(m90_0 == 2);
+    //    end
+    //
+    //    function testForMoney916(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #15");
+    //        m90_0 = -2.9999e0;
+    //        LogResult.assertTrue1(m90_0 == -3);
+    //    end
+    //
+    //    function testForMoney917(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #16");
+    //        m90_0 = -2.231e0;
+    //        LogResult.assertTrue1(m90_0 == -2);
+    //    end
+    //
+    //    function testForMoney918(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #17");
+    //        m90_0 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m90_0 == 3);
+    //    end
+    //
+    //    function testForMoney919(){@Test}
+    //        LogResult.logStdOut("Assign to money(9,0) #18");
+    //        m90_0 = 2.99999999999999;
+    //        LogResult.assertTrue1(m90_0 == 2);
+    //    end
+    //
+    //    function testForMoney251(){@Test}
+    //        LogResult.logStdOut("Initial value of money(25,0)");
+    //        LogResult.assertTrue1(m25_0 == 0);
+    //    end
+    //
+    //    function testForMoney252(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #1");
+    //        m25_0 = 1;
+    //        LogResult.assertTrue1(m25_0 == 1);
+    //    end
+    //
+    //    function testForMoney253(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #2");
+    //        m25_0 = -1;
+    //        LogResult.assertTrue1(m25_0 == -1);
+    //    end
+    //
+    //    function testForMoney254(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #3");
+    //        m25_0 = 9999999999999999999999999;
+    //        LogResult.assertTrue1(m25_0 == 9999999999999999999999999);
+    //    end
+    //
+    //    function testForMoney255(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #4");
+    //        m25_0 = -9999999999999999999999999;
+    //        LogResult.assertTrue1(m25_0 == -9999999999999999999999999);
+    //    end
+    //
+    //    function testForMoney256(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #5 (overflow)");
+    //        try
+    //            m25_0 = 10000000000000000000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney257(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #6 (overflow)");
+    //        try
+    //            m25_0 = -10000000000000000000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForMoney258(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #7");
+    //        m25_0 = 1.23456789;
+    //        LogResult.assertTrue1(m25_0 == 1);
+    //    end
+    //
+    //    function testForMoney259(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #8");
+    //        m25_0 = 1.23456789e2;
+    //        LogResult.assertTrue1(m25_0 == 123);
+    //    end
+    //
+    //    function testForMoney2510(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #9");
+    //        m25_0 = 2.9999;
+    //        LogResult.assertTrue1(m25_0 == 2);
+    //    end
+    //
+    //    function testForMoney2511(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #10");
+    //        m25_0 = 2.0001;
+    //        LogResult.assertTrue1(m25_0 == 2);
+    //    end
+    //
+    //    function testForMoney2512(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #11");
+    //        m25_0 = -2.9999;
+    //        LogResult.assertTrue1(m25_0 == -2);
+    //    end
+    //
+    //    function testForMoney2513(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #12");
+    //        m25_0 = -2.0001;
+    //        LogResult.assertTrue1(m25_0 == -2);
+    //    end
+    //
+    //    function testForMoney2514(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #13");
+    //        m25_0 = 2.9999e0;
+    //        LogResult.assertTrue1(m25_0 == 3);
+    //    end
+    //
+    //    function testForMoney2515(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #14");
+    //        m25_0 = 2.231e0;
+    //        LogResult.assertTrue1(m25_0 == 2);
+    //    end
+    //
+    //    function testForMoney2516(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #15");
+    //        m25_0 = -2.9999e0;
+    //        LogResult.assertTrue1(m25_0 == -3);
+    //    end
+    //
+    //    function testForMoney2517(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #16");
+    //        m25_0 = -2.231e0;
+    //        LogResult.assertTrue1(m25_0 == -2);
+    //    end
+    //
+    //    function testForMoney2518(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #17");
+    //        m25_0 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(m25_0 == 3);
+    //    end
+    //
+    //    function testForMoney2519(){@Test}
+    //        LogResult.logStdOut("Assign to money(25,0) #18");
+    //        m25_0 = 2.99999999999999;
+    //        LogResult.assertTrue1(m25_0 == 2);
+    //    end
+    
+    //    function testForNum91(){@Test}
+    //        LogResult.logStdOut("Initial value of num(9,0)");
+    //        LogResult.assertTrue1(n9_0 == 0);
+    //    end
+    //
+    //    function testForNum92(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #1");
+    //        n9_0 = 1;
+    //        LogResult.assertTrue1(n9_0 == 1);
+    //    end
+    //
+    //    function testForNum93(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #2");
+    //        n9_0 = -1;
+    //        LogResult.assertTrue1(n9_0 == -1);
+    //    end
+    //
+    //    function testForNum94(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #3");
+    //        n9_0 = 999999999;
+    //        LogResult.assertTrue1(n9_0 == 999999999);
+    //    end
+    //
+    //    function testForNum95(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #4");
+    //        n9_0 = -999999999;
+    //        LogResult.assertTrue1(n9_0 == -999999999);
+    //    end
+    //
+    //    function testForNum96(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #5 (overflow)");
+    //        try
+    //            n9_0 = 1000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum97(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #6 (overflow)");
+    //        try
+    //            n9_0 = -1000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum98(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #7");
+    //        n9_0 = 123456789;
+    //        LogResult.assertTrue1(n9_0 == 123456789);
+    //    end
+    //
+    //    function testForNum99(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #8");
+    //        n9_0 = 1.23456789e2;
+    //        LogResult.assertTrue1(n9_0 == 123);
+    //    end
+    //
+    //    function testForNum910(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #9");
+    //        n9_0 = 2.9999;
+    //        LogResult.assertTrue1(n9_0 == 2);
+    //    end
+    //
+    //    function testForNum911(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #10");
+    //        n9_0 = 2.0001;
+    //        LogResult.assertTrue1(n9_0 == 2);
+    //    end
+    //
+    //    function testForNum912(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #11");
+    //        n9_0 = -2.9999;
+    //        LogResult.assertTrue1(n9_0 == -2);
+    //    end
+    //
+    //    function testForNum913(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #12");
+    //        n9_0 = -2.0001;
+    //        LogResult.assertTrue1(n9_0 == -2);
+    //    end
+    //
+    //    function testForNum914(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #13");
+    //        n9_0 = 2.9999e0;
+    //        LogResult.assertTrue1(n9_0 == 3);
+    //    end
+    //
+    //    function testForNum915(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #14");
+    //        n9_0 = 2.231e0;
+    //        LogResult.assertTrue1(n9_0 == 2);
+    //    end
+    //
+    //    function testForNum916(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #15");
+    //        n9_0 = -2.9999e0;
+    //        LogResult.assertTrue1(n9_0 == -3);
+    //    end
+    //
+    //    function testForNum917(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #16");
+    //        n9_0 = -2.231e0;
+    //        LogResult.assertTrue1(n9_0 == -2);
+    //    end
+    //
+    //    function testForNum918(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #17");
+    //        n9_0 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n9_0 == 3);
+    //    end
+    //
+    //    function testForNum919(){@Test}
+    //        LogResult.logStdOut("Assign to num(9,0) #18");
+    //        n9_0 = 2.99999999999999;
+    //        LogResult.assertTrue1(n9_0 == 2);
+    //    end
+    //
+    //    function testForNum251(){@Test}
+    //        LogResult.logStdOut("Initial value of num(25,0)");
+    //        LogResult.assertTrue1(n25_0 == 0);
+    //    end
+    //
+    //    function testForNum252(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #1");
+    //        n25_0 = 1;
+    //        LogResult.assertTrue1(n25_0 == 1);
+    //    end
+    //
+    //    function testForNum253(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #2");
+    //        n25_0 = -1;
+    //        LogResult.assertTrue1(n25_0 == -1);
+    //    end
+    //
+    //    function testForNum254(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #3");
+    //        n25_0 = 9999999999999999999999999;
+    //        LogResult.assertTrue1(n25_0 == 9999999999999999999999999);
+    //    end
+    //
+    //    function testForNum255(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #4");
+    //        n25_0 = -9999999999999999999999999;
+    //        LogResult.assertTrue1(n25_0 == -9999999999999999999999999);
+    //    end
+    //
+    //    function testForNum256(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #5 (overflow)");
+    //        try
+    //            n25_0 = 10000000000000000000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum257(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #6 (overflow)");
+    //        try
+    //            n25_0 = -10000000000000000000000000;
+    //            b = false;
+    //        onException(r runtimeException)
+    //            b = true;
+    //        end
+    //        LogResult.assertTrue1(b);
+    //    end
+    //
+    //    function testForNum258(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #7");
+    //        n25_0 = 1.23456789;
+    //        LogResult.assertTrue1(n25_0 == 1);
+    //    end
+    //
+    //    function testForNum259(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #8");
+    //        n25_0 = 1.23456789e2;
+    //        LogResult.assertTrue1(n25_0 == 123);
+    //    end
+    //
+    //    function testForNum2510(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #9");
+    //        n25_0 = 2.9999;
+    //        LogResult.assertTrue1(n25_0 == 2);
+    //    end
+    //
+    //    function testForNum2511(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #10");
+    //        n25_0 = 2.0001;
+    //        LogResult.assertTrue1(n25_0 == 2);
+    //    end
+    //
+    //    function testForNum2512(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #11");
+    //        n25_0 = -2.9999;
+    //        LogResult.assertTrue1(n25_0 == -2);
+    //    end
+    //
+    //    function testForNum2513(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #12");
+    //        n25_0 = -2.0001;
+    //        LogResult.assertTrue1(n25_0 == -2);
+    //    end
+    //
+    //    function testForNum2514(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #13");
+    //        n25_0 = 2.9999e0;
+    //        LogResult.assertTrue1(n25_0 == 3);
+    //    end
+    //
+    //    function testForNum2515(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #14");
+    //        n25_0 = 2.231e0;
+    //        LogResult.assertTrue1(n25_0 == 2);
+    //    end
+    //
+    //    function testForNum2516(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #15");
+    //        n25_0 = -2.9999e0;
+    //        LogResult.assertTrue1(n25_0 == -3);
+    //    end
+    //
+    //    function testForNum2517(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #16");
+    //        n25_0 = -2.231e0;
+    //        LogResult.assertTrue1(n25_0 == -2);
+    //    end
+    //
+    //    function testForNum2518(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #17");
+    //        n25_0 = 2.99999999999999e0;
+    //        LogResult.assertTrue1(n25_0 == 3);
+    //    end
+    //
+    //    function testForNum2519(){@Test}
+    //        LogResult.logStdOut("Assign to num(25,0) #18");
+    //        n25_0 = 2.99999999999999;
+    //        LogResult.assertTrue1(n25_0 == 2);
+    //    end
+    
+end

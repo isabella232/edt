@@ -1,0 +1,175 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString003
+  * @title EdtString003 - runSubstringFunction
+  * @description testing string substring functions
+  * @testcases runSubstringFunction01 - runSubstringFunction09
+  * @sources EdtString003.egl
+  * @keywords string, substring
+ **/
+library EString003 {}
+		
+	longStr string;
+	shortStr string;
+	longStrN string?;
+	shortStrN string?;
+	desiredResult string?;
+	
+	function runSubstringFunction01(){@Test}
+   		longStr = "123456789";	
+  	  	shortStr = longStr[2:4];   		
+  		desiredResult = "234";
+		LogResult.assertTrue("substring fetch ", ( shortStr == desiredResult) );
+	end
+	
+	function runSubstringFunction02(){@Test}
+		start int = 2;
+		stop int = 4;
+   		longStr = "123456789";	
+  	  	shortStr = longStr[start:stop];   		
+  		desiredResult = "234";
+		LogResult.assertTrue("substring fetch w/ variables", ( shortStr == desiredResult) );
+	end
+	
+	function runSubstringFunction03(){@Test}	
+  	  	shortStr = "123456789"[2:4];   		
+  		desiredResult = "234";
+		LogResult.assertTrue("literal substring fetch ", ( shortStr == desiredResult) );
+	end
+
+	function runSubstringFunction04(){@Test}
+		start int = 2;
+		stop int = 4;
+  	  	shortStr = "123456789"[start:stop];   		
+  		desiredResult = "234";
+		LogResult.assertTrue("literal substring fetch w/ variables", ( shortStr == desiredResult) );
+	end
+	
+	function runSubstringFunction05(){@Test}
+		start,stop int = 8;
+  	  	shortStr = "123456789"[start:stop];   		
+  		desiredResult = "8";
+		LogResult.assertTrue("literal character fetch w/ variables", ( shortStr == desiredResult) );
+	end
+	
+	function runSubstringFunction06(){@Test}
+		try
+   			longStr = "123456789";	
+  	  		shortStr = longStr[8:12];   		
+  			LogResult.failed("no exception");
+  		onException (oops InvalidIndexException)
+			LogResult.passed("OK");
+		end
+	end	
+		
+	function runSubstringFunction07(){@Test}
+		try
+   			longStr = "123456789";	
+  	  		shortStr = longStr[12:15];   		
+  			LogResult.failed("no exception");
+  		onException (oops InvalidIndexException)
+			LogResult.passed("OK");
+		end		
+	end
+	
+	function runSubstringFunction08(){@Test}
+		try
+   			longStr = "123456789";	
+  	  		shortStr = longStr[5:2];   		
+  			LogResult.failed("no exception");
+  		onException (oops InvalidIndexException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runSubstringFunction09(){@Test}
+		longStrN = null;	
+		try
+	  		shortStrN = longStrN[2:3];   		
+  			LogResult.failed("no exception");
+  		onException (oops1 NullValueException)
+			LogResult.passed("OK");
+  		onException (oops2 AnyException)
+			LogResult.failed("wrong kind of exception");
+		end
+	end
+		
+	// BEGIN substring replacement is not valid ... BUGZILLA 354025
+/*
+	function runSubstringFunction10(){@Test}
+   		longStr = "123456789";	
+  	  	shortStr = "abc";
+  		longStr[2:4] = shortStr;   		
+  		desiredResult = "1abc56789";
+		LogResult.assertTrue("substring replace", ( longStr == desiredResult) );
+	end
+	
+	function runSubstringFunction11(){@Test}
+   		longStr = "123456789";	
+  	  	shortStr = "abc";
+  		longStr[2:6] = shortStr;   		
+  		desiredResult = "1abc  789";
+		LogResult.assertTrue("substring replace longer", ( longStr == desiredResult) );
+	end
+	
+	function runSubstringFunction12(){@Test}
+   		longStr = "123456789";	
+  	  	shortStr = "abc";
+  		longStr[2:3] = shortStr;   		
+  		desiredResult = "1ab456789";
+		LogResult.assertTrue("substring replace shorter", ( longStr == desiredResult) );
+	end
+	
+	function runSubstringFunction13(){@Test}
+  		try
+        	longStr = "123456789";	
+  	  		shortStr  string = "abc";
+  			longStr[12:14] = shortStr; 
+  		  	LogResult.failed("no exception", details);
+  		onException(oops InvalidIndexException)
+  			LogResult.passed("substring replace beyond", details);
+  		end  
+	end
+	
+	function runSubstringFunction14(){@Test}
+  		try
+        	longStr = "123456789";	
+  	  		shortStr  string = "abc";
+  			longStr[8:10] = shortStr; 
+  		  	LogResult.failed("no exception", details);
+  		onException(oops InvalidIndexException)
+  			LogResult.passed("substring replace extends", details);
+  		end  
+	end
+	
+	// substring replace with null
+	function runSubstringFunction15(){@Test}
+  		// treats null like blank string
+        longStr string? = "123456789";	
+  	  	shortStr  string? = "abc";
+  	  	shortStr = null;
+  	  	desiredResult = "12   6789";
+  		longStr[3:5] = shortStr;
+		LogResult.assertTrue("substring replace with null", ( longStr == desiredResult) );
+	end
+	
+	function runSubstringFunction16(){@Test}
+   		try
+        	longStr string? = "123456789";	
+  	  		shortStr  string? = "abc";
+  	  		longstr = null;
+  			longStr[3:5] = shortStr;  
+  			LogResult.failed("no  exception", details);
+  		onException(oops InvalidIndexException)
+  			LogResult.passed("substring replace into null", details);
+  		end  
+	end
+	
+	// END substring replacement is not valid ... BUGZILLA 354025
+*/
+
+end  // library EdtString003

@@ -1,0 +1,171 @@
+package fvt.delegates;
+
+library MyLib{}
+
+    thevar int;
+
+    //	d MyDelegate;
+    //	di MyDelegateIN;
+    //	do MyDelegateOUT;
+    //	dio MyDelegateINOUT;
+    d MyDelegate?;
+    di MyDelegateIN?;
+    do MyDelegateOUT?;
+    dio MyDelegateINOUT?;
+
+    function assert(b boolean in)
+        if(!b)
+        // Insert diagnostic here
+        end
+    end
+
+    // Test with delegates to local functions
+    
+    function runLocalTest()
+        ii, jj int;
+        dii, djj int;
+        thevar1 int;
+
+        d = func;
+        di = funci;
+        do = funco;
+        dio = funcio;
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+        assert(jj == 11);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+        assert(djj == 11);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        assert(jj == 10);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        assert(djj == 10);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        assert(jj == 1);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        assert(djj == 1);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        assert(jj == 11);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        assert(djj == 11);
+        assert(thevar1 == 2);
+    end
+
+    // Test with delegates to functions within another part
+    
+    function runNonlocalTest()
+        ii, jj int;
+        dii, djj int;
+        thevar1 int;
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+        assert(jj == 11);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+        assert(djj == 11);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        assert(jj == 10);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        assert(djj == 10);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        assert(jj == 1);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        assert(djj == 1);
+        assert(thevar1 == 2);
+
+        thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        assert(jj == 11);
+        assert(thevar1 == 2);
+        assert(thevar1 == thevar);
+
+        thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        assert(djj == 11);
+        assert(thevar1 == 2);
+    end
+
+    function func(i int) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function funci(i int in) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function funco(i int out) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+    function funcio(i int inOut) returns(int)
+        thevar += 1;
+        i += 1;
+        return(thevar);
+    end
+
+end

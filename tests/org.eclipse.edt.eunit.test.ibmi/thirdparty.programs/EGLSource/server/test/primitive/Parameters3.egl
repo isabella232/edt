@@ -1,0 +1,201 @@
+package server.test.primitive;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import server.host.programs.Primitive;
+
+// basic library
+library Parameters3
+	
+	char20 string; 
+	lchar20 string(20); 
+	unicode20 string; 
+	lunicode20 string(20); 
+	bin2sign smallint;
+	bin4sign int;
+	bin8sign bigint;
+	dec112 decimal(11,2);
+	dec15 decimal(15);
+	num6 decimal(6);
+	num103 decimal(10,3);
+	bin2 int;
+	bin4 bigint;
+	date1 date;
+	date2 date;
+	date3 date;
+	time1 time;
+	time2 time;
+	time3 time;
+	timestamp1 timestamp("yyyyMMddHHmmss");
+	float4 smallfloat;
+	float8 float;
+	testParameters boolean = true;
+	function test1(){@Test}
+		char20 = "abcd"; 
+		lchar20 = "defg"; 
+		unicode20 = "xyz"; 
+		lunicode20 = "abc"; 
+		bin2sign = 1;
+		bin4sign = 2;
+		bin8sign = 3;
+		dec112 = 45.67;
+		dec15 = 14;
+		num6 = 5;
+		num103 = 11.61;
+		bin2 = 6;
+		bin4  = 7;
+		date1 = "06/24/2011";
+		date2 = "05/19/1997";
+		date3 = "04/03/1922";
+		time1 = "17:54:34";
+		time2 = "07:14:03";
+		time3 = "01:45:43";
+		timestamp1 = "2012/02/11 17:54:34";
+		float4 = 8;
+		float8 = 9;
+		try
+        	LogResult.logStdOut("call Primitive.primitiveHostProgram3");
+			Primitive.primitiveHostProgram3(char20, lchar20, unicode20, lunicode20, bin2sign, bin4sign, bin8sign, dec112, dec15, num6, num103, bin2, bin4, date1, date2, date3, time1, time2, time3, timestamp1, float4, float8);
+ 			testParameters = true;
+ 			LogResult.assertTrue1(true);
+ 		onException(exception AnyException)
+ 			testParameters = false;
+            LogResult.assertTrue(exception.message, false);
+		end
+	end
+	function char20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing char20 value");
+            LogResult.assertStringEqual("Fail char20", "abcdYYYYY           ", char20);
+		end
+	end
+	function lchar20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing lchar20 value");
+            LogResult.assertStringEqual("Fail lchar20", "defgYYYYY           ", lchar20);
+		end
+	end
+	function unicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing unicode20 value");
+            LogResult.assertStringEqual("Fail unicode20", "xyz ZZZZZZZZZZ      ", unicode20);
+		end
+	end
+	function lunicode20Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing lunicode20 value");
+            LogResult.assertStringEqual("Fail lunicode20", "abc ZZZZZZZZZZ      ", lunicode20);
+		end
+	end
+	function bin2signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin2sign value");
+            LogResult.assertBigIntEqual("Fail bin2sign", 99, bin2sign);
+		end
+	end
+	function bin4signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin4sign value");
+            LogResult.assertBigIntEqual("Fail bin4sign", 1000, bin4sign);
+		end
+	end
+	function bin8signTest(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin8sign value");
+            LogResult.assertBigIntEqual("Fail bin8sign", 10001, bin8sign);
+		end
+	end
+	function dec112Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing dec112 value");
+            LogResult.assertDecimalEqual("Fail dec112", 1043.67, dec112);
+		end
+	end
+	function dec15Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing dec15 value");
+            LogResult.assertDecimalEqual("Fail dec15", 1012, dec15);
+		end
+	end
+	function num6Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing num6 value");
+            LogResult.assertDecimalEqual("Fail num6", 10003, num6);
+		end
+	end
+	function num103Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing num103 value");
+            LogResult.assertDecimalEqual("Fail num103", 10009.61, num103);
+		end
+	end
+	function bin2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin2 value");
+            LogResult.assertBigIntEqual("Fail bin2", 104, bin2);
+		end
+	end
+	function bin4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing bin4 value");
+            LogResult.assertBigIntEqual("Fail bin4", 1005, bin4);
+		end
+	end
+	function date1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date1 value");
+            LogResult.assertDateEqual("Fail date1", "11/29/2016", date1);
+		end
+	end
+	function date2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date2 value");
+            LogResult.assertDateEqual("Fail date2", "10/24/2002", date2);
+		end
+	end
+
+	function date3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing date3 value");
+            LogResult.assertDateEqual("Fail date3", "09/08/1927", date3);
+		end
+	end
+	function time1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time1 value");
+            LogResult.assertTimeEqual("Fail time1", "22:59:39", time1);
+		end
+	end
+	function time2Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time2 value");
+            LogResult.assertTimeEqual("Fail time2", "12:19:08", time2);
+		end
+	end
+
+	function time3Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing time3 value");
+            LogResult.assertTimeEqual("Fail time3", "06:50:48", time3);
+		end
+	end
+	function timestamp1Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing timestamp1 value");
+            LogResult.assertTimestampEqual("Fail timestamp1", "2017/07/16 22:59:39", timestamp1);
+		end
+	end
+	function float4Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing float4 value");
+            LogResult.assertFloatEqual("Fail float4", 8.99 as smallfloat, float4);
+		end
+	end
+	function float8Test(){@Test {}}
+		if(testParameters)
+            LogResult.logStdOut("testing float8 value");
+            LogResult.assertFloatEqual("Fail float8", 9.99, float8);
+		end
+	end
+
+end

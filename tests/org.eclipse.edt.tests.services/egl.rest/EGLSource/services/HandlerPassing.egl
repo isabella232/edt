@@ -1,0 +1,278 @@
+package services;
+
+
+import Interfaces.IHandlerPassing;
+import data.StringRec;
+import handlers.BooleanArrayHandler;
+import handlers.BooleanHandler;
+import handlers.DateArrayHandler;
+import handlers.DateHandler;
+import handlers.DecimalArrayHandler;
+import handlers.DecimalHandler;
+import handlers.FloatArrayHandler;
+import handlers.FloatHandler;
+import handlers.IntArrayHandler;
+import handlers.IntHandler;
+import handlers.OuterHandler;
+import handlers.SmallIntArrayHandler;
+import handlers.SmallfloatArrayHandler;
+import handlers.SmallfloatHandler;
+import handlers.SmallintHandler;
+import handlers.StringArrayHandler;
+import handlers.StringHandler;
+import handlers.TimestampArrayHandler;
+import handlers.TimestampHandler;
+import handlers.bigIntArrayHandler;
+import handlers.bigIntHandler;
+import utilities.CommonUtilities;
+
+// service
+Service HandlerPassing 
+
+	//prim PrimitivePassing{@DedicatedService};
+
+	// Function Declarations
+	function outerHandlerIn( data OuterHandler in) returns(string)
+		return ("data.item4.item1[1] = " + data.item4.item1[1]);
+	end
+
+	function outerHandlerInout( data OuterHandler inout)
+//		;
+	end
+
+	function outerHandlerOut( data OuterHandler out)
+		CommonUtilities.initOuterHandler(data);		
+	end
+
+	function outerHandlerAll(data1 OuterHandler in, data2 OuterHandler inout, data3 OuterHandler out) returns(string)
+		data3 = data1;
+		return (data1.item4.item1[1]);
+	end
+	
+	function intAll(data1 intHandler in, data2 intHandler inout, data3 intHandler out) returns (int[])
+		data1.item1 = data1.item1 +1;
+		data2.item1 = data2.item1 +1;
+		data3.item1 = 100;
+
+		retvals int[];		
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		return (retvals);
+	end		
+	
+	function intArrayAll(dataArray1 intArrayHandler in,
+							dataArray2 intArrayHandler inout,
+							dataArray3 intArrayHandler out) returns(int[])
+		dataArray2.item1.appendElement(1);
+		dataArray3.item1 = new int[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(100);
+		return(dataArray1.item1);								
+	end
+
+	function bigIntAll(data1 bigIntHandler in, data2 bigIntHandler inout, data3 bigIntHandler out) returns(bigInt[])
+		data1.item1 = data1.item1 +1;
+		data2.item1 = data2.item1 +1;
+		data3.item1 = 100;
+
+		retvals bigInt[];		
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		return (retvals);
+	end
+	
+	function bigIntArrayAll(dataArray1 bigIntArrayHandler in, 
+								dataArray2 bigIntArrayHandler inout,
+								dataArray3 bigIntArrayHandler out) returns(bigInt[])
+		dataArray2.item1.appendElement(1);
+		dataArray3.item1 = new bigInt[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(100);
+		return(dataArray1.item1);
+	end
+	
+	function smallIntAll(data1 smallIntHandler in, 
+							 data2 smallIntHandler inout,
+							 data3 smallIntHandler out) returns(smallInt[])
+		data3.item1 = 7;							 	
+		ret smallInt = commonCodeLib.smallint_all(data1.item1, data2.item1, data3.item1);								 	
+		retvals smallInt[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+	
+	function smallIntArrayAll(dataArray1 smallIntArrayHandler in,
+								  dataArray2 smallIntArrayHandler inout,
+								  dataArray3 smallIntArrayHandler out)returns(smallInt[])
+		dataArray2.item1.appendElement(1);
+		dataArray3.item1 = new smallInt[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(10);
+		return(dataArray1.item1);
+	end
+	
+	function smallFloatAll(data1 smallFloatHandler in,
+							   data2 smallFloatHandler inout,
+							   data3 smallFloatHandler out) returns(smallFloat[])
+		data3.item1 = 1.3;							   	
+		ret smallFloat = commonCodeLib.smallfloat_all(data1.item1, data2.item1, data3.item1);
+		retvals smallFloat[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end			
+	
+	function smallFloatArrayAll(dataArray1 smallFloatArrayHandler in,
+								    dataArray2 smallFloatArrayHandler inout,
+								    dataArray3 smallFloatArrayHandler out) returns(smallFloat[])			   	
+		dataArray2.item1.appendElement(2.7);
+		dataArray3.item1 = new smallFloat[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(9.4);
+		return(dataArray1.item1);
+	end								    
+				
+	function floatAll(data1 floatHandler in,
+						  data2 floatHandler inout,
+						  data3 floatHandler out) returns(float[])
+		data3.item1 = 1.3;
+		ret float = commonCodeLib.float_all(data1.item1, data2.item1, data3.item1);
+		retvals float[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+	
+	function floatArrayAll(dataArray1 floatArrayHandler in,
+							   dataArray2 floatArrayHandler inout,
+							   dataArray3 floatArrayHandler out) returns(float[])
+		dataArray2.item1.appendElement(23.2);
+		dataArray3.item1 = new float[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(7.3);
+		return(dataArray1.item1);		
+	end							 
+	
+	function decimalAll(data1 decimalHandler in,
+							data2 decimalHandler inout,
+							data3 decimalHandler out)  returns(decimal(10, 2)[])
+		data3.item1 = 1.3;		
+		ret decimal(10, 2) = commonCodeLib.decimal_all(data1.item1, data2.item1, data3.item1);
+		retvals decimal(10, 2)[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);
+	end
+
+	function deciamlArrayAll(dataArray1 decimalArrayHandler in,
+							   dataArray2 decimalArrayHandler inout,
+							   dataArray3 decimalArrayHandler out)returns(decimal(10, 2)[])
+		dataArray2.item1.appendElement(3.4);
+		dataArray3.item1 = new decimal(10, 2)[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement(7.3);
+		return(dataArray1.item1);
+	end
+	
+	
+	function stringAll(data1 stringHandler in, 
+							data2 stringHandler inout,
+							data3 stringHandler out) returns(string[])
+		data3.item1 = "c";
+		ret string = commonCodeLib.string_all(data1.item1, data2.item1, data3.item1);
+		retvals string[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);												
+	end
+	
+	function stringArrayAll(dataArray1 stringArrayHandler in,
+								dataArray2 stringArrayHandler inout,
+								dataArray3 stringArrayHandler out) returns(string[])
+		dataArray2.item1.appendElement("Yahoo");
+		dataArray3.item1 = new string[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement("HiHi");
+		return(dataArray1.item1);
+	end	
+
+	
+	function timeStampAll(data1 timestampHandler in, 
+								data2 timestampHandler inout) returns(timeStamp[])
+		ret timeStamp = commonCodeLib.timestamp_all(data1.item1, data2.item1);
+		retvals timeStamp[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(ret);
+		return(retvals);										
+	end
+			
+	function timeStampArrayAll(dataArray1 timeStampArrayHandler in,
+									dataArray2 timeStampArrayHandler inout,
+									dataArray3 timeStampArrayHandler out) returns(timeStamp("yyyyMMddHHmmss")[])
+		dataArray2.item1.appendElement("2006/07/13-18:30:23");
+		dataArray3.item1 = new timeStamp("yyyyMMddHHmmss")[]; //
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement("2006/07/12-20:23:54");
+		return(dataArray1.item1);
+	end
+	
+	function dateAll(data1 dateHandler in, 
+						 data2 dateHandler inout,
+						 data3 dateHandler out) returns (date[])
+		ret date = commonCodeLib.date_all(data1.item1, data2.item1, data3.item1);
+		data3.item1 = "10/01/2007";
+		retvals date[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);						 	
+	end	
+
+	function dateArrayAll(dataArray1 dateArrayHandler in,
+								dataArray2 dateArrayHandler inout,
+								dataArray3 dateArrayHandler out) returns(date[])
+		dataArray2.item1.appendElement("07/13/2006");
+		dataArray3.item1 = new date[];
+		dataArray3.item1.removeAll();
+		dataArray3.item1.appendElement("07/12/2006");
+		return(dataArray1.item1);			
+	end
+		
+	function booleanAll(data1 booleanHandler in,
+							data2 booleanHandler inout,
+							data3 booleanHandler out) returns(boolean[])
+		data3.item1 = false;
+		ret boolean = commonCodeLib.boolean_all(data1.item1, data2.item1, data3.item1);
+		retvals boolean[];
+		retvals.appendElement(data1.item1);
+		retvals.appendElement(data2.item1);
+		retvals.appendElement(data3.item1);
+		retvals.appendElement(ret);
+		return(retvals);										
+	end
+
+	function booleanArrayAll(dataArray1 booleanArrayHandler in,
+								dataArray2 booleanArrayHandler inout,
+								dataArray3 booleanArrayHandler out) returns(boolean[])
+		dataArray2.item1.appendElement(true);
+		dataArray3.item1 = new boolean[];
+		dataArray3.item1.appendElement(false);
+		return(dataArray1.item1);
+	end
+	
+end

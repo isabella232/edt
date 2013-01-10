@@ -1,0 +1,663 @@
+package fvt.delegates;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestDelegate01Lib
+* @title The function test program for delegate in EDT
+* @keywords delegate
+* @author EDT team
+* @createDate 2011/08/10
+* @description
+* Test the Delegate functionalities inludes the In parameter,
+* Inout parameter, call local delegate functions, call remote
+* delegate functions
+*/
+
+library TestDelegate01Lib{}
+
+    use TestDelegate01Lib2;
+
+    //	d MyDelegate;
+    //	di MyDelegateIN;
+    //	do MyDelegateOUT;
+    //	dio MyDelegateINOUT;
+    d MyDelegate?;
+    di MyDelegateIN?;
+    do MyDelegateOUT?;
+    dio MyDelegateINOUT?;
+
+    //	invoker invoker;
+    invoker invoker?;
+
+    //Test Delegates as Parameters	
+    
+    function testDelegateAsINParameter(){@test}
+        s string;
+        LogResult.logStdOut("Delegate As IN Parameter");
+        s = TestDelegate01Lib2.invokerIN(testerForIN);
+        LogResult.assertTrue1(s == "testerForIN:IN:");
+    end
+
+    function testDelegateAsINOUTParameter()
+    	// Throws validation error message now
+//        s string;
+//        LogResult.logStdOut("Delegate As INOUT Parameter 1");
+//        s = TestDelegate01Lib2.invokerINOUT(testerForINOUT);
+//        LogResult.assertTrue1(s == "testerForINOUT:INOUT:");
+    end
+
+    function testDelegateAsINParameter2a(){@test}
+        s string;
+        LogResult.logStdOut("Delegate As INOUT Parameter 2a");
+        invoker = testerForINOUT;
+        s = TestDelegate01Lib2.invokerINOUT(invoker);
+        LogResult.assertTrue1(s == "testerForINOUT:INOUT:");
+    end
+
+    function testDelegateAsINParameter2b(){@test}
+        s string;
+        invoker = testerForINOUT;
+        LogResult.logStdOut("Delegate As INOUT Parameter 2b");
+        s = invoker("X:");
+        LogResult.assertTrue1(s == "testerForINOUT:X:");
+    end
+
+    function testDelegateAsINParameter1a(){@test}
+        s string;
+        invoker = testerForINOUT;
+        LogResult.logStdOut("Delegate As OUT Parameter 1a");
+        s = TestDelegate01Lib2.invokerOUT(invoker);
+        LogResult.assertTrue1(s == "privateFunc:OUT:");
+    end
+
+    function testDelegateAsINParameter1b(){@test}
+        s string;
+        invoker = testerForINOUT;
+        LogResult.logStdOut("Delegate As OUT Parameter 1b");
+        s = invoker("Y:");
+        LogResult.assertTrue1(s == "testerForINOUT:Y:");
+    end
+
+    //Test Local Delegates
+    
+    function testDelegateLocal1a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Loal function Delegate - 1a");
+        LogResult.assertTrue1(jj == 11);
+    end
+
+    function testDelegateLocal1b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Local function Delegate - 1b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal1c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Local function Delegate - 1c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateLocal2a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        d = func;
+
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+
+        LogResult.logStdOut("Local function Delegate - 2a");
+        LogResult.assertTrue1(djj == 11);
+    end
+
+    function testDelegateLocal2b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        d = func;
+
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+
+        LogResult.logStdOut("Local function Delegate - 2b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal3a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3a");
+        LogResult.assertTrue1(jj == 10);
+    end
+
+    function testDelegateLocal3b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal3c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateLocal4a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        di = funci;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        LogResult.logStdOut("Local function Delegate - 4a");
+        LogResult.assertTrue1(djj == 10);
+    end
+
+    function testDelegateLocal4b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        di = funci;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        LogResult.logStdOut("Local function Delegate - 4b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal5a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5a");
+        LogResult.assertTrue1(jj == 1);
+    end
+
+    function testDelegateLocal5b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal5c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateLocal6a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        do = funco;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        LogResult.logStdOut("Local function Delegate - 6a");
+        LogResult.assertTrue1(djj == 1);
+    end
+
+    function testDelegateLocal6b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        do = funco;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        LogResult.logStdOut("Local function Delegate - 6b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal7a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7a");
+        LogResult.assertTrue1(jj == 11);
+    end
+
+    function testDelegateLocal7b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateLocal7c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateLocal8a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        dio = funcio;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        LogResult.logStdOut("Local function Delegate - 8a");
+        LogResult.assertTrue1(djj == 11);
+    end
+
+    function testDelegateLocal8b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        dio = funcio;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        LogResult.logStdOut("Local function Delegate - 8b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    //Test Non_local Delegates
+    
+    function testDelegateNonLocal1a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Loal function Delegate - 1a");
+        LogResult.assertTrue1(jj == 11);
+    end
+
+    function testDelegateNonLocal1b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Local function Delegate - 1b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal1c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = func(jj);
+
+        LogResult.logStdOut("Local function Delegate - 1c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateNonLocal2a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        d = TestDelegate01Lib2.lfunc;
+
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+
+        LogResult.logStdOut("Local function Delegate - 2a");
+        LogResult.assertTrue1(djj == 11);
+    end
+
+    function testDelegateNonLocal2b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        d = TestDelegate01Lib2.lfunc;
+
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = d(djj);
+
+        LogResult.logStdOut("Local function Delegate - 2b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal3a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3a");
+        LogResult.assertTrue1(jj == 10);
+    end
+
+    function testDelegateNonLocal3b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal3c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funci(jj);
+        LogResult.logStdOut("Local function Delegate - 3c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateNonLocal4a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        di = TestDelegate01Lib2.lfunci;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        LogResult.logStdOut("Local function Delegate - 4a");
+        LogResult.assertTrue1(djj == 10);
+    end
+
+    function testDelegateNonLocal4b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        di = TestDelegate01Lib2.lfunci;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = di(djj);
+        LogResult.logStdOut("Local function Delegate - 4b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal5a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5a");
+        LogResult.assertTrue1(jj == 1);
+    end
+
+    function testDelegateNonLocal5b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal5c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funco(jj);
+        LogResult.logStdOut("Local function Delegate - 5c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateNonLocal6a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        do = TestDelegate01Lib2.lfunco;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        LogResult.logStdOut("Local function Delegate - 6a");
+        LogResult.assertTrue1(djj == 1);
+    end
+
+    function testDelegateNonLocal6b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        do = TestDelegate01Lib2.lfunco;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = do(djj);
+        LogResult.logStdOut("Local function Delegate - 6b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal7a(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7a");
+        LogResult.assertTrue1(jj == 11);
+    end
+
+    function testDelegateNonLocal7b(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    function testDelegateNonLocal7c(){@test}
+        jj int;
+        thevar1 int;
+
+        // Baseline values
+        TestDelegate01Lib2.thevar = 1;
+        jj = 10;
+        thevar1 = funcio(jj);
+        LogResult.logStdOut("Local function Delegate - 7c");
+        LogResult.assertTrue1(thevar1 == TestDelegate01Lib2.thevar);
+    end
+
+    function testDelegateNonLocal8a(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        dio = TestDelegate01Lib2.lfuncio;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        LogResult.logStdOut("Local function Delegate - 8a");
+        LogResult.assertTrue1(djj == 11);
+    end
+
+    function testDelegateNonLocal8b(){@test}
+        djj int;
+        thevar1 int;
+
+        // Baseline values
+        dio = TestDelegate01Lib2.lfuncio;
+        TestDelegate01Lib2.thevar = 1;
+        djj = 10;
+        thevar1 = dio(djj);
+        LogResult.logStdOut("Local function Delegate - 8b");
+        LogResult.assertTrue1(thevar1 == 2);
+    end
+
+    //Test Delegate Call
+    
+    function testDelegateCall01(){@test}
+        a any = "1234";
+
+        // Happy Happy Joy Joy
+        stringinfunc("Function Delegate - straight call", a); // this.func(egl.convertAnyToString(a,false) );
+    end
+
+    function testDelegateCall02(){@test}
+        a any = "1234";
+
+        // Sad Panda
+        doh doh = stringinfunc;
+        doh("Function Delegate - delegate call", a); // doh((a).toString() ); => passes in "[object Object]"
+    end
+
+    private function testerForIN(s string in) returns(string)
+        return("testerForIN:" :: s);
+    end
+
+    private function testerForINOUT(s string in) returns(string)
+        return("testerForINOUT:" :: s);
+    end
+
+    function func(i int) returns(int)
+        TestDelegate01Lib2.thevar += 1;
+        i += 1;
+
+        return(TestDelegate01Lib2.thevar);
+    end
+
+    function funci(i int in) returns(int)
+        TestDelegate01Lib2.thevar += 1;
+        i += 1;
+
+        return(TestDelegate01Lib2.thevar);
+    end
+
+    function funco(i int out) returns(int)
+        TestDelegate01Lib2.thevar += 1;
+        i += 1;
+
+        return(TestDelegate01Lib2.thevar);
+    end
+
+    function funcio(i int inOut) returns(int)
+        TestDelegate01Lib2.thevar += 1;
+        i += 1;
+
+        return(TestDelegate01Lib2.thevar);
+    end
+
+    function stringinfunc(var string in, s string in)
+        i int = s;
+        variation string = var;
+        //		TestUILib.reportStatus(jsLib.getFile(), jsLib.getLine(), compareInt(i,1234) );
+        LogResult.assertTrue1(i == "1234");
+    end
+
+end
+
+delegate doh(var string in, s string in)
+end
+
+delegate invoker(s string in) returns(string)
+end

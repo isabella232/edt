@@ -1,0 +1,291 @@
+package fvt.functionInvocation;
+
+/*
+* @name returnvaluefunctions
+* @title The library for returning values
+* @keywords Returning Values
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to provide the functions for returning values
+*/
+
+library returnvaluefunctions
+
+    function retInt() returns(int)
+        return(5);
+    end
+
+    function retBin() returns(decimal(4))
+        return(5);
+    end
+
+    //function retChar() returns (char(3))
+    //	return ("EGL");
+    //end
+    
+    //function retDate() returns (date)
+    ////	return (dateTimeLib.dateValue("2004-01-01"));
+    //	return (dateTimeLib.currentDate());
+    //end
+    //
+    //function retTime() returns (time)
+    //	return (dateTimeLib.timeValue("08:00:00"));
+    //end
+    //
+    //function retTimeStamp() returns (timestamp)
+    //	return (dateTimeLib.timeStampValue("2004-01-01-08-20-30"));
+    ////	return (datetimeLib.currentTimeStamp());
+    //end
+    //
+    //function retDBChar() returns (dbchar(2))
+    //	dbchar1 dbchar(2);
+    //	dbchar1 ="??";	
+    //	return (dbchar1);
+    //end
+    
+    function retDecimal() returns(decimal(4, 2))
+        return(4.55);
+    end
+
+    function retFloat() returns(float)
+        return(9.1999);
+    end
+
+    //function retHex() returns (hex(2))
+    //	hex1 hex(2);
+    //	hex1 = "E1";
+    //	return (hex1);
+    //end
+    //
+    //function retInterval() returns (interval("yyyyMM"))
+    //	return (dateTimeLib.intervalvalue("000001")); 
+    //end
+    //
+    //function retMBchar() returns (mbchar(5))
+    //	mb1 mbchar(4);
+    //	mb1 ="ABC?";
+    //	return(mb1);
+    //end
+    //
+    //function retXMBchar() returns (mbchar(4))
+    //	mb1 mbchar(4);
+    //	mb1 ="ABC?";
+    //	return(mb1);
+    //end
+    
+    function retString() returns(string)
+        return("EGLTEST");
+    end
+
+    //function retUnicode() returns (unicode(5))
+    //	u1 unicode(5);
+    //	u1 ="EGL12";
+    //	return (u1);
+    //end
+    
+    function retAnyInt() returns(any)
+        i int = 5;
+        return(i);
+    end
+
+    //function retAnyBin() returns (any)
+    //	i bin(4) = 5;
+    //	return (i);
+    //end
+    
+    //function retAnyChar() returns (any)
+    //	a char(3) = "EGL";
+    //	return (a);
+    //end
+    
+    //function retAnyDate() returns (any)
+    //	d date = dateTimeLib.currentDate(); 
+    ////	return (dateTimeLib.dateValue("2004-01-01"));
+    //	return (d);
+    //end
+    //
+    //function retAnyTime() returns (any)
+    //	t time = dateTimeLib.timeValue("08:00:00");
+    //	return (t);
+    //end
+    //
+    //function retAnyTimeStamp() returns (any)
+    //	t timestamp = datetimeLib.currentTimeStamp();
+    ////	return (dateTimeLib.timeStampValue("2004-01-01-08-00-00"));
+    //	return (t);
+    //end
+    //
+    //function retAnyDBChar() returns (any)
+    //	dbchar1 dbchar(2);
+    //	dbchar1 ="??";	
+    //	return (dbchar1);
+    //end
+    
+    function retAnyDecimal() returns(any)
+        d decimal(4, 2) = 4.55;
+        return(d);
+    end
+
+    function retAnyFloat() returns(any)
+        f float = 9.1999;
+        return(f);
+    end
+
+    /*
+function retAnyHex() returns (any)
+	hex1 hex(2);
+	hex1 = "E1";
+	return (hex1);
+end
+*/
+
+    //function retAnyInterval() returns (any)
+    //	i interval("yyyyMM") = dateTimeLib.intervalvalue("000001");
+    //	return (i); 
+    //end
+    //
+    //function retAnyMBchar() returns (any)
+    //	mb1 mbchar(4);
+    //	mb1 ="ABC?";
+    //	return(mb1);
+    //end
+    
+    function retAnyString() returns(any)
+        s string = "EGLTEST";
+        return(s);
+    end
+
+    //function retAnyUnicode() returns (any)
+    //	u1 unicode(5);
+    //	u1 ="EGL12";
+    //	return (u1);
+    //end
+    
+    function ArgInt(a int in) returns(boolean)
+        a = a + 10;
+        return((a == 15));
+    end
+
+    function ArgCharInt(a int in) returns(boolean)
+        a = a + 10;
+        return((a == 13));
+    end
+
+    function ArgBin(a decimal(4) in) returns(boolean)
+        a = a + 1;
+        if(a == 6)
+            return(true);
+        else
+            return(false);
+        end
+    end
+
+    //function ArgChar( a char(3) in) returns (boolean)
+    //	b char(7);
+    //	b = "IBM "+a;
+    //	if(b=="IBM EGL")
+    //		return( true );
+    //	else
+    //		return( false );
+    //	end
+    //end	
+    
+    //function ArgDate( a date in) returns (boolean)
+    //	a = a + 1;
+    //	return( dataLib.compareDate(a, dateTimeLib.currentDate() + 1) );
+    //end	
+    //
+    //function ArgDbchar ( a dbchar(2) in) returns (boolean)
+    //	b dbchar(4);
+    //	b1 string;
+    //	b1 = "??";
+    //	b = b1+a;
+    //	if(b == "????")
+    //		return( true );
+    //	else
+    //		return( false );
+    //	end
+    //end
+    
+    function ArgDecimal(a decimal(4, 2) in) returns(boolean)
+        a = a - 2.22;
+        return((a == 2.33));
+    end
+
+    //function ArgTime( a time in ) returns (boolean)
+    //	return( datalib.compareTime(a, dateTimeLib.timeValue("08:00:00")) );
+    //end
+    //
+    //function ArgTimeStamp( a timestamp in) returns (boolean)
+    // 	return( datalib.compareTimeStamp(a, datetimeLib.timestampvalue("2004-01-01-08-20-30")) );
+    ////	datalib.compareTimeStamp(a, datetimeLib.currentTimeStamp());
+    //end
+    
+    function ArgFloat(a float in) returns(boolean)
+        a = a - 9;
+        //        return((a == .1999));
+        //        //	if(a ==.1999)
+        //        //		return( true );
+        //        //	else
+        //        //		return( false );
+        //        //	end
+        
+        expected float = .1999;//Change for EDT 0.7
+        actual float = a;
+        normalExpected, normalActual, delta float;
+        mantissaExpected, mantissaActual int;
+        signExpected, signActual string;
+        deltaLimit float = 1E-14;
+        normalExpected = normalFloat(expected, mantissaExpected, signExpected);
+        normalActual = normalFloat(actual, mantissaActual, signActual);
+        delta = normalExpected - normalActual;
+        delta = MathLib.abs(delta);
+        isEqual boolean =(signExpected == signActual) &&(mantissaExpected == mantissaActual) &&(delta < deltaLimit);
+        return(isEqual);
+    end
+
+    function ArgString(a string in) returns(boolean)
+        a = a + " 1";
+        return((a == "EGLTEST 1"));
+    end
+
+    function ArgXString(a string in) returns(boolean)
+        a = a + " 1";
+        return((a == "EGLTESTEGLTESTEGLTEST 1"));
+    end
+
+    //function ArgMbchar(a mbchar(4) in) returns (boolean)
+    //	b mbchar(10);
+    //	b = a + "defgh";
+    //	return( datalib.compareString(b, "ABC?defgh") );
+    //end
+    //
+    //function ArgXMbchar(a mbchar(12) in) returns (boolean)
+    //	b mbchar(17);
+    //	b = a + "defgh";
+    //	return( datalib.compareString(b, "ABC?ABC?ABC?defgh") );
+    //end
+    
+    private function normalFloat(afloat float in, mantissa int out, sign string out) returns(float)
+        mantissa = 0;
+        if(aFloat >= 0)
+            sign = "+";
+        else
+            sign = "-";
+            aFloat = aFloat * -1;
+        end
+        if(aFloat != 0)
+            while(aFloat < 1)
+                aFloat = aFloat * 10;
+                mantissa = mantissa - 1;
+            end
+            while(aFloat >= 10)
+                aFloat = aFloat / 10;
+                mantissa = mantissa + 1;
+            end
+        end
+        return(aFloat);
+    end
+
+end

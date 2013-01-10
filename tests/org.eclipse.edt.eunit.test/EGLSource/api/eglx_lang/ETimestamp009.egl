@@ -1,0 +1,204 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTimestamp009
+  * @title EdtTimestamp009 - runExtendFunction
+  * @description testing timestamp 'extend' function
+  * @testcases runExtendFunction1 - runExtendFunction65
+  * @sources EdtTimestamp009.egl
+  * @keywords timestamp, functions, extend
+ **/
+library ETimestamp009 {}
+
+	// Constant Declarations
+
+	const constTimeStampFull timeStamp("yyyyMMddHHmmssffffff") = "2012-02-29-10-55-30-987654";
+	const constTimeStampDateTime timeStamp("yyyyMMddHHmmss") = "2012-02-29-10-55-30";
+	const constTimeStampDate timeStamp("yyyyMMdd") = "2012-02-29";
+	const constTimeStampYDate timeStamp("yyyy") = "2012";
+	const constTimeStampYMDate timeStamp("yyyyMM") = "2012-02";
+	const constTimeStampMDDate timeStamp("MMdd") = "02-29";
+	const constTimeStampDHDate timeStamp("ddHH") = "29-10";
+	const constTimeStampTime timeStamp("HHmmss") = "10-55-30";
+	const constTimeStampHMTime timeStamp("HHmm") = "10-55";
+	const constTimeStampMSTime timeStamp("mmss") = "55-30";
+	
+	variation String;
+	 	
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+	
+	function runExtendFunction01(){@Test}
+		actual timestamp = constTimeStampFull.extend("yyyyMMddHHmmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to yyyyMMddHHmmss ", constTimeStampDateTime, actual);
+	end
+	
+	function runExtendFunction02(){@Test}
+		actual timestamp = constTimeStampFull.extend("yyyyMMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to yyyyMMdd", constTimeStampDate, actual);
+	end
+	
+	function runExtendFunction03(){@Test}
+		actual timestamp = constTimeStampFull.extend("yyyyMM");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to yyyyMM ", constTimeStampYMDate, actual);
+	end
+	
+	function runExtendFunction04(){@Test}
+		actual timestamp = constTimeStampFull.extend("yyyy");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to yyyy", constTimeStampYDate, actual);
+	end
+	
+	function runExtendFunction05(){@Test}
+		actual timestamp = constTimeStampFull.extend("MMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to MMdd ", constTimeStampMDDate, actual);
+	end
+	
+	function runExtendFunction06(){@Test}
+		actual timestamp = constTimeStampFull.extend("ddHH");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to ddHH ", constTimeStampDHDate, actual);
+	end
+	
+	function runExtendFunction07(){@Test}
+		actual timestamp = constTimeStampFull.extend("HHmmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to HHmmss", constTimeStampTime, actual);
+	end
+	
+	function runExtendFunction08(){@Test}
+		actual timestamp = constTimeStampFull.extend("HHmm");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to HHmm", constTimeStampHMTime, actual);
+	end
+	
+	function runExtendFunction09(){@Test}
+		actual timestamp = constTimeStampFull.extend("mmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to mmss", constTimeStampMSTime, actual);
+	end
+
+	function runExtendFunction10(){@Test}
+		actual timestamp = constTimeStampFull.extend("yyyyMMddHHmmssffffff");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmssffffff to yyyyMMddHHmmssffffff ", constTimeStampFull, actual);
+	end
+	
+	
+	function runExtendFunction11(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("yyyyMMddHHmmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to yyyyMMddHHmmss ", constTimeStampDateTime, actual);
+	end
+	
+	function runExtendFunction12(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("yyyyMMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to yyyyMMdd", constTimeStampDate, actual);
+	end
+	
+	function runExtendFunction13(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("yyyyMM");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to yyyyMM ", constTimeStampYMDate, actual);
+	end
+	
+	function runExtendFunction14(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("yyyy");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to yyyy", constTimeStampYDate, actual);
+	end
+	
+	function runExtendFunction15(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("MMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to MMdd ", constTimeStampMDDate, actual);
+	end
+	
+	function runExtendFunction16(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("ddHH");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to ddHH ", constTimeStampDHDate, actual);
+	end
+	
+	function runExtendFunction17(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("HHmmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to HHmmss", constTimeStampTime, actual);
+	end
+	
+	function runExtendFunction18(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("HHmm");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to HHmm", constTimeStampHMTime, actual);
+	end
+	
+	function runExtendFunction19(){@Test}
+		actual timestamp = ConstTimeStampDateTime.extend("mmss");
+		LogResult.assertTimestampEqual("extend from yyyyMMddHHmmss to mmss", constTimeStampMSTime, actual);
+	end
+
+	function runExtendFunction20(){@Test}
+		actual timestamp = ConstTimeStampDate.extend("yyyyMMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMdd to yyyyMMdd", constTimeStampDate, actual);
+	end
+	
+	function runExtendFunction21(){@Test}
+		actual timestamp = ConstTimeStampDate.extend("yyyyMM");
+		LogResult.assertTimestampEqual("extend from yyyyMMdd to yyyyMM ", constTimeStampYMDate, actual);
+	end
+	
+	function runExtendFunction22(){@Test}
+		actual timestamp = ConstTimeStampDate.extend("yyyy");
+		LogResult.assertTimestampEqual("extend from yyyyMMdd to yyyy", constTimeStampYDate, actual);
+	end
+	
+	function runExtendFunction23(){@Test}
+		actual timestamp = ConstTimeStampDate.extend("MMdd");
+		LogResult.assertTimestampEqual("extend from yyyyMMdd to MMdd ", constTimeStampMDDate, actual);
+	end
+	
+	function runExtendFunction24(){@Test}
+		actual timestamp = ConstTimeStampYMDate.extend("yyyy");
+		LogResult.assertTimestampEqual("extend from yyyyMMto yyyy ", constTimeStampYDate, actual);
+	end
+
+	function runExtendFunction25(){@Test}
+		actual timestamp = ConstTimeStampYMDate.extend("yyyyMM");
+		LogResult.assertTimestampEqual("extend from yyyyMMto yyyyMM ", constTimeStampYMDate, actual);
+	end
+	
+	function runExtendFunction26(){@Test}
+		actual timestamp = ConstTimeStampYDate.extend("yyyy");
+		LogResult.assertTimestampEqual("extend from yyyy to yyyy ", constTimeStampYDate, actual);
+	end
+	
+	function runExtendFunction27(){@Test}
+		actual timestamp = ConstTimeStampMDDate.extend("MMdd");
+		LogResult.assertTimestampEqual("extend from MMdd to MMdd ", constTimeStampMDDate, actual);
+	end
+	
+	function runExtendFunction28(){@Test}
+		actual timestamp = ConstTimeStampDHDate.extend("ddHH");
+		LogResult.assertTimestampEqual("extend from ddHH to ddHH ", constTimeStampDHDate, actual);
+	end
+	
+	function runExtendFunction29(){@Test}
+		actual timestamp = ConstTimeStampTime.extend("HHmmss");
+		LogResult.assertTimestampEqual("extend from HHmmss to HHmmss", constTimeStampTime, actual);
+	end
+	
+	function runExtendFunction30(){@Test}
+		actual timestamp = ConstTimeStampTime.extend("HHmm");
+		LogResult.assertTimestampEqual("extend from HHmmss to HHmm", constTimeStampHMTime, actual);
+	end
+	
+	
+	function runExtendFunction31(){@Test}
+		actual timestamp = ConstTimeStampTime.extend("mmss");
+		LogResult.assertTimestampEqual("extend from HHmmss to mmss", constTimeStampMSTime, actual);
+	end
+	
+	function runExtendFunction32(){@Test}
+		actual timestamp = ConstTimeStampHMTime.extend("HHmm");
+		LogResult.assertTimestampEqual("extend from HHmm to HHmm", constTimeStampHMTime, actual);
+	end
+	
+	
+	function runExtendFunction33(){@Test}
+		actual timestamp = ConstTimeStampMSTime.extend("mmss");
+		LogResult.assertTimestampEqual("extend from mmss to mmss", constTimeStampMSTime, actual);
+	end
+end

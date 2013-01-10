@@ -1,0 +1,49 @@
+package services;
+
+import data.OuterFlexibleRecordMultiDim;
+import interfaces.IArrayPassingMultiDim;
+import utilities.CommonUtilitiesMultiDim;
+
+// service
+Service ArrayPassingMultiDim 
+	
+	
+	function doubleIn(_array string[][] in) returns(string)
+		return(_array[1][1]);
+	end
+	
+	function doubleInout( _array string[][] inout)
+		_array[1][1] = "Value changed";		
+	end
+	
+	function doubleOut( _array string[][] out)
+		_array = new string[][];
+		CommonUtilitiesMultiDim.init2DStringArray(_array);		
+	end
+	
+	function doubleAll(_array1 string[][] in, _array2 string[][] inout, _array3 string[][] out) returns(string[][])
+		_array2[1][1] = "Value changed";
+		_array3 = new string[][];
+		_array3.appendAll(_array1);
+		return (_array1);
+	end
+	
+	function outerFlexibleRecordMultiDimIn(flex OuterFlexibleRecordMultiDim in) returns(string)
+		return ("flex.item4.item1[1] = " + flex.item4.item1[1]);
+	end
+
+	function outerFlexibleRecordMultiDimInout(flex OuterFlexibleRecordMultiDim inout)
+//		;
+	end
+
+	function outerFlexibleRecordMultiDimOut(flex OuterFlexibleRecordMultiDim out)
+		CommonUtilitiesMultiDim.initOuterFlexibleRecordMultiDim(flex);	
+	end
+
+	function outerFlexibleRecordMultiDimAll(flex1 OuterFlexibleRecordMultiDim in, flex2 OuterFlexibleRecordMultiDim inout, flex3 OuterFlexibleRecordMultiDim out) returns(string)
+		flex3 = flex1;
+		return (flex1.item4.item1[1]);
+	end
+
+	
+end

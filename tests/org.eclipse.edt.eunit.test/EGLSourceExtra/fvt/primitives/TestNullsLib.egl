@@ -1,0 +1,559 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestNullsLib
+* @title The function test program for null values in EDT for RichUI
+* @keywords null
+* @author EDT team
+* @createDate 2011/08/26
+* @description 
+* Test the initialization, value-assign, and comparison for null, also test passing
+* null value to functions.
+*/
+
+library TestNullsLib
+
+    x1 boolean;
+    x2 string;
+    x3 int;
+    x4 timeStamp("HHmmss");
+    x5 dictionary{};
+    x6 float;
+    x7 decimal(7, 6);
+    x8 smallFloat;
+
+    r playWithNullsRec?;
+
+    //str1, str3, str4, str5 string;
+    str1 string;
+    str3 string;
+    str4 string;
+    str5 string?;
+    //i int = null;//In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException
+    nullableInt int? = null;
+    //nullableInt3, nullableInt4, nullableInt5 int?;
+    nullableInt3 int?;
+    nullableInt4 int?;
+    nullableInt5 int?;
+    //nullableStr3, nullableStr4, nullableStr5 string?;
+    nullableStr3 string?;
+    nullableStr4 string?;
+    nullableStr5 string?;
+    
+    tempInt int = 2;
+    tempNullableInt int? = 2;
+
+    function testForNulls1(){@Test}
+        LogResult.logStdOut("Assign null to boolean");
+        //        x1 = true;
+        //        x1 = null;
+        //        LogResult.assertTrue1(x1 != null && x1 == false);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNulls2(){@Test}
+        LogResult.logStdOut("Assign null to string");
+        //        x2 = "hello";
+        //        x2 = null;
+        //        LogResult.assertTrue1(x2 != null && x2 == "");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNulls3(){@Test}
+        LogResult.logStdOut("Assign null to int");
+        //        x3 = -99;
+        //        x3 = null;
+        //        LogResult.assertTrue1(x3 != null && x3 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    //    function testForNulls4(){@Test}
+    //        LogResult.logStdOut("Assign null to timestamp");
+    //        x4 = "12:10:08";
+    //        x4 = null;
+    //        LogResult.assertTrue1(x4 as time == currentTime());
+    //    end
+    
+    //    function testForNulls5(){@Test}
+    //        LogResult.logStdOut("Assign null to dictionary");
+    //        x5.x = "foo";
+    //        x5 = null;
+    //        LogResult.assertTrue1(x5 == null);
+    //    end
+    
+    function testForNulls6(){@Test}
+        LogResult.logStdOut("Assign null to float");
+        //        x6 = 3.14159;
+        //        x6 = null;
+        //        LogResult.assertTrue1(x6 != null && x6 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNulls7(){@Test}
+        LogResult.logStdOut("Assign null to decimal");
+        //        x7 = 3.14159;
+        //        x7 = null;
+        //        LogResult.assertTrue1(x7 != null && x7 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNulls8(){@Test}
+        LogResult.logStdOut("Assign null to smallfloat");
+        //        x8 = 3.14159;
+        //        x8 = null;
+        //        LogResult.assertTrue1(x8 != null && x8 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNullsToFuncs(){@Test}
+        //        fbool(null);
+        //        fstring(null);
+        //        fint(null);
+        //        // fstamp(null);
+        //        fdict(null);
+        //        ffloat(null);
+        //        fsmallfloat(null);
+        //        fdec(null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function fbool(x1 boolean in)
+        LogResult.logStdOut("Pass null to boolean");
+        LogResult.assertTrue("fbool", null != x1 && x1 == false);
+    end
+
+    function fstring(x2 string in)
+        LogResult.logStdOut("Pass null to string");
+        LogResult.assertTrue("fstring", null != x2 && x2 == "");
+    end
+
+    function fint(x3 int in)
+        LogResult.logStdOut("Pass null to int");
+        LogResult.assertTrue("fint", null != x3 && x3 == 0);
+    end
+
+    //    function fstamp(x4 timeStamp("HHmmss") in)
+    //        LogResult.logStdOut("Pass null to timestamp");
+    //        LogResult.assertTrue("fstamp", x4 as time == currentTime());
+    //    end
+    
+    function fdict(x5 dictionary in)
+        LogResult.logStdOut("Pass null to dictionary");
+        LogResult.assertTrue("fdict", null == x5);
+    end
+
+    function ffloat(x6 float in)
+        LogResult.logStdOut("Pass null to float");
+        LogResult.assertTrue("ffloat", null != x6 && x6 == 0);
+    end
+
+    function fsmallfloat(x6 float in)
+        LogResult.logStdOut("Pass null to smallfloat");
+        LogResult.assertTrue("fsmallfloat", null != x6 && x6 == 0);
+    end
+
+    function fdec(x7 decimal(7, 6) in)
+        LogResult.logStdOut("Pass null to decimal");
+        LogResult.assertTrue("fdec", null != x7 && x7 == 0);
+    end
+
+    function testForNullsInRec1(){@Test}
+        LogResult.logStdOut("Assign null to rec.boolean");
+        //        r.x1 = true;
+        //        r.x1 = null;
+        //        LogResult.assertTrue1(r.x1 != null && r.x1 == false);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNullsInRec2(){@Test}
+        LogResult.logStdOut("Assign null to rec.string");
+        //        r.x2 = "hello";
+        //        r.x2 = null;
+        //        LogResult.assertTrue1(r.x2 != null && r.x2 == "");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNullsInRec3(){@Test}
+        LogResult.logStdOut("Assign null to rec.int");
+        //        r.x3 = -99;
+        //        r.x3 = null;
+        //        LogResult.assertTrue1(r.x3 != null && r.x3 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    //    function testForNullsInRec4(){@Test}
+    //        LogResult.logStdOut("Assign null to rec.timestamp");
+    //        r.x4 = "12:10:08";
+    //        r.x4 = null;
+    //        LogResult.assertTrue1(r.x4 as time == currentTime());
+    //    end
+    
+    //    function testForNullsInRec5(){@Test}
+    //        LogResult.logStdOut("Assign null to rec.dictionary");
+    //        r.x5 = new dictionary;
+    //        r.x5.x = "foo";
+    //        r.x5 = null;
+    //        LogResult.assertTrue1(r.x5 == null);
+    //    end
+    
+    function testForNullsInRec6(){@Test}
+        LogResult.logStdOut("Assign null to rec.float");
+        //        r.x6 = 3.14159;
+        //        r.x6 = null;
+        //        LogResult.assertTrue1(r.x6 != null && r.x6 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNullsInRec7(){@Test}
+        LogResult.logStdOut("Assign null to rec.decimal");
+        //        r.x7 = 3.14159;
+        //        r.x7 = null;
+        //        LogResult.assertTrue1(r.x7 != null && r.x7 == 0);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function testForNullsInRec8(){@Test}
+        LogResult.logStdOut("Assign null to rec #1");
+        r.x1 = true;
+        r.x2 = "hello";
+        r.x3 = -99;
+        r.x4 = "12:10:08";
+        r.x5 = new dictionary{a = 1};
+        r.x6 = 12e42;
+        r.x7 = -5.4321;
+        r = null;
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testForNullsInRec9(){@Test}
+        LogResult.logStdOut("Assign null to rec #2");
+        LogResult.assertTrue1(r.x1 != null && r.x1 == false);
+    end
+
+    function testForNullsInRec10(){@Test}
+        LogResult.logStdOut("Assign null to rec #3");
+        LogResult.assertTrue1(r.x2 != null && r.x2 == "");
+    end
+
+    function testForNullsInRec11(){@Test}
+        LogResult.logStdOut("Assign null to rec #4");
+        LogResult.assertTrue1(r.x3 != null && r.x3 == 0);
+    end
+
+    //    function testForNullsInRec12(){@Test}
+    //        LogResult.logStdOut("Assign null to rec #5");
+    //        LogResult.assertTrue1(r.x4 as time == currentTime());
+    //    end
+    
+    function testForNullsInRec13(){@Test}
+        LogResult.logStdOut("Assign null to rec #6");
+        LogResult.assertTrue1(r.x5 == null);
+    end
+
+    function testForNullsInRec14(){@Test}
+        LogResult.logStdOut("Assign null to rec #7");
+        LogResult.assertTrue1(r.x6 != null && r.x6 == 0);
+    end
+
+    function testForNullsInRec15(){@Test}
+        LogResult.logStdOut("Assign null to rec #8");
+        LogResult.assertTrue1(r.x7 != null && r.x7 == 0);
+    end
+
+    // Verification code from RTC 34502
+    
+    function test34502_1(){@Test}
+        LogResult.logStdOut("non-NullableInt is not null");
+        //LogResult.assertTrue1(i != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_2(){@Test}
+        LogResult.logStdOut("? int is null");
+        LogResult.assertTrue1(nullableInt == null);
+    end
+
+    function test34502_3(){@Test}
+        LogResult.logStdOut("Test assigning values to non-nullable string 1");
+        LogResult.assertTrue1(str1 == "");
+    end
+
+    function test34502_4(){@Test}
+        LogResult.logStdOut("Test assigning values to non-nullable string 2");
+        //        str3 = i;
+        //        LogResult.assertTrue1(str3 == "0");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_5(){@Test}
+        LogResult.logStdOut("Test assigning values to non-nullable string 3");
+        try
+            str4 = nullableInt;
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function test34502_6(){@Test}
+        LogResult.logStdOut("Test assigning values to non-nullable string 4");
+        str5 = null;
+        LogResult.assertTrue1(str5 == "");
+    end
+
+    function test34502_7(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 1");
+        //        nullableStr3 = i;
+        //        LogResult.assertTrue1(nullableStr3 != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_8(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 2");
+        nullableStr4 = nullableInt;
+        LogResult.assertTrue1(nullableStr4 == null);
+    end
+
+    function test34502_9(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 3");
+        nullableStr5 = null;
+        LogResult.assertTrue1(nullableStr5 == null);
+    end
+
+    function test34502_10(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 4");
+        LogResult.assertTrue1(nullableStr3 == "0");
+    end
+
+    function test34502_11(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 5");
+        try
+            LogResult.assertStringEqual1("", nullableStr4);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function test34502_12(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable string 6");
+        try
+            LogResult.assertStringEqual1("", nullableStr5);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function test34502_13(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to non-nullable string 1");
+        //        str3 = i + 0;
+        //        LogResult.assertTrue1(str3 == "0");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_14(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to non-nullable string 2");
+        str4 = nullableInt + 0;
+        LogResult.assertTrue1(str4 :: "" == "");
+    end
+
+    function test34502_15(){@Test}
+        LogResult.logStdOut("Test assigning variables in a string expression to non-nullable string 1");
+        //        str3 = "" + i;
+        //        LogResult.assertTrue1(str3 == "0");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_16(){@Test}
+        LogResult.logStdOut("Test assigning variables in a string expression to non-nullable string 2");
+        str4 = "" + nullableInt;
+        LogResult.assertTrue1(str4 == "");
+    end
+
+    function test34502_17(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to nullable int 1");
+        //        nullableInt3 = i + 0;
+        //        LogResult.assertTrue1(nullableInt3 != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_18(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to nullable int 2");
+        nullableInt4 = nullableInt + 0;
+        LogResult.assertTrue1(nullableInt4 == null);
+    end
+
+    function test34502_19(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to nullableString 1");
+        //        nullableStr3 = i + 0;
+        //        LogResult.assertTrue1(nullableStr3 != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_20(){@Test}
+        LogResult.logStdOut("Test assigning variables in a numeric expression to nullableString 2");
+        nullableStr4 = nullableInt + 0;
+        LogResult.assertTrue1(nullableStr4 == null);
+    end
+
+    function test34502_21(){@Test}
+        LogResult.logStdOut("Test assigning variables in a string expression with + operator to nullableString 1");
+        //        nullableStr3 = "" + i;
+        //        LogResult.assertTrue1(nullableStr3 != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_22(){@Test}
+        LogResult.logStdOut("Test assigning variables in a string expression with + operator to nullableString 2");
+        nullableStr4 = "" + nullableInt;
+        LogResult.assertTrue1(nullableStr4 != null);
+    end
+
+    function test34502_23(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 1");
+        //        nullableInt3 = i;
+        //        LogResult.assertTrue1(nullableInt3 != null);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_24(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 2");
+        nullableInt4 = nullableInt;
+        LogResult.assertTrue1(nullableInt4 == null);
+    end
+
+    function test34502_25(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 3");
+        nullableInt5 = null;
+        LogResult.assertTrue1(nullableInt5 == null);
+    end
+
+    function test34502_26(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 1");
+        LogResult.assertTrue1(nullableInt3 == "0");
+    end
+
+    function test34502_27(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 2");
+        //LogResult.assertTrue1(nullableInt4 :: "" == "");
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function test34502_28(){@Test}
+        LogResult.logStdOut("Test assigning values to nullable int 3");
+        //LogResult.assertTrue1(nullableInt5 :: "" == "");
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function test34502_29(){@Test}
+        LogResult.logStdOut("Test passing values to ? nullable function (inout) 1");
+        nullableIntFuncInOut(nullableInt, "nullable int");
+    end
+
+    function test34502_30(){@Test}
+        LogResult.logStdOut("Test passing values to ? nullable function (inout) 2");
+        //nullableIntFuncInOut(null, "null value");
+        LogResult.skipped("Passing a reference type arg to a value type parm defined as INOUT or OUT is no longer allowed");
+    end
+
+    function test34502_31(){@Test}
+        LogResult.logStdOut("Test passing values to non nullable function (inout)");
+        //nonNullableIntFuncInOut(i, "non-nullable int");
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_32(){@Test}
+        LogResult.logStdOut("Test passing values to sql nullable function (inout)");
+        //sqlNullableIntFuncInOut(i, "non-nullable int", false);
+        LogResult.skipped("In EDT if you assign null to a non-nullable variable, or pass null to a non-nullable parameter, we'll throw a NullValueException");
+    end
+
+    function test34502_33(){@Test}
+        LogResult.logStdOut("Test passing values to ? nullable function (out) 1");
+        nullableIntFuncOut(tempInt, "non-nullable int");
+        LogResult.assertTrue1(tempInt != null);
+    end
+
+    function test34502_34(){@Test}
+        LogResult.logStdOut("Test passing values to ? nullable function (out) 2");
+        nullableIntFuncOut(tempNullableInt, "nullable int");
+        LogResult.assertTrue1(tempNullableInt == null);
+    end
+
+    function test34502_35(){@Test}
+        LogResult.logStdOut("Test passing values to non-nullable function (out) 1");
+        tempInt = 2;
+        tempNullableInt = 2;
+        nonNullableIntFuncOut(tempInt, "non-nullable int");
+        LogResult.assertTrue1(tempInt != null);
+    end
+
+    function test34502_36(){@Test}
+        LogResult.logStdOut("Test passing values to non-nullable function (out) 2");
+        nonNullableIntFuncOut(tempNullableInt, "nullable int");
+        LogResult.assertTrue1(tempNullableInt != null);
+    end
+
+    function test34502_37(){@Test}
+        LogResult.logStdOut("Test passing values to sql nullable function (out) 1");
+        tempInt = 2;
+        tempNullableInt = 2;
+        sqlNullableIntFuncOut(tempInt, "non-nullable int");
+        LogResult.assertTrue1(tempInt != null);
+    end
+
+    function test34502_38(){@Test}
+        LogResult.logStdOut("Test passing values to sql nullable function (out) 2");
+        sqlNullableIntFuncOut(tempNullableInt, "nullable int");
+        LogResult.assertTrue1(tempNullableInt != null);
+    end
+
+    function nullableIntFuncInOut(param1 int?, param2 string in)
+        LogResult.assertTrue1(param1 == null);
+    end
+
+    function nonNullableIntFuncInOut(param1 int, param2 string)
+        LogResult.assertTrue1(param1 != null);
+    end
+
+    function sqlNullableIntFuncInOut(param1 int sqlnullable, param2 string, nullExpected boolean)
+        if(nullExpected)
+            LogResult.assertTrue1(param1 == null);
+        else
+            LogResult.assertTrue1(param1 != null);
+        end
+    end
+
+    function nullableIntFuncOut(param1 int? out, param2 string in)
+    end
+
+    function nonNullableIntFuncOut(param1 int out, param2 string in)
+    end
+
+    function sqlNullableIntFuncOut(param1 int sqlnullable out, param2 string in)
+    end
+
+    var1 SQLNullableRec;
+end
+
+record playWithNullsRec
+    x1 boolean;
+    x2 string;
+    x3 int;
+    x4 timeStamp("HHmmss");
+    x5 dictionary{};
+    x6 float;
+    x7 decimal(7, 6);
+end
+
+//record SQLNullableRec type SQLRecord
+//    item1 string{isSQLNullable = yes};
+//end
+
+record SQLNullableRec
+    item1 string;
+end

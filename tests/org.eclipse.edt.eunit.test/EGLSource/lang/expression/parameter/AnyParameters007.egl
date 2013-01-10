@@ -1,0 +1,1182 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Function paramater declarations of type ANY IN passing all numeric types and compare to all numeric types
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/11/29
+* @description  
+*/
+library AnyParameters007
+
+	anySmallInt any = (3 as smallint);
+	anyInt any = (3 as Int);
+	anyFloat any = (3 as float);
+	anyDecimal any = (3 as decimal);
+	
+	mysmallint smallint = 3;
+	myint int = 3;
+	myFloat float = 3;
+	myDecimal decimal(5,3) = 3;
+	
+	anySmallInt2 any = (3 as smallint);
+	anyInt2 any = (3 as Int);
+	anyFloat2 any = (3 as float);
+	anyDecimal2 any = (3 as decimal);
+	
+	mysmallint2 smallint = 3;
+	myint2 int = 3;
+	myFloat2 float = 3;
+	myDecimal2 decimal(5,3) = 3;
+	
+	function testCompareLiteralIntToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3);
+	end
+		
+	function testCompareLiteralIntToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3);
+	end
+
+	function testCompareLiteralIntToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3);
+	end
+		
+	function testCompareLiteralIntToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3);
+	end
+	
+	function testCompareLiteralIntToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3);
+	end
+	
+	function testCompareLiteralIntToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3);
+	end
+
+	function testCompareLiteralIntToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3);
+	end
+		
+	function testCompareLiteralIntToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3);
+	end
+	
+	function testCompareLiteralIntToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3);
+	end
+	
+	function testCompareLiteralIntToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3);
+	end
+
+	function testCompareLiteralIntToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3);
+	end	
+	
+	function testCompareLiteralDecimalToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3.0);
+	end
+		
+	function testCompareLiteralDecimalToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3.0);
+	end
+
+	function testCompareLiteralDecimalToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3.0);
+	end
+		
+	function testCompareLiteralDecimalToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3.0);
+	end
+	
+	function testCompareLiteralDecimalToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3.0);
+	end
+	
+	function testCompareLiteralDecimalToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3.0);
+	end
+
+	function testCompareLiteralDecimalToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3.0);
+	end
+		
+	function testCompareLiteralDecimalToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3.0);
+	end
+	
+	function testCompareLiteralDecimalToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3.0);
+	end
+	
+	function testCompareLiteralDecimalToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3.0);
+	end
+
+	function testCompareLiteralDecimalToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3.0);
+	end
+	
+		function testCompareLiteralFloatToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3.0e0);
+	end
+		
+	function testCompareLiteralFloatToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3.0e0);
+	end
+
+	function testCompareLiteralFloatToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3.0e0);
+	end
+		
+	function testCompareLiteralFloatToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3.0e0);
+	end
+	
+	function testCompareLiteralFloatToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3.0e0);
+	end
+	
+	function testCompareLiteralFloatToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3.0e0);
+	end
+
+	function testCompareLiteralFloatToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3.0e0);
+	end
+		
+	function testCompareLiteralFloatToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3.0e0);
+	end
+	
+	function testCompareLiteralFloatToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3.0e0);
+	end
+	
+	function testCompareLiteralFloatToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3.0e0);
+	end
+
+	function testCompareLiteralFloatToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3.0e0);
+	end
+	
+	function testCompareSmallIntVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(mySmallInt);
+	end
+		
+	function testCompareSmallIntVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(mySmallInt);
+	end
+
+	function testCompareSmallIntVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(mySmallInt);
+	end
+		
+	function testCompareSmallIntVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(mySmallInt);
+	end
+	
+	function testCompareSmallIntVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(mySmallInt);
+	end
+	
+	function testCompareSmallIntVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(mySmallInt);
+	end
+
+	function testCompareSmallIntVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(mySmallInt);
+	end
+		
+	function testCompareSmallIntVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(mySmallInt);
+	end
+	
+	function testCompareSmallIntVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(mySmallInt);
+	end
+	
+	function testCompareSmallIntVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(mySmallInt);
+	end
+
+	function testCompareSmallIntVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(mySmallInt);
+	end
+	
+	function testCompareIntVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myInt);
+	end
+		
+	function testCompareIntVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myInt);
+	end
+
+	function testCompareIntVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myInt);
+	end
+		
+	function testCompareIntVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myInt);
+	end
+	
+	function testCompareIntVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myInt);
+	end
+	
+	function testCompareIntVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myInt);
+	end
+
+	function testCompareIntVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myInt);
+	end
+		
+	function testCompareIntVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myInt);
+	end
+	
+	function testCompareIntVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myInt);
+	end
+	
+	function testCompareIntVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myInt);
+	end
+
+	function testCompareIntVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myInt);
+	end
+	
+	function testCompareFloatVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myFloat);
+	end
+		
+	function testCompareFloatVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myFloat);
+	end
+
+	function testCompareFloatVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myFloat);
+	end
+		
+	function testCompareFloatVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myFloat);
+	end
+	
+	function testCompareFloatVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myFloat);
+	end
+	
+	function testCompareFloatVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myFloat);
+	end
+
+	function testCompareFloatVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myFloat);
+	end
+		
+	function testCompareFloatVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myFloat);
+	end
+	
+	function testCompareFloatVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myFloat);
+	end
+	
+	function testCompareFloatVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myFloat);
+	end
+
+	function testCompareFloatVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myFloat);
+	end
+	
+	function testCompareDecimalVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myDecimal);
+	end
+		
+	function testCompareDecimalVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myDecimal);
+	end
+
+	function testCompareDecimalVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myDecimal);
+	end
+		
+	function testCompareDecimalVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myDecimal);
+	end
+	
+	function testCompareDecimalVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myDecimal);
+	end
+	
+	function testCompareDecimalVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myDecimal);
+	end
+
+	function testCompareDecimalVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myDecimal);
+	end
+		
+	function testCompareDecimalVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myDecimal);
+	end
+	
+	function testCompareDecimalVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myDecimal);
+	end
+	
+	function testCompareDecimalVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myDecimal);
+	end
+
+	function testCompareDecimalVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myDecimal);
+	end
+	
+	function testCompareCastedSmallIntToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as smallInt);
+	end
+		
+	function testCompareCastedSmallIntToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as smallInt);
+	end
+
+	function testCompareCastedSmallIntToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as smallInt);
+	end
+		
+	function testCompareCastedSmallIntToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as smallInt);
+	end
+	
+	function testCompareCastedSmallIntToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as smallInt);
+	end
+	
+	function testCompareCastedSmallIntToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as smallInt);
+	end
+
+	function testCompareCastedSmallIntToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as smallInt);
+	end
+		
+	function testCompareCastedSmallIntToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as smallInt);
+	end
+	
+	function testCompareCastedSmallIntToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as smallInt);
+	end
+	
+	function testCompareCastedSmallIntToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as smallInt);
+	end
+
+	function testCompareCastedSmallIntToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as smallInt);
+	end		function testCompareCastedIntToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as int);
+	end
+		
+	function testCompareCastedIntToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as int);
+	end
+
+	function testCompareCastedIntToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as int);
+	end
+		
+	function testCompareCastedIntToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as int);
+	end
+	
+	function testCompareCastedIntToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as int);
+	end
+	
+	function testCompareCastedIntToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as int);
+	end
+
+	function testCompareCastedIntToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as int);
+	end
+		
+	function testCompareCastedIntToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as int);
+	end
+	
+	function testCompareCastedIntToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as int);
+	end
+	
+	function testCompareCastedIntToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as int);
+	end
+
+	function testCompareCastedIntToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as int);
+	end
+	
+		function testCompareCastedFloatToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as float);
+	end
+		
+	function testCompareCastedFloatToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as float);
+	end
+
+	function testCompareCastedFloatToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as float);
+	end
+		
+	function testCompareCastedFloatToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as float);
+	end
+	
+	function testCompareCastedFloatToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as float);
+	end
+	
+	function testCompareCastedFloatToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as float);
+	end
+
+	function testCompareCastedFloatToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as float);
+	end
+		
+	function testCompareCastedFloatToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as float);
+	end
+	
+	function testCompareCastedFloatToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as float);
+	end
+	
+	function testCompareCastedFloatToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as float);
+	end
+
+	function testCompareCastedFloatToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as float);
+	end
+	
+	function testCompareCastedDecimalToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as decimal);
+	end
+		
+	function testCompareCastedDecimalToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as decimal);
+	end
+
+	function testCompareCastedDecimalToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as decimal);
+	end
+		
+	function testCompareCastedDecimalToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as decimal);
+	end
+	
+	function testCompareCastedDecimalToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as decimal);
+	end
+	
+	function testCompareCastedDecimalToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as decimal);
+	end
+
+	function testCompareCastedDecimalToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as decimal);
+	end
+		
+	function testCompareCastedDecimalToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as decimal);
+	end
+	
+	function testCompareCastedDecimalToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as decimal);
+	end
+	
+	function testCompareCastedDecimalToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as decimal);
+	end
+
+	function testCompareCastedDecimalToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as decimal);
+	end
+	
+	function testCompareCastedNumberToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as number);
+	end
+		
+	function testCompareCastedNumberToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as number);
+	end
+
+	function testCompareCastedNumberToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as number);
+	end
+		
+	function testCompareCastedNumberToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as number);
+	end
+	
+	function testCompareCastedNumberToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as number);
+	end
+	
+	function testCompareCastedNumberToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as number);
+	end
+
+	function testCompareCastedNumberToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as number);
+	end
+		
+	function testCompareCastedNumberToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as number);
+	end
+	
+	function testCompareCastedNumberToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as number);
+	end
+	
+	function testCompareCastedNumberToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as number);
+	end
+
+	function testCompareCastedNumberToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as number);
+	end
+	
+	function testCompareCastedSizedDecimalToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(3 as decimal(5,2));
+	end
+		
+	function testCompareCastedSizedDecimalToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(3 as decimal(5,2));
+	end
+
+	function testCompareCastedSizedDecimalToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(3 as decimal(5,2));
+	end
+		
+	function testCompareCastedSizedDecimalToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(3 as decimal(5,2));
+	end
+	
+	function testCompareCastedSizedDecimalToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(3 as decimal(5,2));
+	end
+	
+	function testCompareCastedSizedDecimalToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(3 as decimal(5,2));
+	end
+
+	function testCompareCastedSizedDecimalToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(3 as decimal(5,2));
+	end
+		
+	function testCompareCastedSizedDecimalToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(3 as decimal(5,2));
+	end
+	
+	function testCompareCastedSizedDecimalToIntVariable() {@Test}
+		compareAnyParamToIntVariable(3 as decimal(5,2));
+	end
+	
+	function testCompareCastedSizedDecimalToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(3 as decimal(5,2));
+	end
+
+	function testCompareCastedSizedDecimalToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(3 as decimal(5,2));
+	end
+
+	function testCompareAnySmallIntVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anySmallInt);
+	end
+		
+	function testCompareAnySmallIntVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anySmallInt);
+	end
+
+	function testCompareAnySmallIntVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anySmallInt);
+	end
+		
+	function testCompareAnySmallIntVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anySmallInt);
+	end
+	
+	function testCompareAnySmallIntVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anySmallInt);
+	end
+	
+	function testCompareAnySmallIntVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anySmallInt);
+	end
+
+	function testCompareAnySmallIntVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anySmallInt);
+	end
+		
+	function testCompareAnySmallIntVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anySmallInt);
+	end
+	
+	function testCompareAnySmallIntVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anySmallInt);
+	end
+	
+	function testCompareAnySmallIntVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anySmallInt);
+	end
+
+	function testCompareAnySmallIntVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anySmallInt);
+	end
+	
+	function testCompareAnyIntVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyInt);
+	end
+		
+	function testCompareAnyIntVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyInt);
+	end
+
+	function testCompareAnyIntVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyInt);
+	end
+		
+	function testCompareAnyIntVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyInt);
+	end
+	
+	function testCompareAnyIntVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyInt);
+	end
+	
+	function testCompareAnyIntVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyInt);
+	end
+
+	function testCompareAnyIntVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyInt);
+	end
+		
+	function testCompareAnyIntVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyInt);
+	end
+	
+	function testCompareAnyIntVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyInt);
+	end
+	
+	function testCompareAnyIntVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyInt);
+	end
+
+	function testCompareAnyIntVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyInt);
+	end
+	
+		function testCompareAnyFloatVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyFloat);
+	end
+		
+	function testCompareAnyFloatVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyFloat);
+	end
+
+	function testCompareAnyFloatVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyFloat);
+	end
+		
+	function testCompareAnyFloatVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyFloat);
+	end
+	
+	function testCompareAnyFloatVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyFloat);
+	end
+	
+	function testCompareAnyFloatVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyFloat);
+	end
+
+	function testCompareAnyFloatVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyFloat);
+	end
+		
+	function testCompareAnyFloatVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyFloat);
+	end
+	
+	function testCompareAnyFloatVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyFloat);
+	end
+	
+	function testCompareAnyFloatVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyFloat);
+	end
+
+	function testCompareAnyFloatVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyFloat);
+	end
+ 
+ 	function testCompareAnyDecimalVariableToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyDecimal);
+	end
+		
+	function testCompareAnyDecimalVariableToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyDecimal);
+	end
+
+	function testCompareAnyDecimalVariableToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyDecimal);
+	end
+		
+	function testCompareAnyDecimalVariableToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyDecimal);
+	end
+	
+	function testCompareAnyDecimalVariableToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyDecimal);
+	end
+	
+	function testCompareAnyDecimalVariableToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyDecimal);
+	end
+
+	function testCompareAnyDecimalVariableToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyDecimal);
+	end
+		
+	function testCompareAnyDecimalVariableToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyDecimal);
+	end
+	
+	function testCompareAnyDecimalVariableToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyDecimal);
+	end
+	
+	function testCompareAnyDecimalVariableToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyDecimal);
+	end
+
+	function testCompareAnyDecimalVariableToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyDecimal);
+	end
+	
+	function compareAnyParamToLiteralInt(p1 any)
+		LogResult.assertTrue1(p1 == 3);
+	end
+		
+	function compareAnyParamToLiteralDecimal(p1 any)
+		LogResult.assertTrue1(p1 == 3.00);
+	end
+
+	function compareAnyParamToLiteralFloat(p1 any)
+		LogResult.assertTrue1(p1 == 3.0e0);
+	end
+		
+	function compareAnyParamToAnySmallIntVariable(p1 any)
+		LogResult.assertTrue1(p1 == anySmallInt);
+	end
+	
+	function compareAnyParamToAnyIntVariable(p1 any)
+		LogResult.assertTrue1(p1 == anyInt);
+	end
+	
+	function compareAnyParamToAnyFloatVariable(p1 any)
+		LogResult.assertTrue1(p1 == anyFloat);
+	end
+
+	function compareAnyParamToAnyDecimalVariable(p1 any)
+		LogResult.assertTrue1(p1 == anyDecimal);
+	end
+		
+	function compareAnyParamToSmallIntVariable(p1 any)
+		LogResult.assertTrue1(p1 == mySmallInt);
+	end
+	
+	function compareAnyParamToIntVariable(p1 any)
+		LogResult.assertTrue1(p1 == myInt);
+	end
+	
+	function compareAnyParamToFloatVariable(p1 any)
+		LogResult.assertTrue1(p1 == myFloat);
+	end
+
+	function compareAnyParamToDecimalVariable(p1 any)
+		LogResult.assertTrue1(p1 == myDecimal);
+	end
+
+// additional
+
+	function testCompareSmallIntVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(mySmallInt2);
+	end
+		
+	function testCompareSmallIntVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(mySmallInt2);
+	end
+
+	function testCompareSmallIntVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(mySmallInt2);
+	end
+		
+	function testCompareSmallIntVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(mySmallInt2);
+	end
+	
+	function testCompareSmallIntVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(mySmallInt2);
+	end
+	
+	function testCompareSmallIntVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(mySmallInt2);
+	end
+
+	function testCompareSmallIntVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(mySmallInt2);
+	end
+		
+	function testCompareSmallIntVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(mySmallInt2);
+	end
+	
+	function testCompareSmallIntVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(mySmallInt2);
+	end
+	
+	function testCompareSmallIntVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(mySmallInt2);
+	end
+
+	function testCompareSmallIntVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(mySmallInt2);
+	end
+	
+	function testCompareIntVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myInt2);
+	end
+		
+	function testCompareIntVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myInt2);
+	end
+
+	function testCompareIntVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myInt2);
+	end
+		
+	function testCompareIntVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myInt2);
+	end
+	
+	function testCompareIntVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myInt2);
+	end
+	
+	function testCompareIntVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myInt2);
+	end
+
+	function testCompareIntVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myInt2);
+	end
+		
+	function testCompareIntVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myInt2);
+	end
+	
+	function testCompareIntVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myInt2);
+	end
+	
+	function testCompareIntVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myInt2);
+	end
+
+	function testCompareIntVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myInt2);
+	end
+	
+	function testCompareFloatVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myFloat2);
+	end
+		
+	function testCompareFloatVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myFloat2);
+	end
+
+	function testCompareFloatVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myFloat2);
+	end
+		
+	function testCompareFloatVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myFloat2);
+	end
+	
+	function testCompareFloatVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myFloat2);
+	end
+	
+	function testCompareFloatVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myFloat2);
+	end
+
+	function testCompareFloatVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myFloat2);
+	end
+		
+	function testCompareFloatVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myFloat2);
+	end
+	
+	function testCompareFloatVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myFloat2);
+	end
+	
+	function testCompareFloatVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myFloat2);
+	end
+
+	function testCompareFloatVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myFloat2);
+	end
+	
+	function testCompareDecimalVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(myDecimal2);
+	end
+		
+	function testCompareDecimalVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(myDecimal2);
+	end
+
+	function testCompareDecimalVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(myDecimal2);
+	end
+		
+	function testCompareDecimalVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(myDecimal2);
+	end
+	
+	function testCompareDecimalVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(myDecimal2);
+	end
+	
+	function testCompareDecimalVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(myDecimal2);
+	end
+
+	function testCompareDecimalVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(myDecimal2);
+	end
+		
+	function testCompareDecimalVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(myDecimal2);
+	end
+	
+	function testCompareDecimalVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(myDecimal2);
+	end
+	
+	function testCompareDecimalVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(myDecimal2);
+	end
+
+	function testCompareDecimalVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(myDecimal2);
+	end
+
+// Anys
+	function testCompareAnySmallIntVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anySmallInt2);
+	end
+		
+	function testCompareAnySmallIntVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anySmallInt2);
+	end
+
+	function testCompareAnySmallIntVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anySmallInt2);
+	end
+		
+	function testCompareAnySmallIntVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anySmallInt2);
+	end
+	
+	function testCompareAnySmallIntVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anySmallInt2);
+	end
+	
+	function testCompareAnySmallIntVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anySmallInt2);
+	end
+
+	function testCompareAnySmallIntVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anySmallInt2);
+	end
+		
+	function testCompareAnySmallIntVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anySmallInt2);
+	end
+	
+	function testCompareAnySmallIntVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anySmallInt2);
+	end
+	
+	function testCompareAnySmallIntVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anySmallInt2);
+	end
+
+	function testCompareAnySmallIntVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anySmallInt2);
+	end
+	
+	function testCompareAnyIntVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyInt2);
+	end
+		
+	function testCompareAnyIntVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyInt2);
+	end
+
+	function testCompareAnyIntVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyInt2);
+	end
+		
+	function testCompareAnyIntVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyInt2);
+	end
+	
+	function testCompareAnyIntVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyInt2);
+	end
+	
+	function testCompareAnyIntVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyInt2);
+	end
+
+	function testCompareAnyIntVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyInt2);
+	end
+		
+	function testCompareAnyIntVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyInt2);
+	end
+	
+	function testCompareAnyIntVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyInt2);
+	end
+	
+	function testCompareAnyIntVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyInt2);
+	end
+
+	function testCompareAnyIntVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyInt2);
+	end
+	
+	function testCompareAnyFloatVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyFloat2);
+	end
+		
+	function testCompareAnyFloatVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyFloat2);
+	end
+
+	function testCompareAnyFloatVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyFloat2);
+	end
+		
+	function testCompareAnyFloatVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyFloat2);
+	end
+	
+	function testCompareAnyFloatVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyFloat2);
+	end
+	
+	function testCompareAnyFloatVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyFloat2);
+	end
+
+	function testCompareAnyFloatVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyFloat2);
+	end
+		
+	function testCompareAnyFloatVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyFloat2);
+	end
+	
+	function testCompareAnyFloatVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyFloat2);
+	end
+	
+	function testCompareAnyFloatVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyFloat2);
+	end
+
+	function testCompareAnyFloatVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyFloat2);
+	end
+ 
+ 	function testCompareAnyDecimalVariable2ToLiteralInt() {@Test}
+		compareAnyParamToLiteralInt(anyDecimal2);
+	end
+		
+	function testCompareAnyDecimalVariable2ToLiteralDecimal() {@Test}
+		compareAnyParamToLiteralDecimal(anyDecimal2);
+	end
+
+	function testCompareAnyDecimalVariable2ToLiteralFloat() {@Test}
+		compareAnyParamToLiteralFloat(anyDecimal2);
+	end
+		
+	function testCompareAnyDecimalVariable2ToAnySmallIntVariable() {@Test}
+		compareAnyParamToAnySmallIntVariable(anyDecimal2);
+	end
+	
+	function testCompareAnyDecimalVariable2ToAnyIntVariable() {@Test}
+		compareAnyParamToAnyIntVariable(anyDecimal2);
+	end
+	
+	function testCompareAnyDecimalVariable2ToAnyFloatVariable() {@Test}
+		compareAnyParamToAnyFloatVariable(anyDecimal2);
+	end
+
+	function testCompareAnyDecimalVariable2ToAnyDecimalVariable() {@Test}
+		compareAnyParamToAnyDecimalVariable(anyDecimal2);
+	end
+		
+	function testCompareAnyDecimalVariable2ToSmallIntVariable() {@Test}
+		compareAnyParamToSmallIntVariable(anyDecimal2);
+	end
+	
+	function testCompareAnyDecimalVariable2ToIntVariable() {@Test}
+		compareAnyParamToIntVariable(anyDecimal2);
+	end
+	
+	function testCompareAnyDecimalVariable2ToFloatVariable() {@Test}
+		compareAnyParamToFloatVariable(anyDecimal2);
+	end
+
+	function testCompareAnyDecimalVariable2ToDecimalVariable() {@Test}
+		compareAnyParamToDecimalVariable(anyDecimal2);
+	end
+
+    
+end

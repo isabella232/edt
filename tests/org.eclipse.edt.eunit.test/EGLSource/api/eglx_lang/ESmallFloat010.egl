@@ -1,0 +1,244 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.services.ServiceInvocationException;
+
+
+/** @test
+  * @name ESmallFloat010
+  * @title ESmallFloat010 - runISAFunction
+  * @description testing smallFloat nullable variable with the isa operator
+  * @testcases runISAFunction01 - runISAFunctionn30
+  * @sources ESmallFloat010.egl
+  * @keywords smallFloat, isa
+ **/
+library ESmallFloat010 {}
+
+	isIt boolean;
+	expected boolean;
+	smallFloat1n smallFloat? = 1.4028e6;
+	
+	variation string;
+	
+	function assertTrue()
+	 	success boolean = (isIt == expected);
+	 	if (!success)
+	 		Syslib.writeStdOut(variation);
+	 		SysLib.writeStdOut(" actual " + isIt);
+	 		SysLib.writeStdOut(" expect " + expected);
+	 	end
+ 		LogResult.assertTrue(variation, success);
+ 	end
+
+	function runISAFunction01(){@Test}
+		variation = "smallFloat/nullable variable is any";
+		isIt = smallFloat1n isa any;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction02(){@Test}
+		variation = "smallFloat/nullable variable is bigInt";
+		isIt = smallFloat1n isa bigInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction03(){@Test}
+		variation = "smallFloat/nullable variable is boolean";
+		isIt = smallFloat1n isa boolean;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction04(){@Test}
+		variation = "smallFloat/nullable variable is date";
+		isIt = smallFloat1n isa date;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction05(){@Test}
+		variation = "smallFloat/nullable variable is decimal(4,2)";
+		isIt = smallFloat1n isa decimal(4,2);
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction06(){@Test}
+		variation = "smallFloat/nullable variable is decimal";
+		isIt = smallFloat1n isa decimal;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction07(){@Test}
+		variation = "smallFloat/nullable variable is dictionary";
+		isIt = smallFloat1n isa dictionary;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction08(){@Test}
+		variation = "smallFloat/nullable variable is float";
+		isIt = smallFloat1n isa float;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction09(){@Test}
+		variation = "smallFloat/nullable variable is int";
+		isIt = smallFloat1n isa int;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction10(){@Test}
+		variation = "smallFloat/nullable variable is number";
+		isIt = smallFloat1n isa number;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction11(){@Test}
+		variation = "smallFloat/nullable variable is smallFloat BUG 358484";
+		isIt = smallFloat1n isa smallFloat;
+		expected = true;
+		assertTrue();
+	end
+	
+	function runISAFunction12(){@Test}
+		variation = "smallFloat/nullable variable is smallInt";
+		isIt = smallFloat1n isa smallInt;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction13(){@Test}
+		variation = "smallFloat/nullable variable is string";
+		isIt = smallFloat1n isa string;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction14(){@Test}
+		variation = "smallFloat/nullable variable is timestamp";
+		isIt = smallFloat1n isa timestamp;
+		expected = false;
+		assertTrue();
+	end	
+	
+	function runISAFunction15(){@Test}
+		variation = "smallFloat/nullable variable is anyexception";
+		isIt = smallFloat1n isa anyexception;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction16(){@Test}
+		variation = "smallFloat/nullable variable is DynamicAccessException";
+		isIt = smallFloat1n isa DynamicAccessException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction17(){@Test}
+		variation = "smallFloat/nullable variable is InvalidArgumentException";
+		isIt = smallFloat1n isa InvalidArgumentException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction18(){@Test}
+		variation = "smallFloat/nullable variable is InvalidIndexException";
+		isIt = smallFloat1n isa InvalidIndexException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction19(){@Test}
+		variation = "smallFloat/nullable variable is InvalidPatternException";
+		isIt = smallFloat1n isa InvalidPatternException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction20(){@Test}
+		variation = "smallFloat/nullable variable is InvocationException";
+		isIt = smallFloat1n isa InvocationException;
+		expected = false;
+		assertTrue();
+	end
+
+//	function runISAFunction21(){@Test {targetLang = [JAVA]}}
+//		variation = "smallFloat/nullable variable is JavaObjectException";
+//		isIt = smallFloat1n isa JavaObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+//	
+//	function runISAFunction22(){@Test{targetLang = [JAVASCRIPT]}}
+//		variation = "smallFloat/nullable variable is JavaScriptObjectException";
+//		isIt = smallFloat1n isa JavaScriptObjectException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction23(){@Test}
+		variation = "smallFloat/nullable variable is NullValueException";
+		isIt = smallFloat1n isa NullValueException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction24(){@Test}
+		variation = "smallFloat/nullable variable is NumericOverflowException";
+		isIt = smallFloat1n isa NumericOverflowException;
+		expected = false;
+		assertTrue();
+	end
+
+	function runISAFunction26(){@Test}
+		variation = "smallFloat/nullable variable is ServiceInvocationException";
+		isIt = smallFloat1n isa ServiceInvocationException;
+		expected = false;
+		assertTrue();
+	end
+	
+//	function runISAFunction27(){@Test{targetLang = [JAVA]}}
+//		variation = "smallFloat/nullable variable is SQLException";
+//		isIt = smallFloat1n isa SQLException;
+//		expected = false;
+//		assertTrue();
+//	end
+	
+	function runISAFunction28(){@Test}
+		variation = "smallFloat/nullable variable is TypeCastException";
+		isIt = smallFloat1n isa TypeCastException;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction30(){@Test}
+		variation = "smallFloat/null is smallFloat";
+		smallFloat1n = null;
+		isIt = smallFloat1n isa smallFloat;
+		expected = false;
+		assertTrue();
+	end	
+		
+	function runISAFunction31(){@Test}
+		variation = "smallFloat/nullable variable is bytes";
+		isIt = smallFloat1n isa bytes;
+		expected = false;
+		assertTrue();
+	end
+	
+	function runISAFunction32(){@Test}
+		variation = "smallFloat/nullable variable is bytes(8)";
+		isIt = smallFloat1n isa bytes(8);
+		expected = false;
+		assertTrue();
+	end	
+end // ESmallFloat010

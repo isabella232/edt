@@ -1,0 +1,158 @@
+ /*
+ * Licensed Materials - Property of IBM
+ *
+ * Copyright IBM Corporation 2008. All Rights Reserved.
+ *
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
+package handlers; 
+
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridBehaviors;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextField;
+import eglx.http.HttpProxy;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import interfaces.FedWireSoap;
+import interfaces.GetParticipantsByLocation;
+import interfaces.GetParticipantsByLocationEnvelope;
+import interfaces.GetParticipantsByLocationResponseEnvelope;
+import services.Logger;
+
+
+handler FedWire type RUIHandler { initialUI = [ ui ] } 
+//	use PrettyXMLLib;   
+	
+	serviceType Combo{values=["get using SOAP"]};
+	invoke Button{text="invoke Service",onClick ::= invokeService};
+	clean Button{text="clear list",onClick ::= clearList};
+	const TIMEOUT int = 100000;
+	ui Box { columns=1,
+		background = "blue", width = 770, padding=11,
+		children = [inputSection, resultsBox] 
+	};
+	
+	cityField TextField{ margin=2, text="", width=300 , text="boston"};
+	stateField TextField{ margin=2, text="", width=300, text="ma" };
+	inputSection Box { columns = 1, children = [
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "City:", margin = 3, marginTop=5 },cityField]}, 
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "State:", margin = 3, marginTop=5 },stateField]},
+		new Box { children = [new HTML { font = "Verdana", color = "white", text = "Select the service call type:", margin = 3, marginTop=5 },serviceType]}, 
+		new Box { children = [invoke,clean]}
+	]};
+	resultsHeader HTML{ margin=3, font = "Verdana", color = "white", text = "Results:"};
+	
+	resultList any[] = new any[0];
+	
+	resultsgrid DataGrid { 
+		marginLeft=20,   
+ 		behaviors 		= [   
+ 			DataGridBehaviors.alternatingColor, 
+ 			DataGridBehaviors.tightCells 		],
+ 		headerBehaviors = [   
+ 			DataGridBehaviors.grayCells 		],   
+ 		columns = [
+	 		new DataGridColumn{name="RoutingNumber", displayName="RoutingNumber", width=100}, 
+	 		new DataGridColumn{name="TelegraphicName", displayName="TelegraphicName"},
+	 		new DataGridColumn{name="CustomerName", displayName="CustomerName", width=60},
+	 		new DataGridColumn{name="State", displayName="State", width=130}, 
+	 		new DataGridColumn{name="City", displayName="City", width=130}, 
+	 		new DataGridColumn{name="FundsTransferStatus", displayName="FundsTransferStatus", width=130}, 
+	 		new DataGridColumn{name="FundsSettlementOnlyStatus", displayName="FundsSettlementOnlyStatus", width=130}, 
+	 		new DataGridColumn{name="BookEntrySecuritiesTransferStatus", displayName="BookEntrySecuritiesTransferStatus", width=130}, 
+	 		new DataGridColumn{name="DateOfLastRevision", displayName="DateOfLastRevision", width=130} 
+ 		],
+ 		data = resultList
+ 	};
+ 	
+	resultsBox Box { columns=1, children = [
+		new Box { children = [resultsHeader, resultsGrid]}, 
+		originalXML
+	]};
+	originalXML TextField{ margin=2, text="", width = 700};
+
+	private function handleException( exception AnyException in, http IHttp in)
+		originalXML.text = http.getResponse().body;
+		call Logger.log(http.getRequest().body) using new HttpProxy() returning to handleEmptyResponse;
+		syslib.writeStderr(http.getRequest().body);
+		resultsHeader.text = "<br>An exception has occurred<p>";
+		resultsBox.height = 350;
+		resultsHeader.text += "message:" + exception.message + "<p>";
+		if( exception isa ServiceInvocationException )
+			resultsHeader.text += "ServiceKind:" + serviceKind(exception as ServiceInvocationException) + "<p>";
+			resultsHeader.text += "detail1:" + (exception as ServiceInvocationException).detail1 + "<p>";
+			resultsHeader.text += "detail2:" + (exception as ServiceInvocationException).detail2 + "<p>";
+			resultsHeader.text += "detail3:" + (exception as ServiceInvocationException).detail3 + "<p>";
+		end
+		resultsBox.children = [ 
+			resultsHeader
+		];
+	end
+	private function serviceKind( sie ServiceInvocationException in)returns(string)
+		case(sie.source)
+			when(eglx.services.ServiceKind.WEB)
+				return("WEB");
+			when(eglx.services.ServiceKind.NATIVE)
+				return("NATIVE");
+			when(eglx.services.ServiceKind.EGL)
+				return("EGL");
+			when(eglx.services.ServiceKind.REST)
+				return("REST");
+			otherwise
+				return("unknown");
+		end
+	end
+	
+	function invokeService( e Event in)
+		case( serviceType.getSelection())
+			when( 1 )
+				http IHttp = Resources.getResource("binding:srvc");
+				http.getRequest().headers = new dictionary(true, OrderingKind.byInsertion);
+				http.getRequest().headers["SOAPAction"] = "http://www.webservicex.net/GetParticipantsByLocation";
+				http.getRequest().headers["Content-Type"] = "text/xml; charset=UTF-8";
+				request GetParticipantsByLocationEnvelope;
+				request.Body.GetParticipantsByLocation.city = cityField.text;
+				request.Body.GetParticipantsByLocation.stateCode = stateField.text;
+				call FedWireSoap.GetParticipantsByLocation(request) using http returning to handleReturn onexception handleException;
+		end
+	end
+
+	function handleReturn(result GetParticipantsByLocationResponseEnvelope in, http IHttp in)
+		originalXML.text = http.getResponse().body;
+		call Logger.log(http.getResponse().body) using new HttpProxy() returning to handleEmptyResponse;
+		syslib.writestdout( "Result? " + result.Body.GetParticipantsByLocation.getParticipantsByLocationResult);
+	
+		if (result.Body.GetParticipantsByLocation.getParticipantsByLocationResult)
+			i int = 0;
+			while (i < result.Body.GetParticipantsByLocation.fedWireLists.TotalRecords)
+				i += 1;
+				resultList.appendElement(result.Body.GetParticipantsByLocation.fedWireLists.FedWires.fedWires[i]);
+			end
+			resultsgrid.data = resultList;
+		else
+			resultsgrid.data = new any[0];
+		end
+	end
+
+	function clearList( e event in )
+		originalXML.text = "";
+		resultsgrid.data = new any[0];
+	end
+	
+	function handleEmptyResponse()
+		//Auto-generated method stub
+	end
+	
+
+end

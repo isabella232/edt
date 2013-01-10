@@ -1,0 +1,14 @@
+package data;
+
+Record SimpleRecord
+  item1 string;
+  item2 int;
+  item3 decimal(10,2);
+end
+
+Record ArrayContainingRecord
+  item1 string[];
+  item2 int[];
+  item3 decimal(10,2)[];
+  item4 SimpleRecord[];
+end

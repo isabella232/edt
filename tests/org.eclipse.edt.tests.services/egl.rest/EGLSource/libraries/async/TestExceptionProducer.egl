@@ -1,0 +1,47 @@
+package libraries.async;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.services.ServiceInvocationException;
+import interfaces.IExceptionProducer;
+import services.ExceptionProducer;
+import utilities.CommonUtilities;
+
+// basic library
+library TestExceptionProducer
+	
+	private function handleServiceException(e AnyException in, http IHttp in)
+		if(e isa ServiceInvocationException)
+			if( (e as ServiceInvocationException).detail3.indexOf("index 0 is out of bounds") > 0)
+				LogResult.assertTrue("", true);
+				TestListMgr.nextTest();
+				return;
+			else 
+				if( (e as ServiceInvocationException).detail3.indexOf("The server encountered an internal error") > 0 &&
+					(e as ServiceInvocationException).detail3.indexOf("Apache Tomcat") > 0)
+					LogResult.assertTrue("", true);
+					TestListMgr.nextTest();
+					return;
+				end
+			end
+		end
+		TestListMgr.handleCallBackException(e, http);
+	end
+	
+	function testExcpetionProducer() {@Test}
+		call ExceptionProducer.produceException() using CommonUtilities.getResource("expprod") returning to verifyExceptionProducer onException handleServiceException;		
+	end
+	
+	function testExcpetionProducer2() {@Test}
+		call IExceptionProducer.produceException() using CommonUtilities.getResource("expprod") returning to verifyExceptionProducer onException handleServiceException;		
+	end
+	
+	function verifyExceptionProducer()
+		LogResult.assertTrue("InvalidIndexException is not caught when it should have been caught!!", false);
+		TestListMgr.nextTest();
+	end
+	
+end

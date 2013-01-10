@@ -1,0 +1,205 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+
+library isaLIB 
+
+    private variation string;
+    
+    function setVariation(varName string in)
+    	variation = varName;
+    end
+
+    function compareIF(ITEM1 string,  ITEM2 string    )
+ /*
+    	if(ITEM1 == ITEM2)
+            sysLib.writestdout("success " + variation);
+        else
+            sysLib.writestdout("failure " + variation);
+         end 
+*/
+    	LogResult.assertStringEqual(variation, ITEM1, ITEM2);
+   end
+   
+   function reportFailureWithText(info string)
+   		fullDetails string = info + variation;
+   		logResult.failed(fullDetails);
+   end
+
+end  // end isALIB
+
+Record isA_CONSTANTS 
+  VAGen_TRUE string; //char(1) ;
+  PROGRAM_NAME string; //char(20);
+  maxNumDigits string; //char(2);
+  VAGCOMPAT string; //char(1);
+  decimalsAlwaysOdd string; //char(1);
+  myResourceAssociation string; //char(50);  
+end // end isA_CONSTANTS
+
+Record isA_WS 
+  RESULT_COMPARE string; //char(2);            
+  EXPECTED_COMPARE string; //char(2);
+  hadFailure string; //char(1);
+  myType string; //char(4);
+  myLen smallInt;
+  myDec smallInt;
+end // end isA_WS
+
+
+Record isA18_DEC_D0 
+// Record used for maxNumericDigits = 18
+// DECIMAL - increasing length, no decimal places  
+  DECIMAL01D0 decimal(1) ; 
+  DECIMAL02D0 decimal(2) ;   
+  DECIMAL03D0 decimal(3) ; 
+  DECIMAL04D0 decimal(4) ; 
+  DECIMAL05D0 decimal(5) ; 
+  DECIMAL06D0 decimal(6) ; 
+  DECIMAL07D0 decimal(7) ; 
+  DECIMAL08D0 decimal(8) ; 
+  DECIMAL09D0 decimal(9) ; 
+  DECIMAL10D0 decimal(10) ; 
+  DECIMAL11D0 decimal(11) ; 
+  DECIMAL12D0 decimal(12) ; 
+  DECIMAL13D0 decimal(13) ; 
+  DECIMAL14D0 decimal(14) ; 
+  DECIMAL15D0 decimal(15) ; 
+  DECIMAL16D0 decimal(16) ; 
+  DECIMAL17D0 decimal(17) ; 
+  DECIMAL18D0 decimal(18) ;
+//  3 MONEY01D0 money(1,0) ;      // vagen did not have money type
+end // end isA18_DEC_D0
+
+Record isA31_DEC_D0 
+// Record used for maxNumericDigits = 31, 
+// DECIMAL - increasing length, no decimal places  
+  DECIMAL19D0 decimal(19) ;  // egl allows the even length
+  DECIMAL20D0 decimal(20) ; 
+  DECIMAL21D0 decimal(21) ; 
+  DECIMAL22D0 decimal(22) ; 
+  DECIMAL23D0 decimal(23) ; 
+  DECIMAL24D0 decimal(24) ; 
+  DECIMAL25D0 decimal(25) ; 
+  DECIMAL26D0 decimal(26) ; 
+  DECIMAL27D0 decimal(27) ; 
+  DECIMAL28D0 decimal(28) ; 
+  DECIMAL29D0 decimal(29) ; 
+  DECIMAL30D0 decimal(30) ; 
+  DECIMAL31D0 decimal(31) ;     
+end // end isA31_DEC_D0
+
+Record isA32_DEC_D0 
+// Record used for maxNumericDigits = 32 (Java Only)
+// DECIMAL - increasing length, no decimal places
+  DECIMAL32D0 decimal(32) ;
+end // end isA32_DEC_D0
+
+Record isA18_DEC_Dx 
+// Record used for maxNumericDigits = 18  
+// DECIMAL - max length with increasing number of decimal places  
+  DECIMAL18D00 decimal(18) ; 
+  DECIMAL18D01 decimal(18,1) ; 
+  DECIMAL18D02 decimal(18,2) ; 
+  DECIMAL18D03 decimal(18,3) ; 
+  DECIMAL18D04 decimal(18,4) ; 
+  DECIMAL18D05 decimal(18,5) ; 
+  DECIMAL18D06 decimal(18,6) ; 
+  DECIMAL18D07 decimal(18,7) ; 
+  DECIMAL18D08 decimal(18,8) ; 
+  DECIMAL18D09 decimal(18,9) ; 
+  DECIMAL18D10 decimal(18,10) ; 
+  DECIMAL18D11 decimal(18,11) ; 
+  DECIMAL18D12 decimal(18,12) ; 
+  DECIMAL18D13 decimal(18,13) ; 
+  DECIMAL18D14 decimal(18,14) ; 
+  DECIMAL18D15 decimal(18,15) ; 
+  DECIMAL18D16 decimal(18,16) ; 
+  DECIMAL18D17 decimal(18,17) ; 
+  DECIMAL18D18 decimal(18,18) ; 
+end // end isA18_DEC_Dx
+
+Record isA31_DEC_Dx 
+// Record used for maxNumericDigits = 31
+// DECIMAL - max length with increasing number of decimal places  
+  DECIMAL31D00 decimal(31) ; 
+  DECIMAL31D01 decimal(31,1) ; 
+  DECIMAL31D02 decimal(31,2) ; 
+  DECIMAL31D03 decimal(31,3) ; 
+  DECIMAL31D04 decimal(31,4) ; 
+  DECIMAL31D05 decimal(31,5) ; 
+  DECIMAL31D06 decimal(31,6) ; 
+  DECIMAL31D07 decimal(31,7) ; 
+  DECIMAL31D08 decimal(31,8) ; 
+  DECIMAL31D09 decimal(31,9) ; 
+  DECIMAL31D10 decimal(31,10) ; 
+  DECIMAL31D11 decimal(31,11) ; 
+  DECIMAL31D12 decimal(31,12) ; 
+  DECIMAL31D13 decimal(31,13) ; 
+  DECIMAL31D14 decimal(31,14) ; 
+  DECIMAL31D15 decimal(31,15) ; 
+  DECIMAL31D16 decimal(31,16) ; 
+  DECIMAL31D17 decimal(31,17) ; 
+  DECIMAL31D18 decimal(31,18) ; 
+  DECIMAL31D19 decimal(31,19) ; 
+  DECIMAL31D20 decimal(31,20) ;
+  DECIMAL31D21 decimal(31,21) ; 
+  DECIMAL31D22 decimal(31,22) ; 
+  DECIMAL31D23 decimal(31,23) ; 
+  DECIMAL31D24 decimal(31,24) ; 
+  DECIMAL31D25 decimal(31,25) ; 
+  DECIMAL31D26 decimal(31,26) ; 
+  DECIMAL31D27 decimal(31,27) ; 
+  DECIMAL31D28 decimal(31,28) ; 
+  DECIMAL31D29 decimal(31,29) ; 
+  DECIMAL31D30 decimal(31,30) ; 
+  DECIMAL31D31 decimal(31,31) ;          
+end // end isA31_DEC_Dx
+
+Record isA32_DEC_Dx
+// Record used for maxNumericDigits = 32
+// DECIMAL - max length with increasing number of decimal places  
+  DECIMAL32D00 decimal(32) ; 
+  DECIMAL32D01 decimal(32,1) ; 
+  DECIMAL32D02 decimal(32,2) ; 
+  DECIMAL32D03 decimal(32,3) ; 
+  DECIMAL32D04 decimal(32,4) ; 
+  DECIMAL32D05 decimal(32,5) ; 
+  DECIMAL32D06 decimal(32,6) ; 
+  DECIMAL32D07 decimal(32,7) ; 
+  DECIMAL32D08 decimal(32,8) ; 
+  DECIMAL32D09 decimal(32,9) ; 
+  DECIMAL32D10 decimal(32,10) ; 
+  DECIMAL32D11 decimal(32,11) ; 
+  DECIMAL32D12 decimal(32,12) ; 
+  DECIMAL32D13 decimal(32,13) ; 
+  DECIMAL32D14 decimal(32,14) ; 
+  DECIMAL32D15 decimal(32,15) ; 
+  DECIMAL32D16 decimal(32,16) ; 
+  DECIMAL32D17 decimal(32,17) ; 
+  DECIMAL32D18 decimal(32,18) ; 
+  DECIMAL32D19 decimal(32,19) ; 
+  DECIMAL32D20 decimal(32,20) ;
+  DECIMAL32D21 decimal(32,21) ; 
+  DECIMAL32D22 decimal(32,22) ; 
+  DECIMAL32D23 decimal(32,23) ; 
+  DECIMAL32D24 decimal(32,24) ; 
+  DECIMAL32D25 decimal(32,25) ; 
+  DECIMAL32D26 decimal(32,26) ; 
+  DECIMAL32D27 decimal(32,27) ; 
+  DECIMAL32D28 decimal(32,28) ; 
+  DECIMAL32D29 decimal(32,29) ; 
+  DECIMAL32D30 decimal(32,30) ; 
+  DECIMAL32D31 decimal(32,31) ;
+  DECIMAL32D32 decimal(32,32) ;               
+end // end isA32_DEC_Dx
+
+
+Record isA_OTHER_NUMS 
+// Other miscellaneous numbers, without decimal places  
+  SMALLINT_A smallint ; 
+  INT_A int ; 
+  BIGINT_A bigint ;  
+  smallFloat_A smallFloat;
+  float_A float;
+end // end isA_OTHER_NUMS 

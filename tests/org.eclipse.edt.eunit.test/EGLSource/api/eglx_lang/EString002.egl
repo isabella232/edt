@@ -1,0 +1,152 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString002
+  * @title EdtString002 - runConcatenationFunction
+  * @description testing string concatenation functions
+  * @testcases runConcatenationFunction01 - runConcatenationFunction18
+  * @sources EdtString002.egl
+  * @keywords string, concatenation
+ **/
+library EString002 {}
+
+	// Constant Declarations
+	const constFlexName string = "Fred Smith";
+	const constSecondName string = "FRED";
+	
+	// Variable Declarations
+	varFlexName string;
+	
+	nullFlexName string?;
+	nullFixedName string(4)?;
+	
+	concatResult string?;
+	desiredString string?;
+	spaces string = "   ";
+	tabs string = "		";
+	variation string;
+	
+	// Simple concatenation with + operator
+	function runConcatenationFunction01(){@Test}
+		variation = "constant concate +";
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName + constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction02(){@Test}
+		desiredString = constFlexName;
+		concatResult = nullFlexName + constFlexName;
+		variation = "null concate +";
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction03(){@Test}
+		desiredString = constFlexName;
+		concatResult = constFlexName + nullFlexName;
+		variation = "null concate +";
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	// Generate Exception with + operator
+	function runConcatenationFunction04(){@Test}
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName + constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction05(){@Test}
+		desiredString = constFlexName;
+		concatResult = nullFlexName + constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction06(){@Test}
+		desiredString = constFlexName;
+		concatResult = constFlexName + nullFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+
+	// Simple concatenation with :: operator
+	function runConcatenationFunction07(){@Test}
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName :: constFlexName;
+		variation = "constant concate ::";
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction08(){@Test}
+		desiredString = constFlexName;
+		concatResult = nullFlexName :: constFlexName;
+		variation = "null concate ::";
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction09(){@Test}
+		desiredString = constFlexName;
+		concatResult = constFlexName :: nullFlexName;
+		variation = "null concate ::";
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	// Generate Exception with :: operator
+	function runConcatenationFunction10(){@Test}
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName :: constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);	
+	end
+	
+	function runConcatenationFunction11(){@Test}
+		desiredString = constFlexName;
+		concatResult = nullFlexName :: constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction12(){@Test}
+		desiredString = constFlexName;
+		concatResult = constFlexName :: nullFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	// Simple concatenation with ?: operator
+	function runConcatenationFunction13(){@Test}
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName ?: constFlexName;
+		variation = "constant concate ?:";
+		LogResult.assertStringEqual1(desiredString, concatResult); 
+	end
+	
+	function runConcatenationFunction14(){@Test}
+		concatResult = nullFlexName ?: constFlexName;
+		variation ="null concate ?:";
+		LogResult.assertTrue1(concatResult == null);
+	end
+	
+	function runConcatenationFunction15(){@Test}
+		concatResult = constFlexName ?: nullFlexName;
+		variation = "null concate ?:";
+		LogResult.assertTrue1(concatResult == null);
+	end
+	
+	// Generate Exception with ?: operator
+	function runConcatenationFunction16(){@Test}
+		desiredString = "FREDFred Smith";
+		concatResult = constSecondName ?: constFlexName;
+		LogResult.assertStringEqual1(desiredString, concatResult);
+	end
+	
+	function runConcatenationFunction17(){@Test}
+			desiredString = constFlexName;
+			concatResult = nullFlexName ?: constFlexName;
+			LogResult.assertTrue1( concatResult == null );
+	end
+	
+	function runConcatenationFunction18(){@Test}
+		desiredString = constFlexName;
+		concatResult = constFlexName ?: nullFlexName;
+		LogResult.assertTrue1( concatResult == null );
+	end
+end

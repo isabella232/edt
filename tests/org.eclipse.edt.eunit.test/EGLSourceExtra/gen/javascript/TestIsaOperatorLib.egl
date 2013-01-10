@@ -1,0 +1,88 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestIsaOperatorLib
+* @title The function test program for the EGL ISA operator
+* @keywords ISA
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL ISA operator
+*/
+
+library TestIsaOperatorLib
+
+    anInt any = new int;
+    aString any = new string;
+    myRecord any = new myFlexRecord;
+    exType any?;
+
+    anInt1 any = new int[];
+    aString1 any = new string[];
+    myRecord1 any = new myFlexRecord[];
+    exType1 any?;
+
+    function setup()
+        exType any = new ExType("abc");
+        exType1 any = new ExType[];
+    end
+
+    function TestAny1d(){@Test{targetLang = [JAVASCRIPT]}}
+        setup();
+        LogResult.logStdOut("Check any string - 1d");
+        LogResult.assertTrue1(!(isaExType(aString)));
+    end
+
+    function TestAny2d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any integer - 2d");
+        LogResult.assertTrue1(!(isaExType(anInt)));
+    end
+
+    function TestAny3d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any record - 3d");
+        LogResult.assertTrue1(!(isaExType(myRecord)));
+    end
+
+    function TestAny4d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any external type - 4d");
+        LogResult.assertTrue1((isaExType(exType)));
+    end
+
+    function TestAnyArray1d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any string array-- 1d");
+        LogResult.assertTrue1(!(isaExTypeArray(aString1)));
+    end
+
+    function TestAnyArray2d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any integer array-- 2d");
+        LogResult.assertTrue1(!(isaExTypeArray(anInt1)));
+    end
+
+    function TestAnyArray3d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any record array-- 3d");
+        LogResult.assertTrue1(!(isaexTypeArray(myRecord1)));
+    end
+
+    function TestAnyArray4d(){@Test{targetLang = [JAVASCRIPT]}}
+        LogResult.logStdOut("Check any external type array-- 4d");
+        LogResult.assertTrue1((isaExTypeArray(exType1)));
+    end
+
+    function isaExType(item any in) returns(boolean)
+        return(item isa ExType);
+    end
+
+    function isaExTypeArray(item any in) returns(boolean)
+        return(item isa ExType[]);
+    end
+
+end
+
+record myFlexRecord
+    aChar string;
+    aMoney int;
+end
+

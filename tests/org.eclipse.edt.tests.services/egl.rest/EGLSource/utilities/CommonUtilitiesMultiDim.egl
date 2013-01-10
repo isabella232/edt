@@ -1,0 +1,67 @@
+package utilities;
+
+import data.ArrayContainingRecord;
+import data.SimpleRecord;
+import data.InnerFlexibleRecord;
+import data.OuterFlexibleRecord;
+import data.OuterFlexibleRecordMultiDim;
+
+// basic library
+library CommonUtilitiesMultiDim
+	
+	function init2DStringArray(_array string[][] inout)
+		if( _array == null )
+			_array = new string[][];
+		end
+		_array.removeAll();
+		tempArray string[];
+		tempArray.appendElement("1.1");
+		tempArray.appendElement("1.2");
+		tempArray.appendElement("1.3");
+		_array.appendElement(tempArray);
+		tempArray = new string[];
+		tempArray.appendElement("2.1");
+		tempArray.appendElement("2.2");
+		tempArray.appendElement("2.3");
+		_array.appendElement(tempArray);
+		tempArray = new string[];
+		tempArray.appendElement("3.1");
+		tempArray.appendElement("3.2");
+		tempArray.appendElement("3.3");
+		_array.appendElement(tempArray);		
+	end
+    function initOuterFlexibleRecordMultiDim(flex OuterFlexibleRecordMultiDim)
+        temp InnerFlexibleRecord;
+        tempArray string[] = new string[1];
+
+        tempArray[1] = "flex.item4.item1[1]";
+        tempArray.appendElement("flex.item4.item1[2]");
+        tempArray.appendElement("flex.item4.item1[3]");
+
+        temp.item1 = tempArray;
+        temp.item2 = "flex.item4.item2";
+        temp.item3 = 10;
+
+        flex.item1 = "flex.item1";
+        tempArray = new string[1];
+        tempArray[1] = "flex.item2[1]";
+        tempArray.appendElement("flex.item2[2]");
+        tempArray.appendElement("flex.item2[3]");
+        flex.item2 = tempArray;
+        flex.item4 = temp;
+		flex.item5 = new string[2][3][4];
+		lp1, lp2, lp3 int;
+		lp1Sz, lp2Sz, lp3Sz int;
+		lp1Sz = flex.item5.getSize();
+		for( lp1 from 1 to lp1Sz )
+			lp2Sz = flex.item5[lp1].getSize();
+			for( lp2 from 1 to lp2Sz )
+				lp3Sz = flex.item5[lp1][lp2].getSize();
+				for( lp3 from 1 to lp3Sz )
+					flex.item5[lp1][lp2][lp3] = "flex.item5[" + lp1 + "][" + lp2 + "][" + lp3 + "]";
+				end
+			end
+		end
+    end
+
+end

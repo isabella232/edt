@@ -1,0 +1,13 @@
+package fvt.datatypes;
+
+handler USERS
+    ID int;
+    NAME string;
+    EMAIL string;
+    BLDG string;
+    OFFICE string;
+    LAST_LOGIN date?;
+    USERID string;
+    PASSWORD string?;
+    GROUPS string;
+end

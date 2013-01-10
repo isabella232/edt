@@ -1,0 +1,34 @@
+package common;
+
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+
+library ChattyGabbyService
+
+    function loadRecentPosts(formData RequestRecord in) returns(ChattyGabbyRecords)
+		{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2", requestFormat = _FORM, responseFormat = json }}
+	end
+	// _FORM response not supported by the runtime, this now gives a validation error
+//    function loadRecentPosts2(formData RequestRecord in) returns(ChattyGabbyRecords)
+//		{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2", requestFormat = json, responseFormat = _FORM }}
+//	end
+    function loadRecentPosts3(formData RequestRecord in) returns(ChattyGabbyRecords)
+		{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2", requestFormat = NONE, responseFormat = json }}
+	end
+    function loadRecentPosts4(formData RequestRecord in) returns(ChattyGabbyRecords)
+		{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2", requestFormat = xml, responseFormat = USE_CONTENTTYPE }}
+	end
+    function loadRecentPosts5(formData RequestRecord in) returns(ChattyGabbyRecords)
+		{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2", requestFormat = _FORM, responseFormat = NONE }}
+	end
+
+    function postText(text String in, userId String in) returns(string)
+    	{@Rest{method = HttpMethod.PUT, uriTemplate = "http://chattygabby.com/cg/chatgabv2?action=btnPostText&TXT={text}&USRID={userId}" }}
+    end
+
+end
+
+record RequestRecord
+	action string;
+	startAtId string;
+end

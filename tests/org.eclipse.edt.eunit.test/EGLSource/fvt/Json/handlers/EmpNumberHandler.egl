@@ -1,0 +1,10 @@
+package fvt.Json.handlers;
+
+import eglx.json.JsonName;
+
+handler EmpNumberHandler
+//    department string{JSONName = "dept", FORMName = "dept"};
+//    value int{JSONName = "empno", FORMName = "empno"};
+    department string{@JSONName{"dept"}};
+    value int{@JSONName{"empno"}};
+end

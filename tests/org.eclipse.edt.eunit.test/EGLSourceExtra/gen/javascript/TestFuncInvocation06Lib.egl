@@ -1,0 +1,36 @@
+package gen.javascript;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation06Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation06Lib
+
+    exType ExType = new ExType("abc");
+
+    function testLocalInParametersRet4a(){@Test{targetLang =[JAVASCRIPT]}}
+        exType2 ExType = localInExternal(exType);
+        LogResult.logStdOut("Local function IN externaltype parameter - 4a");
+        LogResult.assertStringEqual1("cde", exType2.getData());
+    end
+
+    function testLocalInParametersRet4b(){@Test{targetLang =[JAVASCRIPT]}}
+        LogResult.logStdOut("Local function IN externaltype parameter - 4b");
+        LogResult.assertStringEqual1("cde", exType.getData());
+    end
+
+    function localInExternal(e ExType in) returns(ExType)
+        e.setData("cde");
+        return(e);
+    end
+
+end

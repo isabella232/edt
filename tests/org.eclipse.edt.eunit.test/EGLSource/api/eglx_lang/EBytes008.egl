@@ -1,0 +1,557 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EBytes008
+  * @title EBytes008
+  * @description testing conversions from various types to bytes
+  * @testcases runConversion01
+  * @sources EBytes008.egl
+  * @keywords bytes, conversion
+ **/
+library EBytes008
+	function runConversion01() {@Test}
+		x bigint = 2002008847296426722I;
+		b bytes(8) = x;
+		LogResult.assertTrue( "bigint 1 to bytes(8)", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion02() {@Test}
+		x bigint = 2002008847296426722I;
+		b bytes = x;
+		LogResult.assertTrue( "bigint 1 to bytes", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion03() {@Test}
+		x bigint = -2002008847296426722I;
+		b bytes(8) = x;
+		LogResult.assertTrue( "bigint 2 to bytes(8)", b == 0xe4376f8f7bb50d1e );
+	end
+
+	function runConversion04() {@Test}
+		x bigint = -2002008847296426722I;
+		b bytes = x;
+		LogResult.assertTrue( "bigint 2 to bytes", b == 0xe4376f8f7bb50d1e );
+	end
+
+	function runConversion05() {@Test}
+		x bigint = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid bigint to bytes", ok );
+	end
+
+	function runConversion06() {@Test}
+		x int = 1213094420;
+		b bytes(4) = x;
+		LogResult.assertTrue( "int 1 to bytes(4)", b == 0x484e5a14 );
+	end
+
+	function runConversion07() {@Test}
+		x int = 1213094420;
+		b bytes = x;
+		LogResult.assertTrue( "int 1 to bytes", b == 0x484e5a14 );
+	end
+
+	function runConversion08() {@Test}
+		x int = -1213094420;
+		b bytes(4) = x;
+		LogResult.assertTrue( "int 2 to bytes(4)", b == 0xb7b1a5ec );
+	end
+
+	function runConversion09() {@Test}
+		x int = -1213094420;
+		b bytes = x;
+		LogResult.assertTrue( "int 2 to bytes", b == 0xb7b1a5ec );
+	end
+
+	function runConversion10() {@Test}
+		x int = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid int to bytes", ok );
+	end
+
+	function runConversion11() {@Test}
+		x smallint = 8231i;
+		b bytes(2) = x;
+		LogResult.assertTrue( "smallint 1 to bytes(2)", b == 0x2027 );
+	end
+
+	function runConversion12() {@Test}
+		x smallint = 8231i;
+		b bytes = x;
+		LogResult.assertTrue( "smallint 1 to bytes", b == 0x2027 );
+	end
+
+	function runConversion13() {@Test}
+		x smallint = -8231i;
+		b bytes(2) = x;
+		LogResult.assertTrue( "smallint 2 to bytes(2)", b == 0xdfd9 );
+	end
+
+	function runConversion14() {@Test}
+		x smallint = -8231i;
+		b bytes = x;
+		LogResult.assertTrue( "smallint 2 to bytes", b == 0xdfd9 );
+	end
+
+	function runConversion15() {@Test}
+		x smallint = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid smallint to bytes", ok );
+	end
+
+	function runConversion16() {@Test}
+		x smallfloat = 9612.7368f;
+		b bytes(4) = x;
+		LogResult.assertTrue( "smallfloat 1 to bytes(4)", b == 0x461632f2 );
+	end
+
+	function runConversion17() {@Test}
+		x smallfloat = 9612.7368f;
+		b bytes = x;
+		LogResult.assertTrue( "smallfloat 1 to bytes", b == 0x461632f2 );
+	end
+
+	function runConversion18() {@Test}
+		x smallfloat = -9612.7368f;
+		b bytes(4) = x;
+		LogResult.assertTrue( "smallfloat 2 to bytes(4)", b == 0xc61632f2 );
+	end
+
+	function runConversion19() {@Test}
+		x smallfloat = -9612.7368f;
+		b bytes = x;
+		LogResult.assertTrue( "smallfloat 2 to bytes", b == 0xc61632f2 );
+	end
+
+	function runConversion20() {@Test}
+		x smallfloat = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid smallfloat to bytes", ok );
+	end
+
+	function runConversion21() {@Test}
+		x float = 4.781235e-118;
+		b bytes(8) = x;
+		LogResult.assertTrue( "float 1 to bytes(8)", b == 0x27934a8992f00f93 || b == 0x27934a8992f00f92 );
+	end
+
+	function runConversion22() {@Test}
+		x float = 4.781235e-118;
+		b bytes = x;
+		LogResult.assertTrue( "float 1 to bytes", b == 0x27934a8992f00f93 || b == 0x27934a8992f00f92 );
+	end
+
+	function runConversion23() {@Test}
+		x float = -4.781235e-118;
+		b bytes(8) = x;
+		LogResult.assertTrue( "float 2 to bytes(8)", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion24() {@Test}
+		x float = -4.781235e-118;
+		b bytes = x;
+		LogResult.assertTrue( "float 2 to bytes", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion25() {@Test}
+		x float = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid float to bytes", ok );
+	end
+
+	function runConversion26() {@Test}
+		x decimal(7) = 1048276;
+		b bytes(4) = x;
+		LogResult.assertTrue( "decimal(7) 1 to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion27() {@Test}
+		x decimal(7) = 1048276;
+		b bytes = x;
+		LogResult.assertTrue( "decimal(7) 1 to bytes", b == 0x1048276c );
+	end
+
+	function runConversion28() {@Test}
+		x decimal(7) = -1048276;
+		b bytes(4) = x;
+		LogResult.assertTrue( "decimal(7) 2 to bytes(4)", b == 0x1048276d );
+	end
+
+	function runConversion29() {@Test}
+		x decimal(7) = -1048276;
+		b bytes = x;
+		LogResult.assertTrue( "decimal(7) 2 to bytes", b == 0x1048276d );
+	end
+
+	function runConversion30() {@Test}
+		x decimal(7) = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid decimal(7) to bytes", ok );
+	end
+
+	function runConversion31() {@Test}
+		x decimal(7,5) = 10.48276;
+		b bytes(4) = x;
+		LogResult.assertTrue( "decimal(7,5) 1 to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion32() {@Test}
+		x decimal(7,5) = 10.48276;
+		b bytes = x;
+		LogResult.assertTrue( "decimal(7,5) 1 to bytes", b == 0x1048276c );
+	end
+
+	function runConversion33() {@Test}
+		x decimal(7,5) = -10.48276;
+		b bytes(4) = x;
+		LogResult.assertTrue( "decimal(7,5) 2 to bytes(4)", b == 0x1048276d );
+	end
+
+	function runConversion34() {@Test}
+		x decimal(7,5) = -10.48276;
+		b bytes = x;
+		LogResult.assertTrue( "decimal(7,5) 2 to bytes", b == 0x1048276d );
+	end
+
+	function runConversion35() {@Test}
+		x decimal(7,5) = 0;
+		ok boolean = false;
+		try
+			b bytes(1) = x;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid decimal(7,5) to bytes", ok );
+	end
+
+	function runConversion36() {@Test}
+		x bigint = 2002008847296426722I;
+		n number = x;
+		b bytes(8) = n;
+		LogResult.assertTrue( "number:bigint to bytes(8)", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion37() {@Test}
+		x bigint = 2002008847296426722I;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:bigint to bytes", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion38() {@Test}
+		x int = -1213094420;
+		n number = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "number:int to bytes(4)", b == 0xb7b1a5ec );
+	end
+
+	function runConversion39() {@Test}
+		x int = -1213094420;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:int to bytes", b == 0xb7b1a5ec );
+	end
+	
+	function runConversion40() {@Test}
+		x smallint = 8231i;
+		n number = x;
+		b bytes(2) = n;
+		LogResult.assertTrue( "number:smallint to bytes(2)", b == 0x2027 );
+	end
+
+	function runConversion41() {@Test}
+		x smallint = 8231i;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:smallint to bytes", b == 0x2027 );
+	end
+
+	function runConversion42() {@Test}
+		x smallfloat = -9612.7368f;
+		n number = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "number:smallfloat to bytes(4)", b == 0xc61632f2 );
+	end
+
+	function runConversion43() {@Test}
+		x smallfloat = -9612.7368f;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:smallfloat to bytes", b == 0xc61632f2 );
+	end
+	
+	function runConversion44() {@Test}
+		x float = -4.781235e-118;
+		n number = x;
+		b bytes(8) = n;
+		LogResult.assertTrue( "number:float to bytes(8)", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion45() {@Test}
+		x float = -4.781235e-118;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:float to bytes", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion46() {@Test}
+		x decimal(7) = 1048276;
+		n number = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "number:decimal(7) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion47() {@Test}
+		x decimal(7) = 1048276;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:decimal(7) to bytes", b == 0x1048276c );
+	end
+	
+	function runConversion48() {@Test}
+		x decimal(7,5) = 10.48276;
+		n number = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "number:decimal(7,5) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion49() {@Test}
+		x decimal(7,5) = 10.48276;
+		n number = x;
+		b bytes = n;
+		LogResult.assertTrue( "number:decimal(7,5) to bytes", b == 0x1048276c );
+	end
+
+	function runConversion50() {@Test}
+		x decimal(7,5) = 12.34567;
+		n number = x;
+		ok boolean = false;
+		try
+			b bytes(1) = n;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid number:decimal(7,5) to bytes", ok );
+	end
+
+	function runConversion51() {@Test}
+		x bigint = 2002008847296426722I;
+		n any = x;
+		b bytes(8) = n;
+		LogResult.assertTrue( "any:bigint to bytes(8)", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion52() {@Test}
+		x bigint = 2002008847296426722I;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:bigint to bytes", b == 0x1BC89070844AF2E2 );
+	end
+
+	function runConversion53() {@Test}
+		x int = -1213094420;
+		n any = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "any:int to bytes(4)", b == 0xb7b1a5ec );
+	end
+
+	function runConversion54() {@Test}
+		x int = -1213094420;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:int to bytes", b == 0xb7b1a5ec );
+	end
+	
+	function runConversion55() {@Test}
+		x smallint = 8231i;
+		n any = x;
+		b bytes(2) = n;
+		LogResult.assertTrue( "any:smallint to bytes(2)", b == 0x2027 );
+	end
+
+	function runConversion56() {@Test}
+		x smallint = 8231i;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:smallint to bytes", b == 0x2027 );
+	end
+
+	function runConversion57() {@Test}
+		x smallfloat = -9612.7368f;
+		n any = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "any:smallfloat to bytes(4)", b == 0xc61632f2 );
+	end
+
+	function runConversion58() {@Test}
+		x smallfloat = -9612.7368f;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:smallfloat to bytes", b == 0xc61632f2 );
+	end
+	
+	function runConversion59() {@Test}
+		x float = -4.781235e-118;
+		n any = x;
+		b bytes(8) = n;
+		LogResult.assertTrue( "any:float to bytes(8)", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion60() {@Test}
+		x float = -4.781235e-118;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:float to bytes", b == 0xa7934a8992f00f93 || b == 0xa7934a8992f00f92 );
+	end
+
+	function runConversion61() {@Test}
+		x decimal(7) = 1048276;
+		n any = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "any:decimal(7) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion62() {@Test}
+		x decimal(7) = 1048276;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:decimal(7) to bytes", b == 0x1048276c );
+	end
+	
+	function runConversion63() {@Test}
+		x decimal(7,5) = 10.48276;
+		n any = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "any:decimal(7,5) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion64() {@Test}
+		x decimal(7,5) = 10.48276;
+		n any = x;
+		b bytes = n;
+		LogResult.assertTrue( "any:decimal(7,5) to bytes", b == 0x1048276c );
+	end
+
+	function runConversion65() {@Test}
+		x decimal(7,5) = 0;
+		n any = x;
+		ok boolean = false;
+		try
+			b bytes(1) = n;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid any:decimal(7,5) to bytes", ok );
+	end
+
+	function runConversion66() {@Test}
+		LogResult.assertTrue("EString.toBytes, US-ASCII", "frog".toBytes( "US-ASCII" ) == 0x66726f67 );
+	end
+	
+	function runConversion67() {@Test}
+		str string = "cheese" :: EString.fromBytes( 0x20ac, "UTF-16BE" ) :: "0" :: EString.fromBytes( 0x1eac00a33141, "UTF-16BE" ) :: "0";
+		LogResult.assertTrue("EString.toBytes, UTF-8", str.toBytes( "UTF-8" ) == 0x636865657365e282ac30e1baacc2a3e3858130 );
+	end
+	
+	function runConversion68() {@Test}
+		LogResult.assertTrue("EString.toBytes, UTF-16BE", "1234".toBytes( "UTF-16BE" ) == 0x0031003200330034 );
+	end	
+	
+	function runConversion69() {@Test}
+		LogResult.assertTrue("EString.toBytes, UTF-16LE", "1234".toBytes( "UTF-16LE" ) == 0x3100320033003400 );
+	end	
+	
+	function runConversion70() {@Test}
+		try
+			bb bytes = "error".toBytes( "-<JUNK>-" );
+			LogResult.assertTrue( "Expecting exception from EString.toBytes()", false );
+		onException ( ex InvalidArgumentException )
+			LogResult.assertTrue( "Expecting exception from EString.toBytes()", true );
+		end
+	end
+	
+	function runConversion71() {@Test}
+		bb bytes = "1234".toBytes( "UTF-16" );
+		
+		// Bytes in UTF-16 may optionally begin with a byte-order mark (BOM) that indicates
+		// if it's big- or little-endian.  No BOM means big-endian.
+		UTF_16_BE_BOM bytes = 0xFEFF0031003200330034;
+		UTF_16_LE_BOM bytes = 0xFFFE3100320033003400;
+		UTF_16_NO_BOM bytes = 0x0031003200330034;
+		ok boolean = (bb == UTF_16_BE_BOM) ?? true : (bb == UTF_16_LE_BOM) ?? true : bb == UTF_16_NO_BOM;
+		LogResult.assertTrue( "EString.toBytes, UTF-16", ok );
+	end
+
+	function runConversion72() {@Test}
+		x decimal(7) = 1048276;
+		n decimal = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "decimal:decimal(7) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion73() {@Test}
+		x decimal(7) = 1048276;
+		n decimal = x;
+		b bytes = n;
+		LogResult.assertTrue( "decimal:decimal(7) to bytes", b == 0x1048276c );
+	end
+	
+	function runConversion74() {@Test}
+		x decimal(7,5) = 10.48276;
+		n decimal = x;
+		b bytes(4) = n;
+		LogResult.assertTrue( "decimal:decimal(7,5) to bytes(4)", b == 0x1048276c );
+	end
+
+	function runConversion75() {@Test}
+		x decimal(7,5) = 10.48276;
+		n decimal = x;
+		b bytes = n;
+		LogResult.assertTrue( "decimal:decimal(7,5) to bytes", b == 0x1048276c );
+	end
+
+	function runConversion76() {@Test}
+		x decimal(7,5) = 12.34567;
+		n decimal = x;
+		ok boolean = false;
+		try
+			b bytes(1) = n;			
+		onException ( tcx TypeCastException )
+			ok = true;
+		end
+		LogResult.assertTrue( "invalid decimal:decimal(7,5) to bytes", ok );
+	end
+end

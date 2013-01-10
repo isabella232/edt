@@ -1,0 +1,164 @@
+package client;
+
+import common.CUST;
+import server.CustomerPgm;
+
+// basic library
+library TestGetRecStatefully
+	
+	currentExpected int;
+	
+	expectedResults Cust[][] = [
+		[
+			new CUST{CUSTNO="0010100", CUSTNA="Meridien Electronics Limited", REPNO="43443", CONTAC="Alfredo Bayonne", CPHONE="206-865-4027", CFAX="206-865-4037", CADDR="10423 S.E. 30th Place", CCITY="Bellevue, WA", CCOUNT="U.S.A.", CZIP="98007", CZIPLO="1"}, 
+			new CUST{CUSTNO="0010200", CUSTNA="Royal Hardware Supplies", REPNO="20527", CONTAC="Arnie Podell", CPHONE="905-619-2045", CFAX="905-619-2073", CADDR="Maple View Plaza, 256 New St.", CCITY="Ajax, Ontario", CCOUNT="Canada", CZIP="L8D 4S6", CZIPLO="2"}, 
+			new CUST{CUSTNO="0010300", CUSTNA="Webster Appliances", REPNO="15196", CONTAC="Bob Wolfstadt", CPHONE="619-549-5212", CFAX="619-549-5222", CADDR="7350 Miramar Road, Suite 247", CCITY="San Diego, CA", CCOUNT="USA", CZIP="92121", CZIPLO="1"}, 
+			new CUST{CUSTNO="0010400", CUSTNA="ProLine Building Supplies", REPNO="13300", CONTAC="Bud Dobbs", CPHONE="905-403-4055", CFAX="905-403-4059", CADDR="73 Marchwood Road", CCITY="Burlington, Ontario", CCOUNT="Canada", CZIP="D8G 3V6", CZIPLO="2"}, 
+			new CUST{CUSTNO="0010700", CUSTNA="Universal Communications Ltd.", REPNO="64357", CONTAC="Dave Franken", CPHONE="415-545-5055", CFAX="415-545-5065", CADDR="720 Harrison Street", CCITY="San Francisco, CA", CCOUNT="USA", CZIP="94107", CZIPLO="1"}, 
+			new CUST{CUSTNO="0010800", CUSTNA="Baker Electronics", REPNO="15445", CONTAC="Dave Matthison", CPHONE="818-715-2045", CFAX="818-715-2045", CADDR="17150 Koll Center Parkway", CCITY="Pasadena, CA", CCOUNT="USA", CZIP="94566", CZIPLO="1"}, 
+			new CUST{CUSTNO="0010900", CUSTNA="Village Telephone", REPNO="16716", CONTAC="Dayle Swigger", CPHONE="707-367-4530", CFAX="707-367-4530", CADDR="2752 Betsy Ross Drive", CCITY="Santa Clara, CA", CCOUNT="USA", CZIP="95054", CZIPLO="1"}, 
+			new CUST{CUSTNO="0011100", CUSTNA="BelAir Communications incorp.", REPNO="12203", CONTAC="Doreen Coin", CPHONE="914-765-8021", CFAX="914-765-8031", CADDR="302 Washington Road", CCITY="White Plains, NY", CCOUNT="USA", CZIP="71530", CZIPLO="1"}, 
+			new CUST{CUSTNO="0011300", CUSTNA="Burnham Trading Inc", REPNO="41480", CONTAC="Efrem Helassie", CPHONE="613-225-0753", CFAX="613-225-0753", CADDR="91 Baseline Road", CCITY="Trenton, Ontario", CCOUNT="Canada", CZIP="C6B 9S3", CZIPLO="2"}, 
+			new CUST{CUSTNO="0011400", CUSTNA="Calderone Imports", REPNO="00477", CONTAC="Elsie Pons", CPHONE="407-392-7077", CFAX="407-392-7087", CADDR="702 S.W. 15th Street", CCITY="Boca Raton, FL", CCOUNT="USA", CZIP="33486", CZIPLO="1"} 
+		],
+		[
+			new CUST{CUSTNO="0011500", CUSTNA="The Communications Specialists", REPNO="05345", CONTAC="Esther Varrick", CPHONE="904-599-0377", CFAX="904-599-0387", CADDR="3011 E. Georgia St.", CCITY="Jacksonville, FL", CCOUNT="USA", CZIP="33830", CZIPLO="1"}, 
+			new CUST{CUSTNO="0011600", CUSTNA="Sudbury Radio and TV", REPNO="01900", CONTAC="Garry Morehouse", CPHONE="705-522-5044", CFAX="705-522-5047", CADDR="7 North Road", CCITY="Sudbury, Ontario", CCOUNT="Canada", CZIP="P7G 5A3", CZIPLO="2"}, 
+			new CUST{CUSTNO="0011700", CUSTNA="Christies Electronics Limited", REPNO="3", CONTAC="George Baccxrat", CPHONE="818-707-6767", CFAX="818-707-6777", CADDR="70223 Agoura Road, Suite 13", CCITY="Westlake Village, CA", CCOUNT="USA", CZIP="91354", CZIPLO="1"}, 
+			new CUST{CUSTNO="0011900", CUSTNA="Conroy Communications", REPNO="23456", CONTAC="Guy Lewis", CPHONE="918-825-4545", CFAX="448-4404", CADDR="701 S. Adair Street", CCITY="Pryor, OK", CCOUNT="USA", CZIP="74361", CZIPLO="1"}, 
+			new CUST{CUSTNO="0012100", CUSTNA="DaSilva Novelties", REPNO="17506", CONTAC="Henry Goldsmith", CPHONE="416-484-2766", CFAX="416-484-2795", CADDR="926 Danforth Avenue", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M5R 6C1", CZIPLO="2"}, 
+			new CUST{CUSTNO="0012200", CUSTNA="Communications-R-Us Corporation", REPNO="22004", CONTAC="Jack Deauson", CPHONE="416-695-3455", CFAX="416-695-3458", CADDR="82 Royal York Road", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M7G 5C1", CZIPLO="2"}, 
+			new CUST{CUSTNO="0012300", CUSTNA="Danton Industries", REPNO="98989", CONTAC="Jack Vance", CPHONE="905-316-2245", CFAX="905-316-2255", CADDR="78 John Street", CCITY="Markham, Ontario", CCOUNT="Canada", CZIP="M0J 8G4", CZIPLO="1"}, 
+			new CUST{CUSTNO="0012500", CUSTNA="Diplomat Sales and Liquidations", REPNO="00488", CONTAC=" Jim Doe Wan", CPHONE="905-369-1234", CFAX="416-343-1027", CADDR="Gerrard Square, 54 Gerrard St.", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M3S 6F0", CZIPLO="1"}, 
+			new CUST{CUSTNO="0012600", CUSTNA="Down Under Electronics Supplies", REPNO="42167", CONTAC="John Riley", CPHONE="416-694-1459", CFAX="416-694-1469", CADDR="206 Queen Street East", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M3S 6G7", CZIPLO="2"}, 
+			new CUST{CUSTNO="0012700", CUSTNA="Dunsten Electronics Inc.", REPNO="60585", CONTAC="Kersi Copper", CPHONE="416-633-1027", CFAX="416-633-1029", CADDR="1298 Victoria Park Avenue", CCITY="North York, Ontario", CCOUNT="Canada", CZIP="M0K 8F4", CZIPLO="2"} 
+		],
+		[
+			new CUST{CUSTNO="0012800", CUSTNA="Elite Communications", REPNO="26489", CONTAC="Marilyn Myerson", CPHONE="416-343-2077", CFAX="416-343-3079", CADDR="257 Queen Street East", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M8Y 3K9", CZIPLO="2"}, 
+			new CUST{CUSTNO="0012900", CUSTNA="Excalibur Products", REPNO="14557", CONTAC="Mark Nonne", CPHONE="608-273-0459", CFAX="608-273-0459", CADDR="1732 S Calhoun Road", CCITY="Madison, WI", CCOUNT="USA", CZIP="53151", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013000", CUSTNA="Fantastic Future Supplies", REPNO="63445", CONTAC="Mary Goodbar", CPHONE="905-316-4545", CFAX="905-316-4572", CADDR="Markham Place, 500 Steeles Ave E.", CCITY="Markham, Ontario", CCOUNT="Canada", CZIP="M9U 6M1", CZIPLO="2"}, 
+			new CUST{CUSTNO="0013100", CUSTNA="Fleetwood Industries Limited", REPNO="17616", CONTAC="Michael Stalwart", CPHONE="612-397-7703", CFAX="612-397-7705", CADDR="5235 Lindsay St.", CCITY="Minneapolis, MN", CCOUNT="USA", CZIP="55422", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013200", CUSTNA="Fjord Consumer Industries", REPNO="99706", CONTAC="Mike Bobbin", CPHONE="601-272-0578", CFAX="601-272-0578", CADDR="132 Industrial Parkway", CCITY="Lumberton, MS", CCOUNT="USA", CZIP="39455", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013300", CUSTNA="Forward Sales PLC", REPNO="08385", CONTAC="Mike McClenan", CPHONE="011-44-817-582204", CFAX="011-44-817-582204", CADDR="57 Purley Way,", CCITY="Croydon, Surrey", CCOUNT="UK", CZIP="CR3 3QG", CZIPLO="3"}, 
+			new CUST{CUSTNO="0013400", CUSTNA="Communications Fournier", REPNO="13497", CONTAC="Larry Schweyer", CPHONE="514-534-2953", CFAX="514-534-2977", CADDR="3162 Rue Ste Catherine", CCITY="Montreal, Quebec", CCOUNT="Canada", CZIP="E6P 2S3", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013500", CUSTNA="Gallery Sales and Liquidations", REPNO="64616", CONTAC="Mostafa Egoury", CPHONE="416-961-2722", CFAX="416-961-2752", CADDR="73 University Avenue", CCITY="Toronto, Ontario", CCOUNT="Canada", CZIP="M9K 6G7", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013600", CUSTNA="Gaylord Electronics Supplies", REPNO="16733", CONTAC="Nancy Bluebeard", CPHONE="203-257-7291", CFAX="203-257-7292", CADDR="893 Inwood Road", CCITY="Rocky Hill, CT", CCOUNT="USA", CZIP="06072", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013700", CUSTNA="Gerrard Electronics", REPNO="63798", CONTAC="Nand Wadhandi", CPHONE="908-329-4502", CFAX="908-329-4503", CADDR="198 Mountainside Rd.", CCITY="Mendham, NJ", CCOUNT="USA", CZIP="07945", CZIPLO="1"} 
+		],
+		[ 
+			new CUST{CUSTNO="0013800", CUSTNA="Global Telephone & Telegraph", REPNO="60754", CONTAC="Nic Samson", CPHONE="309-797-4512", CFAX="309-797-4514", CADDR="71 Vincent Ave., Peoria Industrial Park", CCITY="Peoria, IL", CCOUNT="USA", CZIP="62839", CZIPLO="1"}, 
+			new CUST{CUSTNO="0013900", CUSTNA="Gold Label Direct Sales", REPNO="42666", CONTAC="PJ Rodgers", CPHONE="314-232-1407", CFAX="314-232-1407", CADDR="1383 Chaffee Rd", CCITY="St Louis, MO", CCOUNT="USA", CZIP="63146", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014000", CUSTNA="Kangaroo Communications Limited", REPNO="70245", CONTAC="Roger Barrett", CPHONE="011-612-354-4554", CFAX="011-612-354-4554", CADDR="32 Green St.", CCITY="Sydney", CCOUNT="Australia", CZIP="5068", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014100", CUSTNA="Gordon Di Palma Partners", REPNO="25760", CONTAC="Paul Kelsey", CPHONE="212-745-2272", CFAX="212-745-2287", CADDR="1336 Broadway, 6th floor", CCITY="New York, NY", CCOUNT="USA", CZIP="10018", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014200", CUSTNA="Graham Bell Outlet", REPNO="14844", CONTAC="Phil Erwin", CPHONE="316-266-2005", CFAX="316-266-2005", CADDR="2110 West Harry", CCITY="Wichita, KS", CCOUNT="USA", CZIP="67209", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014300", CUSTNA="Grand Communications Inc.", REPNO="61221", CONTAC="Phyllis Porwitt", CPHONE="716-987-4402", CFAX="716-987-4599", CADDR="3 Seneca Ave", CCITY="Buffalo, NY", CCOUNT="USA", CZIP="15710", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014400", CUSTNA="Great Neck Industries", REPNO="20882", CONTAC="Randy Filskilin", CPHONE="716-987-2103", CFAX="716-987-2106", CADDR="826 Liberty Ave", CCITY="Buffalo, NY", CCOUNT="USA", CZIP="69104", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014500", CUSTNA="Green Belt Associates", REPNO="33109", CONTAC="Raymond Daugh", CPHONE="918-357-2045", CFAX="918-357-2045", CADDR="14207 E. 55th St.", CCITY="Broken Arrow, OK", CCOUNT="USA", CZIP="74014", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014600", CUSTNA="Haliburton Sales", REPNO="27949", CONTAC="Roy Molar", CPHONE="404-238-7205", CFAX="404-238-7215", CADDR="3002 Trade Port Blvd, Suite 1010", CCITY="Atlanta, GA.", CCOUNT="USA", CZIP="30354", CZIPLO="1"}, 
+			new CUST{CUSTNO="0014700", CUSTNA="Handy Communications", REPNO="22174", CONTAC="Steve Gould", CPHONE="703-276-6646", CFAX="703-276-6656", CADDR="7253 Wilson Boulevard", CCITY="Arlington, VA", CCOUNT="USA", CZIP="22205", CZIPLO="1"} 
+		],
+		[
+			new CUST{CUSTNO="0014800", CUSTNA="Hanover Communications Limited", REPNO="21808", CONTAC="Stu Lindley", CPHONE="310-645-2044", CFAX="310-645-2064", CADDR="7600 Airport Boulevard", CCITY="Los Angeles, CA", CCOUNT="USA", CZIP="90045", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015000", CUSTNA="Hawaii Industries", REPNO="17061", CONTAC="Ted Von Ryan", CPHONE="510-277-5045", CFAX="510-277-5055", CADDR="2751 South Pointe Avenue", CCITY="Oakland, CA", CCOUNT="USA", CZIP="91761", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015100", CUSTNA="Henderson Sales & Liquidations", REPNO="39592", CONTAC="Ted Zibello", CPHONE="412-237-5045", CFAX="412-237-5045", CADDR="Belmont and Sixth Avenue", CCITY="York, PA", CCOUNT="USA", CZIP="17403", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015200", CUSTNA="Hi-Tech Communications", REPNO="10462", CONTAC="Thomas Hazelton", CPHONE="011-44-373-401225", CFAX="011-44-373-401235", CADDR="Unit 31, Markton Trading Estate,", CCITY="Frome, Somerset             OK", CCOUNT="UK", CZIP="BA11 5NP", CZIPLO="3"}, 
+			new CUST{CUSTNO="0015300", CUSTNA="Holiday Sales", REPNO="14915", CONTAC="William Riso", CPHONE="905-891-5677", CFAX="905-891-5697", CADDR="305 Appleby Line", CCITY="Missisauga, Ontario", CCOUNT="Canada", CZIP="M9B 7F5", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015400", CUSTNA="Hollister Promotions Limited", REPNO="65424", CONTAC="Yutaka Mori", CPHONE="215-293-5642", CFAX="215-293-5652", CADDR="32nd and Chestnut Street", CCITY="Philadelphia, PA", CCOUNT="USA", CZIP="19104", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015500", CUSTNA="Holmes Liquidations", REPNO="14977", CONTAC="Zoltan Stockwell", CPHONE="914-684-7223", CFAX="914-684-7225", CADDR="502 Chemung St.", CCITY="Painted Post, NY", CCOUNT="USA", CZIP="14870", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015600", CUSTNA="House of Telephones", REPNO="00589", CONTAC="Richard Beaudry", CPHONE="206-803-4593", CFAX="206-803-4693", CADDR="1140 Burnet Road", CCITY="Austin, TX", CCOUNT="USA", CZIP="78758", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015700", CUSTNA="Hudson Valley Electronics", REPNO="35454", CONTAC="Patty Smythe", CPHONE="408-256-2059", CFAX="408-256-2077", CADDR="1008 South Rd", CCITY="Poughkeepsie, NY", CCOUNT="USA", CZIP="12601", CZIPLO="1"}, 
+			new CUST{CUSTNO="0015800", CUSTNA="Humber Bay Industries", REPNO="41575", CONTAC="James Bond", CPHONE="617-547-2048", CFAX="617-547-2048", CADDR="719 First Street", CCITY="Cambridge, MA", CCOUNT="USA", CZIP="02142", CZIPLO="1"} 
+		],
+		[
+			new CUST{CUSTNO="0015900", CUSTNA="Imperial Communications", REPNO="30101", CONTAC="Natalie Corona", CPHONE="715-848-1302", CFAX="715-848-1302", CADDR="3019 W Stewart Ave", CCITY="Wausau, WI", CCOUNT="USA", CZIP="54401", CZIPLO="1"}, 
+			new CUST{CUSTNO="0016000", CUSTNA="A/S Mobiltelefon", REPNO="77107", CONTAC="Hr. direktoer M. Nielsen", CPHONE="011-45-45932055", CFAX="011-45-45932059", CADDR="Tvaergade 26B, st. tv., Menigheden", CCITY="AAby", CCOUNT="Denmark", CZIP="DK-9000", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016100", CUSTNA="Royal Communications", REPNO="08505", CONTAC="Peter Smythe", CPHONE="011-44-784-245066", CFAX="011-44-784-245076", CADDR="Regal House, Chaucer Road", CCITY="Ashford, Middlesex", CCOUNT="UK", CZIP="TW15 3RW", CZIPLO="3"}, 
+			new CUST{CUSTNO="0016200", CUSTNA="Les Algorythmes", REPNO="65468", CONTAC="Marcel Bienvenue", CPHONE="011-331-38824402", CFAX="011-331-38824412", CADDR="25, Avenue D'Italie", CCITY="Bagnolet, Paris", CCOUNT="France", CZIP="93170", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016300", CUSTNA="Supersoft", REPNO="72305", CONTAC="Alain Rabeuf", CPHONE="011-331-38767412", CFAX="011-331-38767422", CADDR="200, Avenue Franklin-Roosevelt", CCITY="Thiers", CCOUNT="France", CZIP="63300", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016400", CUSTNA="La Calixtine", REPNO="40275", CONTAC="Gerard Ramare", CPHONE="011-336-32450455", CFAX="011-336-32450465", CADDR="Rue du Fort-Gambetta", CCITY="Metz", CCOUNT="France", CZIP="57070", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016500", CUSTNA="Technopole 2000", REPNO="43876", CONTAC="Martine Ratti", CPHONE="011-331-38727403", CFAX="011-331-38727413", CADDR="1807, Avenue Anne-Marie", CCITY="Marsaille", CCOUNT="France", CZIP="13015", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016600", CUSTNA="L'Equipe", REPNO="20995", CONTAC="Mona Sainte-Marie", CPHONE="011-331-38670455", CFAX="011-331-38670465", CADDR="307, Route de la Reine", CCITY="Issy-les-Moulineaux", CCOUNT="France", CZIP="92130", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016700", CUSTNA="Galaxie", REPNO="34812", CONTAC="Emannuelle Salomon", CPHONE="011-336-62450475", CFAX="011-336-62450477", CADDR="Route d'Houppeville", CCITY="Cleon", CCOUNT="France", CZIP="76140", CZIPLO="2"}, 
+			new CUST{CUSTNO="0016800", CUSTNA="L'Aviation", REPNO="34066", CONTAC="Pierre Bardot", CPHONE="011-336-62380487", CFAX="011-336-62380488", CADDR="43, Boulevard de Nord", CCITY="Calais", CCOUNT="France", CZIP="62100", CZIPLO="2"} 
+		],
+		[
+			new CUST{CUSTNO="0016900", CUSTNA="Vatine Informatique", REPNO="30955", CONTAC="Yves Cappelle", CPHONE="011-331-38120465", CFAX="011-331-38120475", CADDR="17, Avenue De Bois", CCITY="Boulogne-Billancort", CCOUNT="France", CZIP="92100", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017000", CUSTNA="Computer Friends B.V.", REPNO="48672", CONTAC="Hans Maas", CPHONE="011-3120-513-5067", CFAX="011-3120-513-5077", CADDR="Postbus 577", CCITY="Amsterdam", CCOUNT="Netherlands", CZIP="1420 AD", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017100", CUSTNA="Gran Almacen de Electronica", REPNO="62035", CONTAC="Gaston Quezada", CPHONE="011-562-633-2015", CFAX="011-562-633-2025", CADDR="Providencia 65, Casilla", CCITY="Santiago", CCOUNT="Chile", CZIP="3630", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017200", CUSTNA="Telefonia Mobil", REPNO="64782", CONTAC="José Juan Peña", CPHONE="011-343-401-8245", CFAX="011-343-401-8255", CADDR="Via Augusta, 101", CCITY="Barcelona", CCOUNT="Spain", CZIP="08021", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017300", CUSTNA="La Casa de la Telefonia", REPNO="64956", CONTAC="Juan Pérez García", CPHONE="011-345-448-3057", CFAX="011-345-448-3059", CADDR="Calle Pérez Galdós, 23", CCITY="Cazalla de la Sierra, Sevilla", CCOUNT="Spain", CZIP="41022", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017400", CUSTNA="Suministros de Oficina", REPNO="64320", CONTAC="Francisco Ayala Morales", CPHONE="011-341-274-5656", CFAX="011-341-274-5666", CADDR="Calle Serrano, 44 - pta. 10", CCITY="Madrid", CCOUNT="Spain", CZIP="28000", CZIPLO="2"}, 
+			new CUST{CUSTNO="0017500", CUSTNA="Loja da Eletronica", REPNO="73075", CONTAC="Alessandro Xavier Pasqua", CPHONE="011-5511-886-2013", CFAX="011-5511-886-2016", CADDR="Juscelino Kubitscheck Av., 1422 T3 10A", CCITY="Sao Paulo", CCOUNT="Brazil", CZIP="04543-000", CZIPLO="1"}, 
+			new CUST{CUSTNO="0017600", CUSTNA="Telefonia Movel Ltda.", REPNO="73450", CONTAC="Ivando Goncalves Pinheiro", CPHONE="011-5521-678-7256", CFAX="011-5521-678-7281", CADDR="Presidente Vargas Av., 824", CCITY="Rio de Janeiro", CCOUNT="Brazil", CZIP="20071-001", CZIPLO="1"}, 
+			new CUST{CUSTNO="0017700", CUSTNA="Artigos de Escritorio Ltda.", REPNO="73282", CONTAC="Eduardo Roberto Pereira", CPHONE="011-5561-214-3255", CFAX="416-800-8000", CADDR="Osmar Cunha Av., 148", CCITY="Brasilia", CCOUNT="Brazil", CZIP="88015-100", CZIPLO="1"}, 
+			new CUST{CUSTNO="0017800", CUSTNA="TeleComms Pte Ltd", REPNO="40592", CONTAC="Kwang June Wen", CPHONE="011-65-3201598", CFAX="011-65-3201599", CADDR="10 Exeter Road", CCITY="Singapore", CCOUNT="Singapore", CZIP="0923", CZIPLO="1"} 
+		],
+		[
+			new CUST{CUSTNO="0909090", CUSTNA="I&B&M&A&B", REPNO="12345", CONTAC="Mr. Customer", CPHONE="416-448-9809", CFAX="416-448-4545", CADDR="1150 E&A Ave", CCITY="North York", CCOUNT="Canada", CZIP="M1M 2N2", CZIPLO="1"}
+		] 
+	];
+	
+	function test1(){@Test}
+		currentExpected = 1;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test2(){@Test}
+		currentExpected = 2;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test3(){@Test}
+		currentExpected = 3;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test4(){@Test}
+		currentExpected = 4;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test5(){@Test}
+		currentExpected = 5;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test6(){@Test}
+		currentExpected = 6;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test7(){@Test}
+		currentExpected = 7;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function test8(){@Test}
+		currentExpected = 8;
+    	call CustomerPgm.getCustomers() using new HttpProxy returning to verifyResults onException handleException;
+	end
+	
+	function verifyResults(retResult CUST[] in)
+		LogResult.assertBigIntEqual("array size grp:" + currentExpected, expectedResults[currentExpected].getSize(), retResult.getSize());
+		for(idx int from 1 to retResult.getSize())
+			validateCust("group[" + currentExpected + "] + cust[" + idx + "].", expectedResults[currentExpected][idx], retResult[idx]);
+		end
+		TestListMgr.nextTest();			
+	end
+	private function validateCust(prefix string in, expected CUST in, actual CUST in)
+		LogResult.assertStringEqual(prefix + "CADDR", expected.CADDR, actual.CADDR);
+		LogResult.assertStringEqual(prefix + "CCITY", expected.CCITY, actual.CCITY);
+		LogResult.assertStringEqual(prefix + "CCOUNT", expected.CCOUNT, actual.CCOUNT);
+		LogResult.assertStringEqual(prefix + "CFAX", expected.CFAX, actual.CFAX);
+		LogResult.assertStringEqual(prefix + "CONTAC", expected.CONTAC, actual.CONTAC);
+		LogResult.assertStringEqual(prefix + "CPHONE", expected.CPHONE, actual.CPHONE);
+		LogResult.assertStringEqual(prefix + "CUSTNA", expected.CUSTNA, actual.CUSTNA);
+		LogResult.assertStringEqual(prefix + "CUSTNO", expected.CUSTNO, actual.CUSTNO);
+		LogResult.assertStringEqual(prefix + "CZIP", expected.CZIP, actual.CZIP);
+		LogResult.assertStringEqual(prefix + "CZIPLO", expected.CZIPLO, actual.CZIPLO);
+		LogResult.assertStringEqual(prefix + "REPNO", expected.REPNO, actual.REPNO);
+	end	
+	function handleException(exp AnyException in, http IHTTP)
+		TestListMgr.handleCallBackException(exp, http);
+	end
+end

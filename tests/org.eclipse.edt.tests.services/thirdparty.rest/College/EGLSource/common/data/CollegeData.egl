@@ -1,0 +1,60 @@
+package common.data;
+
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+record CollegeRec {@XMLRootElement{name="colleges", namespace="http://openshpe.shpe.org/commons"}}
+	college CollegeData[] {@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+end
+     
+record FormDataRec
+	data String;
+end
+     
+record CollegeData {@XMLRootElement{name="college", namespace="http://openshpe.shpe.org/commons"}}
+	id string ? {@XMLAttribute} = null;
+	name string{@XMLAttribute};
+	href string ? {@XMLAttribute{namespace="http://www.w3.org/1999/xlink"}} = null;
+	_url string {@XMLElement{name="url",namespace="http://openshpe.shpe.org/commons"}};
+	duration string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	_private boolean{@XMLElement{name="private",namespace="http://openshpe.shpe.org/commons"}};
+	forProfit boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	opeId string?{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	statistics Statistics ? {@XMLElement{namespace="http://openshpe.shpe.org/commons"}} = null;
+	address Address?{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	awardsOffered AwardsOffered?{@XMLElement{namespace="http://openshpe.shpe.org/commons"}} = null;
+end
+	
+record Statistics
+	stat Stat{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+end
+
+record Stat
+	statTerm string{@XMLAttribute};
+	statYear string{@XMLAttribute};
+	collegeId string{@XMLAttribute};
+	totalStudents int{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	totalUndergrad int{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	percentageOfHispanic float{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	percentageOfStudentsInSTEM float{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	maleFemaleRatio float{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+end
+
+record Address
+	address string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	city string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	state string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	country string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	postalCode string{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	lat string ? {@XMLElement{namespace="http://openshpe.shpe.org/commons"}} = null;
+	lon string ? {@XMLElement{namespace="http://openshpe.shpe.org/commons"}} = null;
+end
+
+record AwardsOffered
+	associateDegree boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	bachelorsDegree boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	mastersDegree boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	phdDegree boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+	otherNonDegreeAwards boolean{@XMLElement{namespace="http://openshpe.shpe.org/commons"}};
+end

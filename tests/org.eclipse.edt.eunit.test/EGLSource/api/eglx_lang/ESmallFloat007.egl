@@ -1,0 +1,350 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name ESmallFloat007
+  * @title ESmallFloat007 - runConversionFunction
+  * @description testing conversion from smallFloat to/from other types
+  * @testcases runConversionFunction01 - runConversionFunctionn34
+  * @sources ESmallFloat007.egl
+  * @keywords smallFloat, 
+ **/
+library ESmallFloat007 {}
+
+	expectedFloat smallFloat?;
+	actualFloat smallFloat;
+	variation string;
+	
+	function assertTrue()
+ 		LogResult.assertSmallFloatEqual(variation, expectedFloat, actualFloat);
+ 	end
+ 	
+  	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		variation = "int implicit smallFloat conversion";
+		actual int = 7;
+		actualFloat = actual;
+		expectedFloat = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction02(){@Test}		
+		variation = "negative int implicit smallFloat conversion";
+		actual int = -7;
+		actualFloat = actual;
+		expectedFloat = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction03(){@Test}
+		variation = "int? implicit smallFloat conversion";
+		actual int? = 7;
+		actualFloat = actual;
+		expectedFloat = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction04(){@Test}
+		variation = "decimal implicit smallFloat conversion";
+		actual decimal(5,2) = 123.45;
+		actualFloat = actual;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction05(){@Test}
+		variation = "negative decimal implicit smallFloat conversion";
+		actual decimal(5,2) = -123.45;
+		actualFloat = actual;
+		expectedFloat = -123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction06(){@Test}
+		variation = "decimal() implicit smallFloat conversion";
+		actual decimal = 123.45;
+		actualFloat = actual;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction07(){@Test}
+		variation = "decimal? implicit smallFloat conversion";
+		actual decimal(5,2)? = 123.45;
+		actualFloat = actual;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction08(){@Test}
+		variation = "decimal()? implicit smallFloat conversion";
+		actual decimal? = 123.45;
+		actualFloat = actual;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction09(){@Test}
+		variation = "float implicit smallFloat conversion1";
+		actual float = 2.539E7;
+		actualFloat = actual;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction10(){@Test}
+		variation = "negative float implicit smallFloat conversion2";
+		actual float = -2.539e7;
+		actualFloat = actual;
+		expectedFloat = -25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction11(){@Test}
+		variation = "float? implicit smallFloat conversion1";
+		actual float? = 2.539E7;
+		actualFloat = actual;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction12(){@Test}
+		variation = "smallFloat implicit smallFloat conversion1";
+		actual smallFloat = 2.539E7;
+		actualFloat = actual;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction13(){@Test}
+		variation = "negative smallFloat implicit smallFloat conversion1";
+		actual smallFloat = 2.539E7;
+		actualFloat = actual;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction14(){@Test}
+		variation = "smallFloat? implicit smallFloat conversion1";
+		actual smallFloat? = 2.539E7;
+		actualFloat = actual;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction15(){@Test}
+		variation = "bigint implicit smallFloat conversion";
+		actual smallFloat = 8928234898823I;
+		actualFloat = actual;
+		expectedFloat = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction16(){@Test}
+		variation = "negative bigint implicit smallFloat conversion";
+		actual smallFloat = -8928234898823I;
+		actualFloat = actual;
+		expectedFloat = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction17(){@Test}
+		variation = "bigint? implicit smallFloat conversion";
+		actual smallFloat? = 8928234898823I;
+		actualFloat = actual;
+		expectedFloat = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction18(){@Test}
+		variation = "float explicit smallFloat conversion";
+		actual float = 7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction19(){@Test}		
+		variation = "negative float explicit smallFloat conversion";
+		actual float = -7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = -7;
+		assertTrue();
+	end
+		
+	function runConversionFunction20(){@Test}
+		variation = "float? explicit float conversion";
+		actual smallFloat? = 7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 7;
+		assertTrue();
+	end
+	
+	function runConversionFunction21(){@Test}
+		variation = "decimal explicit smallFloat conversion";
+		actual decimal(5,2) = 123.45;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction22(){@Test}
+		variation = "negative decimal explicit smallFloat conversion";
+		actual decimal(5,2) = -123.45;
+		actualFloat = actual as smallFloat;
+		expectedFloat = -123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction23(){@Test}
+		variation = "decimal() explicit smallFloat conversion";
+		actual decimal = 123.45;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+		function runConversionFunction24(){@Test}
+		variation = "decimal? explicit smallFloat conversion";
+		actual decimal(5,2)? = 123.45;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction25(){@Test}
+		variation = "decimal()? explicit smallFloat conversion";
+		actual decimal? = 123.45;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 123.45;
+		assertTrue();
+	end
+	
+	function runConversionFunction26(){@Test}
+		variation = "float explicit smallFloat conversion1";
+		actual float = 2.539E7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction27(){@Test}
+		variation = "negative float explicit smallFloat conversion2";
+		actual float = -2.539e7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = -25390000;
+		assertTrue();
+	end	
+	
+	function runConversionFunction28(){@Test}
+		variation = "float? explicit smallFloat conversion1";
+		actual float? = 2.539E7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+
+	function runConversionFunction29(){@Test}
+		variation = "smallFloat explicit smallFloat conversion1";
+		actual smallFloat = 2.539E7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction30(){@Test}
+		variation = "negative smallFloat explicit smallFloat conversion1";
+		actual smallFloat = 2.539E7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction31(){@Test}
+		variation = "smallFloat? explicit smallFloat conversion1";
+		actual smallFloat? = 2.539E7;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 25390000;
+		assertTrue();
+	end
+	
+	function runConversionFunction32(){@Test}
+		variation = "bigint explicit smallFloat conversion";
+		actual smallFloat = 8928234898823I;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction33(){@Test}
+		variation = "negative bigint explicit smallFloat conversion";
+		actual smallFloat = -8928234898823I;
+		actualFloat = actual as smallFloat;
+		expectedFloat = -8928234898823I;
+		assertTrue();
+	end
+	
+	function runConversionFunction34(){@Test}
+		variation = "bigint? explicit smallFloat conversion";
+		actual smallFloat? = 8928234898823I;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 8928234898823I;
+		assertTrue();
+	end
+
+	function runConversionFunction35(){@Test}
+		variation = "bytes(4) implicit smallFloat conversion";
+		actual bytes(4) = 0x1BADF00D;
+		actualFloat = actual;
+		expectedFloat = 2.8775578e-22;
+		assertTrue();
+	end
+	
+	function runConversionFunction37(){@Test}
+		variation = "bytes implicit smallFloat conversion";
+    	actual bytes = 0x7BA56DC3;
+		actualFloat = actual;
+		expectedFloat = 1.7179104e36;
+		assertTrue();		
+	end
+	
+	function runConversionFunction38(){@Test}
+		variation = "bytes(4)? implicit smallFloat conversion";
+		actual bytes(4)? = 0x7BA56DC3;
+		actualFloat = actual;
+		expectedFloat = 1.7179104e36;
+		assertTrue();	
+	end
+	
+	function runConversionFunction39(){@Test}
+		variation = "bytes? implicit smallFloat conversion";
+		actual bytes? = 0x7BA56DC3;
+		actualFloat = actual;
+		expectedFloat = 1.7179104e36;
+		assertTrue();
+	end
+	
+	function runConversionFunction40(){@Test}
+		variation = "bytes explicit smallFloat conversion";
+    	actual bytes = 0x7BA56DC3;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 1.7179104e36;
+		assertTrue();
+	end
+	
+	function runConversionFunction41(){@Test}
+		variation = "bytes? explicit smallFloat conversion";
+    	actual bytes? = 0x7BA56DC3;
+		actualFloat = actual as smallFloat;
+		expectedFloat = 1.7179104e36;
+		assertTrue();
+	end
+
+end // ESmallFloat007

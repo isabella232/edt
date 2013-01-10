@@ -1,0 +1,780 @@
+package fvt.xml;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+import eglx.xml.XmlLib;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+/* 
+* @name DictionaryLib
+* @title The function test program for kinds of Dictionary
+* @keywords Dictionary
+* @author EDT team
+* @createDate 2011/08/23
+* @description 
+* Test record with a null Dictionary, Dictionary boolean values, float values, 
+* decimal values, integer values, string values
+*/
+
+library DictionaryLib
+
+	function testXMLOnJava() {@Test{targetLang = [JAVA]}}
+		// Revert all the Test annotations to include Java execution
+		// on this enhancement has been worked
+		LogResult.skipped("Java Only Bug 351892");
+	end
+	
+    function testNullDictionary(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        rec.dict = null;
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        rec2.dict = null;
+
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Null Dictionary");
+        LogResult.assertTrue("Fail in rec2.dict, not null or size > 0", rec2.dict == null || rec2.dict.size() == 0);
+    end
+
+    function testNullDictionary2(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        rec.dict = null;
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec2{};
+        rec2.dict = null;
+
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Null Dictionary");
+        LogResult.assertTrue("Fail in rec2.dict, not null or size > 0", rec2.dict == null || rec2.dict.size() == 0);
+    end
+
+    function testNullDictionary3(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        rec.dict = new Dictionary{};
+        rec.dict["abc"] = "abc";
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec2{};
+        rec2.dict = null;
+
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Null Dictionary - 1");
+        LogResult.assertTrue("Fail in rec2.dict != null", rec2.dict != null);
+        LogResult.assertTrue("Fail in rec2.dict.size()", rec2.dict.size() == 1);
+    end
+
+    function testNullDictionary4(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        rec.dict = new Dictionary{};
+        rec.dict["abc"] = "abc";
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec2{};
+        rec2.dict = null;
+
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Null Dictionary - 2");
+        try
+            LogResult.assertStringEqual("Fail in rec2.dict", "abc", rec2.dict["abc"] as string);
+        onException(ex AnyException)
+            LogResult.logStdOut("Dictionary[\"abc\"] not found or not equal to \"abc\"");
+            LogResult.assertStringEqual("Fail in rec2.dict", "abc", rec2.dict["abc"] as string);
+        end
+    end
+
+    function initRecDictBool(rec DictRec)
+        rec.dict = new Dictionary{};
+        rec.dict["booltrue"] = true;
+        rec.dict["boolfalse"] = false;
+        rec.dict["stringtrue"] = "true";
+        rec.dict["stringfalse"] = "false";
+        rec.dict["capstringtrue"] = "TRUE";
+        rec.dict["capstringfalse"] = "FALSE";
+        rec.dict["booltrueArray"] = [true, true, false];
+    end
+
+    function testBooleanValuesBoolTrueIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary booleans - 1");
+        LogResult.assertTrue("Fail in rec2.dict['booltrue'] isa string", rec2.dict["booltrue"] isa string);
+    end
+
+    function testBooleanValuesBoolTrueAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary booleans - 2");
+        LogResult.assertStringEqual("Fail in rec2.dict['booltrue']", "true", rec2.dict["booltrue"]);
+    end
+
+    function testBooleanValuesBoolFalseIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary booleans - 3");
+        LogResult.assertTrue("Fail in rec2.dict['boolfalse'] isa string", rec2.dict["boolfalse"] isa string);
+    end
+
+    function testBooleanValuesBoolFalseAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary booleans - 4");
+        LogResult.assertStringEqual("Fail in !(rec2.dict['boolfalse'])", "false", rec2.dict["boolfalse"]);
+    end
+
+    function testBooleanValuesStrTrueIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 5");
+        LogResult.assertTrue("Fail in rec2.dict['stringtrue'] isa string", rec2.dict["stringtrue"] isa string);
+    end
+
+    function testBooleanValuesStrTrueAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 6");
+        LogResult.assertStringEqual("Fail in rec2.dict['stringtrue']", "true", rec2.dict["stringtrue"]);
+    end
+
+    function testBooleanValuesStrFalseIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 7");
+        LogResult.assertTrue("Fail in rec2.dict['stringfalse'] isa string", rec2.dict["stringfalse"] isa string);
+    end
+
+    function testBooleanValuesStrFalseAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 8");
+        LogResult.assertStringEqual("Fail in !(rec2.dict['stringfalse'])", "false", rec2.dict["stringfalse"]);
+    end
+
+    function testBooleanValuesCapStrTrueIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 9");
+        LogResult.assertTrue("Fail in rec2.dict['capstringtrue'] isa string", rec2.dict["capstringtrue"] isa string);
+    end
+
+    function testBooleanValuesCapStrTrueAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 10");
+        LogResult.assertStringEqual("Fail in rec2.dict['capstringtrue']", "TRUE", rec2.dict["capstringtrue"]);
+    end
+
+    function testBooleanValuesCapStrFalseIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 11");
+        LogResult.assertTrue("Fail in rec2.dict['capstringfalse'] isa string", rec2.dict["capstringfalse"] isa string);
+    end
+
+    function testBooleanValuesCapStrFalseAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean - 12");
+        LogResult.assertStringEqual("Fail in !(rec2.dict['capstringfalse'])", "FALSE", rec2.dict["capstringfalse"]);
+    end
+
+    function testBooleanArray(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictBool(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String boolean[]");
+        ary string[] = rec2.dict["booltrueArray"] as string[];
+        LogResult.assertBigIntEqual("Fail in rec2.dict['booltrueArray']getSize)", 3, ary.getSize());
+        LogResult.assertStringEqual("Fail in rec2.dict['booltrueArray'][1])", "true", ary[1]);
+        LogResult.assertStringEqual("Fail in rec2.dict['booltrueArray'][2])", "true", ary[2]);
+        LogResult.assertStringEqual("Fail in rec2.dict['booltrueArray'][3])", "false", ary[3]);
+    end
+
+    function initRecDictFloat(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        flt float = 1245.44E20;
+        rec.dict["float"] = flt;
+    end
+
+    function testFloatValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictFloat(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Float - 1");
+        LogResult.assertTrue("Fail in rec2.dict['float'], not a float", rec2.dict["float"] isa string);
+    end
+
+    function testFloatValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictFloat(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Float - 2");
+        LogResult.assertFloatEqual1(rec.dict["float"] as float, rec2.dict["float"] as float);
+    end
+
+    function initRecDictDecimal(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        dec decimal(9, 4) = 12345.345;
+        rec.dict["decimal"] = dec;
+    end
+
+    function testDecimalValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictDecimal(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Decimal - 1");
+        LogResult.assertTrue("Fail in rec2.dict['decimal'], not a decimal", rec2.dict["decimal"] isa string);
+    end
+
+    function testDecimalValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictDecimal(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Decimal - 2");
+        LogResult.assertDecimalEqual1(rec.dict["decimal"] as decimal(9, 4), rec2.dict["decimal"] as decimal(9, 4));
+    end
+
+    function initRecDictString(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        str string = "abcdefghijk";
+        rec.dict["string"] = str;
+    end
+
+    function testStringValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictString(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 1");
+        LogResult.assertTrue("Fail in rec2.dict['string'], not a string", rec2.dict["string"] isa string);
+    end
+
+    function testStringValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictString(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 2");
+        LogResult.assertStringEqual1(rec.dict["string"], rec2.dict["string"]);
+    end
+
+    function initRecDictLString(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        str string(5) = "abcdefghijk";
+        rec.dict["string"] = str;
+    end
+
+    function testLStringValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictLString(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 1");
+        LogResult.assertTrue("Fail in rec2.dict['string'], not a string", rec2.dict["string"] isa string);
+    end
+
+    function testLStringValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictLString(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 2");
+        LogResult.assertStringEqual1("abcde", rec2.dict["string"]);
+    end
+
+    function initRecDictInt(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        i int = 12345;
+        rec.dict["integer"] = i;
+    end
+
+    function testIntegerValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictInt(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Integer - 1");
+        LogResult.assertTrue("Fail in rec2.dict['integer'], not an integer", rec2.dict["integer"] isa string);
+    end
+
+    function testIntegerValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictInt(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Integer - 2");
+        LogResult.assertBigIntEqual1(rec.dict["integer"] as int, rec2.dict["integer"] as int);
+    end
+
+    function initRecDictStr(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        rec.dict["fakeFloat"] = "1.23eE45";
+        rec.dict["fakeDecimal"] = "1.23.45";
+        rec.dict["fakeFloat2"] = "1.23E45x";
+        rec.dict["faketrue"] = "tru";
+        rec.dict["fakefalse"] = "falsex";
+    end
+
+    function testStringValuesFakeFloatIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 1");
+        LogResult.assertTrue("Fail in rec2.dict['fakeFloat'], not a string", rec2.dict["fakeFloat"] isa string);
+    end
+
+    function testStringValuesFakeFloatAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 2");
+        LogResult.assertStringEqual1(rec.dict["fakeFloat"] as string, rec2.dict["fakeFloat"] as string);
+    end
+
+    function testStringValuesFakeDecimalIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 3");
+        LogResult.assertTrue("Fail in rec2.dict['fakeDecimal'], not a string", rec2.dict["fakeDecimal"] isa string);
+    end
+
+    function testStringValuesFakeDecimalAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 4");
+        LogResult.assertStringEqual1(rec.dict["fakeDecimal"] as string, rec2.dict["fakeDecimal"] as string);
+    end
+
+    function testStringValuesFakeFloat2Isa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 5");
+        LogResult.assertTrue("Fail in rec2.dict['fakeFloat2'], not a string", rec2.dict["fakeFloat2"] isa string);
+    end
+
+    function testStringValuesFakeFloat2As(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 6");
+        LogResult.assertStringEqual1(rec.dict["fakeFloat2"] as string, rec2.dict["fakeFloat2"] as string);
+    end
+
+    function testStringValuesFakeTrueIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 7");
+        LogResult.assertTrue("Fail in rec2.dict['faketrue'], not a string", rec2.dict["faketrue"] isa string);
+    end
+
+    function testStringValuesFakeTrueAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 8");
+        LogResult.assertStringEqual1(rec.dict["faketrue"] as string, rec2.dict["faketrue"] as string);
+    end
+
+    function testStringValuesFakeFalseIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 9");
+        LogResult.assertTrue("Fail in rec2.dict['fakefalse'], not a string", rec2.dict["fakefalse"] isa string);
+    end
+
+    function testStringValuesFakeFalseAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictStr(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary String - 10");
+        LogResult.assertStringEqual1(rec.dict["fakefalse"] as string, rec2.dict["fakefalse"] as string);
+    end
+    function initRecDictDate(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        rec.dict["datefield"] = "12/09/1927" as date;
+    end
+
+    function testDateValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictDate(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Date - 1");
+        LogResult.assertTrue("Fail in rec2.dict['datefield'], not an string", rec2.dict["datefield"] isa string);
+    end
+
+    function testDateValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictDate(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary date - 2");
+        LogResult.assertStringEqual1(stringlib.format(rec.dict["datefield"] as date, "yyyy-MM-dd"), rec2.dict["datefield"]);
+    end
+
+    function initRecDictTimestamp(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        i int = 12345;
+        rec.dict["Timestampfield"] = "2009-03-27 14:12:05" as timestamp("yyyyMMddHHmmss");
+    end
+
+    function testTimestampValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictTimestamp(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Timestamp - 1");
+        LogResult.assertTrue("Fail in rec2.dict['Timestampfield'], not an string", rec2.dict["Timestampfield"] isa string);
+    end
+
+    function testTimestampValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictTimestamp(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Timestamp - 2");
+        str string = rec2.dict["Timestampfield"];
+        ts Timestamp("yyyyMMddHHmmss") = str as Timestamp("yyyyMMddHHmmss");
+        LogResult.assertTimestampEqual1(rec.dict["Timestampfield"], ts);
+    end
+
+    function initRecDictTime(rec DictRec)
+        rec.dict = new Dictionary{};
+
+        rec.dict["timefield"] = "14:09:37" as time;
+    end
+
+    function testTimeValuesIsa(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictTime(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary Time - 1");
+        LogResult.assertTrue("Fail in rec2.dict['timefield'], not an string", rec2.dict["timefield"] isa string);
+    end
+
+    function testTimeValuesAs(){@Test{targetLang = [JAVASCRIPT]}}
+        rec DictRec{};
+        initRecDictTime(rec);
+
+        //xml string = xmllib.convertToXML(rec);
+        xml string = xmllib.convertToXML(rec, true);
+        LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+
+        rec2 DictRec{};
+        xmllib.convertFromXML(xml, rec2);
+
+        LogResult.logStdOut("Dictionary time - 2");
+        LogResult.assertTimeEqual1(rec.dict["timefield"], rec2.dict["timefield"] as time);
+    end
+
+end
+
+record DictRec{@XMLRootElement{name = "DictRec"}}
+    //dict Dictionary{@XMLElement{nillable = yes}};
+    dict Dictionary?{@XMLElement{nillable = yes}};
+end
+
+record DictRec2{@XMLRootElement{name = "DictRec"}}
+    //dict Dictionary;
+    dict Dictionary?;
+end

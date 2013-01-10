@@ -1,0 +1,1010 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+* @name TestNullableStringLib
+* @title TestNullableStringLib - RunNullableStringFunctions
+* @description test case for Nullable String behavior
+* @sources TestNullableStringLib.egl
+* @keywords Nullable String, functions
+**/
+
+library TestNullableStringLib
+
+    aFlexRec FlxFlexRecord;
+    testResultMsg string[] = new string[0];
+    nStr string?;
+    nStr2 string?;
+    aStr string;
+    aString, bString string?;
+    success boolean?;
+    bString2 string;
+    aStringn string?;
+    bStringn string?;
+    aStr2 string;
+    anInt int;
+    ndx int?;
+
+    function runTestNullableStringDefs1(){@Test}
+        LogResult.logStdOut("Local STRING? definition - 1");
+        LogResult.assertTrue("(nStr==null)",(nStr == null));
+    end
+
+    function runTestNullableStringDefs2(){@Test}
+        nStr = "a string";
+        LogResult.logStdOut("Local STRING? definition - 2");
+        LogResult.assertTrue("(nStr!=null)",(nStr != null));
+    end
+
+    function runTestNullableStringDefs3(){@Test}
+        nStr = "";
+        LogResult.logStdOut("Local STRING? definition - 3");
+        LogResult.assertTrue("(nStr!=null)",(nStr != null));
+    end
+
+    function runTestNullableStringDefs4(){@Test}
+        nStr3 string?{};
+        LogResult.logStdOut("Local STRING? definition - 4");
+        LogResult.assertTrue("(nStr3==null)",(nStr3 == null));
+    end
+
+    function runTestNullableStringAssignmentToString1(){@Test}
+    	try
+    		LogResult.logStdOut("Null STRING? used in assignment to STRING");
+        	aStr string = "a string";
+        	nStr = null;
+        	aStr = nStr;
+        	LogResult.failed("Expecting NullValueException");
+        onException(nullEx NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringAssignmentToString2(){@Test}
+        aStr string = "a string";
+        aStr = "start " :: nStr;
+        LogResult.logStdOut("Null STRING? used in :: expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start ");
+    end
+
+    function runTestNullableStringAssignmentToString3(){@Test}
+        aStr string = "a string";
+        aStr = nStr :: " end";
+        LogResult.logStdOut("Null STRING? used in :: expression to STRING - 2");
+        LogResult.assertStringEqual1(aStr, " end");
+    end
+
+    function runTestNullableStringAssignmentToString4(){@Test}
+        aStr string = "a string";
+        aStr = "start " + nStr;
+        LogResult.logStdOut("Null STRING? used in + expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start ");
+    end
+
+    function runTestNullableStringAssignmentToString5(){@Test}
+        aStr string = "a string";
+        aStr = nStr + " end";
+        LogResult.logStdOut("Null STRING? used in + expression to STRING - 2");
+        LogResult.assertStringEqual1(aStr, " end");
+    end
+
+    function runTestNullableStringAssignmentToString6a(){@Test}
+    	LogResult.logStdOut("Null STRING? used in ?: expression to nonnullable STRING");
+    	try
+        	aStr = "a string";
+        	aStr = "start " ?: nStr;
+        	LogResult.failed("expecting NullValueException");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+    
+    function runTestNullableStringAssignmentToString6(){@Test}
+        aStr3 string? = "a string";
+        aStr3 = "start " ?: nStr;
+        LogResult.logStdOut("Null STRING? used in ?: expression to STRING - 1");
+        LogResult.assertTrue1((aStr3 == null));
+    end
+
+    function runTestNullableStringAssignmentToString7(){@Test}
+        aStr3 string? = "a string";
+        aStr3 = nStr ?: " end";
+        LogResult.logStdOut("Null STRING? used in ?: expression to STRING - 2");
+        LogResult.assertTrue1((aStr3 == null));
+    end
+
+    function runTestNullableStringAssignmentToString8(){@Test}
+        aStr string = "a string";
+        aStr = "start ";
+        aStr ::= nStr;
+        LogResult.logStdOut("Null STRING? used in ::= expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start ");
+    end
+
+    function runTestNullableStringAssignmentToString9(){@Test}
+        aStr string = "a string";
+        aStr = "start ";
+        aStr += nStr;
+        LogResult.logStdOut("Null STRING? used in += expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start ");
+    end
+
+    function runTestNullableStringAssignmentToString10(){@Test}
+        local string? = "a string";
+        local = "start ";
+        local ?:= nStr;
+        LogResult.logStdOut("Null STRING? used in ?:= expression to STRING - 1");
+        LogResult.assertTrue1((local == null));
+    end
+
+    function runTestNullableStringAssignmentToString11(){@Test}
+        aStr string = "a string";
+        aStr = "start " :: localTestString(true);
+        LogResult.logStdOut("Function returning null STRING? used in :: expression to STRING");
+        LogResult.assertStringEqual1(aStr, "start ");
+    end
+
+    function runTestNullableStringAssignmentToString12(){@Test}
+        local string? = "a string";
+        local = "start " ?: localTestString(true);
+        LogResult.logStdOut("Function returning null STRING? used in ?: expression to STRING");
+        LogResult.assertTrue1((local == null));
+    end
+
+    function runTestNullableStringAssignmentToString12ex(){@Test}
+    	LogResult.logStdOut("Function returning null STRING? used in ?: expression to STRING");
+    	try
+        	local string = "a string";
+        	local = "start " ?: localTestString(true);
+        	LogResult.failed("Expecting NullValueException");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end    
+
+    function runTestNullableStringAssignmentToString13(){@Test}
+        aStr string = "a string";
+        aStr = localTestString(true) + " end";
+        LogResult.logStdOut("Function returning null STRING? used in + expression to STRING");
+        LogResult.assertStringEqual1(aStr, " end");
+    end
+
+    function runTestNullableStringAssignmentToString14(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = nStr;
+        LogResult.logStdOut("Non-null STRING? used in assignment to STRING");
+        LogResult.assertStringEqual1(aStr, "a string");
+    end
+
+    function runTestNullableStringAssignmentToString15(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start " :: nStr;
+        LogResult.logStdOut("Non-null STRING? used in :: expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString16(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = nStr :: " end";
+        LogResult.logStdOut("Non-null STRING? used in :: expression to STRING - 2");
+        LogResult.assertStringEqual1(aStr, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToString17(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start " + nStr;
+        LogResult.logStdOut("Non-null STRING? used in + expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString18(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = nStr + " end";
+        LogResult.logStdOut("Non-null STRING? used in + expression to STRING - 2");
+        LogResult.assertStringEqual1(aStr, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToString19(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start " ?: nStr;
+        LogResult.logStdOut("Non-null STRING? used in ?: expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString20(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = nStr ?: " end";
+        LogResult.logStdOut("Non-null STRING? used in ?: expression to STRING - 2");
+        LogResult.assertStringEqual1(aStr, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToString21(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start ";
+        aStr ::= nStr;
+        LogResult.logStdOut("Non-null STRING? used in ::= expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString22(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start ";
+        aStr += nStr;
+        LogResult.logStdOut("Non-null STRING? used in += expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString23(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start ";
+        aStr ?:= nStr;
+        LogResult.logStdOut("Non-null STRING? used in ?:= expression to STRING - 1");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString24(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start " :: localTestString(false);
+        LogResult.logStdOut("Function returning non-null STRING? used in :: expression to STRING");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString25(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = "start " ?: localTestString(false);
+        LogResult.logStdOut("Function returning non-null STRING? used in ?: expression to STRING");
+        LogResult.assertStringEqual1(aStr, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToString26(){@Test}
+        aStr string = "a string";
+        nStr = "a string";
+        aStr = localTestString(false) + " end";
+        LogResult.logStdOut("Function returning non-null STRING? used in + expression to STRING");
+        LogResult.assertStringEqual1(aStr, "a string end");
+        nStr = null;
+    end
+
+    function runTestNullableStringAssignmentToNullableString1(){@Test}
+        nStr2 = nStr;
+        LogResult.logStdOut("Null STRING? used in assignment to STRING?");
+        LogResult.assertTrue("(nStr2==null)",(nStr2 == null));
+    end
+
+    function runTestNullableStringAssignmentToNullableString2(){@Test}
+        nStr2 = "start " :: nStr;
+        LogResult.logStdOut("Null STRING? used in :: expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start ");
+    end
+
+    function runTestNullableStringAssignmentToNullableString3(){@Test}
+        nStr2 = nStr :: " end";
+        LogResult.logStdOut("Null STRING? used in :: expression to STRING? - 2");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, " end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString4(){@Test}
+        nStr2 = "start " + nStr;
+        LogResult.logStdOut("Null STRING? used in + expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start ");
+    end
+
+    function runTestNullableStringAssignmentToNullableString5(){@Test}
+        nStr2 = nStr + " end";
+        LogResult.logStdOut("Null STRING? used in + expression to STRING? - 2");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, " end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString6(){@Test}
+        nStr2 = "start " ?: nStr;
+        LogResult.logStdOut("Null STRING? used in ?: expression to STRING? - 1");
+        LogResult.assertTrue("(nStr2==null)",(nStr2 == null));
+    end
+
+    function runTestNullableStringAssignmentToNullableString7(){@Test}
+        nStr2 = nStr ?: " end";
+        LogResult.logStdOut("Null STRING? used in ?: expression to STRING? - 2");
+        LogResult.assertTrue("(nStr2==null)",(nStr2 == null));
+    end
+
+    function runTestNullableStringAssignmentToNullableString8(){@Test}
+        nStr2 = "start ";
+        nStr2 ::= nStr;
+        LogResult.logStdOut("Null STRING? used in ::= expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start ");
+    end
+
+    function runTestNullableStringAssignmentToNullableString9(){@Test}
+        nStr2 = "start ";
+        nStr2 += nStr;
+        LogResult.logStdOut("Null STRING? used in += expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start ");
+    end
+
+    function runTestNullableStringAssignmentToNullableString10(){@Test}
+        nStr2 = "start ";
+        nStr2 ?:= nStr;
+        LogResult.logStdOut("Null STRING? used in ?:= expression to STRING? - 1");
+        LogResult.assertTrue("(nStr2==null)",(nStr2 == null));
+    end
+
+    function runTestNullableStringAssignmentToNullableString11(){@Test}
+        nStr2 = "start " :: localTestString(true);
+        LogResult.logStdOut("Function returning null STRING? used in :: expression to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start ");
+    end
+
+    function runTestNullableStringAssignmentToNullableString12(){@Test}
+        nStr2 = "start " ?: localTestString(true);
+        LogResult.logStdOut("Function returning null STRING? used in ?: expression to STRING?");
+        LogResult.assertTrue("(nStr2==null)",(nStr2 == null));
+    end
+
+    function runTestNullableStringAssignmentToNullableString13(){@Test}
+        nStr2 = localTestString(true) + " end";
+        LogResult.logStdOut("Function returning null STRING? used in && expression to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, " end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString14(){@Test}
+        nStr = "a string";
+        nStr2 = nStr;
+        LogResult.logStdOut("Non-null STRING? used in assignment to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString15(){@Test}
+        nStr = "a string";
+        nStr2 = "start " :: nStr;
+        LogResult.logStdOut("Non-null STRING? used in :: expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString16(){@Test}
+        nStr = "a string";
+        nStr2 = nStr :: " end";
+        LogResult.logStdOut("Non-null STRING? used in :: expression to STRING? - 2");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString17(){@Test}
+        nStr = "a string";
+        nStr2 = "start " + nStr;
+        LogResult.logStdOut("Non-null STRING? used in + expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString18(){@Test}
+        nStr = "a string";
+        nStr2 = nStr + " end";
+        LogResult.logStdOut("Non-null STRING? used in + expression to STRING? - 2");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString19(){@Test}
+        nStr = "a string";
+        nStr2 = "start " ?: nStr;
+        LogResult.logStdOut("Non-null STRING? used in ?: expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString20(){@Test}
+        nStr = "a string";
+        nStr2 = nStr ?: " end";
+        LogResult.logStdOut("Non-null STRING? used in ?: expression to STRING? - 2");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "a string end");
+    end
+
+    function runTestNullableStringAssignmentToNullableString21(){@Test}
+        nStr = "a string";
+        nStr2 = "start ";
+        nStr2 ::= nStr;
+        LogResult.logStdOut("Non-null STRING? used in ::= expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString22(){@Test}
+        nStr = "a string";
+        nStr2 = "start ";
+        nStr2 += nStr;
+        LogResult.logStdOut("Non-null STRING? used in += expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString23(){@Test}
+        nStr = "a string";
+        nStr2 = "start ";
+        nStr2 ?:= nStr;
+        LogResult.logStdOut("Non-null STRING? used in ?:= expression to STRING? - 1");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString24(){@Test}
+        nStr = "a string";
+        nStr2 = "start " :: localTestString(false);
+        LogResult.logStdOut("Function returning non-null STRING? used in :: expression to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString25(){@Test}
+        nStr = "a string";
+        nStr2 = "start " ?: localTestString(false);
+        LogResult.logStdOut("Function returning non-null STRING? used in ?: expression to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "start a string");
+    end
+
+    function runTestNullableStringAssignmentToNullableString26(){@Test}
+        nStr = "a string";
+        nStr2 = localTestString(false) + " end";
+        LogResult.logStdOut("Function returning non-null STRING? used in && expression to STRING?");
+        LogResult.assertTrue1(nStr2 != null);
+        LogResult.assertStringEqual1(nStr2, "a string end");
+    end
+
+    function runTestNullableStringComparisons1(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Null STRING? used in == expression - 1");
+        LogResult.assertTrue1((nStr == "") == false);
+    end
+
+    function runTestNullableStringComparisons2(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Null STRING? used in == expression - 2");
+        LogResult.assertTrue1(nStr != "");
+    end
+
+    function runTestNullableStringComparisons3(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Null STRING? used in == expression - 3");
+        LogResult.assertTrue1(((nStr == aStr) == false));
+    end
+
+    function runTestNullableStringComparisons4(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Null STRING? used in != expression");
+        LogResult.assertTrue1(nStr != aStr);
+    end
+
+    function runTestNullableStringComparisons5(){@Test}
+    	LogResult.logStdOut("Null STRING? used in >= expression");
+    	try
+        	nStr = null;
+        	aStr = "a string";
+       		LogResult.assertTrue1(nStr >= aStr);
+       		wantNVE();
+       	onException(nve NullValueException)
+       		flagOK();
+       	end
+    end
+
+    function runTestNullableStringComparisons6(){@Test}
+    	LogResult.logStdOut("Null STRING? used in > expression");
+    	try
+        	nStr = null;
+        	aStr = "a string";
+            LogResult.assertTrue1(nStr > aStr);
+            wantNVE();
+         onException(nve NullValueException)
+         	flagOK();
+       	end
+    end
+
+    function runTestNullableStringComparisons7(){@Test}
+    	LogResult.logStdOut("Null STRING? used in <= expression");
+       try
+       		nStr = null;
+        	aStr = "a string";
+        	LogResult.assertTrue1(nStr <= aStr);
+         	wantNVE();
+         onException(nve NullValueException)
+         	flagOK();
+       	end
+    end
+
+    function runTestNullableStringComparisons8(){@Test}
+    	LogResult.logStdOut("Null STRING? used in < expression");
+    	try
+        	nStr = null;
+        	aStr = "a string";
+        	LogResult.assertTrue1(nStr < aStr);
+         	wantNVE();
+         onException(nve NullValueException)
+         	flagOK();
+       	end       
+    end
+
+    function runTestNullableStringComparisons9(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Function returning null STRING? used in == expression to STRING - 1");
+        LogResult.assertTrue1((localTestString(true) == "a string") == false);
+    end
+
+    function runTestNullableStringComparisons10(){@Test}
+        nStr = null;
+        aStr = "a string";
+        LogResult.logStdOut("Function returning null STRING? used in == expression to STRING - 2");
+        LogResult.assertTrue1((localTestString(true) == "a string") == false);
+    end
+
+    function runTestNullableStringComparisons11(){@Test}
+        nStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in == expression - 1");
+        LogResult.assertTrue1((nStr == "a string") == true);
+    end
+
+    function runTestNullableStringComparisons12(){@Test}
+        nStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in == expression - 2");
+        LogResult.assertTrue1(((nStr != "string") == true) == true);
+    end
+
+    function runTestNullableStringComparisons13(){@Test}
+        nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in == expression - 3");
+        LogResult.assertTrue1((nStr == aStr) == true);
+    end
+
+    function runTestNullableStringComparisons14(){@Test}
+        nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in != expression");
+        LogResult.assertTrue1((nStr != aStr) == false);
+    end
+
+    function runTestNullableStringComparisons15(){@Test}
+    	nStr = "a string";
+        aStr = "a string";
+	    LogResult.logStdOut("Non-null STRING? used in >= expression");
+        LogResult.assertTrue1((nStr >= aStr) == true);   	
+    end
+    
+    function runTestNullableStringComparisons16(){@Test}
+    	nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in > expression");
+        LogResult.assertTrue1((nStr > aStr) == false);
+    end
+
+    function runTestNullableStringComparisons17(){@Test}
+		nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in <= expression");
+        LogResult.assertTrue1((nStr <= aStr) == true);  
+    end
+
+    function runTestNullableStringComparisons18(){@Test}
+    	nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Non-null STRING? used in < expression");
+        LogResult.assertTrue1((nStr < aStr) == false);         	
+    end
+
+    function runTestNullableStringComparisons19(){@Test}
+        nStr = "a string";
+        aStr = "a string";
+        LogResult.logStdOut("Function returning non-null STRING? used in == expression to STRING");
+        LogResult.assertTrue1((localTestString(false) == "a string") == true);
+        nStr = null;
+    end
+
+    function runTestNullableStringLike1(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        bString = "%EGL%string";
+        //success = aString like bString;
+        success = aString.isLike(bString);
+        LogResult.logStdOut("String Like operator 1a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringLike2(){@Test}
+        aString string?;
+        aString = null;
+        bString = "%EGL%string";
+        LogResult.logStdOut("String Like operator 1b");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringLike3(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        bString = null;
+        LogResult.logStdOut("String Like operator 1c");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringLike4(){@Test}
+        aString string?;
+        aString = null;
+        bString = null;
+        LogResult.logStdOut("String Like operator 1d");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringLike5(){@Test}
+        bString = "%EGL%string";
+        success = "EGLTESTstring".isLike(bString);
+        LogResult.logStdOut("String Like operator 2a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringLike6(){@Test}
+        bString = null;
+        LogResult.logStdOut("String Like operator 2b");
+        try
+            success = "EGLTESTstring".isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringLike7(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        success = astring.isLike("%EGL%strin_");
+        LogResult.logStdOut("String Like operator 3a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringLike8(){@Test}
+        aString string?;
+        aString = null;
+        LogResult.logStdOut("String Like operator 3b");
+        try
+            success = astring.isLike("%EGL%strin_");
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches1(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        bString = "%EGL%strin_";
+        success = aString.isLike(bString);
+        LogResult.logStdOut("String matches operator 1a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringMatches2(){@Test}
+        aString string?;
+        aString = null;
+        bString = "*EGL*strin?";
+        LogResult.logStdOut("String matches operator 1b");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches3(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        bString = null;
+        LogResult.logStdOut("String matches operator 1c");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches4(){@Test}
+        aString string?;
+        aString = null;
+        bString = null;
+        LogResult.logStdOut("String matches operator 1d");
+        try
+            success = aString.isLike(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches5(){@Test}
+        aString string?;
+        aString = null;
+        bString2 = "*EGL*strin?";
+        LogResult.logStdOut("String matches operator 1e");
+        try
+            success = aString.matchesPattern(bString2);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches6(){@Test}
+        bString = "*EGL*strin?";
+        success = "EGLTESTstring".matchesPattern(bString);
+        LogResult.logStdOut("String matches operator 2a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringMatches7(){@Test}
+        bString = null;
+        LogResult.logStdOut("String matches operator 2b");
+        try
+            success = "EGLTESTstring".matchesPattern(bString);
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runTestNullableStringMatches8(){@Test}
+        aString string?;
+        aString = "EGLTESTstring";
+        success = astring.matchesPattern("*EGL*strin?");
+        LogResult.logStdOut("String matches operator 3a");
+        LogResult.assertTrue("(success != null) && success ",(success != null) && success);
+    end
+
+    function runTestNullableStringMatches9(){@Test}
+        aString string?;
+        aString = null;
+        LogResult.logStdOut("String matches operator 3b");
+        try
+            success = astring.matchesPattern("*EGL*strin?");
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runtestNullableStringSubstring1(){@Test}
+        aString string?;
+        aString = "1234567890";
+        bString = aString[4 : 9];
+        LogResult.logStdOut("String Substring 1a");
+        LogResult.assertStringEqual1(bString, "456789");
+    end
+
+    function runtestNullableStringSubstring2(){@Test}
+        aStringn = "1234567890";
+        bStringn = aStringn[4 : 9];
+        LogResult.logStdOut("String Substring 1b");
+        LogResult.assertStringEqual1(bStringn, "456789");
+    end
+
+    function runtestNullableStringSubstring3(){@Test}
+        aString = "1234567890";
+        bString = aString[4 : 9];
+        LogResult.logStdOut("String Substring 2a");
+        LogResult.assertTrue("aString[5:8] == bString[2:5] ", aString[5 : 8] == bString[2 : 5]);
+    end
+
+    function runtestNullableStringSubstring4(){@Test}
+        aStringn = "1234567890";
+        bStringn = aStringn[4 : 9];
+        LogResult.logStdOut("String Substring 2b");
+        LogResult.assertTrue("aStringn[5:8] == bStringn[2:5] ", aStringn[5 : 8] == bStringn[2 : 5]);
+    end
+
+    function runtestNullableStringSubstring5(){@Test}
+    	LogResult.logStdOut("String Substring 5");
+    	try
+        	aStringn = null;
+        	bStringn = aStringn[4 : 9];
+        	wantNVE();
+        onException(nve NullValueException)
+        	flagOK();
+        end
+    end
+
+    function runtestNullableStringSubstring6(){@Test}
+        aStringn = null;
+        LogResult.logStdOut("String Substring 3b");
+        try
+            bString = aStringn[4 : 9];
+            LogResult.failed("No NullValueException Thrown");
+        onException(exception NullValueException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function runtestNullableStringSubstring7(){@Test}
+        ndx int? = 4;
+        aString = "1234567890";
+        bString = aString[ndx : 9];
+        LogResult.logStdOut("String Substring 4a");
+        LogResult.assertStringEqual1(bString, "456789");
+    end
+
+    function runtestNullableStringSubstring8(){@Test}
+        ndx int? = 4;
+        aString = "1234567890";
+        bStringn = aString[ndx : 9];
+        LogResult.logStdOut("String Substring 4b");
+        LogResult.assertStringEqual1(bStringn, "456789");
+    end
+
+    function runtestNullableStringSubstring9(){@Test}
+        ndx int? = 4;
+        aStringn = "1234567890";
+        bStringn = aStringn[ndx : 9];
+        LogResult.logStdOut("String Substring 4c");
+        LogResult.assertStringEqual1(bStringn, "456789");
+    end
+
+    function runtestNullableStringSubstring10(){@Test}
+        ndx = null;
+        aString = "1234567890";
+        LogResult.logStdOut("String Substring 5a");
+        try
+            bString = aString[ndx : 9];
+            wantNVE();
+        onException(exception NullValueException)
+          	flagOK();
+        end
+    end
+
+    function runtestNullableStringSubstring11(){@Test}
+    	LogResult.logStdOut("String Substring 5b");
+    	try
+        	ndx = null;
+        	aString = "1234567890";
+        	bStringn = aString[ndx : 9];
+        	wantNVE();
+        onException(nve NullValueException)
+        	flagOK();
+        end
+    end
+
+    function runtestNullableStringSubstring12(){@Test}
+    	LogResult.logStdOut("String Substring 5c");
+    	try	
+        	ndx = null;
+        	aStringn = "1234567890";
+        	bStringn = aStringn[ndx : 9];
+            wantNVE();
+         onException(nve NullValueException)
+         	flagOK();
+        end
+    end
+
+    function runTestNullableStringOddCases1(){@Test}
+    	LogResult.logStdOut("Null STRING? used in + expression - 1");
+    	try
+        	aStr = 1 + nStr;
+        	wantNVE();        	
+        onException (nve NullValueException)
+        	flagOK();
+        end
+    end
+
+    function runTestNullableStringOddCases2(){@Test}
+    	nStr = null;
+        aStr = nStr + 1;
+        LogResult.logStdOut("Null STRING? used in + expression - 2");
+        LogResult.assertStringEqual1(aStr, "1");
+    end
+
+    function runTestNullableStringOddCases3(){@Test}
+        nStr = "1";
+        aStr = 1 + nStr;
+        LogResult.logStdOut("Non-null STRING? used in + expression - 1");
+        LogResult.assertStringEqual1(aStr, "2");
+    end
+
+    function runTestNullableStringOddCases4(){@Test}
+        aStr = nStr + 1;
+        LogResult.logStdOut("Non-null STRING? used in + expression - 2");
+        LogResult.assertStringEqual1(aStr, "11");
+    end
+
+    function runTestNullableStringOddCases5(){@Test}
+        anInt = 1 + nStr;
+        LogResult.logStdOut("Non-null STRING? used in + expression with INT- 1");
+        LogResult.assertTrue1(anInt == 2);
+    end
+
+    function runTestNullableStringOddCases6(){@Test}
+        anInt = nStr + 1;
+        LogResult.logStdOut("Non-null STRING? used in + expression with INT- 2");
+        LogResult.assertTrue1(anInt == 11);
+    end
+
+    function runTestNullableStringOddCases7(){@Test}
+        aStr2 = "0";
+        aStr = 1 + aStr2;
+        LogResult.logStdOut("STRING used in + expression - 1");
+        LogResult.assertStringEqual1(aStr, "1");
+    end
+
+    function runTestNullableStringOddCases8(){@Test}
+        aStr = aStr2 + 1;
+        LogResult.logStdOut("STRING used in + expression - 2");
+        LogResult.assertStringEqual1(aStr, "01");
+    end
+
+    function runTestNullableStringOddCases9(){@Test}
+        aStr2 = "1";
+        aStr = 1 + aStr2;
+        LogResult.logStdOut("STRING used in + expression - 3");
+        LogResult.assertStringEqual1(aStr, "2");
+    end
+
+    function runTestNullableStringOddCases10(){@Test}
+        aStr = aStr2 + 1;
+        LogResult.logStdOut("STRING used in + expression - 4");
+        LogResult.assertStringEqual1(aStr, "11");
+    end
+
+    function localTestString(bRetNull boolean in) returns(string?)
+        if(bRetNull)
+            return(null);
+        else
+            return("a string");
+        end
+    end
+
+	function wantNVE()
+		LogResult.failed("Expecting NullValueException");
+	end
+	
+	function flagOK()
+		LogResult.passed("OK");
+	end
+end

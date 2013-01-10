@@ -1,0 +1,65 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime001
+  * @title EdtTime001 - runAssignmentFunction
+  * @description testing Time assignment and initialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction07
+  * @sources EdtTime001.egl
+  * @keywords time, functions, assignemnt, null
+ **/
+library ETime001 {}
+
+	// Constant Declarations
+	const constTime1 Time="15:01:55";
+	
+	function runAssignmentFunction01(){@Test}
+		LogResult.assertTrue("initialization",constTime1=="15:01:55");
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		myTime Time?;
+		try
+			if(myTime != "")
+				LogResult.passed("No exception should be thrown");
+			end
+		onException(exception NullValueException)			
+			LogResult.failed("should not throw NullValueException");
+		onException(exception AnyException)
+			LogResult.failed("should not throw AnyException");
+		end		
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		myTime Time?;
+		LogResult.assertTrue("nullable isNull", (myTime == null));
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		myTime Time?;
+		myTime = constTime1;
+		LogResult.assertTrue("nullable not Null", (myTime != null ));
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		myTime Time?;
+		myTime = constTime1;
+		myTime = null;
+		LogResult.assertTrue("nullable reset to Null", (myTime == null));
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		myTime, another Time?;
+		myTime = constTime1;
+		myTime = another;
+		LogResult.assertTrue("nullable indirectly set to null", (myTime == null ));
+	end
+
+	function runAssignmentFunction07(){@Test}
+		LogResult.assertStringEqual("String conversion", "15:01:55", constTime1);		
+	end	
+end

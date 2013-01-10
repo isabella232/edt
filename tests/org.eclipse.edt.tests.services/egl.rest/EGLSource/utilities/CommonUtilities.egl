@@ -1,0 +1,204 @@
+package utilities;
+
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import data.ArrayContainingRecord;
+import data.InnerFlexibleRecord;
+import data.OuterFlexibleRecord;
+import data.SimpleRecord;
+import data.StringRec;
+import eglx.http.IHttp;
+import handlers.InnerHandler;
+import handlers.OuterHandler;
+
+// basic library
+library CommonUtilities 
+	 
+	function getResource(resourceName string in)returns(IHttp)
+		resource IHttp?;
+		case(TestListMgr.bindingType)
+			when(ServiceBindingType.DEVELOP)
+				resource = Resources.getResource("binding:file:egl_restDev#"+ resourceName) as IHttp;
+			when(ServiceBindingType.DEPLOYED)	
+				resource = Resources.getResource("binding:file:egl_restTgt#"+ resourceName) as IHttp;
+			otherwise
+				resource = Resources.getResource("binding:file:egl_restDed#"+ resourceName) as IHttp;
+		end
+		return resource;
+	end
+	function initSimpleRecordArray(recArray SimpleRecord[] inout)
+		temp SimpleRecord;
+		recArray = new SimpleRecord[0];
+		
+		temp.item1 = "Index 1";
+		temp.item2 = 10;
+		temp.item3 = 99999999.10;
+		recArray.appendElement(temp);
+		
+		temp.item1 = "Index 1";
+		temp.item2 = 20;
+		temp.item3 = 99999999.20;
+		recArray.appendElement(temp);
+		
+		temp.item1 = "Index 1";
+		temp.item2 = 30;
+		temp.item3 = 99999999.30;
+		recArray.appendElement(temp);
+	end
+	
+	function initArrayContainingRecordArray(recArray ArrayContainingRecord[] inout)
+		recArray.removeAll();
+		temp ArrayContainingRecord;
+		
+		temp2 simpleRecord;
+		
+		// create recArray[1]
+		temp.item1 = new string[];
+		temp.item1.appendElement("recArray[1].item1[1]");
+		temp.item1.appendElement("recArray[1].item1[2]");
+		temp.item1.appendElement("recArray[1].item1[3]");
+		temp.item2 = new int[];
+		temp.item2.appendElement(10);
+		temp.item2.appendElement(20);
+		temp.item2.appendElement(30);
+		temp.item3 = new decimal(10,2)[];
+		temp.item3.appendElement(99999999.10);
+		temp.item3.appendElement(99999999.20);
+		temp.item3.appendElement(99999999.30);
+		temp.item4 = new SimpleRecord[0];
+		temp2.item1 = "recArray[1].item4[1].item1";
+		temp2.item2 = 10;
+		temp2.item3 = 99999999.10;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[1].item4[2].item1";
+		temp2.item2 = 20;
+		temp2.item3 = 99999999.20;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[1].item4[3].item1";
+		temp2.item2 = 30;
+		temp2.item3 = 99999999.30;
+		temp.item4.appendElement(temp2);
+
+		recArray.appendElement(temp);
+			
+		// create recArray[2]
+		temp.item1 = new string[];
+		temp.item1.appendElement("recArray[2].item1[1]");
+		temp.item1.appendElement("recArray[2].item1[2]");
+		temp.item1.appendElement("recArray[2].item1[3]");
+		temp.item2 = new int[];
+		temp.item2.appendElement(10);
+		temp.item2.appendElement(20);
+		temp.item2.appendElement(30);
+		temp.item3 = new decimal(10,2)[];
+		temp.item3.appendElement(99999999.10);
+		temp.item3.appendElement(99999999.20);
+		temp.item3.appendElement(99999999.30);
+		temp.item4 = new SimpleRecord[0];
+		temp2.item1 = "recArray[2].item4[1].item1";
+		temp2.item2 = 10;
+		temp2.item3 = 99999999.10;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[2].item4[2].item1";
+		temp2.item2 = 20;
+		temp2.item3 = 99999999.20;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[2].item4[3].item1";
+		temp2.item2 = 30;
+		temp2.item3 = 99999999.30;
+		temp.item4.appendElement(temp2);
+
+		recArray.appendElement(temp);
+			
+		// create recArray[3]
+		temp.item1 = new string[];
+		temp.item1.appendElement("recArray[3].item1[1]");
+		temp.item1.appendElement("recArray[3].item1[2]");
+		temp.item1.appendElement("recArray[3].item1[3]");
+		temp.item2 = new int[];
+		temp.item2.appendElement(10);
+		temp.item2.appendElement(20);
+		temp.item2.appendElement(30);
+		temp.item3 = new decimal(10,2)[];
+		temp.item3.appendElement(99999999.10);
+		temp.item3.appendElement(99999999.20);
+		temp.item3.appendElement(99999999.30);
+		temp.item4 = new SimpleRecord[0];
+		temp2.item1 = "recArray[3].item4[1].item1";
+		temp2.item2 = 10;
+		temp2.item3 = 99999999.10;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[3].item4[2].item1";
+		temp2.item2 = 20;
+		temp2.item3 = 99999999.20;
+		temp.item4.appendElement(temp2);
+		
+		temp2.item1 = "recArray[3].item4[3].item1";
+		temp2.item2 = 30;
+		temp2.item3 = 99999999.30;
+		temp.item4.appendElement(temp2);
+
+		recArray.appendElement(temp);
+	end
+    function initOuterFlexibleRecord (flex OuterFlexibleRecord)
+        temp InnerFlexibleRecord;
+        tempArray string[] = new string[1];
+
+        tempArray[1] = "flex.item4.item1[1]";
+        tempArray.appendElement("flex.item4.item1[2]");
+        tempArray.appendElement("flex.item4.item1[3]");
+
+        temp.item1 = tempArray;
+        temp.item2 = "flex.item4.item2";
+        temp.item3 = 10;
+
+        flex.item1 = "flex.item1";
+        tempArray = new string[1];
+        tempArray[1] = "flex.item2[1]";
+        tempArray.appendElement("flex.item2[2]");
+        tempArray.appendElement("flex.item2[3]");
+        flex.item2 = tempArray;
+        flex.item4 = temp;
+    end
+
+	
+	function getStringRec( idx int in )returns(StringRec)
+		rec StringRec;
+		rec.field1 = "StringRec" + idx + ".field1";
+//		rec.field2 = "StringRec" + idx + ".field2";
+//		rec.field3 = "StringRec" + idx + ".field3";
+		rec.field4[1] = "StringRec" + idx + ".field4[1]";
+		rec.field4[2] = "StringRec" + idx + ".field4[2]";
+		return(rec);
+	end
+	
+    function initOuterHandler (data OuterHandler)
+        temp InnerHandler;
+        tempArray string[] = new string[1];
+
+        tempArray[1] = "data.item4.item1[1]";
+        tempArray.appendElement("data.item4.item1[2]");
+        tempArray.appendElement("data.item4.item1[3]");
+
+        temp.item1 = tempArray;
+        temp.item2 = "data.item4.item2";
+        temp.item3 = 10;
+
+        data.item1 = "data.item1";
+        tempArray = new string[1];
+        tempArray[1] = "data.item2[1]";
+        tempArray.appendElement("data.item2[2]");
+        tempArray.appendElement("data.item2[3]");
+        data.item2 = tempArray;
+        data.item4 = temp;
+    end
+
+
+end
+
+	

@@ -1,0 +1,71 @@
+package fvt.xml;
+
+import eglx.xml.binding.annotation.XMLAttribute;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+import eglx.xml.binding.annotation.XMLSchemaType;
+import eglx.xml.binding.annotation.XMLStructureKind;
+import eglx.xml.binding.annotation.XMLValue;
+
+/* 
+* @name MyRecord
+* @title The common record library used by XML package
+* @keywords MyRecord
+* @author EDT team
+* @createDate 2011/08/23
+* @description 
+* The common record library used by XML package
+*/
+
+record MyRecord{@XMLRootElement{name = "stump", namespace = "http://mynamespace.com"}}//{@XMLStructure {value = xmlStructureKind.simpleContent}}
+    itemName string;
+    litem string(5);
+    item2 int;
+    litems string(5)[] = new string(5)[5];
+    items string[] = new string[5];
+    //binary bin(9,2);
+    //sbinary bin(4,2);
+    //    shrt bin(4){@XMLElement{namespace = "http://mynamespace.com"}};
+    //    intt bin(9);
+    //    lng bin(18);
+    //dbl bin(18,5);
+    bint bigInt;
+    bdec decimal(32, 4);
+    flt float;
+    //    numb num(5, 2);
+    datefield date;
+    timefield time;
+    ts timeStamp("yyyyMMddHHmmss");
+    //    timefield time;
+    //hhex hex(12);
+    bool boolean;
+    bool2 boolean;
+    nStr string?{@XMLElement{nillable = true, namespace = "http://mynamespace.com"}};
+    nStr2 string?;
+    bits1 bytes{@XMLSchemaType{name="hexBinary"}};
+    bits2 bytes(3){@XMLSchemaType{name="hexBinary"}};
+end
+
+record Employee{@XMLValue{kind = xmlStructurekind.sequence}, @XMLRootElement{name = "stump"}}
+    EmpNo EmpNumber;
+    //array EmpNumber[0]{@XMLElement{nillable = true}};
+    array EmpNumber[]{@XMLElement{nillable = true}} = new EmpNumber[0];
+    //dicta Dictionary[0];
+    dicta Dictionary[] = new Dictionary[0];
+    dict Dictionary{};
+    LastName string;
+end
+
+record EmpNumber{@XMLValue{kind = xmlStructurekind.simpleContent}}
+    department string{@XMLAttribute{name = "dept"}};
+    value int;
+end
+
+//record MyRec type BasicRecord
+//    f1 num(5, 2);
+//    f2 myNum;
+//end
+
+//dataItem myNum num(5, 2)
+//end
+

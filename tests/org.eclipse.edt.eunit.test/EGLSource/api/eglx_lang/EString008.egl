@@ -1,0 +1,221 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString008
+  * @title EdtString008 - runCharacterUtilFunction
+  * @description testing string pattern matching with and without wildcards
+  * @testcases runCharacterUtilFunction01 - runCharacterUtilFunctionn22
+  * @sources EdtString008.egl
+  * @keywords string, length, clip, clipLeading, trim, toUppercase, toLowercase, charCodeAt 
+ **/
+library EString008 {}
+	
+	s1 string;
+	nS1 string?;
+	actualInt int;
+	expectedInt int;
+	actualStr string;
+	expectedStr string;
+
+	// string length
+	function runCharacterUtilFunction01(){@Test}	
+		actualInt = "abcdef".length();
+		expectedInt = 6;
+		LogResult.assertTrue("length of literal string", (actualInt == expectedInt) );
+	end
+	
+	function runCharacterUtilFunction02(){@Test}
+		s1 = "abcdef ";
+		actualInt = s1.length();
+		expectedInt = 7;
+		LogResult.assertTrue("length of string variable", (actualInt == expectedInt) );
+	end
+	
+	function runCharacterUtilFunction03(){@Test}
+		try
+			nS1 = null;
+			actualInt = nS1.length();	
+			LogResult.failed("Expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+		
+	// clip/clibLeading/trim literal strings 
+	function runCharacterUtilFunction04(){@Test}
+		actualStr = "  abcdef   ".clip();
+		expectedStr = "  abcdef";
+		LogResult.assertTrue("clip literal string", (actualStr == expectedStr) );
+	end
+
+	function runCharacterUtilFunction05(){@Test}
+		actualStr = "  abcdef   ".clipLeading();
+		expectedStr = "abcdef   ";
+		LogResult.assertTrue("clipLeading literal string", (actualStr == expectedStr) );
+	end
+	
+	function runCharacterUtilFunction06(){@Test}
+		actualStr = "  abcdef   ".trim();
+		expectedStr = "abcdef";
+		LogResult.assertTrue("trim literal string", (actualStr == expectedStr) );
+	end
+	
+	// clip/clibLeading/trim strings variables 
+	function runCharacterUtilFunction07(){@Test}
+		s1 = "  abcdef   ";
+		actualStr = s1.clip();
+		expectedStr = "  abcdef";
+		LogResult.assertTrue("clip string variable", (actualStr == expectedStr) );
+	end
+
+	function runCharacterUtilFunction08(){@Test}
+		s1 = "  abcdef   ";
+		actualStr = s1.clipLeading();
+		expectedStr = "abcdef   ";
+		LogResult.assertTrue("clipLeading string variable", (actualStr == expectedStr) );
+	end
+	
+	function runCharacterUtilFunction09(){@Test}
+		s1 = "  abcdef   ";
+		actualStr = s1.trim();
+		expectedStr = "abcdef";
+		LogResult.assertTrue("trim string variable", (actualStr == expectedStr) );
+	end
+	
+	// clip/clibLeading/trim null variables 
+	function runCharacterUtilFunction10(){@Test}
+		try
+			nS1 = null;
+			actualInt = nS1.clip();	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+
+	function runCharacterUtilFunction11(){@Test}
+		try
+			nS1 = null;
+			actualInt = nS1.clipLeading();	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runCharacterUtilFunction12(){@Test}
+		// trim of null string
+		try
+			nS1 = null;
+			actualInt = nS1.clip();	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	// toUpperCass/toLowercase with literal strings
+	function runCharacterUtilFunction13(){@Test}
+		actualStr = "  abcdef9&&@   ".toUppercase(); 
+		expectedStr = "  ABCDEF9&&@   ";
+		LogResult.assertTrue("toUppercase literal string", (actualStr == expectedStr) );
+	end
+
+	function runCharacterUtilFunction14(){@Test}
+		actualStr = "  ABCDEF9&&@   ".toLowercase();
+		expectedStr = "  abcdef9&&@   ";
+		LogResult.assertTrue("toLowercase literal string", (actualStr == expectedStr) );
+	end
+	
+	// toUpperCass/toLowercase with string variables
+	function runCharacterUtilFunction15(){@Test}
+		s1 = "  abcdef9&&@   ";
+		actualStr = s1.toUppercase(); 
+		expectedStr = "  ABCDEF9&&@   ";
+		LogResult.assertTrue("toUppercase string variable", (actualStr == expectedStr) );
+	end
+
+	function runCharacterUtilFunction16(){@Test}
+		s1 = "  ABCDEF9&&@   ";
+		actualStr = s1.toLowercase();
+		expectedStr = "  abcdef9&&@   ";
+		LogResult.assertTrue("toLowercase string variable", (actualStr == expectedStr) );
+	end
+	
+	// toUppercase/toLowercase with null variable
+	function runCharacterUtilFunction17(){@Test}
+		//toUppercase of null string
+		try
+			nS1 = null;
+			actualInt = nS1.toUppercase();	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runCharacterUtilFunction18(){@Test}
+		// toLowercase of null string
+		try
+			nS1 = null;
+			actualInt = nS1.toLowercase();	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runCharacterUtilFunction19(){@Test}
+		// charCodeAt  of null string
+		try
+			nS1 = null;
+			actualInt = nS1.charCodeAt(2);	
+			LogResult.failed("expecting exception");
+		onException (oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runCharacterUtilFunction20(){@Test}
+		// charCodeAt of null string
+		try
+			nS1 = null;
+			actualInt = nS1.charCodeAt(-22);	
+			LogResult.failed("expecting exception");
+		onException (oops AnyException)
+			localDetails string = "OK " + oops.message;
+			LogResult.passed(localDetails);
+		end
+	end
+	
+	function runCharacterUtilFunction21(){@Test}
+		s1 = "abcdef ";
+		actualInt = s1.charCodeAt(2);
+		expectedInt = 98;
+		LogResult.assertTrue("charCodeAt of string variable", (actualInt == expectedInt) );
+	end
+	
+	function runCharacterUtilFunction22(){@Test}
+		s1 = "12345";
+		actualInt = s1.charCodeAt(2);
+		expectedInt = 50;
+		LogResult.assertTrue("charCodeAt of string variable", (actualInt == expectedInt) );
+	end
+	
+	function runCharacterUtilFunction23_Java(){@Test {targetLang = [JAVA]}}
+		actualEncoding string = EString.getDefaultEncoding();
+		expectedEncoding string = SysLib.getProperty( "file.encoding" );
+		LogResult.assertStringEqual("EString.getDefaultEncoding() - JAVA", expectedEncoding, actualEncoding );
+	end
+	
+	function runCharacterUtilFunction23_JavaScript(){@Test {targetLang = [JAVASCRIPT]}}
+		actualEncoding string = EString.getDefaultEncoding();
+		expectedEncoding string = "UTF-16BE";
+		LogResult.assertStringEqual("EString.getDefaultEncoding() - JAVASCRIPT", expectedEncoding, actualEncoding );
+	end
+
+	
+end // EdtString008

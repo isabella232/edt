@@ -1,0 +1,81 @@
+package fvt.operators;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestIsOperatorLib
+* @title The function test program for the EGL IS operator
+* @keywords IS
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL IS operator
+*/
+
+library TestIsOperatorLib
+
+    myString string;
+
+    //NOTE: The operator "IS" is not supported in EDT 0.7, so comment the following code.
+    //    function testIsBlanks1(){@Test}
+    //        LogResult.logStdOut("Test IS BLANK - 1");
+    //        LogResult.assertTrue1((myString is blanks));
+    //    end
+    //
+    //    function testIsBlanks2(){@Test}
+    //        myString = "ABC";
+    //        LogResult.logStdOut("Test IS BLANK - 2");
+    //        LogResult.assertTrue1(!(myString is blanks));
+    //    end
+    //
+    //    function testIsNumeric1(){@Test}
+    //        LogResult.logStdOut("Test IS Numeric - 1");
+    //        LogResult.assertTrue1(!(myString is Numeric));
+    //    end
+    //
+    //    function testIsNumeric2(){@Test}
+    //        myString = "ABC";
+    //        LogResult.logStdOut("Test IS Numeric - 2");
+    //        LogResult.assertTrue1(!(myString is Numeric));
+    //    end
+    //
+    //    function testIsNumeric3(){@Test}
+    //        myString = "123 456";
+    //        LogResult.logStdOut("Test IS Numeric - 3");
+    //        LogResult.assertTrue1(!(myString is Numeric));
+    //    end
+    //
+    //    function testIsNumeric4(){@Test}
+    //        myString = "123456";
+    //        LogResult.logStdOut("Test IS Numeric - 4");
+    //        LogResult.assertTrue1((myString is Numeric));
+    //    end
+    //
+    //    function testIsSystemTypeDebug1(){@Test}
+    //        if(systemType is debug)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test IS SystemType debug - 1");
+    //            LogResult.assertTrue1((systemType is debug));
+    //        end
+    //    end
+    //
+    //    function testIsSystemTypeWin1(){@Test}
+    //        if(systemType is win)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test IS SystemType win - 1");
+    //            LogResult.assertTrue1((systemType is win));
+    //        end
+    //    end
+    //
+    //    function testIsSystemTypeJavaScript1(){@Test}
+    //        if(systemType is javascript)
+    //            writestdout("systemtype=" + systemType);
+    //            LogResult.logStdOut("Test IS SystemType javascript - 1");
+    //            LogResult.assertTrue1((systemType is javascript));
+    //
+    //            LogResult.logStdOut("Test IS SystemType win - 1");
+    //            LogResult.assertTrue1(!(systemType is win));
+    //        end
+    //    end
+end

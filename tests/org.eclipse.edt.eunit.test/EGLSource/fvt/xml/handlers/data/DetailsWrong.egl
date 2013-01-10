@@ -1,0 +1,5 @@
+package fvt.xml.handlers.data;
+
+handler DetailsWrong
+    WeatherData WeatherDataWrong[]{};
+end

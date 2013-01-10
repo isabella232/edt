@@ -1,0 +1,41 @@
+package server.host.programs.data.handlers;
+
+import eglx.jtopen.annotations.StructArray;
+import eglx.jtopen.annotations.StructDate;
+import eglx.jtopen.annotations.StructText;
+import eglx.jtopen.annotations.StructTime;
+import eglx.jtopen.annotations.StructUnsignedBin2;
+import eglx.jtopen.annotations.StructUnsignedBin4;
+import eglx.jtopen.annotations.StructZonedDecimal;
+import eglx.services.Encoding;
+
+
+
+handler Handler11
+	rec Handler1;
+	char20 string[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructText{length = 20}}}; 
+	lchar20 string(20)[]{@StructArray {elementCount = 4}}; 
+	unicode20 string[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructText{length = 20, encoding = "UTF-16BE"}}}; 
+	lunicode20 string(20)[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructText{encoding = "UTF-16BE"}}}; 
+	bin2sign smallint[]{@StructArray {elementCount = 4}};
+	bin4sign int[]{@StructArray {elementCount = 4}};
+	bin8sign bigint[]{@StructArray {elementCount = 4}};
+	dec112 decimal(11,2)[]{@StructArray {elementCount = 4}};
+	dec15 decimal(15)[]{@StructArray {elementCount = 4}};
+	num6 decimal(6)[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructZonedDecimal {}}};
+	num103 decimal(10,3)[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructZonedDecimal {}}};
+	bin2 int[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructUnsignedBin2{}}};
+	bin4 bigint[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructUnsignedBin4{}}};
+	date1 date[]{@StructArray {elementCount = 4}};
+	date2 date[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA}}};
+	date3 date[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}}};
+	time1 time[]{@StructArray {elementCount = 4}};
+	time2 time[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR}}};
+	time3 time[]{@StructArray {elementCount = 4, elementTypeAnnotation = @StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}}};
+	timestamp1 timestamp("yyyyMMddHHmmss")[]{@StructArray {elementCount = 4}};
+	float4 smallfloat[]{@StructArray {elementCount = 4}};
+	float8 float[]{@StructArray {elementCount = 4}};
+	recA Handler1[]{@StructArray{elementCount = 4}};
+	validCount int;
+end
+

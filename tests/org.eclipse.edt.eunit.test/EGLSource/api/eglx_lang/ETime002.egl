@@ -1,0 +1,117 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime004
+  * @title EdtTime004 - runComparisonFunction
+  * @description testing time comparisons
+  * @testcases runComparisonFunction01 - runComparisonFunction22
+  * @sources EdtTime004.egl
+  * @keywords time, less than, greater than, equal, not equal, comparison
+ **/
+library ETime002 {}
+
+	// Constant Declarations
+	const oneFifteenPM Time = "13:15:00";
+	const oneFifteenAM Time = "01:15:00";
+	
+	function runComparisonFunction01(){@Test}
+		LogResult.assertTrue("< comparison - equal Time", !(oneFifteenAM < oneFifteenAM) );	
+	end
+		
+	function runComparisonFunction02(){@Test}
+		LogResult.assertTrue("< comparison - non-equal Time", oneFifteenAM < oneFifteenPM );
+	end
+	
+	function runComparisonFunction03(){@Test}
+		LogResult.assertTrue("< comparison - non-equal Time 2", !(oneFifteenPM < oneFifteenAM) );
+	end
+	
+	function runComparisonFunction04(){@Test}
+		LogResult.assertTrue("<= comparison - equal Time", oneFifteenAM <= oneFifteenAM );
+	end
+	
+	function runComparisonFunction05(){@Test}
+		LogResult.assertTrue("<= comparison - non-equal Time", oneFifteenAM <= oneFifteenPM );
+	end
+	
+	function runComparisonFunction06(){@Test}
+		LogResult.assertTrue("<= comparison - non-equal Time 2", !(oneFifteenPM <= oneFifteenAM) );
+	end
+	
+	function runComparisonFunction07(){@Test}
+		LogResult.assertTrue("> comparison - equal Time", !(oneFifteenPM > oneFifteenPM) );
+	end
+	
+	function runComparisonFunction08(){@Test}
+		LogResult.assertTrue("> comparison - non-equal Time", oneFifteenPM > oneFifteenAM );
+	end
+	
+	function runComparisonFunction09(){@Test}
+		LogResult.assertTrue("> comparison - non-equal Time 2", !(oneFifteenAM > oneFifteenPM) );
+	end
+	
+	function runComparisonFunction10(){@Test}
+		LogResult.assertTrue(">= comparison - equal Time", oneFifteenAM >= oneFifteenAM );
+	end
+	
+	function runComparisonFunction11(){@Test}
+		LogResult.assertTrue(">= comparison - non-equal Time", oneFifteenPM >= oneFifteenAM );
+	end
+	
+	function runComparisonFunction12(){@Test}
+		LogResult.assertTrue(">= comparison - non-equal Time 2", !(oneFifteenAM >= oneFifteenPM) );
+	end
+	
+	function runComparisonFunction13(){@Test}
+		LogResult.assertTrue("== comparison - equal Time", oneFifteenAM == oneFifteenAM);
+	end
+	
+	function runComparisonFunction14(){@Test}
+		LogResult.assertTrue("== comparison - nonequal Time", !(oneFifteenAM == oneFifteenPM) );
+	end
+	
+	function runComparisonFunction15(){@Test}
+		LogResult.assertTrue("!= comparison - equal Time", !(oneFifteenPM != oneFifteenPM));
+	end
+	
+	function runComparisonFunction16(){@Test}
+		LogResult.assertTrue("!= comparison - nonequal Time", oneFifteenAM != oneFifteenPM );
+	end
+	
+	function runComparisonFunction17(){@Test}
+		myTime1 Time?=null;
+		myTime2 Time?=null;
+		LogResult.assertTrue("== comparison - with null values", myTime1 == myTime2 );
+	end
+	
+	function runComparisonFunction18(){@Test}
+		myTime1 Time?=null;
+		myTime2 Time?=null;
+		LogResult.assertTrue("!= comparison - with null values",!( myTime1 != myTime2) );
+	end
+	
+	function runComparisonFunction19(){@Test}
+		myTime Time?=null;
+		LogResult.assertTrue("== comparison - with left null value", !(myTime == oneFifteenPM) );
+	end
+	
+	function runComparisonFunction20(){@Test}
+		myTime Time?=null;
+		LogResult.assertTrue("!= comparison - with left null value", myTime != oneFifteenPM );
+	end
+	
+	function runComparisonFunction21(){@Test}
+		myTime Time?=null;
+		LogResult.assertTrue("== comparison - with right null value", !(oneFifteenPM == myTime) );
+	end
+	
+	function runComparisonFunction22(){@Test}
+		myTime Time?=null;
+		LogResult.assertTrue("!= comparison - with right null value", oneFifteenPM != myTime );
+	end
+
+end

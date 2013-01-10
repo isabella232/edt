@@ -1,0 +1,44 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtDate007
+  * @title EdtDate007 - runConversionFunction
+  * @description testing Date 'extend' functions
+  * @testcases runConversionFunction01 - runConversionFunction04
+  * @sources EdtDate007.egl
+  * @keywords date, conversion, extend, timestamp
+ **/
+library EDate007 {}
+
+	
+	febLeap date = "02-29-2000";
+	
+	const febLeapTimeStamp timeStamp("yyyyMMdd") = "2000-02-29";
+	const febLeapTimeStampYDate timeStamp("yyyy") = "2000";
+	const febLeapTimeStampYMDate timeStamp("yyyyMM") = "2000-02";
+	
+	
+	
+	function runConversionFunction01(){@Test}
+		LogResult.assertTrue("date to timestamp yyyyMMdd",febLeap.extend("yyyyMMdd")==febLeapTimeStamp);
+	end
+	
+	function runConversionFunction02(){@Test}
+		LogResult.assertTrue("date to timestamp yyyy",febLeap.extend("yyyy")==febLeapTimeStampYDate);
+	end
+	
+	function runConversionFunction03(){@Test}
+		LogResult.assertTrue("date to timestamp yyyyMM",febLeap.extend("yyyyMM")==febLeapTimeStampYMDate);
+	end
+	
+	function runConversionFunction04(){@Test}
+		febLeapTimeStampMDDate timeStamp("MMdd") = "02/29";
+		LogResult.assertTrue("date to timestamp MMdd",febLeap.extend("MMdd")==febLeapTimeStampMDDate);
+	end
+	
+	
+end

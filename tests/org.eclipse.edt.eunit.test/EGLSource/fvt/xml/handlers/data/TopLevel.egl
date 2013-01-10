@@ -1,0 +1,11 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+handler TopLevel{@XMLRootElement{namespace = "http://my.namespace.com"}}
+    name string;
+    status string{@XMLElement{namespace = "http://my.status.com"}};
+    array string[];
+    nextLevel SecondLevel{@XMLElement{namespace = "http://my.namespace.com"}};
+end

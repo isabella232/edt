@@ -1,0 +1,17 @@
+package interfaces;
+
+import eglx.xml.binding.annotation.XMLElement;
+
+// basic record
+//
+
+record GetParticipantsByLocationBody
+
+    GetParticipantsByLocation GetParticipantsByLocation{@XMLElement{namespace = "http://www.webservicex.net/",name = "GetParticipantsByLocation"}};
+
+end
+record GetParticipantsByLocationResponseBody
+
+    GetParticipantsByLocation GetParticipantsByLocationResponse{@XMLElement{namespace = "http://www.webservicex.net/",name = "GetParticipantsByLocationResponse"}};
+
+end

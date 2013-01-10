@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<egl:deployment xmlns:egl="http://www.eclipse.org/xmlns/edt/deployment/1.0">
+  <bindings>
+    <binding name="conn1" type="edt.binding.ibmiconnection" useURI="false">
+      <parameters>
+        <parameter name="system" value="AS4069.rtp.raleigh.ibm.com"/>
+        <parameter name="userId" value=""/>
+        <parameter name="password" value=""/>
+      </parameters>
+    </binding>
+    <binding name="conn2" type="edt.binding.ibmiconnection" useURI="false">
+      <parameters>
+        <parameter name="system" value="AS4069.rtp.raleigh.ibm.com"/>
+        <parameter name="userId" value=""/>
+        <parameter name="password" value=""/>
+        <parameter name="library" value="/QSYS.LIB/EVANSM.LIB/"/>
+      </parameters>
+    </binding>
+    <binding name="conn3" type="edt.binding.ibmiconnection" useURI="false">
+      <parameters>
+        <parameter name="system" value="AS4069.rtp.raleigh.ibm.com"/>
+        <parameter name="userId" value=""/>
+        <parameter name="password" value=""/>
+        <parameter name="library" value="/QSYS.LIB/TSTSRVPGM.LIB"/>
+      </parameters>
+    </binding>
+    <binding name="conn4" type="edt.binding.ibmiconnection" useURI="false">
+      <parameters>
+        <parameter name="system" value="AS4069.rtp.raleigh.ibm.com"/>
+        <parameter name="userId" value=""/>
+        <parameter name="password" value=""/>
+        <parameter name="library" value="/QSYS.LIB/TSTSRVPGM.LIB/"/>
+      </parameters>
+    </binding>
+    <binding name="DerbyConnection" type="edt.binding.sql" uri="workspace://DerbyConnection" useURI="true"/>
+    <binding name="Defaults" type="edt.binding.ibmiconnection" useURI="false">
+      <parameters>
+        <parameter name="system" value="AS4069.rtp.raleigh.ibm.com"/>
+        <parameter name="userId" value=""/>
+        <parameter name="password" value=""/>
+        <parameter name="encoding" value="UTF-16BE"/>
+        <parameter name="dateFormat" value="6"/>
+        <parameter name="library" value="/QSYS.LIB/TSTSRVPGM.LIB/"/>
+      </parameters>
+    </binding>
+  </bindings>
+</egl:deployment>

@@ -1,0 +1,259 @@
+package fvt.substrings;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestSubString And Expressions
+* @title The function test program for SubString and Expressions in EDT
+* @keywords SubString Expression
+* @author EDT team
+* @createDate 2011/08/19
+* @description
+* Test the Substring Function and Expressions
+*/
+
+library TestSubStringsAndExpressionsLib{}
+
+    aString string? = "1234567890";
+    bString string = "abcdefghij";
+    aStrings string[] =["1234567890", "abcdefghij"];
+    bStrings string[] =["1234567890", "abcdefghij"];
+    rString string;
+    i int?;
+    rc boolean;
+
+    function Substring_7_Assignment_source_1(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 1");
+        rString = aString[3 : 5];
+        rc =(rString == "345");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_7_Assignment_source_3(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 3");
+        rString = aStrings[1][3 : 5];
+        rc =(rString == "345");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_7_Assignment_source_17(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 17");
+        rString = "abcde"[1 : 1];
+        rc =(rString == "a");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_7_Assignment_source_18(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 18");
+        rString = "abcde"[1 : 5];
+        rc =(rString == "abcde");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_7_Assignment_source_19(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 19");
+        rString = "abcde"[2 : 3];
+        rc =(rString == "bc");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_7_Assignment_source_21(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 21");
+        try
+            rString = "abcde"[1 : 0];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+        
+    end
+
+    function Substring_7_Assignment_source_22(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 22");
+        try
+            rString = "abcde"[0 : 0];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_7_Assignment_source_23(){@test}
+        LogResult.logStdOut("Substring 7 - Assignment source 23");
+        try
+            rString = "abcde"[1 : 10];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_8_Assignment_source_1(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 1");
+        rString = aString[3 : 5];
+        rc =(rString == "345");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_8_Assignment_source_3(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 3");
+        rString = aStrings[1][3 : 5];
+        rc =(rString == "345");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_8_Assignment_source_17(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 17");
+        aString = "abcde";
+        rString = aString[1 : 1];
+        rc =(rString == "a");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_8_Assignment_source_18(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 18");
+        rString = aString[1 : 5];
+        rc =(rString == "abcde");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_8_Assignment_source_19(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 19");
+        rString = aString[2 : 3];
+        rc =(rString == "bc");
+        LogResult.assertTrue1(rc);
+    end
+
+    function Substring_8_Assignment_source_20(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 20");
+        try
+            rString = aString[5 : 1];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_8_Assignment_source_21(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 21");
+        try
+            rString = aString[1 : 0];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_8_Assignment_source_22(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 22");
+        try
+            rString = aString[0 : 0];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_8_Assignment_source_23(){@test}
+        LogResult.logStdOut("Substring 8 - Assignment source 23");
+        try
+            rString = aString[1 : 10];
+            LogResult.failed("expecting exception");
+        onException(r InvalidIndexException)
+            LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_1(){@test}
+        LogResult.logStdOut("Substring 9 - Assignment source 1 with null terminating index");
+        try
+        	rString = aString[3 : i];
+        	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_3(){@test}
+        LogResult.logStdOut("Substring 9 - Assignment source 3 with null leading index");
+        try
+        	rString = aStrings[1][i : 5];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");   
+        end
+    end
+
+    function Substring_9_Assignment_source_17(){@test}
+        LogResult.logStdOut("Substring 9 - Assignment source 17");
+        try
+        	aString = null;
+        	rString = aString[1 : 1];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_18(){@test}
+    	try
+        	LogResult.logStdOut("Substring 9 - Assignment source 18");
+       		rString = aString[1 : 5];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_19(){@test}
+        LogResult.logStdOut("Substring 9 - Assignment source 19");
+        try
+        	rString = aString[i : i];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_20(){@test}
+    	try
+        	LogResult.logStdOut("Substring 9 - Assignment source 20");
+        	rString = aString[5 : 1];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_21(){@test}
+    	try
+        	LogResult.logStdOut("Substring 9 - Assignment source 21");
+        	rString = aString[1 : 0];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_22(){@test}
+    	try
+        	LogResult.logStdOut("Substring 9 - Assignment source 22");
+        	rString = aString[0 : 0];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+    function Substring_9_Assignment_source_23(){@test}
+    	try
+        	LogResult.logStdOut("Substring 9 - Assignment source 23");
+        	rString = aString[1 : 10];
+         	LogResult.failed("expecting exception");
+        onException(nve NullValueException)
+        	LogResult.passed("OK");
+        end
+    end
+
+end

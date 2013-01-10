@@ -1,0 +1,97 @@
+package common.interfaces;
+
+import common.data.CollegeData;
+import common.data.CollegeRec;
+import common.data.FormDataRec;
+import eglx.http.HttpMethod;
+import eglx.rest.Rest;
+import eglx.services.Encoding;
+
+// interface
+
+library IColleges
+ 
+    function listAll() returns(CollegeRec)
+    	{
+    		@Rest{
+    			method = HttpMethod._GET, 
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/colleges/", 
+    			responseFormat = Encoding.XML
+    		}
+    	}
+    end
+
+    function listAllByState(state string in) returns(CollegeRec)
+    	{
+    		@Rest{
+    			method = HttpMethod._GET, 
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/colleges/?state={state}&country=US"
+    		}
+    	}
+    end
+
+    function listAllByState2(_url string in, state string in) returns(CollegeRec)
+    	{
+    		@Rest{
+    			method = HttpMethod._GET, 
+    			uriTemplate = "{_url}{state}&country=US"
+    		}
+    	}
+    end
+
+    function listAllByState3(state string in) returns(CollegeRec)
+    	{
+    		@Rest{
+    			method = HttpMethod._GET, 
+    			uriTemplate = "{state}&country=US"
+    		}
+    	}
+ 	end
+ 	
+    function getCollegeByID(id string in) returns(CollegeData)
+    	{
+    		@Rest{
+    			method = HttpMethod._GET, 
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/college/{id}/"
+    		}
+    	}
+ 	end
+
+    function search(query string in) returns(CollegeRec)
+    	{
+    		@Rest{
+	  			method = HttpMethod._GET, 
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/colleges/search/?q={query}"
+    		}
+    	}
+    end
+
+    function addCollege(college FormDataRec in) returns(CollegeData)
+    	{
+    		@Rest{
+    			method = HttpMethod.POST,
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/college/", 
+    			requestFormat = Encoding._FORM
+    		}
+    	}
+    end
+
+    function updateCollege(id string in, college FormDataRec in) returns(CollegeData)
+    	{
+    		@Rest{
+    			method = HttpMethod.PUT,
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/college/{id}/", 
+    			requestFormat = Encoding._FORM
+    		}
+    	}
+    end
+
+    function deleteCollege(id string in)
+    	{
+    		@Rest{
+    		method = HttpMethod._DELETE,
+    			uriTemplate = "http://rbdsrv2.rtp.raleigh.ibm.com:9080/org/v0/college/{id}/"
+    		}
+    	}
+    end
+end

@@ -1,0 +1,60 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtBoolean002
+  * @title EdtBoolean002 - RunTestAssignment
+  * @description testing boolean assignment
+  * @testcases runTestAssignment01 - runTestAssignment08
+  * @sources EdtBoolean002.egl
+  * @keywords boolean, assignment
+ **/
+library EBoolean002 {}
+
+	myT boolean = true;
+	myF boolean = false;
+	myDefault boolean;
+	myAlwaysDefault boolean;
+	
+	function runTestAssignment01(){@Test}
+		LogResult.assertTrue("myT == true", (myT == true) );
+	end
+	
+	function runTestAssignment02(){@Test}
+		LogResult.assertTrue("myF == false", (myF == false) );
+	end
+	
+	function runTestAssignment03(){@Test}
+		LogResult.assertTrue("myAlwaysDefault == false", (myAlwaysDefault == false) );
+	end
+	
+	function runTestAssignment04(){@Test}
+		LogResult.assertTrue("myDefault == false", (myDefault == false) );
+	end
+		
+	function runTestAssignment05(){@Test}
+		myDefault = myT;
+		LogResult.assertTrue("myDefault == true", (myDefault == true) );
+	end
+
+	function runTestAssignment06(){@Test}
+		myDefault = myF;
+		LogResult.assertTrue("myDefault == false", (myDefault == false) );
+	end
+	
+	function runTestAssignment07(){@Test}
+		myTestBlank boolean?;
+		LogResult.assertTrue("myTestBlank == null", (myTestBlank == null) );
+	end
+	
+	function runTestAssignment08(){@Test}
+		myTestBlank boolean?;
+		myTestBlank = true;
+		LogResult.assertTrue("myTestBlank != null", (myTestBlank != null) );
+	end
+	
+end
+

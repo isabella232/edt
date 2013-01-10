@@ -1,0 +1,95 @@
+package fvt.functionInvocation;
+
+
+
+/*
+* @name TestFuncOverloadLib
+* @title The function test program for the EGL Function Invocation
+* @keywords ASEGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncOverloadLib
+
+    gblArray string[] =["abc", "cde", "efg"];
+    //		i int = 1;
+    //		f float = 1;
+    //		s string;
+    s string;
+
+    //    function testOverloadedUserFunctions1(){@Test}
+    //        //		s = Overload(i);
+    //        //		LogResult.logStdOut("Local overloaded function - 1";
+    //        //		LogResult.assertTrue1( compareString(s,"Overload, 1i") );
+    //    end
+    
+    //    function testOverloadedUserFunctions2(){@Test}
+    //        //		s = Overload(i,i);
+    //        //		LogResult.logStdOut("Local overloaded function - 2";
+    //        //		LogResult.assertTrue1( compareString(s,"Overload, 2i") );
+    //    end
+    
+    //    function testOverloadedUserFunctions3(){@Test}
+    //        //		s = Overload(f);
+    //        //		LogResult.logStdOut("Local overloaded function - 3";
+    //        //		LogResult.assertTrue1( compareString(s,"Overload, 1f") );
+    //    end
+    
+    //    function testOverloadedUserFunctions4(){@Test}
+    //        //		s = Overload(f,f);
+    //        //		LogResult.logStdOut("Local overloaded function - 4";
+    //        //		LogResult.assertTrue1( compareString(s,"Overload, 2f") );
+    //    end
+    
+    //    function testOverloadedUserFunctions5(){@Test}
+    //        //		s = NoOverload(f, f);
+    //        //		LogResult.logStdOut("Local overloaded function - 5";
+    //        //		LogResult.assertTrue1( compareString(s,"NoOverload") );
+    //        //		
+    //        //		a int[0];
+    //        //		a.appendElement(1);
+    //    end
+    
+    //	function Overload(i int) returns (String)
+    //		return ("Overload, 1i");
+    //	end
+    //	
+    //	function Overload(i int, j int) returns (String)
+    //		return ("Overload, 2i");
+    //	end
+    //	
+    //	function Overload(i float) returns (String)
+    //		return ("Overload, 1f");
+    //	end
+    //	
+    //	function overload(i float, j float) returns (String)
+    //		return ("Overload, 2f");
+    //	end
+    //	
+    //	function NoOverload(i float, j float) returns (String)
+    //		return ("NoOverload");
+    //	end
+    //	
+    //	function Overloadex(exType ExType in) returns (String)
+    //		return ("OverloadEx");
+    //	end
+    //	function Overloadex(exType ExType in, i int in) returns (String)
+    //		return ("OverloadEx");
+    //	end
+    
+    //    function testOverloadedSystemFunctions1(){@Test}
+    //        LogResult.logStdOut("System lib function - 1");
+    //        //		s = RUILib.createXMLNode( "nodeName", "nodeValue"); 
+    //        //		LogResult.assertTrue1( compareString(s,"<nodeName>nodeValue</nodeName>") );
+    //    end
+    
+    //    function testOverloadedSystemFunctions2(){@Test}
+    //        LogResult.logStdOut("System lib function - 2");
+    //        //		s = RUILib.createXMLNode( "nodeName", "attrib1=attrb", "nodeValue"); 
+    //        //		LogResult.assertTrue1( compareString(s,"<nodeName attrib1=attrb>nodeValue</nodeName>") );
+    //    end
+    
+end

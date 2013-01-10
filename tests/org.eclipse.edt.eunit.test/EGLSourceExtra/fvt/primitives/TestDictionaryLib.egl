@@ -1,0 +1,616 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestDictionaryLib
+* @title The function test program for dictionary datatype in EDT for RichUI
+* @keywords dictionary
+* @author EDT team
+* @createDate 2011/08/23
+* @description 
+* Test the initialization, value-assign, and comparison for dictionary.
+*/
+
+library TestDictionaryLib
+
+	//aMap, bMap egl.core.Dictionary{};
+	//aMap, bMap Dictionary{};
+    aMap Dictionary{};
+    bMap Dictionary{};
+    cMap Dictionary{a = "aaa", b = "bbb", c = "ccc"};
+    dMap Dictionary{a = 100, b = 12.25, c = 314e-2};
+    //thing any;
+    thing any = aMap;
+    bChar string;
+    anInt int;
+    //aString, bString string;
+    aString string;
+    bString string;
+    //aFlexRec, bFlexRec clnFlexRecord;
+    aFlexRec clnFlexRecord;
+    bFlexRec clnFlexRecord;
+    //mapSize, intA, intB int;
+    mapSize int;
+    intA int;
+    intB int;
+    //arrayA string[0];
+    arrayA string[] = new string[0];
+    //arrayB any[0];
+    arrayB any[] = new any[0];
+    errorString string;
+
+    dict dictionary{};
+    sf1 smallFloat = 123456789.123;
+    sfDict dictionary{};
+
+    //myODict1 Dictionary{ordering = byInsertion};
+    //myODict2 Dictionary{ordering = byInsertion, d = 4, c = 3, b = 2, a = 1};
+    //myODict3 Dictionary{ordering = byKey};
+    //myODict4 Dictionary{ordering = byKey, k = 11, z = 26, a = 1, b = 2};
+    //myODict5 Dictionary{caseSensitive = yes, ordering = byKey};
+    //myODict6 Dictionary{caseSensitive = yes, ordering = byKey, k = 11, z = 26, A = 27, b = 2};
+    myODict1 Dictionary = new Dictionary(false, OrderingKind.byInsertion);
+    myODict2 Dictionary = new Dictionary(false, OrderingKind.byInsertion){d = 4, c = 3, b = 2, a = 1};
+    myODict3 Dictionary = new Dictionary(false, OrderingKind.byKey);
+    myODict4 Dictionary = new Dictionary(false, OrderingKind.byKey){k = 11, z = 26, a = 1, b = 2};
+    myODict5 Dictionary = new Dictionary(true, OrderingKind.byKey);
+    myODict6 Dictionary = new Dictionary(true, OrderingKind.byKey){k = 11, z = 26, A = 27, b = 2};
+
+    myDict Dictionary;
+    //keysArray string[0];
+    keysArray string[] = new string[0];
+    //valuesArray any[0];
+    valuesArray any[] = new any[0];
+
+    //myODict Dictionary{caseSensitive = yes, ordering = byKey, k = 11, z = 26, A = 27, b = 2};
+    //myODict20 Dictionary{caseSensitive = yes, ordering = byKey};
+    //myODict30 Dictionary{ordering = byInsertion, caseSensitive = yes};
+    myODict Dictionary = new Dictionary(true, OrderingKind.byKey){k = 11, z = 26, A = 27, b = 2};
+    myODict20 Dictionary = new Dictionary(true, OrderingKind.byKey);
+    myODict30 Dictionary = new Dictionary(true, OrderingKind.byInsertion);
+
+    myReturnedDict Dictionary;
+    //myNewDict Dictionary{ordering = byInsertion};
+    myNewDict Dictionary = new Dictionary(false, OrderingKind.byInsertion);
+
+    //simpleArray string[0] =["b", "k", "z", "A"];
+    simpleArray string[] =["b", "k", "z", "A"];
+
+    arec clnFlexRecord;
+    anyRec any = arec;
+    sAny any = "xyz";
+
+    aFlex clnFlexRecord;
+
+    function testBasicDictionaryCases1(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 0");
+        aFlexRec.aString = "flex record string";
+        bFlexRec.aString = "flex record string";
+        aFlexRec.anInt = 5000;
+        aMap.aString = "string value";
+        aMap.anInt = 100;
+        aMap["anInt"] = 200;
+        aMap.aFlex = aFlexRec;
+        aMap.anAny = bFlexRec;
+        thing = aMap["aString"];
+        LogResult.assertTrue1(thing isa string);
+    end
+
+    function testBasicDictionaryCases2(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 1");
+        LogResult.assertTrue1(aMap["aString"] isa string);
+    end
+
+    function testBasicDictionaryCases3(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 2");
+        aString = aMap.aString;
+        LogResult.assertTrue1(aString == "string value");
+    end
+
+    function testBasicDictionaryCases4(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 3");
+        anInt = aMap.anInt;
+        LogResult.assertTrue1(anInt == 200);
+    end
+
+    function testBasicDictionaryCases5(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 4");
+        aString = aMap["aflex"]["aString"];
+        LogResult.assertTrue1(aString == "flex record string");
+    end
+
+    function testBasicDictionaryCases6(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 5");
+        anInt = aMap.AFLEX.anInt;
+        LogResult.assertTrue1(anInt == 5000);
+    end
+
+    function testBasicDictionaryCases7(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 7");
+        aMap.anAny = aFlexRec;
+        LogResult.assertTrue1(aMap.anAny isa ClnFlexRecord);
+    end
+
+    function testBasicDictionaryCases8(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 9");
+        aMap.anAny = aFlexRec;
+        LogResult.assertTrue1(aMap.anAny.aString as string == aMap.aFlex.aString as string);
+    end
+
+    function testBasicDictionaryCases9(){@Test}
+        LogResult.logStdOut("Collections - Basic Dictionary 10");
+        aMap.aFlex.aString = "secondValue";
+        LogResult.assertTrue1(aMap.anAny.aString != aMap.aFlex.aString);
+    end
+
+    function testBasicDictionaryCases10(){@Test}
+        LogResult.logStdOut("Basic Functions 1: size()");
+        mapSize = aMap.size();
+        LogResult.assertTrue1(mapSize == 4);
+    end
+
+    function testBasicDictionaryCases11(){@Test}
+        LogResult.logStdOut("Basic Functions 2: removeElement()");
+        aMap.removeElement("anAny");
+        mapSize = aMap.size();
+        LogResult.assertTrue1(mapSize == 3);
+    end
+
+    function testBasicDictionaryCases12(){@Test}
+        LogResult.logStdOut("Basic Functions 3: containsKey() == no >>");
+        LogResult.assertTrue1(!aMap.containsKey("anAny"));
+    end
+
+    function testBasicDictionaryCases13(){@Test}
+        LogResult.logStdOut("Basic Functions 4: containsKey() == yes >>");
+        LogResult.assertTrue1(aMap.containsKey("AString"));
+    end
+
+    function testBasicDictionaryCases14(){@Test}
+        LogResult.logStdOut("Basic Functions 5: insertAll() with 1 common element >>");
+        bMap.bString = aMap.aString;
+        aMap.anInt = 5000;
+        bMap.anInt = 10000;
+        bMap.insertAll(aMap);
+        mapSize = bMap.size();
+        LogResult.assertTrue1(mapsize == 4);
+    end
+
+    function testBasicDictionaryCases15(){@Test}
+        LogResult.logStdOut("Basic Functions 6: value comparison - strings");
+        aString = aMap.aString;
+        bString = bMap.bString;
+        LogResult.assertTrue1(aString == bString);
+    end
+
+    function testBasicDictionaryCases16(){@Test}
+        LogResult.logStdOut("Basic Functions 7: value comparison - test update of element on insertAll()");
+        intA = bMap.anInt;
+        LogResult.assertTrue1(intA == 5000);
+    end
+
+    function testBasicDictionaryCases17(){@Test}
+        LogResult.logStdOut("Basic Functions 8: value comparison - ints");
+        intB = bMap.aFlex.anInt;
+        intA = aMap.aFlex.anInt;
+        LogResult.assertTrue1(intB == intA);
+    end
+
+    function testBasicDictionaryCases18(){@Test}
+        LogResult.logStdOut("Basic Functions 9: checking for making copy of a record on assignment");
+        aMap.aFlex.anInt = 30000;
+        intB = bMap.aFlex.anInt;
+        LogResult.assertTrue1(intB == 30000);
+    end
+
+    function testBasicDictionaryCases19(){@Test}
+        LogResult.logStdOut("Basic Functions 9.01  << checking for making copy of a record on assignment >>");
+        //move aMap.aFlex to bMap.aFlex ;
+        bMap.aFlex = aMap.aFlex;
+        bMap.aFlex.anInt = 5000;
+        intB = bMap.aFlex.anInt;
+        intB = aMap.aFlex.anInt;
+        LogResult.assertTrue1(intB == 30000);
+    end
+
+    function testBasicDictionaryCases20(){@Test}
+        LogResult.logStdOut("Basic Functions 9.1: checking for making copy of an int on assignment");
+        aMap.anInt = 1;
+        intB = bMap.anInt;
+        LogResult.assertTrue1(intB == 5000);
+    end
+
+    function testBasicDictionaryCases21(){@Test}
+        LogResult.logStdOut("Basic Functions 9.2: checking for making copy of a string on assignment");
+        aMap.aString = "Check for by value or by ref";
+        bString = bMap.aString;
+        LogResult.assertTrue1(bString == "string value");
+    end
+
+    function testBasicDictionaryCases22(){@Test}
+        LogResult.logStdOut("Basic Functions 10: removeAll()");
+        bMap.removeAll();
+        mapSize = bMap.size();
+        LogResult.assertTrue1(mapSize == 0);
+    end
+
+    function testBasicDictionaryCases23(){@Test}
+        LogResult.logStdOut("Basic Functions 11: getKeys()");
+        cMap.a = "aaa";
+        cMap.b = "bbb";
+        cMap.c = "ccc";
+        arrayA = cMap.getkeys();
+        LogResult.assertTrue("arrayA[1] == \"a\"", arrayA[1] == "a");
+        LogResult.assertTrue("arrayA[2] == \"b\"", arrayA[2] == "b");
+        LogResult.assertTrue("arrayA[3] == \"c\"", arrayA[3] == "c");
+    end
+
+    function testBasicDictionaryCases24(){@Test}
+        LogResult.logStdOut("Basic Functions 12: getValues() with string values");
+        //move cMap.getValues() to arrayB;
+        arrayB = cMap.getValues();
+        LogResult.assertTrue("arrayB[1] == \"aaa\"", arrayB[1] as string == "aaa");
+        LogResult.assertTrue("arrayB[2] == \"bbb\"", arrayB[2] as string == "bbb");
+        LogResult.assertTrue("arrayB[3] == \"ccc\"", arrayB[3] as string == "ccc");
+    end
+
+    function testBasicDictionaryCases25(){@Test}
+        LogResult.logStdOut("Basic Functions 12.5 << getValues() with variable types as values >>");
+        arrayB = dMap.getvalues();
+        LogResult.assertTrue1(arrayB[1] as int == 100);
+    end
+
+    function testBasicDictionaryCases26(){@Test}
+        LogResult.logStdOut("Basic Functions 13: value comparison with spaces in key");
+        cMap["d d"] = "ddd";
+        aString = cMap["d d"];
+        LogResult.assertTrue1(aString == "ddd");
+    end
+
+    function testBasicDictionaryCases27(){@Test}
+        LogResult.logStdOut("Basic Records: change one affects the other?");
+        aFlexRec.aString = "flex record string";
+        bFlexRec = aFlexRec;
+        aFlexRec.aString = "Changed flex record string";
+        LogResult.assertTrue1(aFlexRec.aString != bFlexRec.aString);
+    end
+
+    function testBasicDictionaryCases28(){@Test}
+        LogResult.logStdOut(" Basic dictionary of smallfloat -  001 ");
+        sf10 smallFloat = 123456789.123;
+        sfDict.s1 = sf10;
+        sfDict.s2 = sf10;
+        LogResult.assertTrue1(sfDict.size() == 2 && sfDict.s1 == sfDict.s2);
+    end
+
+    function testBasicDictionaryCases29(){@Test}
+        LogResult.logStdOut(" Basic dictionary of smallfloat -  002 ");
+        sf1 = sfDict.s1;
+        LogResult.assertTrue1(sf1 == 123456789.123);
+    end
+
+    function testBasicDictionaryCases30(){@Test}
+        LogResult.logStdOut(" Basic dictionary of smallfloat -  003 ");
+        anAny any = sf1;
+        sfDict.s3 = anAny;
+        LogResult.assertTrue1(sf1 == sfDict.s3 as smallFloat);
+    end
+
+    function testComplexDictionaryCases1(){@Test}
+        LogResult.logStdOut("Array as dictionary value has correct size");
+        dict.numbers =[4, 8, 15, 16, 23, 42];
+        ary smallInt[] = dict.numbers;
+        // FIXME : change assert
+        LogResult.assertTrue1(6 == ary.getSize());
+        LogResult.logStdOut("Array as dictionary value has correct value 1");
+        LogResult.assertTrue1(4 == ary[1]);
+        LogResult.logStdOut("Array as dictionary value has correct value 2");
+        LogResult.assertTrue1(42 == ary[6]);
+    end
+
+    function testOrderingCases1(){@Test}
+        LogResult.logStdOut("Ordering Case 1: Ordering = byInsertion; getKeys");
+        myODict1.d = 4 as int;
+        myODict1.c = 3 as int;
+        myODict1.b = 2 as int;
+        myODict1.a = 1 as int;
+        keysArray = myODict1.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "d" && keysArray[2] == "c" && keysArray[3] == "b" && keysArray[4] == "a");
+    end
+
+    function testOrderingCases2(){@Test}
+        LogResult.logStdOut("Ordering Case 2: Ordering = byInsertion; getValues");
+        valuesArray = myODict1.getValues();
+        LogResult.assertTrue1(valuesArray[1] isa int);
+    end
+
+    function testOrderingCases3(){@Test}
+        LogResult.logStdOut("Ordering Case 2.5: Ordering = byInsertion; getValues");
+        valuesArray = myODict1.getValues();
+        LogResult.assertTrue1(valuesArray[1] as int == 4 && valuesArray[2] as int == 3 && valuesArray[3] as int == 2 && valuesArray[4] as int == 1);
+    end
+
+    function testOrderingCases4(){@Test}
+        LogResult.logStdOut("Ordering Case 3: Ordering = byInsertion; used initializer; getKeys");
+        //        myODict21 Dictionary{ordering = byInsertion, d = 4, c = 3, b = 2, a = 1};
+        myODict21 Dictionary = new Dictionary(false, OrderingKind.byInsertion){d = 4, c = 3, b = 2, a = 1};
+
+        keysArray = myODict21.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "d" && keysArray[2] == "c" && keysArray[3] == "b" && keysArray[4] == "a");
+    end
+
+    function testOrderingCases5(){@Test}
+        LogResult.logStdOut("Ordering Case 4: Ordering = byInsertion; used initializer; getValues");
+        //        myODict22 Dictionary{ordering = byInsertion, d = 4, c = 3, b = 2, a = 1};
+        myODict22 Dictionary = new Dictionary(false, OrderingKind.byInsertion){d = 4, c = 3, b = 2, a = 1};
+
+        valuesArray = myODict22.getValues();
+        LogResult.assertTrue1(valuesArray[1] as int == 4 && valuesArray[2] as int == 3 && valuesArray[3] as int == 2 && valuesArray[4] as int == 1);
+    end
+
+    function testOrderingCases6(){@Test}
+        LogResult.logStdOut("Ordering Case 5: Ordering = byKey; getKeys");
+        myODict3.k = 11;
+        myODict3.z = 26;
+        myODict3.a = 1;
+        myODict3.b = 2;
+        keysArray = myODict3.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "a" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testOrderingCases7(){@Test}
+        LogResult.logStdOut("Ordering Case 6: Ordering = byKey; getValues");
+        valuesArray = myODict3.getValues();
+        LogResult.assertTrue1(valuesArray[1] as int == 1 && valuesArray[2] as int == 2 && valuesArray[3] as int == 11 && valuesArray[4] as int ==
+                                26);
+    end
+
+    function testOrderingCases8(){@Test}
+        LogResult.logStdOut("Ordering Case 7: Ordering = byKey; used initializer; getKeys");
+        keysArray = myODict4.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "a" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testOrderingCases9(){@Test}
+        LogResult.logStdOut("Ordering Case 8: Ordering = byKey; used initializer; getValues");
+        valuesArray = myODict4.getValues();
+        LogResult.assertTrue1(valuesArray[1] as int == 1 && valuesArray[2] as int == 2 && valuesArray[3] as int == 11 && valuesArray[4] as int ==
+                                26);
+    end
+
+    function testOrderingCases10(){@Test}
+        LogResult.logStdOut("Ordering Case 9: CaseSensitive = Yes; Ordering = byKey; getKeys");
+        myODict5.k = 11;
+        myODict5.z = 26;
+        myODict5.A = 27;
+        myODict5.b = 2;
+        keysArray = myODict5.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "A" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testOrderingCases11(){@Test}
+        LogResult.logStdOut("Ordering Case 10: CaseSensitive = Yes; Ordering = byKey; getValues");
+        valuesArray = myODict5.getValues();
+        LogResult.assertTrue1(valuesArray[2] as int == 2 && valuesArray[3] as int == 11 && valuesArray[4] as int == 26 && valuesArray[1] as int ==
+                                27);
+    end
+
+    function testOrderingCases12(){@Test}
+        LogResult.logStdOut("Ordering Case 11: CaseSensitive = Yes; Ordering = byKey; used initializer; getKeys");
+        keysArray = myODict6.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "A" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testOrderingCases13(){@Test}
+        LogResult.logStdOut("Ordering Case 12: CaseSensitive = Yes; Ordering = byKey; used initializer; getValues");
+        valuesArray = myODict6.getValues();
+        LogResult.assertTrue1(valuesArray[2] as int == 2 && valuesArray[3] as int == 11 && valuesArray[4] as int == 26 && valuesArray[1] as int ==
+                                27);
+    end
+
+    function testOrderingCases14(){@Test}
+        LogResult.logStdOut("Ordering Case 13: simple case sensitive = yes");
+        eMap Dictionary{caseSensitive = yes, a = "lower", A = "upper"};
+        aString = eMap.a;
+        if(aString == "upper")
+            LogResult.assertTrue1(false);
+        //addDetail("case sensitivivity not supported") ;
+        else
+            bString = eMap.A;
+            LogResult.assertTrue1(aString == "lower" && bString == "upper");
+        end
+    end
+
+    function testAdditionalCases1(){@Test}
+        LogResult.logStdOut("Additional Case 1: Check for ordering of keys with caseSensitive ON & 'ordering = byKey' ");
+        keysArray = myODict.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "A" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testAdditionalCases2(){@Test}
+        LogResult.logStdOut("Additional Case 1.1: Check for ordering of keys with caseSensitive ON & 'ordering = byKey' ");
+        myODict20.k = 11;
+        myODict20.z = 26;
+        myODict20.A = 27;
+        myODict20.b = 2;
+        keysArray = myODict20.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "A" && keysArray[2] == "b" && keysArray[3] == "k" && keysArray[4] == "z");
+    end
+
+    function testAdditionalCases3(){@Test}
+        LogResult.logStdOut("Additional Case 1.2: Check for ordering of keys 'ordering = byInsertion' ");
+        myODict30.k = 11;
+        myODict30.z = 26;
+        myODict30.A = 27;
+        myODict30.b = 2;
+        keysArray = myODict30.getKeys();
+        LogResult.assertTrue1(keysArray[1] == "k" && keysArray[2] == "z" && keysArray[3] == "A" && keysArray[4] == "b");
+    end
+
+    function testAdditionalCases4(){@Test}
+        LogResult.logStdOut("Additional Case 2: Use Dictionary as a Function parameter/return value ");
+        myReturnedDict = changeDictionary(myODict);
+        keysArray = myReturnedDict.getKeys();
+        LogResult.assertTrue1(myReturnedDict.k as int == 500);
+    end
+
+    function testAdditionalCases5(){@Test}
+        LogResult.logStdOut("Additional Case 4: Literal Array as a dictionary element");
+        myNewdict.aKeyArray =["b", "k", "z", "A"];
+        LogResult.assertTrue1(myNewDict.aKeyArray[3] as string == "z");
+    end
+
+    function testAdditionalCases6(){@Test}
+        LogResult.logStdOut("Additional Case 5: Array as a dictionary element");
+        myNewdict.aKeyArray = simpleArray;
+        LogResult.assertTrue1(myNewDict.aKeyArray[3] as string == "z");
+    end
+
+    function testAdditionalCases7(){@Test}
+        LogResult.logStdOut("Additional Case 6: Any(Rec) as a dictionary element");
+        arec.anInt = 1;
+        arec.aString = "abc";
+        arec.anAny = "abc";
+        arec.aDecimal = 99.2345;
+        anyRec = arec;
+        anyRec.anInt = 5;
+        anyRec.aString = "mno";
+        anyRec.anAny = "mno";
+        anyRec.aDecimal = 44.4534;
+        anyRec.ts = "20080808110000";
+        LogResult.assertTrue1(anyRec.anInt as int == 5);
+    end
+
+    function testAdditionalCases8(){@Test}
+        LogResult.logStdOut("Additional Case 7: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(anyRec.aString as string == "mno");
+    end
+
+    function testAdditionalCases9(){@Test}
+        LogResult.logStdOut("Additional Case 8: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(anyRec.anAny as string == "mno");
+    end
+
+    function testAdditionalCases10(){@Test}
+        LogResult.logStdOut("Additional Case 9: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.anInt == 1);
+    end
+
+    function testAdditionalCases11(){@Test}
+        LogResult.logStdOut("Additional Case 10: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.aString == "abc");
+    end
+
+    function testAdditionalCases12(){@Test}
+        LogResult.logStdOut("Additional Case 11: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.anAny as string == "abc");
+    end
+
+    function testAdditionalCases13(){@Test}
+        LogResult.logStdOut("Additional Case 12: Any(Rec) as a dictionary element");
+        arec = anyRec;
+        LogResult.assertTrue1(arec.anInt == 5);
+    end
+
+    function testAdditionalCases14(){@Test}
+        LogResult.logStdOut("Additional Case 13: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.aString == "mno");
+    end
+
+    function testAdditionalCases15(){@Test}
+        LogResult.logStdOut("Additional Case 14: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.anAny as string == "mno");
+    end
+
+    function testAdditionalCases16(){@Test}
+        LogResult.logStdOut("Additional Case 15: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.aDecimal == 44.45);
+    end
+
+    function testAdditionalCases17(){@Test}
+        LogResult.logStdOut("Additional Case 16: Any(Rec) as a dictionary element");
+        LogResult.assertTrue1(arec.ts == "20080808110000");
+    end
+
+    function testAdditionalCases18(){@Test}
+        LogResult.logStdOut("Additional Case 15: Any(Rec) as a dictionary element");
+        sAny = "xyz";
+        anyRec.aString = sAny;
+        arec = anyRec;
+        LogResult.assertTrue1(arec.aString == "xyz");
+    end
+
+    function testFailureCases1(){@Test}
+        LogResult.logStdOut("Failure Case 1: Dynamic access only valid on Dictionary and Record");
+        aMap.anInt = 100;
+        try
+            aMap.anInt.xyz = 100;
+            LogResult.assertTrue1(false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testFailureCases2(){@Test}
+        LogResult.logStdOut("Failure Case 2: Dynamic access on Dictionary of unknown key not valid on righthand side of assignment");
+        try
+            i any = aMap.xxxx;
+            LogResult.assertTrue1(false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testFailureCases3(){@Test}
+        LogResult.logStdOut("Failure Case 3: Dynamic access on Record of unknown key not valid on either side of assignment");
+        try
+            i int = aFlex["xxxx"];
+            LogResult.assertTrue1(false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testFailureCases4(){@Test}
+        LogResult.logStdOut("Failure Case 4: Dynamic access on Record of unknown key not valid on either side of assignment");
+        try
+            aFlex["xxxx"] = 100;
+            LogResult.assertTrue1(false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testFailureCases5(){@Test}
+        LogResult.logStdOut("Failure Case 5: Dynamic access on Record case sensitivity");
+        try
+            aFlex["astring"] = "abc";
+            LogResult.assertTrue1(true);
+        onException(ex AnyException)
+            LogResult.assertTrue1(false);
+        end
+    end
+
+    function changeDictionary(dict Dictionary in) returns(dictionary)
+        dict.k = 500;
+        return(dict);
+    end
+
+end
+
+record clnFlexRecord
+    aString string;
+    anInt int;
+    //anAny any;
+    anAny any = "";
+    aDecimal decimal(9, 2);
+    ts timeStamp?;
+end
+
+//record clnFixedRecord
+//    10 aHex hex(60);
+//        15 aChar char(30);
+//end
+

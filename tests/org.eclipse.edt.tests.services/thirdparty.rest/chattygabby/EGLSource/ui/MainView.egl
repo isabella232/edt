@@ -1,0 +1,90 @@
+package ui;
+  
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.GridLayoutLib;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import common.ChattyGabbyRecords;
+import common.ChattyGabbyService;
+import common.RequestRecord;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.lang.SysLib;
+import eglx.services.ServiceInvocationException;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+import eglx.xml.binding.annotation.XMLValue;
+//import utils.dialog.DojoDialogLib;
+
+handler MainView type RUIhandler { initialUI = [ request, ui ], onConstructionFunction = start, cssFile = "css/chattygabby.css", title = "Chatty Gabby" }
+     
+    ui GridLayout { columns = 4, rows = 4, cellPadding = 4, children = [ GridLayout, messageLogArea, messageTextField, TextLabel ] };
+//    FormPanel DojoTitlePane { title = "Chatty Gabby", isOpen = true, duration = 1000, width = "500", children = [ ui ] };
+    sendButton Button { layoutData = new GridLayoutData { row = 1, column = 1 }, text = "Send" };
+    setNameButton Button { layoutData = new GridLayoutData { row = 1, column = 2 }, text = "Set Gabby Name" };
+    aboutButton Button { layoutData = new GridLayoutData { row = 1, column = 3 }, text = "Button" };
+    TextLabel TextLabel { layoutData = new GridLayoutData { row = 2, column = 1, horizontalAlignment = GridLayoutLib.ALIGN_RIGHT }, text = "Chat text:" };
+    messageTextField TextField { layoutData = new GridLayoutData { row = 2, column = 2, horizontalSpan = 2 } };
+    messageLogArea Div { layoutData = new GridLayoutData { row = 3, column = 2, horizontalSpan = 2 }, style = "overflow: scroll", width = "360", height = "390" };
+    GridLayout GridLayout { layoutData = new GridLayoutData { row = 1, column = 1, horizontalSpan = 3 }, cellPadding = 4, rows = 1, columns = 3, children = [
+                    sendButton, aboutButton, setNameButton ] };
+    request Button {  text = "Request", onClick ::= getChat2 };
+
+	startAtId int = 0;
+	userId String = "";
+	
+//	task Job { runfunction = getChat };
+	
+	
+
+    function start()
+ //   	DojoDialogLib.promptForValue("Gabby Name", "... any name you want ...", userNameSupplied);
+    	
+//    	task.repeat(3000);
+    end
+    
+    function userNameSupplied(value String in, e Event in) returns (boolean)
+    	if (value != "")
+    		userId = value;
+    		return(true);
+    	else
+    		return(false);
+    	end
+   	end
+   
+   function getChat2(e event in)
+   		getChat();
+   	end
+   	
+   	function getChat()  
+   		rec RequestRecord{action = "loadRecentPst",startAtId = 0};  		   
+		call ChattyGabbyService.loadRecentPosts(rec) using Resources.getResource("binding:chattygabby") as IHTTP returning to chatsReturned onException chatsException;  		
+   	end///
+   	
+   	function chatsReturned(retResult ChattyGabbyRecords in, http IHttp in)
+   		syslib.writeStdout("http.getResponse().body:" + http.getResponse().body);
+   		try 
+   		for (i int from 1 to retResult.list.getSize() by 1)			
+			messageLogArea.innerHTML = messageLogArea.innerHTML + retResult.list[i].txt + "<p>";
+		end
+		onException (ex AnyException)
+			Syslib.writestdout(ex.message);
+		end
+   	end
+   	
+   	function chatsException(exp AnyException in)
+   		se ServiceInvocationException = exp as ServiceInvocationException;
+   		Syslib.writestdout(se.detail1);
+   		Syslib.writestdout(se.detail2);
+   Syslib.writestdout(se.detail3);
+   	end
+   	
+   	
+end
+
+record rrr {@XMLValue {kind = simpleContent}}
+	value string;
+end

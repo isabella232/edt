@@ -1,0 +1,10 @@
+package lang.expression.initializer;
+
+handler TestHandler
+
+	i int;
+
+	function sneeze() returns( string )
+		return( "Ah-choo!" );
+	end
+end

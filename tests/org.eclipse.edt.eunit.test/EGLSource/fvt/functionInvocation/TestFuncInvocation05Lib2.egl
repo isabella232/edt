@@ -1,0 +1,74 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+
+/*
+* @name TestFuncInvocation05Lib2
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation05Lib2
+
+    function libraryInString(s string in)
+        LogResult.logStdOut("Library function IN String parameter - 1a");
+        LogResult.assertStringEqual1("abc", s);
+        s = "cde";
+    end
+
+    function libraryInInt(i int in)
+        LogResult.logStdOut("Library function IN integer parameter - 2a");
+        LogResult.assertBigIntEqual1(10, i);
+        i = 5;
+    end
+
+    function libraryInRecord(rec myRecord in)
+        LogResult.logStdOut("Library function IN record parameter - 3a");
+        LogResult.assertTrue1((rec.s == "abc") &&(rec.i == 10));
+        rec.s = "cde";
+        rec.i = 5;
+    end
+
+    function libraryOutString(s string out)
+        LogResult.logStdOut("Library function OUT String parameter - 1a");
+        LogResult.assertStringEqual1("", s);
+        s = "cde";
+    end
+
+    function libraryOutInt(i int out)
+        LogResult.logStdOut("Library function OUT integer parameter - 2a");
+        LogResult.assertBigIntEqual1(0, i);
+        i = 5;
+    end
+
+    function libraryOutRecord(rec myRecord out)
+        LogResult.logStdOut("Library function OUT record parameter - 3a");
+        LogResult.assertTrue1((rec.s == "") &&(rec.i == 0));
+        rec.s = "cde";
+        rec.i = 5;
+    end
+
+    function libraryInOutString(s string inOut)
+        LogResult.logStdOut("Library function INOUT String parameter - 1a");
+        LogResult.assertStringEqual1("abc", s);
+        s = "cde";
+    end
+
+    function libraryInOutInt(i int inOut)
+        LogResult.logStdOut("Library function INOUT integer parameter - 2a");
+        LogResult.assertBigIntEqual1(10, i);
+        i = 5;
+    end
+
+    function libraryInOutRecord(rec myRecord inOut)
+        LogResult.logStdOut("Library function INOUT record parameter - 3a");
+        LogResult.assertTrue1((rec.s == "abc") &&(rec.i == 10));
+        rec.s = "cde";
+        rec.i = 5;
+    end
+
+end

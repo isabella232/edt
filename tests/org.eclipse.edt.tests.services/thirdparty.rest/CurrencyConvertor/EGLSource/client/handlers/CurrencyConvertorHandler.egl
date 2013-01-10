@@ -1,0 +1,118 @@
+package client.handlers;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.HTML;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import common.interfaces.CurrencyConvertorData;
+import common.interfaces.ICurrency;
+import common.interfaces.double;
+import eglx.http.IHttp;
+import eglx.services.ServiceInvocationException;
+import eglx.services.ServiceKind;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.RUIHandler;
+
+// RUI Handler
+
+//
+//
+
+handler CurrencyConvertorHandler type RUIhandler{initialUI =[ui
+            ], onConstructionFunction = start, cssFile = "css/CurrencyConvertor.css"}
+
+    invoke Button{text = "invoke Service", onClick ::= invokeService};
+    const TIMEOUT int = 100000;
+    ui Box{columns = 1, background = "blue", width = 1024, padding = 11, children =[
+                    serviceType, inputSection, resultsBox],
+    height = "600"};
+    serviceType Combo{values =["call service using REST GET",
+                    "call service using REST POST"]};
+    resultsBox Box{columns = 1, children =[resultText]};
+    inputSection Box{columns = 2, children =[textLabel, fromDataCombo,
+                    TextLabel1, toDataCombo, invoke]};
+    textLabel TextLabel{text = "From Data:"};
+    fromDataCombo Combo{values =["AFA", "ALL", "DZD", "ARS", "AWG", "AUD", "BSD", "BHD", "BDT", "BBD", "BZD", "BMD", "BTN", "BOB", "BWP", "BRL", "GBP", "BND", "BIF", "XOF", "XAF", "KHR", "CAD", "CVE", "KYD", "CLP", "CNY", "COP", "KMF", "CRC", "HRK", "CUP", "CYP", "CZK", "DKK", "DJF", "DOP", "XCD", "EGP", "SVC", "EEK", "ETB", "EUR", "FKP", "GMD", "GHC", "GIP", "XAU", "GTQ", "GNF", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK", "INR", "IDR", "IQD", "ILS", "JMD", "JPY", "JOD", "KZT", "KES", "KRW", "KWD", "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "LTL", "MOP", "MKD", "MGF", "MWK", "MYR", "MVR", "MTL", "MRO", "MUR", "MXN", "MDL", "MNT", "MAD", "MZM", "MMK", "NAD", "NPR", "ANG", "NZD", "NIO", "NGN", "KPW", "NOK", "OMR", "XPF", "PKR", "XPD", "PAB", "PGK", "PYG", "PEN", "PHP", "XPT", "PLN", "QAR", "ROL", "RUB", "WST", "STD", "SAR", "SCR", "SLL", "XAG", "SGD", "SKK", "SIT", "SBD", "SOS", "ZAR", "LKR", "SHP", "SDD", "SRG", "SZL", "SEK", "TRY", "CHF", "SYP", "TWD", "TZS", "THB", "TOP", "TTD", "TND", "TRL", "USD", "AED", "UGX", "UAH", "UYU", "VUV", "VEB", "VND", "YER", "YUM", "ZMK", "ZWD"],
+    selection = 140};
+    TextLabel1 TextLabel{text = "To Data"};
+    toDataCombo Combo{values =["AFA", "ALL", "DZD", "ARS", "AWG", "AUD", "BSD", "BHD", "BDT", "BBD", "BZD", "BMD", "BTN", "BOB", "BWP", "BRL", "GBP", "BND", "BIF", "XOF", "XAF", "KHR", "CAD", "CVE", "KYD", "CLP", "CNY", "COP", "KMF", "CRC", "HRK", "CUP", "CYP", "CZK", "DKK", "DJF", "DOP", "XCD", "EGP", "SVC", "EEK", "ETB", "EUR", "FKP", "GMD", "GHC", "GIP", "XAU", "GTQ", "GNF", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK", "INR", "IDR", "IQD", "ILS", "JMD", "JPY", "JOD", "KZT", "KES", "KRW", "KWD", "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "LTL", "MOP", "MKD", "MGF", "MWK", "MYR", "MVR", "MTL", "MRO", "MUR", "MXN", "MDL", "MNT", "MAD", "MZM", "MMK", "NAD", "NPR", "ANG", "NZD", "NIO", "NGN", "KPW", "NOK", "OMR", "XPF", "PKR", "XPD", "PAB", "PGK", "PYG", "PEN", "PHP", "XPT", "PLN", "QAR", "ROL", "RUB", "WST", "STD", "SAR", "SCR", "SLL", "XAG", "SGD", "SKK", "SIT", "SBD", "SOS", "ZAR", "LKR", "SHP", "SDD", "SRG", "SZL", "SEK", "TRY", "CHF", "SYP", "TWD", "TZS", "THB", "TOP", "TTD", "TND", "TRL", "USD", "AED", "UGX", "UAH", "UYU", "VUV", "VEB", "VND", "YER", "YUM", "ZMK", "ZWD"],
+    selection = 27};
+
+//    currencyTypeList string[] = new string[]{"AFA", "ALL", "DZD", "ARS", "AWG", "AUD", "BSD", "BHD", "BDT", "BBD", "BZD", "BMD", "BTN", "BOB", "BWP", "BRL", "GBP", "BND", "BIF", "XOF", "XAF", "KHR", "CAD", "CVE", "KYD", "CLP", "CNY", "COP", "KMF", "CRC", "HRK", "CUP", "CYP", "CZK", "DKK", "DJF", "DOP", "XCD", "EGP", "SVC", "EEK", "ETB", "EUR", "FKP", "GMD", "GHC", "GIP", "XAU", "GTQ", "GNF", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK", "INR", "IDR", "IQD", "ILS", "JMD", "JPY", "JOD", "KZT", "KES", "KRW", "KWD", "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "LTL", "MOP", "MKD", "MGF", "MWK", "MYR", "MVR", "MTL", "MRO", "MUR", "MXN", "MDL", "MNT", "MAD", "MZM", "MMK", "NAD", "NPR", "ANG", "NZD", "NIO", "NGN", "KPW", "NOK", "OMR", "XPF", "PKR", "XPD", "PAB", "PGK", "PYG", "PEN", "PHP", "XPT", "PLN", "QAR", "ROL", "RUB", "WST", "STD", "SAR", "SCR", "SLL", "XAG", "SGD", "SKK", "SIT", "SBD", "SOS", "ZAR", "LKR", "SHP", "SDD", "SRG", "SZL", "SEK", "TRY", "CHF", "SYP", "TWD", "TZS", "THB", "TOP", "TTD", "TND", "TRL", "USD", "AED", "UGX", "UAH", "UYU", "VUV", "VEB", "VND", "YER", "YUM", "ZMK", "ZWD"};
+
+    resultText TextLabel{value = ""};
+
+    //sourceText HTML{width = 600, height = 400};
+    resultsHeader HTML{margin = 3, font = "Verdana", color = "white"};
+    originalXML string = "";
+
+    function start()
+    end
+
+    function invokeService(e Event in)
+    	
+        fromdata string = fromDataCombo.getValues()[fromDataCombo.getSelection()];
+        todata string = toDataCombo.getValues()[toDataCombo.getSelection()];
+
+
+		formdata CurrencyConvertorData;
+        formdata.fromCurrency = fromdata;
+        formdata.toCurrency = todata;
+                
+        case(serviceType.getSelection())
+            when(1)
+                call ICurrency.GetCurrencyGet(fromdata, todata)
+                		using Resources.getResource("binding:srvcICurrency") as IHTTP
+                        returning to handleReturn onException Exceptionhandler;
+            when(2)
+                call ICurrency.GetCurrencyPost(formdata)
+                		using Resources.getResource("binding:srvcICurrency") as IHTTP
+                       	returning to handleReturn onException Exceptionhandler;
+        end
+    end
+
+    function handleReturn(currency double in)
+//    	s String = serviceLib.getCurrentCallbackResponse().body;
+        resultText.setText("result is: " + currency.value);
+    end
+
+    private function Exceptionhandler(exception AnyException in)
+        handleException(exception, null);
+    end
+
+    private function handleException(exception AnyException in, srvc string? in)
+        resultsHeader.text = "<br>An exception has occurred<p>";
+        if(srvc != null)
+            resultsHeader.text += "<br>   in the " + srvc + " service<p>";
+        end
+        resultsHeader.text += "message:" + exception.message + "<p>";
+        if(exception isa ServiceInvocationException)
+            resultsHeader.text += "ServiceKind:" + serviceKind(exception as
+                                    ServiceInvocationException) + "<p>";
+            resultsHeader.text += "detail1:" +(exception as
+                            ServiceInvocationException).detail1 + "<p>";
+            resultsHeader.text += "detail2:" +(exception as
+                            ServiceInvocationException).detail2 + "<p>";
+            resultsHeader.text += "detail3:" +(exception as
+                            ServiceInvocationException).detail3 + "<p>";
+        end
+        resultsBox.children =[resultsHeader];
+    end
+
+    private function serviceKind(sie ServiceInvocationException in) returns(string)
+        case(sie.source)
+            when(eglx.services.ServiceKind.WEB)
+                return("WEB");
+            when(eglx.services.ServiceKind.NATIVE)
+                return("NATIVE");
+            when(eglx.services.ServiceKind.EGL)
+                return("EGL");
+            when(eglx.services.ServiceKind.REST)
+                return("REST");
+            otherwise
+                return("unknown");
+        end
+    end
+    //	
+end

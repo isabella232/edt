@@ -1,0 +1,31 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtTime007
+  * @title EdtTime007 - runAssignmentFunction
+  * @description testing Time assignment and initialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction07
+  * @sources EdtTime007.egl
+  * @keywords time, functions, assignemnt, null
+ **/
+library ETime007 {}
+
+	function runHourOfFunction(){@Test}
+		t time = "13:14:15";
+		LogResult.assertBigIntEqual( "time.hourOf", 13, t.hourOf() );
+	end
+
+	function runMinuteOfFunction(){@Test}
+		t time = "13:14:15";
+		LogResult.assertBigIntEqual( "time.minuteOf", 14, t.minuteOf() );
+	end
+
+	function runSecondOfFunction(){@Test}
+		t time = "13:14:15";
+		LogResult.assertBigIntEqual( "time.secondOf", 15, t.secondOf() );
+	end
+end

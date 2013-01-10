@@ -1,0 +1,537 @@
+package fvt.primitives;
+
+/* 
+* @name TestDateTimeLib
+* @title The function test program for Date, Time and Timestamp in EDT for RichUI
+* @keywords Date, Time and Timestamp
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* Test the initialization, value-assign, and comparison for Date, Time and Timestamp.
+*/
+
+library TestDateTimeLib
+
+//date1, date2 date;
+    date1 date;
+    date2 date;
+    b boolean;
+
+    //time1, time2 time;
+    
+    ts1 timeStamp?;
+    ts2 timeStamp("yyyyMMddHHmmssffffff");
+    ts3 timeStamp("yyyyMM");
+    ts4 timeStamp("HHmmss");
+    ts5 timeStamp("MMdd");
+    copy1 timeStamp?;
+    copy2 timeStamp("yyyyMMddHHmmssffffff");
+    copy3 timeStamp("yyyyMM");
+    copy4 timeStamp("HHmmss");
+    copy5 timeStamp("MMdd");
+
+    diff int;
+
+    //    function testForDate1(){@Test}
+    //        LogResult.logStdOut("Initial value of date");
+    //        LogResult.assertTrue1(date1 == currentDate());
+    //    end
+    
+    function testForDate2(){@Test}
+        //        LogResult.logStdOut("Assign to date #1");
+        //        date1 = 1;
+        //        LogResult.assertTrue1(date1 == "01/01/1900");
+        LogResult.skipped("date and int are not compatible types in the expression date1 = 1");
+    end
+
+    function testForDate3(){@Test}
+        LogResult.logStdOut("Assign to date #2");
+        date1 = "10/11/1983";
+        LogResult.assertTrue1(date1 == "10/11/1983");
+    end
+
+    function testForDate4(){@Test}
+        //        LogResult.logStdOut("Assign to date #3 (overflow)");
+        //        try
+        //            date1 = 21474833e15;
+        //            b = false;
+        //        onException(r AnyException)
+        //            b = true;
+        //        end
+        //        LogResult.assertTrue1(b);
+        LogResult.skipped("date and float are not compatible types in the expression date1 = 21474833e15");
+    end
+
+    function testForDate5(){@Test}
+        //        LogResult.logStdOut("Assign to date #4 (overflow)");
+        //        try
+        //            date1 = -21474833e15;
+        //            b = false;
+        //        onException(r AnyException)
+        //            b = true;
+        //        //        onException(ae AnyException)
+        //        //            b = true;
+        //        end
+        //        LogResult.assertTrue1(b);
+        LogResult.skipped("date and float are not compatible types in the expression date1 = -21474833e15");
+    end
+
+    function testForDate6(){@Test}
+        LogResult.logStdOut("Assign and compare two dates #1");
+        date1 = "04/07/1895";
+        date2 = "04/07/1895";
+        LogResult.assertTrue("date1:", date1 == "04/07/1895");
+        LogResult.assertTrue("date2:", date2 == "04/07/1895");
+        LogResult.assertTrue("date1 == date2", date1 == date2);
+    end
+
+    function testForDate7(){@Test}
+        LogResult.logStdOut("Assign and compare two dates #2");
+        date2 = "04/14/1895";
+        LogResult.assertTrue("date1:", date1 == "04/07/1895");
+        LogResult.assertTrue("date2:", date2 == "04/14/1895");
+        LogResult.assertTrue("date1 != date2", date1 != date2);
+    end
+
+    function testForDate8(){@Test}
+        LogResult.logStdOut("Assign and compare two dates #3");
+        date1 = date2;
+        LogResult.assertTrue("date1:", date1 == "04/14/1895");
+        LogResult.assertTrue("date2:", date2 == "04/14/1895");
+        LogResult.assertTrue("date1 == date2", date1 == date2);
+    end
+
+    //    function testForDate9(){@Test}
+    //        LogResult.logStdOut("Assign and compare two dates #4");
+    //        date1 = currentDate();
+    //        date2 = currentDate();
+    //        LogResult.assertTrue1(date1 == date2);
+    //    end
+    
+    //    function testForTime1(){@Test}
+    //        LogResult.logStdOut("Initial value of time");
+    //        time10 time;
+    //        StrLib.defaultTimeFormat = "HH:mm:ss";
+    //        LogResult.assertTrue1(time10 == currenttime());
+    //    end
+    //
+    //    function testForTime2(){@Test}
+    //        LogResult.logStdOut("Assign to time #1");
+    //        time1 = "00:00:00";
+    //        LogResult.assertTrue1(time1 == "00:00:00");
+    //    end
+    //
+    //    function testForTime3(){@Test}
+    //        LogResult.logStdOut("Assign to time #2");
+    //        time1 = "10:11:54";
+    //        LogResult.assertTrue1(time1 == "10:11:54");
+    //    end
+    //
+    //    function testForTime4(){@Test}
+    //        LogResult.logStdOut("Assign to time #3");
+    //        time1 = "19:50:36";
+    //        LogResult.assertTrue1(time1 == "19:50:36");
+    //    end
+    //
+    //    function testForTime5(){@Test}
+    //        LogResult.logStdOut("Assign and compare two times #1");
+    //        time1 = "10:11:53";
+    //        time2 = "10:11:53";
+    //        LogResult.assertTrue("time1:", time1 == "10:11:53");
+    //        LogResult.assertTrue("time2:", time2 == "10:11:53");
+    //        LogResult.assertTrue("time1 == time2", time1 == time2);
+    //    end
+    //
+    //    function testForTime6(){@Test}
+    //        LogResult.logStdOut("Assign and compare two times #2");
+    //        time2 = "10:11:52";
+    //        LogResult.assertTrue("time1:", time1 == "10:11:53");
+    //        LogResult.assertTrue("time2:", time2 == "10:11:52");
+    //        LogResult.assertTrue("time1 != time2", time1 != time2);
+    //    end
+    //
+    //    function testForTime7(){@Test}
+    //        LogResult.logStdOut("Assign and compare two times #3");
+    //        time1 = time2;
+    //        LogResult.assertTrue("time1:", time1 == "10:11:52");
+    //        LogResult.assertTrue("time2:", time2 == "10:11:52");
+    //        LogResult.assertTrue("time1 == time2", time1 == time2);
+    //    end
+    //
+    //    function testForTime8(){@Test}
+    //        LogResult.logStdOut("Assign and compare two times #4");
+    //        time1 = currenttime();
+    //        time2 = currenttime();
+    //        LogResult.assertTrue1(time1 == time2);
+    //    end
+    
+    //    function testForTimestamp1(){@Test}
+    //        LogResult.logStdOut("Timestamp initialized to current timestamp");
+    //        ts10 timeStamp;
+    //        LogResult.assertTrue1(ts10 as timeStamp("yyyyMMddHHmmss") ==
+    //                        currentTimeStamp() as timeStamp("yyyyMMddHHmmss"));
+    //    end
+    
+    function testForTimestamp2(){@Test}
+        LogResult.logStdOut("assign to timestamp 1");
+        ts1 = "1988-10-10 08.32.00.123000";
+        LogResult.assertTrue1(ts1 == "1988-10-10 08:32:00");
+    end
+
+    function testForTimestamp3(){@Test}
+        LogResult.logStdOut("assign to timestamp 2a");
+        ts2 = "19881010083200123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp4(){@Test}
+        LogResult.logStdOut("assign to timestamp 2b");
+        ts2 = "1988-10-10 08.32.00.123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp5(){@Test}
+        LogResult.logStdOut("assign to timestamp 2c");
+        ts2 = "1988-10-10 08.32.00.123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp6(){@Test}
+        LogResult.logStdOut("assign to timestamp 3a");
+        ts3 = "198810";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp7(){@Test}
+        LogResult.logStdOut("assign to timestamp 3b");
+        ts3 = "1988-10";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp8(){@Test}
+        LogResult.logStdOut("assign to timestamp 3c");
+        ts3 = "1988-10";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp9(){@Test}
+        LogResult.logStdOut("assign to timestamp 4a");
+        ts4 = "083200";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp10(){@Test}
+        LogResult.logStdOut("assign to timestamp 4b");
+        ts4 = "08.32.00";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp11(){@Test}
+        LogResult.logStdOut("assign to timestamp 4c");
+        ts4 = "08.32.00";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp12(){@Test}
+        LogResult.logStdOut("assign to timestamp 5a");
+        ts5 = "0822";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp13(){@Test}
+        LogResult.logStdOut("assign to timestamp 5b");
+        ts5 = "08-22";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp14(){@Test}
+        LogResult.logStdOut("assign to timestamp 5c");
+        ts5 = "08-22";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp15(){@Test}
+        LogResult.logStdOut("assign and compare 1");
+        ts1 = "1991-04-10 14.56.21.123000";
+        copy1 = "1991-04-10 14.56.21.123000";
+        LogResult.assertTrue1(ts1 == copy1);
+    end
+
+    function testForTimestamp16(){@Test}
+        LogResult.logStdOut("assign and compare 2");
+        ts2 = "1991-04-10 14.56.21.123000";
+        copy2 = "1991-04-10 14.56.21.123000";
+        LogResult.assertTrue1(ts2 == copy2);
+    end
+
+    function testForTimestamp17(){@Test}
+        LogResult.logStdOut("assign and compare 3");
+        ts3 = "1991-04";
+        copy3 = "1991-04";
+        LogResult.assertTrue1(ts3 == copy3);
+    end
+
+    function testForTimestamp18(){@Test}
+        LogResult.logStdOut("assign and compare 4");
+        ts4 = "14.56.21";
+        copy4 = "14.56.21";
+        LogResult.assertTrue1(ts4 == copy4);
+    end
+
+    function testForTimestamp19(){@Test}
+        LogResult.logStdOut("assign and compare 5");
+        ts5 = "08-22";
+        copy5 = "08-22";
+        LogResult.assertTrue1(ts5 == copy5);
+    end
+
+    //    function testForTimestamp20(){@Test}
+    //        LogResult.logStdOut("assign and compare current");
+    //        ts1 = DateTimeLib.currentTimeStamp();
+    //        ts2 = DateTimeLib.currentTimeStamp();
+    //        LogResult.assertTrue1(ts1 as timeStamp("yyyyMMddHHmmss") ==
+    //                        ts2 as timeStamp("yyyyMMddHHmmss"));
+    //    end
+    
+    function testForTimestamp21(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        LogResult.logStdOut("assign to timestamp 1 with format");
+        ts1 = "1988-10-10 08:32:00.123000";
+        LogResult.assertTrue1(ts1 == "1988-10-10 08:32:00");
+    end
+
+    function testForTimestamp22(){@Test}
+        LogResult.logStdOut("assign to timestamp 2a with format");
+        ts2 = "1988-10-10-08-32-00-123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp23(){@Test}
+        LogResult.logStdOut("assign to timestamp 2b with format");
+        ts2 = "1988-10-10 08:32:00.123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp24(){@Test}
+        LogResult.logStdOut("assign to timestamp 2c with format");
+        ts2 = "1988-10-10 08:32:00.123000";
+        LogResult.assertTrue1(ts2 == "1988-10-10 08:32:00.123000");
+    end
+
+    function testForTimestamp25(){@Test}
+        LogResult.logStdOut("assign to timestamp 3a with format");
+        ts3 = "1988-10";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp26(){@Test}
+        LogResult.logStdOut("assign to timestamp 3b with format");
+        ts3 = "1988-10";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp27(){@Test}
+        LogResult.logStdOut("assign to timestamp 3c with format");
+        ts3 = "1988-10";
+        LogResult.assertTrue1(ts3 == "1988-10");
+    end
+
+    function testForTimestamp28(){@Test}
+        LogResult.logStdOut("assign to timestamp 4a with format");
+        ts4 = "08-32-00";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp29(){@Test}
+        LogResult.logStdOut("assign to timestamp 4b with format");
+        ts4 = "08:32:00";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp30(){@Test}
+        LogResult.logStdOut("assign to timestamp 4c with format");
+        ts4 = "08:32:00";
+        LogResult.assertTrue1(ts4 == "08:32:00");
+    end
+
+    function testForTimestamp31(){@Test}
+        LogResult.logStdOut("assign to timestamp 5a with format");
+        ts5 = "08-22";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp32(){@Test}
+        LogResult.logStdOut("assign to timestamp 5b with format");
+        ts5 = "08-22";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp33(){@Test}
+        LogResult.logStdOut("assign to timestamp 5c with format");
+        ts5 = "08-22";
+        LogResult.assertTrue1(ts5 == "08-22");
+    end
+
+    function testForTimestamp34(){@Test}
+        LogResult.logStdOut("assign and compare 1 with format");
+        ts1 = "1991-04-10 14:56:21.123000";
+        copy1 = "1991-04-10 14:56:21.123000";
+        LogResult.assertTrue1(ts1 == copy1);
+    end
+
+    function testForTimestamp35(){@Test}
+        LogResult.logStdOut("assign and compare 2 with format");
+        ts2 = "1991-04-10 14:56:21.123000";
+        copy2 = "1991-04-10 14:56:21.123000";
+        LogResult.assertTrue1(ts2 == copy2);
+    end
+
+    function testForTimestamp36(){@Test}
+        LogResult.logStdOut("assign and compare 3 with format");
+        ts3 = "1991-04";
+        copy3 = "1991-04";
+        LogResult.assertTrue1(ts3 == copy3);
+    end
+
+    function testForTimestamp37(){@Test}
+        LogResult.logStdOut("assign and compare 4 with format");
+        ts4 = "14:56:21";
+        copy4 = "14:56:21";
+        LogResult.assertTrue1(ts4 == copy4);
+    end
+
+    function testForTimestamp38(){@Test}
+        LogResult.logStdOut("assign and compare 5 with format");
+        ts5 = "08-22";
+        copy5 = "08-22";
+        LogResult.assertTrue1(ts5 == copy5);
+    end
+
+    //    function testForTimestamp39(){@Test}
+    //        LogResult.logStdOut("assign and compare current with format");
+    //        ts1 = DateTimeLib.currentTimeStamp();
+    //        ts2 = DateTimeLib.currentTimeStamp();
+    //        LogResult.assertTrue1(ts1 as timeStamp("yyyyMMddHHmmss") ==
+    //                        ts2 as timeStamp("yyyyMMddHHmmss"));
+    //    end
+    
+    function testMathOps1(){@Test}
+        LogResult.logStdOut("date - date returns int #1");
+        date1 = "06/06/1944";
+        date2 = "06/01/1944";
+        //diff = date1 - date2;
+        diff = date1.daysDifferent(date2);
+        LogResult.assertTrue1(diff == 5);
+    end
+
+    function testMathOps2(){@Test}
+        LogResult.logStdOut("date - date returns int #2");
+        date1 = "06/06/1944";
+        date2 = "05/01/1944";
+        //diff = date1 - date2;
+        diff = date1.daysDifferent(date2);
+        LogResult.assertTrue1(diff == 36);
+    end
+
+    function testMathOps3(){@Test}
+        LogResult.logStdOut("date - date returns int #3");
+        date1 = "10/10/1989";
+        date2 = "10/10/1988";
+        //diff = date1 - date2;
+        diff = date1.daysDifferent(date2);
+        LogResult.assertTrue1(diff == 365);
+    end
+
+    function testMathOps4(){@Test}
+        LogResult.logStdOut("date - date returns int #4");
+        date1 = "08/18/1969";
+        //LogResult.assertTrue1(date1 - "08/15/1969" == 3);
+        LogResult.assertTrue1(date1.daysDifferent("08/15/1969") == 3);
+    end
+
+    //    function testMathOps5(){@Test}
+    //        LogResult.logStdOut("date - number returns date #1");
+    //        date1 = "06/06/1944";
+    //        date2 = "06/01/1944";
+    //        LogResult.assertTrue1((date1 - 5) == date2);
+    //    end
+    //
+    //    function testMathOps6(){@Test}
+    //        LogResult.logStdOut("date - number returns date #2");
+    //        date1 = "06/06/1944";
+    //        date2 = "05/01/1944";
+    //        LogResult.assertTrue1((date1 - 36) == date2);
+    //    end
+    //
+    //    function testMathOps7(){@Test}
+    //        LogResult.logStdOut("date - number returns date #3");
+    //        date1 = "10/10/1989";
+    //        date2 = "10/10/1988";
+    //        LogResult.assertTrue1((date1 - 365) == date2);
+    //    end
+    //
+    //    function testMathOps8(){@Test}
+    //        LogResult.logStdOut("date + number returns date #1");
+    //        date1 = "06/06/1944";
+    //        date2 = "06/01/1944";
+    //        LogResult.assertTrue1(date1 ==(date2 + 5));
+    //    end
+    //
+    //    function testMathOps9(){@Test}
+    //        LogResult.logStdOut("date + number returns date #2");
+    //        date1 = "06/06/1944";
+    //        date2 = "05/01/1944";
+    //        LogResult.assertTrue1(date1 ==(date2 + 36));
+    //    end
+    //
+    //    function testMathOps10(){@Test}
+    //        LogResult.logStdOut("date + number returns date #3");
+    //        date1 = "10/10/1989";
+    //        date2 = "10/10/1988";
+    //        LogResult.assertTrue1(date1 ==(date2 + 365));
+    //    end
+    
+    function testMathOps11(){@Test}
+        //        LogResult.logStdOut("number + date returns date #1");
+        //        date1 = "06/06/1944";
+        //        date2 = "06/01/1944";
+        //        date2 = 5 + date2;
+        //        LogResult.assertTrue1(date1 == date2);
+        LogResult.skipped("The primitive type date for date2 is not valid for use in a numeric expression");
+    end
+
+    function testMathOps12(){@Test}
+        //        LogResult.logStdOut("number + date returns date #2");
+        //        date1 = "06/06/1944";
+        //        date2 = "05/01/1944";
+        //        date2 = 36 + date2;
+        //        LogResult.assertTrue1(date1 == date2);
+        LogResult.skipped("The primitive type date for date2 is not valid for use in a numeric expression");
+    end
+
+    function testMathOps13(){@Test}
+        //        LogResult.logStdOut("number + date returns date #3");
+        //        date1 = "10/10/1989";
+        //        date2 = "10/10/1988";
+        //        date2 = 365 + date2;
+        //        LogResult.assertTrue1(date1 == date2);
+        LogResult.skipped("The primitive type date for date2 is not valid for use in a numeric expression");
+    end
+
+    //    function testMathOps14(){@Test}
+    //        LogResult.logStdOut("number + date returns date #4");
+    //        date1 = "08/18/1969";
+    //        date2 = "08/15/1969";
+    //        date2 += 3;
+    //        LogResult.assertTrue1(date1 == date2);
+    //    end
+    
+    //    function testMathOps15(){@Test}
+    //        LogResult.logStdOut("number + date returns date #5");
+    //        date1 = "08/18/1969";
+    //        date2 = "08/15/1969";
+    //        date2 += 3.000;
+    //        LogResult.assertTrue1(date1 == date2);
+    //    end
+    
+end

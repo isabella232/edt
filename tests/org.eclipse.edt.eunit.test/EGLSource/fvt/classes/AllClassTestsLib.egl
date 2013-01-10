@@ -1,0 +1,220 @@
+package fvt.classes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library AllClassTestsLib
+	
+	function testOverriddenFunctions1(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions1");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new ConcreteClass;
+		result = clazz.abstractFunc();
+		LogResult.assertTrue1(result == 10);
+	end
+	
+	function testOverriddenFunctions2(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions2");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new Subclass(1);
+		result = clazz.abstractFunc();
+		LogResult.assertTrue1(result == 20);
+	end
+	
+	function testOverriddenFunctions3(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions3");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new Subclass(1);
+		result = clazz.getField1(true);
+		LogResult.assertTrue1(result == 1);
+	end
+	
+	function testOverriddenFunctions4(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions4");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new Subclass(1);
+		result = clazz.getField1(false);
+		LogResult.assertTrue1(result == 3);
+	end
+	
+	function testOverriddenFunctions5(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions5");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new Subclass(1);
+		result = clazz.getConst1(true);
+		LogResult.assertTrue1(result == 10);
+	end
+	
+	function testOverriddenFunctions6(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden functions6");
+		clazz AbstractClass?;
+		result int;
+		
+		clazz = new Subclass(1);
+		result = clazz.getConst1(false);
+		LogResult.assertTrue1(result == 30);
+	end
+	
+	function testOverriddenFields1(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields1");
+		clazz AbstractClass?;
+		result int;
+		
+		// Uses field from declared type, not actual
+		clazz = new ConcreteClass;
+		result = clazz.field1;
+		LogResult.assertTrue1(result == 1);
+	end
+	
+	function testOverriddenFields2(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields2");
+		clazz AbstractClass?;
+		result int;
+		
+		// Uses field from declared type, not actual
+		clazz = new Subclass(1);
+		result = clazz.field1;
+		LogResult.assertTrue1(result == 1);
+	end
+	
+	function testOverriddenFields3(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields3");
+		
+		// Uses field from declared type, not actual
+		LogResult.assertTrue1(new ConcreteClass().field1 == 2);
+	end
+	
+	function testOverriddenFields4(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields4");
+		
+		// Uses field from declared type, not actual
+		LogResult.assertTrue1(new Subclass(1).field1 == 3);
+	end
+	
+	function testOverriddenFields5(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields5");
+		clazz Subclass = new Subclass(1);
+		
+		// Uses field from AS type, not actual
+		LogResult.assertTrue1((clazz as ConcreteClass).field1 == 2);
+	end
+	
+	function testOverriddenFields6(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields6");
+		clazz AbstractClass?;
+		result int;
+		
+		// Uses field from declared type, not actual
+		clazz = new ConcreteClass;
+		result = clazz.const1;
+		LogResult.assertTrue1(result == 10);
+	end
+	
+	function testOverriddenFields7(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields7");
+		clazz AbstractClass?;
+		result int;
+		
+		// Uses field from declared type, not actual
+		clazz = new Subclass(1);
+		result = clazz.const1;
+		LogResult.assertTrue1(result == 10);
+	end
+	
+	function testOverriddenFields8(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields8");
+		
+		// Uses field from declared type, not actual
+		LogResult.assertTrue1(new ConcreteClass().const1 == 20);
+	end
+	
+	function testOverriddenFields9(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields9");
+		
+		// Uses field from declared type, not actual
+		LogResult.assertTrue1(new Subclass(1).const1 == 30);
+	end
+	
+	function testOverriddenFields10(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields10");
+		clazz Subclass = new Subclass(1);
+		
+		// Uses field from AS type, not actual
+		LogResult.assertTrue1((clazz as ConcreteClass).const1 == 20);
+	end
+	
+	function testOverriddenFields11(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields11");
+		clazz Subclass = new Subclass(1);
+		
+		// Tests the class returning "super.field1"
+		LogResult.assertTrue1(clazz.getSuperDotField1() == 2);
+	end
+	
+	function testOverriddenFields12(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test overridden fields12");
+		clazz ConcreteClass;
+		
+		// Tests the class returning "super.field1"
+		LogResult.assertTrue1(clazz.getSuperDotField1() == 1);
+	end
+	
+	function testConstructor1(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test constructor1");
+		clazz MultipleConstructors;
+		
+		LogResult.assertTrue1(clazz.invokedDefaultConstructor != null && clazz.invokedDefaultConstructor);
+	end
+	
+	function testConstructor2(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test constructor2");
+		clazz MultipleConstructors = new MultipleConstructors(10);
+		
+		LogResult.assertTrue1(clazz.invokedDefaultConstructor != null && !clazz.invokedDefaultConstructor);
+	end
+	
+	function testConstructor3(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test constructor3");
+		clazz Subclass = new Subclass(888);
+		
+		LogResult.assertTrue1(clazz.constructorValue == 888);
+	end
+	
+	function testImplements1(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test implements1");
+		clazz AbstractClass = new Subclass(1);
+		
+		LogResult.assertTrue1(clazz isa classInterface1);
+	end
+	
+	function testImplements2(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test implements2");
+		clazz AbstractClass = new Subclass(1);
+		
+		LogResult.assertTrue1(clazz isa AbstractClass);
+	end
+	
+	function testImplements3(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test implements3");
+		clazz AbstractClass = new Subclass(1);
+		
+		LogResult.assertTrue1(clazz isa ConcreteClass);
+	end
+	
+	function testImplements4(){@Test{targetLang = [JAVA]}}
+		LogResult.logStdOut("Test implements4");
+		clazz AbstractClass = new Subclass(1);
+		
+		LogResult.assertTrue1(clazz isa Subclass);
+	end
+end

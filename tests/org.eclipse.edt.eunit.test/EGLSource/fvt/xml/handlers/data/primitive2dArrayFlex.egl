@@ -1,0 +1,22 @@
+package fvt.xml.handlers.data;
+
+import eglx.xml.binding.annotation.XMLSchemaType;
+
+handler primitive2dArrayFlex
+    md_paf1 bigInt[][];
+    md_paf2 int[][];
+    md_paf3 smallInt[][];
+    md_paf4 float[][];
+    md_paf5 smallFloat[][];
+    md_paf9 decimal(4)[][];
+    md_paf10 decimal(10)[][];
+    md_paf11 decimal(20)[][];
+    md_paf12 decimal(6, 2)[][];
+    md_paf13 string[][];
+    md_paf14 string(3)[][];
+    md_paf19 date[][];
+    md_paf20 time[][];
+    md_paf21 timeStamp[][];
+    md_paf25 boolean[][];
+	md_paf26 bytes(3)[][]{@XMLSchemaType{name="hexBinary"}};
+end

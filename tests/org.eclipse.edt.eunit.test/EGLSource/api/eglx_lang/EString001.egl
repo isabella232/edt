@@ -1,0 +1,67 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+
+/** @test
+  * @name EdtString001
+  * @title EdtString001 - runAssignmentFunction
+  * @description testing string assignemt and inialization functions
+  * @testcases runAssigmentFunction01 - runAssignmentnFunction07
+  * @sources EdtString001.egl
+  * @keywords string, functions, assignemnt
+ **/
+library EString001 {}
+
+	const constFlexName string = "Fred Smith";
+	varFlexName string;
+	variation string;
+	
+	function runAssignmentFunction01(){@Test}
+		variation = "constant initialization";
+		LogResult.assertStringEqual1("Fred Smith", constFlexName);
+	end
+	
+	function runAssignmentFunction02(){@Test}
+		variation = "variable initialization";
+		LogResult.assertStringEqual1("", varFlexName);
+	end
+	
+	function runAssignmentFunction03(){@Test}
+		//nullable initialization BUG 360801
+		mystring string?;
+		LogResult.assertTrue1( (mystring != "") );
+	end
+	
+	function runAssignmentFunction04(){@Test}
+		variation = "nullable isNull"; 
+		mystring string?;
+		LogResult.assertTrue1(mystring == null );
+	end
+	
+	function runAssignmentFunction05(){@Test}
+		variation = "nullable not Null";
+		mystring string?;
+		mystring = constFlexName;
+		LogResult.assertTrue1( mystring != null );
+	end
+	
+	function runAssignmentFunction06(){@Test}
+		variation = "nullable reset to null";
+		mystring string?;
+		mystring = constFlexName;
+		mystring = null;
+		LogResult.assertTrue1( mystring == null );
+	end
+		
+	function runAssignmentFunction07(){@Test}
+		variation = "nullable indirectly set to null";
+		mystring, another string?;
+		mystring = constFlexName;
+		mystring = another;
+		LogResult.assertTrue1( mystring == null );
+	end
+
+
+end

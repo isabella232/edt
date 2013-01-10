@@ -1,0 +1,345 @@
+package fvt.xml;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+import eglx.json.JsonName;
+import eglx.lang.InvalidArgumentException;
+import eglx.xml.XmlLib;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
+/* 
+* @name WeatherLib
+* @title The function test program for converting Weather XML to record with or without namespace definitions
+* @keywords Namespace
+* @author EDT team
+* @createDate 2011/09/05
+* @description 
+* Test converting Weather XML to record with or without namespace definitions
+*/
+
+library weatherlib 
+
+    use WeatherTable; 
+
+    function testWeatherXML_RightLat(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Latitude");
+        LogResult.assertStringEqual1("35.89493", weatherRec.Lat);
+    end
+
+    function testWeatherXML_RightLong(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Longitude");
+        LogResult.assertStringEqual1("78.7050552", weatherRec.long);
+    end
+
+    function testWeatherXML_RightAllocationFactor(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.AllocationFactor");
+        LogResult.assertStringEqual1("0.002944", weatherRec.AllocationFactor);
+    end
+
+    function testWeatherXML_RightFipsCode(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.FipsCode");
+        LogResult.assertStringEqual1("37", weatherRec.FipsCode);
+    end
+
+    function testWeatherXML_RightPlaceName(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.PlaceName");
+        LogResult.assertStringEqual1("RALEIGH", weatherRec.PlaceName);
+    end
+
+    function testWeatherXML_RightStateCode(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.StateCode");
+        LogResult.assertStringEqual1("NC", weatherRec.StateCode);
+    end
+
+    function testWeatherXML_RightDetails(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Details");
+        LogResult.assertTrue1(weatherRec.Details != null);
+    end
+
+    function testWeatherXML_RightWeatherData(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData");
+        LogResult.assertTrue1(weatherRec.Details.WeatherData != null);
+    end
+
+    function testWeatherXML_RightWeatherDataSize(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData.getSize()");
+        LogResult.assertBigIntEqual1(WeatherTable.weatherData.getSize(),
+                weatherRec.Details.WeatherData.getSize());
+    end
+
+    function testWeatherXML_RightWeatherDataContent(){@Test}
+        weatherRec WeatherForecastsRec{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        i int = 0;
+        while(i < weatherRec.Details.WeatherData.getSize())
+            i += 1;
+            if(i != 7)
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].Day");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].Day", WeatherTable.weatherData[i].Day,
+                        weatherRec.Details.WeatherData[i].Day);
+
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].WeatherImage");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].WeatherImage",
+                        WeatherTable.weatherData[i].WeatherImage,
+                        weatherRec.Details.WeatherData[i].WeatherImage);
+
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MaxTemperatureF");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MaxTemperatureF",
+                        WeatherTable.weatherData[i].MaxTemperatureF,
+                        weatherRec.Details.WeatherData[i].MaxTemperatureF);
+
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MinTemperatureF");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MinTemperatureF",
+                        WeatherTable.weatherData[i].MinTemperatureF,
+                        weatherRec.Details.WeatherData[i].MinTemperatureF);
+
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MaxTemperatureC");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MaxTemperatureC",
+                        WeatherTable.weatherData[i].MaxTemperatureC,
+                        weatherRec.Details.WeatherData[i].MaxTemperatureC);
+
+                LogResult.logStdOut("WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MinTemperatureC");
+                LogResult.assertStringEqual("Fail in WeatherForecastsRec.Details.WeatherData[" +
+                                i + "].MinTemperatureC",
+                        WeatherTable.weatherData[i].MinTemperatureC,
+                        weatherRec.Details.WeatherData[i].MinTemperatureC);
+            else
+                LogResult.assertTrue1(WeatherTable.weatherData[i].Day ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].Day == null);
+                LogResult.assertTrue1(WeatherTable.weatherData[i].WeatherImage ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].WeatherImage ==
+                                        null);
+                LogResult.assertTrue1(WeatherTable.weatherData[i].MaxTemperatureF ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].MaxTemperatureF ==
+                                        null);
+                LogResult.assertTrue1(WeatherTable.weatherData[i].MinTemperatureF ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].MinTemperatureF ==
+                                        null);
+                LogResult.assertTrue1(WeatherTable.weatherData[i].MaxTemperatureC ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].MaxTemperatureC ==
+                                        null);
+                LogResult.assertTrue1(WeatherTable.weatherData[i].MinTemperatureC ==
+                                null &&
+                                weatherRec.Details.WeatherData[i].MinTemperatureC ==
+                                        null);
+            end
+        end
+    end
+
+    function testWeatherXML_WrongLatJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Latitude");
+        LogResult.assertTrue1(null == weatherRec.Lat);
+    end
+
+    function testWeatherXML_WrongLatJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.Latitude");
+        try
+        	XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+	        LogResult.assertTrue1(false);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongLongJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Longitude");
+        LogResult.assertTrue1(null == weatherRec.long);
+    end
+
+    function testWeatherXML_WrongLongJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.Longitude");
+		try
+	        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongAllocationFactorJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.AllocationFactor");
+        LogResult.assertTrue1(null == weatherRec.AllocationFactor);
+    end
+
+    function testWeatherXML_WrongAllocationFactorJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.AllocationFactor");
+        try
+	        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongFipsCodeJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.FipsCode");
+        LogResult.assertTrue1(null == weatherRec.FipsCode);
+    end
+
+    function testWeatherXML_WrongFipsCodeJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.FipsCode");
+		try
+	        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongPlaceNameJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.PlaceName");
+        LogResult.assertTrue1(null == weatherRec.PlaceName);
+    end
+
+    function testWeatherXML_WrongPlaceNameJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.PlaceName");
+		try
+	        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongStateCodeJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.StateCode");
+        LogResult.assertTrue1(null == weatherRec.StateCode);
+    end
+
+    function testWeatherXML_WrongStateCodeJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.StateCode");
+		try
+        	XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+    function testWeatherXML_WrongDetailsJavaScript(){@Test{targetLang = [JAVASCRIPT]}}
+        weatherRec WeatherForecastsRecWrong{};
+        XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+        LogResult.logStdOut("WeatherForecastsRec.Details");
+        LogResult.assertTrue1(null == weatherRec.Details);
+    end
+
+    function testWeatherXML_WrongDetailsJava(){@Test{targetLang = [JAVA]}}
+        weatherRec WeatherForecastsRecWrong{};
+        LogResult.logStdOut("WeatherForecastsRec.Details");
+		try
+        	XMLLib.convertFromXML(WeatherTable.xml, weatherRec);
+    	onException(exception InvalidArgumentException)
+	        LogResult.logStdOut(exception.message);
+	        LogResult.assertTrue1(true);
+    	end
+    end
+
+end
+
+// The following record definitions are incorrect since they do not contain
+// namespaces. If you look at the xml, there is a default namespace which means
+// every unqualified field (in this case every field) is part of that namespace.
+
+record WeatherForecastsRecWrong{@xmlRootElement{name = "WeatherForecasts"}}
+    Lat string?{@JSONName{"Latitude"}, @XMLElement{name = "Latitude"}};
+    long string?{@JSONName{"Longitude"}, @XMLElement{name = "Longitude"}};
+    AllocationFactor string?;
+    FipsCode string?;
+    PlaceName string?;
+    StateCode string?;
+    Details DetailsWrong?;
+end
+
+record WeatherDataWrong{}
+    Day string?;
+    WeatherImage string?;
+    MaxTemperatureF string?;
+    MinTemperatureF string?;
+    MaxTemperatureC string?;
+    MinTemperatureC string?;
+end
+
+record DetailsWrong
+    WeatherData WeatherDataWrong[]{};
+end
+
+// The following record definitions are correct since they contain namespaces
+
+record WeatherForecastsRec{@xmlRootElement{name = "WeatherForecasts", namespace = "http://www.webservicex.net"}}
+    Lat string{@JSONName{"Latitude"}, @XMLElement{name = "Latitude", namespace = "http://www.webservicex.net"}};
+    long string{@JSONName{"Longitude"}, @XMLElement{name = "Longitude", namespace = "http://www.webservicex.net"}};
+    AllocationFactor string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    FipsCode string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    PlaceName string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    StateCode string{@XMLElement{namespace = "http://www.webservicex.net"}};
+    Details Details{@XMLElement{namespace = "http://www.webservicex.net"}}; 
+end 
+
+record WeatherData{}
+    Day string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    WeatherImage string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MaxTemperatureF string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MinTemperatureF string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MaxTemperatureC string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+    MinTemperatureC string?{@XMLElement{namespace = "http://www.webservicex.net"}};
+end
+
+record Details
+    WeatherData WeatherData[]{@XMLElement{namespace = "http://www.webservicex.net"}} = new WeatherData[0];
+end
+

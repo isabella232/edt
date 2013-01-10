@@ -1,0 +1,104 @@
+package sql.test;
+
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import eglx.lang.AnyException;
+import eglx.lang.SysLib;
+import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLException;
+import eglx.persistence.sql.SQLJNDIDataSource;
+
+// basic library
+library commonFunctionLibrary
+	
+ 	variation string ;	
+ 	customerCount int = 10 ;
+ 	orderCount int = 5 ;
+		
+	function setVariation ( variation string in)
+		this.variation = variation ;
+	end
+	
+	function unexpectedException ( ex AnyException )
+		desc string ;
+		if ( ex isa SQLException )
+			sqlex SQLException = ex;
+			desc = "SQLSTATE = " + sqlex.SQLSTATE + ", exception = " + sqlEx.message ;
+		else
+			desc = "exception = " + ex.message ;
+		end
+		log ( desc ) ;
+		failure ( desc ) ;
+	end	
+	
+	function expectedException ( ex AnyException )
+		desc string = variation + ":  expected exception: " + ex.message;
+		if ( ex isa SQLException )
+			desc ::= "SQLSTATE = " + (ex as SQLException).SQLSTATE;
+		end
+		log ( desc ) ;
+	end
+	
+	function throwException ( message string in )
+		throw new anyException { message=message } ;
+	end
+	
+	function success ( )
+		desc string = "Success:  " ;
+		LogResult.passed ( desc ) ;
+	end 
+	
+	function failure ( reason string in  )
+		desc string = "Failure:  " + this.variation + ", " + reason ;
+		LogResult.failed ( desc ) ;
+	end 
+	
+	function notSupported ( )
+		desc String = "Not Supported:  behavior not implemented in EDT 7.0" ;
+		LogResult.passed ( desc ) ;
+	end
+	
+	function validationError ( bug string in ) 
+		desc String = bug + ": Variation commented out to get past EDT validation error" ;
+		throwException ( desc ) ;
+	end
+	
+	function stop ( reason string in )
+		throw new anyException { message = reason } ;
+	end
+
+	function checkNoRecordFound ( isSet boolean in )
+		if ( isSet )
+			throw new anyException { message="record found when not expected" } ;
+		end
+	end
+	
+	function checkColumnValue ( column string in, expectedValue string? in, actualValue string? in )
+		if ( actualValue.clip() != expectedValue.clip() )
+			throw new anyException { message="Column=" + column + ", expected value=" + expectedValue +"', actual value= '" + actualValue + "'" } ;
+		end
+	end	
+	
+	function checkValue ( desc string in, expectedValue string in, actualValue string in )
+		if ( actualValue.clip() != expectedValue.clip() )
+			throw new anyException { message=desc + ", expected value='" + expectedValue + "', actual value='" + actualValue + "'" } ;
+		end
+	end	
+	
+	function log ( text string in )		
+		Syslib.writeStdout ( text ) ;
+	end
+	
+	function connect( connectionInfo string in ) returns( SQLDataSource )
+		if ( Constants.connectJndi )
+			return( new SQLJNDIDataSource( connectionInfo ) );
+		else
+			if (Constants.isBindingDerby())
+				return( new SQLDataSource( connectionInfo ) );
+			else
+				return( new SQLDataSource( connectionInfo, Constants.connectCredentials() ) );
+			end			
+		end
+	end
+	
+end

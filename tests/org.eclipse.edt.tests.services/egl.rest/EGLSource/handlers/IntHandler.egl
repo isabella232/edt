@@ -1,0 +1,7 @@
+package handlers;
+
+// basic handler
+
+handler IntHandler
+	item1 int;
+end

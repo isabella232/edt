@@ -1,0 +1,981 @@
+package fvt.operators;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestConcatOperatorsLib
+* @title The function test program for the EGL Concatenation Operators
+* @keywords Concatenation Operators
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Concatenation Operators, include:
+* <br/>
+* <ul>
+*   <li>::</li>
+*   <li>?:</li>
+* <ul>
+*/
+
+library TestConcatOperatorsLib
+
+    aString string;
+    nString string? = new string;
+    a any = new string;
+    aDate date;
+    nDate date?;
+    //aTime time;
+    //nTime time?;
+    aTimeStamp timeStamp("yyyyMMddHHmmssffffff");
+    nTimeStamp timeStamp("yyyyMMddHHmmssffffff")?;
+
+    x int?;
+    s string;
+    ns string?;
+
+    aInt int[] = new int[0];
+    aInt2 int[] = new int[0];
+    bString string[] = new string[0];
+    bString2 string[] = new string[0];
+    varray string[] =["one", "two"];
+
+    function testConcatAnyString1(){@Test}
+        //        aString = a :: "one";
+        //        LogResult.logStdOut("Any string Concatentation - 1");
+        //        LogResult.assertStringEqual1("one", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatAnyString2(){@Test}
+        //        a = aString;
+        //        aString = a :: "two";
+        //        LogResult.logStdOut("Any string Concatentation - 2");
+        //        LogResult.assertStringEqual1("onetwo", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatAnyString3(){@Test}
+        a = "abc";
+        aString = aString ?: a;
+        LogResult.logStdOut("Any string Concatentation - 3");
+        LogResult.assertStringEqual1("onetwoabc", aString);
+    end
+    //
+    //    function testConcatAnyString4(){@Test}
+    //        a = null;
+    //        aString = aString ?: a;
+    //        LogResult.logStdOut("Any string Concatentation - 4");
+    //        LogResult.assertTrue1((aString != null) &&(aString == ""));
+    //    end
+    
+    function testConcatAnyString5(){@Test}
+        a = "abc";
+        aString = aString ?: a;
+        LogResult.logStdOut("Any string Concatentation - 5");
+        LogResult.assertTrue1((aString != null) &&(aString == "abc"));
+    end
+    //
+    //    function testConcatAnyString6(){@Test}
+    //        a = null;
+    //        aString = "123" :: a;
+    //        LogResult.logStdOut("Any string Concatenation - 6");
+    //        LogResult.assertTrue1((aString != null) &&(aString == "123"));
+    //    end
+    //
+    //    function testConcatAnyString7(){@Test}
+    //        a = null;
+    //        aString = a :: "doremi";
+    //        LogResult.logStdOut("Any Concatenation - 7");
+    //        LogResult.assertStringEqual1("doremi", aString);
+    //    end
+    //
+    //    function testConcatAnyString8(){@Test}
+    //        a = null;
+    //        aString = a ?: "doremi";
+    //        LogResult.logStdOut("Any string Concatenation - 8");
+    //        LogResult.assertStringEqual1("", aString);
+    //    end
+    //
+    //    function testConcatAnyString8_5(){@Test}
+    //        a = null;
+    //        aString = "abc";
+    //        aString ?:= a;
+    //        LogResult.logStdOut("Any string Concatenation - 8.5");
+    //        LogResult.assertStringEqual1("", aString);
+    //    end
+    //
+    //    function testConcatAnyString9(){@Test}
+    //        a = null;
+    //        nString = a ?: "doremi";
+    //        LogResult.logStdOut("Any string Concatenation - 9");
+    //        LogResult.assertTrue1(nString == null);
+    //    end
+    //
+    //    function testConcatAnyString10(){@Test}
+    //        a = null;
+    //        nString = "doremi" ?: a;
+    //        LogResult.logStdOut("Any string Concatenation - 10");
+    //        LogResult.assertTrue1(nString == null);
+    //    end
+    
+    function testConcatAnyDate1(){@Test}
+        aString = ""; // reset
+        aDate = "04/10/1991";
+        a = aDate;
+        aString = aString :: a;
+        LogResult.logStdOut("Any Date Concatentation - 1");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatAnyDate2(){@Test}
+        aDate = "10/10/1988";
+        a = aDate;
+        aString = aString :: a;
+        LogResult.logStdOut("Any Date Concatentation - 2");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    function testConcatAnyDate3(){@Test}
+        nDate = "06/06/1944";
+        a = nDate;
+        aString = aString ?: a;
+        LogResult.logStdOut("Any Date Concatentation - 3");
+        LogResult.assertStringEqual1("04/10/199110/10/198806/06/1944", aString);
+    end
+
+    function testConcatAnyDate4(){@Test}
+        nDate = null;
+        a = nDate;
+        aString = aString ?: a;
+        LogResult.logStdOut("Any Date Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatAnyDate5(){@Test}
+        nDate = "08/14/1945";
+        a = nDate;
+        aString = aString ?: a;
+        LogResult.logStdOut("Any Date Concatentation - 5");
+        LogResult.assertStringEqual1("08/14/1945", aString);
+    end
+
+    function testConcatAnyDate6(){@Test}
+        //        defaultDateFormat = "MM/dd/yyyy";
+        //        aDate = "08/05/2008";
+        //        a = aDate;
+        //        aString = aDate :: a;
+        //        LogResult.logStdOut("Any Date Concatenation - 6");
+        //        LogResult.assertStringEqual1("08/05/200808/05/2008", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatAnyDate7(){@Test}
+        //        defaultDateFormat = "MM/dd/yyyy";
+        //        aDate = "07/04/1776";
+        //        a = aDate;
+        //        aString = a :: " is Independence Day";
+        //        LogResult.logStdOut("Any Date Concatenation - 7");
+        //        LogResult.assertStringEqual1("07/04/1776 is Independence Day", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatAnyDate8(){@Test}
+        aDate = "02/12/1809";
+        a = aDate;
+        aString = "Lincoln's birthday is " + a;
+        LogResult.logStdOut("Any Date Concatenation - 8");
+        LogResult.assertStringEqual1("Lincoln's birthday is 02/12/1809", aString);
+    end
+
+    function testConcatAnyDate9(){@Test}
+        aDate = "04/10/1991";
+        a = aDate;
+        aString = "" + a;
+        LogResult.logStdOut("Any Date Concatentation - 9");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatAnyDate10(){@Test}
+        aDate = "10/10/1988";
+        a = aDate;
+        aString = aString + a;
+        LogResult.logStdOut("Any Date Concatentation - 10");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    //    function testConcatAnyDateAndTime1(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "12:34:56";
+    //        aDate = "08/14/1945";
+    //        at any = aTime;
+    //        ad any = aDate;
+    //        aString = ad :: " " :: at;
+    //        LogResult.logStdOut("Any Date and Time Concatenation - 1");
+    //        LogResult.assertStringEqual1("08/14/1945 12:34:56", aString);
+    //    end
+    
+    function testConcatAnyDate11(){@Test}
+        aString = ""; // reset
+        aDate = "04/10/1991";
+        a = aDate;
+        aString ::= a;
+        LogResult.logStdOut("Any Date Concatentation - 11");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatAnyDate12(){@Test}
+        aDate = "10/10/1988";
+        a = aDate;
+        aString ::= a;
+        LogResult.logStdOut("Any Date Concatentation - 12");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    function testConcatAnyDate13(){@Test}
+        nDate = "06/06/1944";
+        a = nDate;
+        aString ?:= a;
+        LogResult.logStdOut("Any Date Concatentation - 13");
+        LogResult.assertStringEqual1("04/10/199110/10/198806/06/1944", aString);
+    end
+
+    function testConcatAnyDate14(){@Test}
+        nDate = null;
+        a = nDate;
+        aString ?:= a;
+        LogResult.logStdOut("Any Date Concatentation - 14");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatAnyDate15(){@Test}
+        nDate = "08/14/1945";
+        a = nDate;
+        aString ?:= a;
+        LogResult.logStdOut("Any Date Concatentation - 15");
+        LogResult.assertStringEqual1("08/14/1945", aString);
+    end
+
+    //    function testConcatAnyDateAndTime2(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "12:34:56";
+    //        a = aTime;
+    //        aString ::= " " :: a;
+    //        LogResult.logStdOut("Any Date and Time Concatenation - 2");
+    //        LogResult.assertStringEqual1("08/14/1945 12:34:56", aString);
+    //    end
+    
+    function testConcatStringsWithNullableInt1(){@Test}
+        s = "x=\"" + x + "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 1");
+        LogResult.assertStringEqual1("x=\"\"", s);
+    end
+
+    function testConcatStringsWithNullableInt2(){@Test}
+        s = x;
+        LogResult.logStdOut("string Concatentation with INT? - 2");
+        LogResult.assertStringEqual1("", s);
+    end
+
+    function testConcatStringsWithNullableInt3(){@Test}
+        s = "x=\"" :: x :: "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 3");
+        LogResult.assertStringEqual1("x=\"\"", s);
+    end
+
+    function testConcatStringsWithNullableInt4(){@Test}
+        s = "x=\"" ?: x ?: "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 4");
+        LogResult.assertStringEqual1("", s);
+    end
+
+    function testConcatStringsWithNullableInt5(){@Test}
+        ns = "x=\"" + x + "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 5");
+        LogResult.assertStringEqual1("x=\"\"", ns);
+    end
+
+    function testConcatStringsWithNullableInt6(){@Test}
+        ns = x;
+        LogResult.logStdOut("string Concatentation with INT? - 6");
+        LogResult.assertTrue1((ns == null));
+    end
+
+    function testConcatStringsWithNullableInt7(){@Test}
+        ns = "x=\"" :: x :: "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 7");
+        LogResult.assertStringEqual1("x=\"\"", ns);
+    end
+
+    function testConcatStringsWithNullableInt8(){@Test}
+        ns = "x=\"" ?: x ?: "\"";
+        LogResult.logStdOut("string Concatentation with INT? - 8");
+        LogResult.assertTrue1((ns == null));
+    end
+
+    function testConcatArray11a(){@Test}
+        aInt.resize(0);
+        LogResult.logStdOut("Array Concatentation - 1a");
+        LogResult.assertBigIntEqual1(0, aInt.getSize());
+    end
+
+    function testConcatArray11b(){@Test}
+        aInt = aInt :: 1;
+        aInt = aInt :: 2;
+        LogResult.logStdOut("Array Concatentation - 1b");
+        LogResult.assertBigIntEqual1(2, aInt.getSize());
+    end
+
+    function testConcatArray12b(){@Test}
+        for(i int from 1 to 2)
+            LogResult.logStdOut("Array Concatentation - 2b");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatArray11c(){@Test}
+        //        aInt.resize(0);
+        //        aInt = aInt :: 2;
+        //        aInt = 1 :: aInt;
+        //        LogResult.logStdOut("Array Concatentation - 1c");
+        //        LogResult.assertBigIntEqual1(2, aInt.getSize());
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatArray12c(){@Test}
+        for(i int from 1 to 2)
+            LogResult.logStdOut("Array Concatentation - 2c");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatArray13a(){@Test}
+        bString.resize(0);
+        LogResult.logStdOut("Array Concatentation - 3a");
+        LogResult.assertBigIntEqual1(0, bString.getSize());
+    end
+
+    function testConcatArray13b(){@Test}
+        bString = bString :: "one";
+        bString = bString :: "two";
+        LogResult.logStdOut("Array Concatentation - 3b");
+        LogResult.assertBigIntEqual1(2, bString.getSize());
+    end
+
+    function testConcatArray14(){@Test}
+        for(i int from 1 to 2)
+            LogResult.logStdOut("Array Concatentation - 4");
+            LogResult.assertStringEqual1(varray[i], bString[i]);
+        end
+    end
+
+    function testConcatArray15a(){@Test}
+        bString.resize(0);
+        LogResult.logStdOut("Array Concatentation - 5a");
+        LogResult.assertBigIntEqual1(0, bString.getSize());
+    end
+
+    function testConcatArray15b(){@Test}
+        bString = bString :: "abc";
+        LogResult.logStdOut("Array Concatentation - 5b");
+        LogResult.assertBigIntEqual1(1, bString.getSize());
+    end
+
+    function testConcatArray16(){@Test}
+        LogResult.logStdOut("Array Concatentation - 6");
+        LogResult.assertStringEqual1("abc", bString[1]);
+    end
+
+    function testConcatArray17a(){@Test}
+        bString = bString :: bString2;
+        LogResult.logStdOut("Array Concatentation - 7a");
+        LogResult.assertBigIntEqual1(1, bString.getSize());
+    end
+
+    function testConcatArray17b(){@Test}
+        LogResult.logStdOut("Array Concatentation - 7b");
+        LogResult.assertStringEqual1("abc", bString[1]);
+    end
+
+    function testConcatArray18a(){@Test}
+        bString2 =["cde", "efg"];
+        bString = bString :: bString2;
+        LogResult.logStdOut("Array Concatentation - 8a");
+        LogResult.assertBigIntEqual1(3, bString.getSize());
+    end
+
+    function testConcatArray18b(){@Test}
+        LogResult.logStdOut("Array Concatentation - 8b");
+        LogResult.assertStringEqual1("abc", bString[1]);
+    end
+
+    function testConcatArray18c(){@Test}
+        LogResult.logStdOut("Array Concatentation - 8c");
+        LogResult.assertStringEqual1("cde", bString[2]);
+    end
+
+    function testConcatArray18d(){@Test}
+        LogResult.logStdOut("Array Concatentation - 8d");
+        LogResult.assertStringEqual1("efg", bString[3]);
+    end
+
+    function testConcatArray19a(){@Test}
+        aInt2.resize(0);
+        LogResult.logStdOut("Array Concatentation - 9a");
+        LogResult.assertBigIntEqual1(0, aInt2.getSize());
+    end
+
+    function testConcatArray19b(){@Test}
+        aInt2 = aInt2 :: 3;
+        aInt2 = aInt2 :: 4;
+        aInt = aInt :: aInt2;
+        LogResult.logStdOut("Array Concatentation - 9b");
+        LogResult.assertBigIntEqual1(4, aInt.getSize());
+    end
+
+    function testConcatArray110(){@Test}
+        for(i int from 1 to aInt.getSize())
+            LogResult.logStdOut("Array Concatentation - 10");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatArray111a(){@Test}
+        //        aInt.resize(0);
+        //        aInt2.resize(0);
+        //        aInt = aInt :: 1 :: 2;
+        //        aInt2 = aInt2 :: 3 :: 4;
+        //        aInt = aInt :: aInt2;
+        //        LogResult.logStdOut("Array Concatentation - 11a");
+        //        LogResult.assertBigIntEqual1(4, aInt.getSize());
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatArray112(){@Test}
+        for(i int from 1 to aInt.getSize())
+            LogResult.logStdOut("Array Concatentation - 12");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatArray21a(){@Test}
+        aInt.resize(0);
+        LogResult.logStdOut("Array Concatentation - 1a");
+        LogResult.assertBigIntEqual1(0, aInt.getSize());
+    end
+
+    function testConcatArray21b(){@Test}
+        aInt ::= 1;
+        aInt ::= 2;
+        LogResult.logStdOut("Array Concatentation - 1b");
+        LogResult.assertBigIntEqual1(2, aInt.getSize());
+    end
+
+    function testConcatArray22(){@Test}
+        for(i int from 1 to 2)
+            LogResult.logStdOut("Array Concatentation - 2");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatArray23a(){@Test}
+        bString.resize(0);
+        LogResult.logStdOut("Array Concatentation - 3a");
+        LogResult.assertBigIntEqual1(0, bString.getSize());
+    end
+
+    function testConcatArray23b(){@Test}
+        bString ::= "one";
+        bString ::= "two";
+        LogResult.logStdOut("Array Concatentation - 3b");
+        LogResult.assertBigIntEqual1(2, bString.getSize());
+    end
+
+    function testConcatArray24(){@Test}
+        for(i int from 1 to 2)
+            LogResult.logStdOut("Array Concatentation - 4");
+            LogResult.assertStringEqual1(varray[i], bString[i]);
+        end
+    end
+
+    function testConcatArray25a(){@Test}
+        bString.resize(0);
+        LogResult.logStdOut("Array Concatentation - 5a");
+        LogResult.assertBigIntEqual1(0, bString.getSize());
+    end
+
+    function testConcatArray25b(){@Test}
+        bString ::= "abc";
+        LogResult.logStdOut("Array Concatentation - 5b");
+        LogResult.assertBigIntEqual1(1, bString.getSize());
+    end
+
+    function testConcatArray26(){@Test}
+        LogResult.logStdOut("Array Concatentation - 6");
+        LogResult.assertStringEqual1("abc", bString[1]);
+    end
+
+    function testConcatArray29a(){@Test}
+        aInt2.resize(0);
+        LogResult.logStdOut("Array Concatentation - 9a");
+        LogResult.assertBigIntEqual1(0, aInt2.getSize());
+    end
+
+    function testConcatArray29b(){@Test}
+        aInt2 ::= 3;
+        aInt2 ::= 4;
+        aInt ::= aInt2;
+        LogResult.logStdOut("Array Concatentation - 9b");
+        LogResult.assertBigIntEqual1(4, aInt.getSize());
+    end
+
+    function testConcatArray210(){@Test}
+        for(i int from 1 to aInt.getSize())
+            LogResult.logStdOut("Array Concatentation - 10");
+            LogResult.assertBigIntEqual1(i, aInt[i]);
+        end
+    end
+
+    function testConcatString11(){@Test}
+        aString = "";
+        aString = aString :: "one";
+        LogResult.logStdOut("String Concatentation - 1");
+        LogResult.assertStringEqual1("one", aString);
+    end
+
+    function testConcatString12(){@Test}
+        aString = aString :: "two";
+        LogResult.logStdOut("String Concatentation - 2");
+        LogResult.assertStringEqual1("onetwo", aString);
+    end
+
+    function testConcatString13(){@Test}
+        nString = "abc";
+        aString = aString ?: nString;
+        LogResult.logStdOut("String Concatentation - 3");
+        LogResult.assertStringEqual1("onetwoabc", aString);
+    end
+
+    function testConcatString14(){@Test}
+        nString = null;
+        aString = aString ?: nString;
+        LogResult.logStdOut("String Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatString15(){@Test}
+        nString = "abc";
+        aString = aString ?: nString;
+        LogResult.logStdOut("String Concatentation - 5");
+        LogResult.assertStringEqual1("abc", aString);
+    end
+
+    function testConcatString16(){@Test}
+        nString = null;
+        aString = "123" :: nString;
+        LogResult.logStdOut("String Concatenation - 6");
+        LogResult.assertStringEqual1("123", aString);
+    end
+
+    function testConcatString17(){@Test}
+        nString = null;
+        aString = nString :: "doremi";
+        LogResult.logStdOut("String Concatenation - 7");
+        LogResult.assertStringEqual1("doremi", aString);
+    end
+
+    function testConcatString18(){@Test}
+        nString = null;
+        aString = nString ?: "doremi";
+        LogResult.logStdOut("String Concatenation - 8");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatString19(){@Test}
+        nString = null;
+        nString = nString ?: "doremi";
+        LogResult.logStdOut("String Concatenation - 9");
+        LogResult.assertTrue1(nString == null);
+    end
+
+    function testConcatString110(){@Test}
+        nString = null;
+        nString = "doremi" ?: nString;
+        LogResult.logStdOut("String Concatenation - 10");
+        LogResult.assertTrue1(nString == null);
+    end
+
+    function testConcatString21(){@Test}
+        aString ::= "one";
+        LogResult.logStdOut("String Concatentation - 1");
+        LogResult.assertStringEqual1("one", aString);
+    end
+
+    function testConcatString22(){@Test}
+        aString ::= "two";
+        LogResult.logStdOut("String Concatentation - 2");
+        LogResult.assertStringEqual1("onetwo", aString);
+    end
+
+    function testConcatString23(){@Test}
+        nString = "abc";
+        aString ?:= nString;
+        LogResult.logStdOut("String Concatentation - 3");
+        LogResult.assertStringEqual1("onetwoabc", aString);
+    end
+
+    function testConcatString24(){@Test}
+        nString = null;
+        aString ?:= nString;
+        LogResult.logStdOut("String Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatString25(){@Test}
+        nString = "abc";
+        aString ?:= nString;
+        LogResult.logStdOut("String Concatentation - 5");
+        LogResult.assertStringEqual1("abc", aString);
+    end
+
+    function testConcatString31(){@Test}
+        aString = "";
+        aString = aString + "one";
+        LogResult.logStdOut("String Concatentation - 1");
+        LogResult.assertStringEqual1("one", aString);
+    end
+
+    function testConcatString32(){@Test}
+        aString = aString + "two";
+        LogResult.logStdOut("String Concatentation - 2");
+        LogResult.assertStringEqual1("onetwo", aString);
+    end
+
+    function testConcatString33(){@Test}
+        aString = "a" + "b" + "c" + "d";
+        LogResult.logStdOut("String Concatentation - 3");
+        LogResult.assertStringEqual1("abcd", aString);
+    end
+
+    function testConcatString34(){@Test}
+        aString = "";
+        aString += "one";
+        LogResult.logStdOut("String Concatentation - 4");
+        LogResult.assertStringEqual1("one", aString);
+    end
+
+    function testConcatString35(){@Test}
+        aString += "two";
+        LogResult.logStdOut("String Concatentation - 5");
+        LogResult.assertStringEqual1("onetwo", aString);
+    end
+
+    function testConcatDate11(){@Test}
+        aString = "";
+        aDate = "04/10/1991";
+        aString = aString :: aDate;
+        LogResult.logStdOut("Date Concatentation - 1");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatDate12(){@Test}
+        aDate = "10/10/1988";
+        aString = aString :: aDate;
+        LogResult.logStdOut("Date Concatentation - 2");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    function testConcatDate13(){@Test}
+        nDate = "06/06/1944";
+        aString = aString ?: nDate;
+        LogResult.logStdOut("Date Concatentation - 3");
+        LogResult.assertStringEqual1("04/10/199110/10/198806/06/1944", aString);
+    end
+
+    function testConcatDate14(){@Test}
+        nDate = null;
+        aString = aString ?: nDate;
+        LogResult.logStdOut("Date Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatDate15(){@Test}
+        nDate = "08/14/1945";
+        aString = aString ?: nDate;
+        LogResult.logStdOut("Date Concatentation - 5");
+        LogResult.assertStringEqual1("08/14/1945", aString);
+    end
+
+    function testConcatDate16(){@Test}
+        //        defaultDateFormat = "MM/dd/yyyy";
+        //        defaultTimeFormat = "HH:mm:ss";
+        //        aDate = "08/05/2008";
+        //        aString = aDate :: aDate;
+        //        LogResult.logStdOut("Date Concatenation - 6");
+        //        LogResult.assertStringEqual1("08/05/200808/05/2008", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatDate17(){@Test}
+        //        defaultDateFormat = "MM/dd/yyyy";
+        //        defaultTimeFormat = "HH:mm:ss";
+        //        aDate = "07/04/1776";
+        //        aString = aDate :: " is Independence Day";
+        //        LogResult.logStdOut("Date Concatenation - 7");
+        //        LogResult.assertStringEqual1("07/04/1776 is Independence Day", aString);
+        LogResult.skipped("BUG 359386: EDT's :: operator won't be like the one in RBD.  The thing on the left of :: should be a string");
+    end
+
+    function testConcatDate18(){@Test}
+        aDate = "02/12/1809";
+        aString = "Lincoln's birthday is " + aDate;
+        LogResult.logStdOut("Date Concatenation - 8");
+        LogResult.assertStringEqual1("Lincoln's birthday is 02/12/1809", aString);
+    end
+
+    function testConcatDate19(){@Test}
+        aDate = "04/10/1991";
+        aString = "" + aDate;
+        LogResult.logStdOut("Date Concatentation - 9");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatDate110(){@Test}
+        aDate = "10/10/1988";
+        aString = aString + aDate;
+        LogResult.logStdOut("Date Concatentation - 10");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    //    function testConcatDate1DateAndTime(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "12:34:56";
+    //        aDate = "08/14/1945";
+    //        aString = aDate :: " " :: aTime;
+    //        LogResult.logStdOut("Date and Time Concatenation");
+    //        LogResult.assertStringEqual1("08/14/1945 12:34:56", aString);
+    //    end
+    
+    function testConcatDate21(){@Test}
+        aString = "";
+        aDate = "04/10/1991";
+        aString ::= aDate;
+        LogResult.logStdOut("Date Concatentation - 1");
+        LogResult.assertStringEqual1("04/10/1991", aString);
+    end
+
+    function testConcatDate22(){@Test}
+        aDate = "10/10/1988";
+        aString ::= aDate;
+        LogResult.logStdOut("Date Concatentation - 2");
+        LogResult.assertStringEqual1("04/10/199110/10/1988", aString);
+    end
+
+    function testConcatDate23(){@Test}
+        nDate = "06/06/1944";
+        aString ?:= nDate;
+        LogResult.logStdOut("Date Concatentation - 3");
+        LogResult.assertStringEqual1("04/10/199110/10/198806/06/1944", aString);
+    end
+
+    function testConcatDate24(){@Test}
+        nDate = null;
+        aString ?:= nDate;
+        LogResult.logStdOut("Date Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatDate25(){@Test}
+        nDate = "08/14/1945";
+        aString ?:= nDate;
+        LogResult.logStdOut("Date Concatentation - 5");
+        LogResult.assertStringEqual1("08/14/1945", aString);
+    end
+
+    //    function testConcatDate2DateAndTime(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "12:34:56";
+    //        aString ::= " " :: aTime;
+    //        LogResult.logStdOut("Date and Time Concatenation");
+    //        LogResult.assertStringEqual1("08/14/1945 12:34:56", aString);
+    //    end
+    
+    //    function testConcatTime11(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aString = "";
+    //        aTime = "14:15:00";
+    //        aString = aString :: aTime;
+    //        LogResult.logStdOut("Time Concatentation - 1");
+    //        LogResult.assertStringEqual1("14:15:00", aString);
+    //    end
+    //
+    //    function testConcatTime12(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "07:44:59";
+    //        aString = aString :: aTime;
+    //        LogResult.logStdOut("Time Concatentation - 2");
+    //        LogResult.assertStringEqual1("14:15:0007:44:59", aString);
+    //    end
+    //
+    //    function testConcatTime13(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = "00:00:00";
+    //        aString = aString ?: nTime;
+    //        LogResult.logStdOut("Time Concatentation - 3");
+    //        LogResult.assertStringEqual1("14:15:0007:44:5900:00:00", aString);
+    //    end
+    //
+    //    function testConcatTime14(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = null;
+    //        aString = aString ?: nTime;
+    //        LogResult.logStdOut("Time Concatentation - 4");
+    //        LogResult.assertStringEqual1("", aString);
+    //    end
+    //
+    //    function testConcatTime15(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = "12:34:56";
+    //        aString = aString ?: nTime;
+    //        LogResult.logStdOut("Time Concatentation - 5");
+    //        LogResult.assertStringEqual1("12:34:56", aString);
+    //    end
+    //
+    //    function testConcatTime21(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aString = "";
+    //        aTime = "14:15:00";
+    //        aString ::= aTime;
+    //        LogResult.logStdOut("Time Concatentation - 1");
+    //        LogResult.assertStringEqual1("14:15:00", aString);
+    //    end
+    //
+    //    function testConcatTime22(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        aTime = "07:44:59";
+    //        aString ::= aTime;
+    //        LogResult.logStdOut("Time Concatentation - 2");
+    //        LogResult.assertStringEqual1("14:15:0007:44:59", aString);
+    //    end
+    //
+    //    function testConcatTime23(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = "00:00:00";
+    //        aString ?:= nTime;
+    //        LogResult.logStdOut("Time Concatentation - 3");
+    //        LogResult.assertStringEqual1("14:15:0007:44:5900:00:00", aString);
+    //    end
+    //
+    //    function testConcatTime24(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = null;
+    //        aString ?:= nTime;
+    //        LogResult.logStdOut("Time Concatentation - 4");
+    //        LogResult.assertStringEqual1("", aString);
+    //    end
+    //
+    //    function testConcatTime25(){@Test}
+    //        defaultDateFormat = "MM/dd/yyyy";
+    //        defaultTimeFormat = "HH:mm:ss";
+    //        nTime = "12:34:56";
+    //        aString ?:= nTime;
+    //        LogResult.logStdOut("Time Concatentation - 5");
+    //        LogResult.assertStringEqual1("12:34:56", aString);
+    //    end
+    
+    function testConcatTimeStamp11(){@Test}
+        //StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        aString = "";
+        aTimeStamp = "1991-04-10 14:15:00.000000";
+        aString = aString :: aTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 1");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.000000", aString);
+    end
+
+    function testConcatTimeStamp12(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        aTimeStamp = "1988-10-10 07:44:59.999000";
+        aString = aString :: aTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 2");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.0000001988-10-10 07:44:59.999000", aString);
+    end
+
+    function testConcatTimeStamp13(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = "1944-06-06 00:00:00.000000";
+        aString = aString ?: nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 3");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.0000001988-10-10 07:44:59.9990001944-06-06 00:00:00.000000", aString);
+    end
+
+    function testConcatTimeStamp14(){@Test}
+        //StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = null;
+        aString = aString ?: nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatTimeStamp15(){@Test}
+        //StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = "1945-08-14 12:34:56.789000";
+        aString = aString ?: nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 5");
+        LogResult.assertStringEqual1("1945-08-14 12:34:56.789000", aString);
+    end
+
+    function testConcatTimeStamp21(){@Test}
+        //StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        aString = "";
+        aTimeStamp = "1991-04-10 14:15:00.000000";
+        aString ::= aTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 1");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.000000", aString);
+    end
+
+    function testConcatTimeStamp22(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        aTimeStamp = "1988-10-10 07:44:59.999000";
+        aString ::= aTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 2");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.0000001988-10-10 07:44:59.999000", aString);
+    end
+
+    function testConcatTimeStamp23(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = "1944-06-06 00:00:00.000000";
+        aString ?:= nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 3");
+        LogResult.assertStringEqual1("1991-04-10 14:15:00.0000001988-10-10 07:44:59.9990001944-06-06 00:00:00.000000", aString);
+    end
+
+    function testConcatTimeStamp24(){@Test}
+        // StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = null;
+        aString ?:= nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 4");
+        LogResult.assertStringEqual1("", aString);
+    end
+
+    function testConcatTimeStamp25(){@Test}
+        //StrLib.defaultTimeStampFormat = StrLib.odbcTimeStampFormat;
+        nTimeStamp = "1945-08-14 12:34:56.789000";
+        aString ?:= nTimeStamp;
+        LogResult.logStdOut("TimeStamp Concatentation - 5");
+        LogResult.assertStringEqual1("1945-08-14 12:34:56.789000", aString);
+    end
+
+end

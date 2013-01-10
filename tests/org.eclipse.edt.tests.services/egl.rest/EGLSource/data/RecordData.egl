@@ -1,0 +1,15 @@
+package data;
+
+
+Record OuterFlexibleRecord
+	item1 string;
+	item2 string[];
+	item4 InnerFlexibleRecord;
+end
+
+Record OuterFlexibleRecordMultiDim
+	item1 string;
+	item2 string[];
+	item4 InnerFlexibleRecord;
+	item5 string[][][];
+end

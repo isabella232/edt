@@ -1,0 +1,114 @@
+package sql.test;
+
+import org.eclipse.edt.eunit.runtime.Test;
+import eglx.persistence.sql.SQLDataSource;
+
+// basic library
+library CustomerTestLibrary
+	
+	use dataSourceLibrary ;
+	use commonFunctionLibrary ;
+	use CustomerLibrary ;
+	use OrderLibrary ;
+	
+	lastCustomer int = 10 ;
+	orderCount int = 5 ;
+	
+	function connect ( ) {@Test}
+		try  
+			setVariation ( "connect" ) ;
+			dataSourceLibrary.connect ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function createTables ( ) {@Test}
+		try  
+			setVariation ( "create customer table" ) ;
+			createCustomerTable ( ) ;			 
+			setVariation ( "create order table" ) ;
+			createOrderTable ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end	
+	
+	function loadTables ( ) {@Test}
+		id int ;
+		order_id int = 1 ;
+		order_id_end int ;
+		try  
+			setVariation ( "load customer tables" ) ;
+			for ( id from 1 to lastCustomer )
+				customer.initializeCustomer(id);
+				add customer to ds;
+				order_id_end = order_id + 4 ;
+				for ( order_id from order_id to order_id_end )
+					order.initializeOrder(order_id, id);
+					add order to ds;
+				end
+			end
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function verifyTableContents ( ) {@Test}
+		id int ;
+		order_id int = 1 ;
+		order_id_end int ;
+		try  
+			setVariation ( "read rows and verify contents" ) ;
+			for ( id from 1 to lastCustomer )
+			 	verifyCustomer ( id ) ;
+				order_id_end = order_id + 4 ;
+				for ( order_id from order_id to order_id_end )
+					verifyOrder ( order_id, id ) ;
+				end
+			end
+			setVariation ( "verify no customer beyond last" ) ;
+			verifyNotCustomer ( lastCustomer + 1 ) ; 
+			setVariation ( "verify no order beyond last" ) ;
+			verifyNotOrder ( order_id ) ; 
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function readCustomerWithOrders ( ) {@Test} 
+		try
+			setVariation ( "get customer" ) ;
+			customer.cust_id = 5;
+			get customer from ds;
+			checkCustomer ( customer, 5 ) ;
+			success();
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+		try
+			setVariation ( "get customer orders" ) ;
+			customer.getOrders();
+			checkOrders ( customer, 5 ) ;		
+			success();
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+	function basicDropTable ( ) {@Test}
+		try  
+			setVariation ( "drop customer table" ) ;
+			dropCustomerTable ( ) ;
+			success ( ) ;
+		onException ( ex anyException ) 
+			unexpectedException ( ex ) ; 
+		end
+	end
+	
+end
+

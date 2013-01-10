@@ -1,0 +1,8 @@
+#Mon Oct 10 17:32:29 EDT 2011
+DefaultDeploymentDescriptorPath/<project>=/egl.rest/EGLSource/egl.rest.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds//EGLSource/libraries=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+generatorIds//EGLSource/services=org.eclipse.edt.ide.gen.JavaGenProvider
+generatorIds//EGLSource/utilities=org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider,org.eclipse.edt.ide.gen.JavaGenProvider

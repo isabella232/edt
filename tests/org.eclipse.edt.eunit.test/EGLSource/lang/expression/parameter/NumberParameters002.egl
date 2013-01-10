@@ -1,0 +1,292 @@
+package lang.expression.parameter;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title Function paramater declarations of type NUMBER all valid modifiers passing smallInteger variables
+* @keywords FOR
+* @author EDT team
+* @createDate 2011/10/03
+* @description 
+*  Function paramater declarations of type NUMBER all valid modifiers passing smallInteger variables
+*  358651 InOut shouldn't accept a literal 
+*/
+library NumberParameters002
+	toggleValue int;
+	const updated int = 89;
+	
+	function testFunctionParameterIn1() {@Test}
+		toggleValue = 1;
+		localInt smallInt = 1;
+        switchOnInParameter(localInt);
+    end	
+    
+  	function testFunctionParameterIn2() {@Test}
+  		toggleValue = 2;
+  		localInt smallInt = 2;
+        switchOnInParameter(localInt);
+    end	
+    
+    function testFunctionParameterIn3() {@Test}
+    	toggleValue = 3;
+    	localInt smallInt = 3;
+        switchOnInParameter(localInt);
+    end	
+
+    function testFunctionParameterInWithUpdate() {@Test}
+    	toggleValue = 3;
+    	localInt smallInt = 3;
+        updateInParameter(localInt);
+        LogResult.assertTrue1(localInt == 3);
+    end	
+   
+    function testFunctionParameterInOut1()  
+//    	Produces validation error
+//    	toggleValue = 1;
+//    	localInt smallInt = 1;
+//      switchOnInOutParameter(localInt);
+    end
+    
+    function testFunctionParameterInOut2()  
+//    	Produces validation error
+//    	toggleValue = 2;
+//    	localInt smallInt = 2;
+//    	switchOnInOutParameter(localInt);
+    end
+           
+    function testFunctionParameterInOut3()       
+//    	Produces validation error   
+//    	toggleValue = 3;
+//    	localInt smallInt = 3;
+//    	switchOnInOutParameter(localInt);
+    end
+    
+
+    function testFunctionParameterInOutWithUpdate()
+//    	Produces validation error
+//    	localInt smallInt = 3;
+//      updateInOutParameter(localInt);
+//      LogResult.assertTrue1(localInt == updated);
+    end	
+ 
+    function testFunctionParameterOutWithUpdate() 
+//    	Produces validation error 
+//    	localInt smallInt = 3;
+//		updateOutParameter(localInt);
+//		LogResult.assertTrue1(localInt == updated);
+    end	  
+  
+	function testFunctionParameterDefault1() {@Test}
+		toggleValue = 1;
+		localInt smallInt = 1;
+        switchOnDefaultParameter(localInt);
+    end
+    
+    function testFunctionParameterDefault2() {@Test}
+   		toggleValue = 2;
+   		localInt smallInt = 2;
+        switchOnDefaultParameter(localInt);  
+    end
+    
+    function testFunctionParameterDefault3() {@Test}  
+    	toggleValue = 3;         
+    	localInt smallInt = 3;                                   
+        switchOnDefaultParameter(localInt);
+    end
+    
+    function testFunctionParameterDefaultWithUpdate() {@Test}
+    	//  parameter is delcared as number so IN is the default type
+    	localInt smallInt = 3;
+        updateDefaultParameter(localInt);
+        LogResult.assertTrue1(localInt == 3);
+    end	
+    
+   	function testFunctionParameterConstIn1() {@Test}
+		toggleValue = 1;
+		localInt smallInt = 1;
+        switchOnConstInParameter(localInt);
+    end
+    
+    function testFunctionParameterConstIn2() {@Test}
+   		toggleValue = 2;
+   		localInt smallInt = 2;
+        switchOnConstInParameter(localInt );  
+    end
+    
+    function testFunctionParameterConstIn3() {@Test}  
+    	toggleValue = 3;          
+    	localInt smallInt = 3;                                  
+        switchOnConstInParameter(localInt);
+    end
+    
+    function testFunctionParameterConstInWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstInParameter(localLen any const in)
+    		localLen = 89;
+   		end
+*/
+    end
+      
+   	function testFunctionParameterConstInOut1()  
+//   	IWN.VAL.6716.e - The argument localInt cannot be passed to the inOut or Out parameter localLen of the function switchOnConstInOutParameter. 
+//   	The types smallInt and number are not reference compatible.
+//		toggleValue = 1;
+//		localInt smallInt = 1;
+//       switchOnConstInOutParameter(localInt);
+    end
+    
+    function testFunctionParameterConstInOut2()  
+//   	IWN.VAL.6716.e - The argument localInt cannot be passed to the inOut or Out parameter localLen of the function switchOnConstInOutParameter. 
+//   	The types smallInt and number are not reference compatible.    
+//   	toggleValue = 2;
+//   	localInt smallInt = 2;
+//      switchOnConstInOutParameter(localInt);  
+    end
+    
+    function testFunctionParameterConstInOut3()
+//   	IWN.VAL.6716.e - The argument localInt cannot be passed to the inOut or Out parameter localLen of the function switchOnConstInOutParameter. 
+//   	The types smallInt and number are not reference compatible.   
+//    	toggleValue = 3;         
+//    	localInt smallInt = 3;                                   
+//        switchOnConstInOutParameter(localInt);
+    end
+
+    function testFunctionParameterConstInOutWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstInOutParameter(localLen any const inout)
+    		localLen = 89;
+   		end
+*/
+    end
+    
+   	function testFunctionParameterConstDefault1() {@Test}
+		toggleValue = 1;
+		localInt smallInt = 1;
+        switchOnConstDefaultParameter(localInt);
+    end
+    
+    function testFunctionParameterConstDefault2() {@Test}
+   		toggleValue = 2;
+   		localInt smallInt = 2;
+        switchOnConstDefaultParameter(localInt);  
+    end
+    
+    function testFunctionParameterConstDefault3() {@Test}  
+    	toggleValue = 3;             
+    	localInt smallInt = 3;                               
+        switchOnConstDefaultParameter(localInt);
+    end
+    
+    function testFunctionParameterConstDefaultWithUpdate()                                            
+        // called function always results in a validation error
+/*
+        function updateConstDefaultParameter(localLen any const)
+    		localLen = 89;
+   		end
+*/
+    end
+    
+    function switchOnInParameter(localLen number in)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+
+    function switchOnInOutParameter(localLen number inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnDefaultParameter(localLen number)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+   function switchOnConstDefaultParameter(localLen number const)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnConstInParameter(localLen number const in)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function switchOnConstInOutParameter(localLen number const inOut)
+    	resolved int = -1;
+        case(localLen)
+            when(1)
+                resolved = 1;
+            when(2)
+                resolved = 2;
+            otherwise
+                resolved = 3;
+        end
+        LogResult.assertBigIntEqual1(toggleValue, resolved);
+        toggleValue = 0;
+    end
+    
+    function updateInParameter(localLen number in)
+    	localLen = 89;
+    end
+    
+    function updateInOutParameter(localLen number inOut)
+    	localLen = 89;
+    end
+
+    function updateOutParameter(localLen number out)
+    	localLen = 89;
+    end
+        
+    function updateDefaultParameter(localLen number )
+    	localLen = 89;
+    end
+end

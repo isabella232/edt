@@ -1,0 +1,812 @@
+package fvt.operators;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestMathOperators02Lib
+* @title The function test program for the EGL Mathematical Operators
+* @keywords Mathematical Operators
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Mathematical Operators, include:
+* <br/>
+* <ul>
+*   <li>Add</li>
+*   <li>Subtract</li>
+*   <li>Multiply</li>
+*   <li>Divide</li>
+*   <li>Remainder</li>
+*   <li>Exponent</li>
+* <ul>
+*/
+
+library TestMathOperators02Lib
+
+    int0 int = 0;
+    int1 int = 1;
+    int140 int = 140;
+    int52 int = 52;
+    intm1 int = -1;
+    result int;
+
+    flt0 float = 0.0;
+    flt0dot5 float = 0.5;
+    flt1 float = 1.0;
+    flt1dot5 float = 1.5;
+    flt1dot4 float = 1.4;
+    fltm1 float = -1.0;
+    fltm1dot5 float = -1.5;
+    flt140 float = 140.0;
+    resultf float;
+
+    int3 int = 3;
+
+    function testAddIntegerInteger1(){@Test}
+        result = int140 + 1;
+        LogResult.logStdOut("Integer(140) + constant(1) - 1");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testAddIntegerInteger2(){@Test}
+        result = int140 + 0;
+        LogResult.logStdOut("Integer(140) + constant(0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testAddIntegerInteger3(){@Test}
+        result = int140 + -1;
+        LogResult.logStdOut("Integer(140) + constant(-1) - 3");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddIntegerInteger4(){@Test}
+        result = int140 + int1;
+        LogResult.logStdOut("Integer(140) + Integer(1) - 4");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testAddIntegerInteger5(){@Test}
+        result = int140 + int0;
+        LogResult.logStdOut("Integer(140) + Integer(0) - 5");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testAddIntegerInteger6(){@Test}
+        result = int140 + intm1;
+        LogResult.logStdOut("Integer(140) + Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddFloatFloat1(){@Test}
+        resultf = flt140 + 1.0;
+        LogResult.logStdOut("float(140.0) + constant(1.0) - 1");
+        LogResult.assertFloatEqual1(141, resultf);
+    end
+
+    function testAddFloatFloat2(){@Test}
+        resultf = flt140 + 0.0;
+        LogResult.logStdOut("float(140.0) + constant(0.0) - 2");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testAddFloatFloat3(){@Test}
+        resultf = flt140 + -1.0;
+        LogResult.logStdOut("float(140.0) + constant(-1.0) - 3");
+        LogResult.assertFloatEqual1(139, resultf);
+    end
+
+    function testAddFloatFloat4a(){@Test}
+        resultf = flt140 + flt1;
+        LogResult.logStdOut("float(140.0) + float(1.0) - 4a");
+        LogResult.assertFloatEqual1(141, resultf);
+    end
+
+    function testAddFloatFloat4b(){@Test}
+        resultf = flt140 + flt1dot5;
+        LogResult.logStdOut("float(140.0) + float(1.5) - 4b");
+        LogResult.assertFloatEqual1(141.5, resultf);
+    end
+
+    function testAddFloatFloat5a(){@Test}
+        resultf = flt140 + flt0;
+        LogResult.logStdOut("float(140.0) + float(0.0) - 5a");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testAddFloatFloat5b(){@Test}
+        resultf = flt140 + flt0dot5;
+        LogResult.logStdOut("float(140.0) + float(0.5) - 5b");
+        LogResult.assertFloatEqual1(140.5, resultf);
+    end
+
+    function testAddFloatFloat6a(){@Test}
+        resultf = flt140 + fltm1;
+        LogResult.logStdOut("float(140.0) + float(-1.0) - 6a");
+        LogResult.assertFloatEqual1(139, resultf);
+    end
+
+    function testAddFloatFloat6b(){@Test}
+        resultf = flt140 + fltm1dot5;
+        LogResult.logStdOut("float(140.0) + float(-1.5) - 6b");
+        LogResult.assertFloatEqual1(138.5, resultf);
+    end
+
+    function testAddUnaryIntegerInteger1(){@Test}
+        result = int140 - +1;
+        LogResult.logStdOut("Integer(140) - constant(+1) - 1");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddUnaryIntegerInteger2(){@Test}
+        result = int140 - +0;
+        LogResult.logStdOut("Integer(140) + constant(+0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testAddUnaryIntegerInteger3(){@Test}
+        result = int140 + -1;
+        LogResult.logStdOut("Integer(140) + constant(-1) - 3");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddUnaryIntegerInteger4(){@Test}
+        result = +intm1;
+        LogResult.logStdOut("+ Integer(-1) - 4");
+        LogResult.assertBigIntEqual1(-1, result);
+    end
+
+    function testAddUnaryIntegerInteger5(){@Test}
+        result = -intm1;
+        LogResult.logStdOut("- Integer(-1) - 5");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testAddUnaryIntegerInteger6(){@Test}
+        result = int140 + +intm1;
+        LogResult.logStdOut("- Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddEIntegerInteger1(){@Test}
+        result = int140;
+        result += 1;
+        LogResult.logStdOut("Integer(140) + constant(1) - 1");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testAddEIntegerInteger2(){@Test}
+        result = int140;
+        result += 0;
+        LogResult.logStdOut("Integer(140) + constant(0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testAddEIntegerInteger3(){@Test}
+        result = int140;
+        result += -1;
+        LogResult.logStdOut("Integer(140) + constant(-1) - 3");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testAddEIntegerInteger4(){@Test}
+        result = int140;
+        result += int1;
+        LogResult.logStdOut("Integer(140) + Integer(1) - 4");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testAddEIntegerInteger5(){@Test}
+        result = int140;
+        result += int0;
+        LogResult.logStdOut("Integer(140) + Integer(0) - 5");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testAddEIntegerInteger6(){@Test}
+        result = int140;
+        result += intm1;
+        LogResult.logStdOut("Integer(140) + Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractIntegerInteger1(){@Test}
+        result = int140 - 1;
+        LogResult.logStdOut("Integer(140) - constant(1) - 1");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractIntegerInteger2(){@Test}
+        result = int140 - 0;
+        LogResult.logStdOut("Integer(140) - constant(0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+
+    end
+
+    function testSubtractIntegerInteger3(){@Test}
+        result = int140 - -1;
+        LogResult.logStdOut("Integer(140) - constant(+1) - 3");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testSubtractIntegerInteger4(){@Test}
+        result = int140 - int1;
+        LogResult.logStdOut("Integer(140) - Integer(1) - 4");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractIntegerInteger5(){@Test}
+        result = int140 - int0;
+        LogResult.logStdOut("Integer(140) - Integer(0) - 5");
+        LogResult.assertBigIntEqual1(140, result);
+
+    end
+
+    function testSubtractIntegerInteger6(){@Test}
+        result = int140 - intm1;
+        LogResult.logStdOut("Integer(140) - Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testSubtractFloatFloat1(){@Test}
+        resultf = flt140 - 1.0;
+        LogResult.logStdOut("float(140.0) - constant(1.0) - 1");
+        LogResult.assertFloatEqual1(139, resultf);
+    end
+
+    function testSubtractFloatFloat2(){@Test}
+        resultf = flt140 - 0.0;
+        LogResult.logStdOut("float(140.0) - constant(0.0) - 2");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testSubtractFloatFloat3(){@Test}
+        resultf = flt140 - -1.0;
+        LogResult.logStdOut("float(140.0) - constant(-1.0) - 3");
+        LogResult.assertFloatEqual1(141, resultf);
+    end
+
+    function testSubtractFloatFloat4a(){@Test}
+        resultf = flt140 - flt1;
+        LogResult.logStdOut("float(140.0) - float(1.0) - 4a");
+        LogResult.assertFloatEqual1(139, resultf);
+    end
+
+    function testSubtractFloatFloat4b(){@Test}
+        resultf = flt140 - flt1dot5;
+        LogResult.logStdOut("float(140.0) - float(1.5) - 4b");
+        LogResult.assertFloatEqual1(138.5, resultf);
+    end
+
+    function testSubtractFloatFloat5a(){@Test}
+        resultf = flt140 - flt0;
+        LogResult.logStdOut("float(140.0) - float(0.0) - 5a");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testSubtractFloatFloat5b(){@Test}
+        resultf = flt140 - flt0dot5;
+        LogResult.logStdOut("float(140.0) - float(0.5) - 5b");
+        LogResult.assertFloatEqual1(139.5, resultf);
+    end
+
+    function testSubtractFloatFloat6a(){@Test}
+        resultf = flt140 - fltm1;
+        LogResult.logStdOut("float(140.0) - float(-1.0) - 6a");
+        LogResult.assertFloatEqual1(141, resultf);
+    end
+
+    function testSubtractFloatFloat6b(){@Test}
+        resultf = flt140 - fltm1dot5;
+        LogResult.logStdOut("float(140.0) - float(-1.5) - 6b");
+        LogResult.assertFloatEqual1(141.5, resultf);
+    end
+
+    function testSubtractUnaryIntegerInteger1(){@Test}
+        result = int140 + -1;
+        LogResult.logStdOut("Integer(140) + constant(-1) - 1");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractUnaryIntegerInteger2(){@Test}
+        result = int140 + -0;
+        LogResult.logStdOut("Integer(140) + constant(-0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+
+    end
+
+    function testSubtractUnaryIntegerInteger3(){@Test}
+        result = int140 + -1;
+        LogResult.logStdOut("Integer(140) + constant(-1) - 3");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractUnaryIntegerInteger4(){@Test}
+        result = +intm1;
+        LogResult.logStdOut("+ Integer(-1) - 4");
+        LogResult.assertBigIntEqual1(-1, result);
+    end
+
+    function testSubtractUnaryIntegerInteger5(){@Test}
+        result = -intm1;
+        LogResult.logStdOut("- Integer(-1) - 5");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testSubtractUnaryIntegerInteger6(){@Test}
+        result = int140 + -intm1;
+        LogResult.logStdOut("- Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testSubtractEIntegerInteger1(){@Test}
+        result = int140;
+        result -= 1;
+        LogResult.logStdOut("Integer(140) - constant(1) - 1");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractEIntegerInteger2(){@Test}
+        result = int140;
+        result -= 0;
+        LogResult.logStdOut("Integer(140) - constant(0) - 2");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testSubtractEIntegerInteger3(){@Test}
+        result = int140;
+        result -= -1;
+        LogResult.logStdOut("Integer(140) - constant(-1) - 3");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testSubtractEIntegerInteger4(){@Test}
+        result = int140;
+        result -= int1;
+        LogResult.logStdOut("Integer(140) - Integer(1) - 4");
+        LogResult.assertBigIntEqual1(139, result);
+    end
+
+    function testSubtractEIntegerInteger5(){@Test}
+        result = int140;
+        result -= int0;
+        LogResult.logStdOut("Integer(140) - Integer(0) - 5");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testSubtractEIntegerInteger6(){@Test}
+        result = int140;
+        result -= intm1;
+        LogResult.logStdOut("Integer(140) - Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(141, result);
+    end
+
+    function testMultiplyIntegerInteger1(){@Test}
+        result = int140 * 1;
+        LogResult.logStdOut("Integer(140) * constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testMultiplyIntegerInteger2(){@Test}
+        result = int140 * 0;
+        LogResult.logStdOut("Integer(140) * constant(0) - 2");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testMultiplyIntegerInteger3(){@Test}
+        result = int140 * -1;
+        LogResult.logStdOut("Integer(140) * constant(-1) - 3");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testMultiplyIntegerInteger4(){@Test}
+        result = int140 * int1;
+        LogResult.logStdOut("Integer(140) * Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testMultiplyIntegerInteger5(){@Test}
+        result = int140 * int0;
+        LogResult.logStdOut("Integer(140) * Integer(0) - 5");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testMultiplyIntegerInteger6(){@Test}
+        result = int140 * intm1;
+        LogResult.logStdOut("Integer(140) * Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testMultiplyFloatFloat1(){@Test}
+        resultf = flt140 * 1.0;
+        LogResult.logStdOut("float(140.0) * constant(1.0) - 1");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testMultiplyFloatFloat2(){@Test}
+        resultf = flt140 * 0.0;
+        LogResult.logStdOut("float(140.0) * constant(0.0) - 2");
+        LogResult.assertFloatEqual1(0, resultf);
+    end
+
+    function testMultiplyFloatFloat3(){@Test}
+        resultf = flt140 * -1.0;
+        LogResult.logStdOut("float(140.0) * constant(-1.0) - 3");
+        LogResult.assertFloatEqual1(-140, resultf);
+    end
+
+    function testMultiplyFloatFloat4a(){@Test}
+        resultf = flt140 * flt1;
+        LogResult.logStdOut("float(140.0) * float(1.0) - 4a");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testMultiplyFloatFloat4b(){@Test}
+        resultf = flt140 * flt1dot5;
+        LogResult.logStdOut("float(140.0) * float(1.5) - 4b");
+        LogResult.assertFloatEqual1(210, resultf);
+    end
+
+    function testMultiplyFloatFloat5a(){@Test}
+        resultf = flt140 * flt0;
+        LogResult.logStdOut("float(140.0) * float(0.0) - 5a");
+        LogResult.assertFloatEqual1(0, resultf);
+    end
+
+    function testMultiplyFloatFloat5b(){@Test}
+        resultf = flt140 * flt0dot5;
+        LogResult.logStdOut("float(140.0) * float(0.5) - 5b");
+        LogResult.assertFloatEqual1(70, resultf);
+    end
+
+    function testMultiplyFloatFloat6a(){@Test}
+        resultf = flt140 * fltm1;
+        LogResult.logStdOut("float(140.0) * float(-1.0) - 6a");
+        LogResult.assertFloatEqual1(-140, resultf);
+    end
+
+    function testMultiplyFloatFloat6b(){@Test}
+        resultf = flt140 * fltm1dot5;
+        LogResult.logStdOut("float(140.0) * float(-1.5) - 6b");
+        LogResult.assertFloatEqual1(-210, resultf);
+    end
+
+    function testMultiplyEIntegerInteger1(){@Test}
+        result = int140;
+        result *= 1;
+        LogResult.logStdOut("Integer(140) * constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testMultiplyEIntegerInteger2(){@Test}
+        result = int140;
+        result *= 0;
+        LogResult.logStdOut("Integer(140) * constant(0) - 2");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testMultiplyEIntegerInteger3(){@Test}
+        result = int140;
+        result *= -1;
+        LogResult.logStdOut("Integer(140) * constant(-1) - 3");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testMultiplyEIntegerInteger4(){@Test}
+        result = int140;
+        result *= int1;
+        LogResult.logStdOut("Integer(140) * Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testMultiplyEIntegerInteger5(){@Test}
+        result = int140;
+        result *= int0;
+        LogResult.logStdOut("Integer(140) * Integer(0) - 5");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testMultiplyEIntegerInteger6(){@Test}
+        result = int140;
+        result *= intm1;
+        LogResult.logStdOut("Integer(140) * Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testMultiplyEIntegerInteger7(){@Test}
+        result = int140;
+        result *= 50.5;
+        LogResult.logStdOut("Integer(140) * constant(50.5) - 7");
+        LogResult.assertBigIntEqual1(7070, result);
+    end
+
+    function testDivideIntegerInteger1(){@Test}
+        result = int140 / 1;
+        LogResult.logStdOut("Integer(140) / constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testDivideIntegerInteger3(){@Test}
+        result = int140 / -1;
+        LogResult.logStdOut("Integer(140) / constant(-1) - 3");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testDivideIntegerInteger4(){@Test}
+        result = int140 / int1;
+        LogResult.logStdOut("Integer(140) / Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testDivideIntegerInteger6(){@Test}
+        result = int140 / intm1;
+        LogResult.logStdOut("Integer(140) / Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testDivideFloatFloat1(){@Test}
+        resultf = flt140 / 1.0;
+        LogResult.logStdOut("float(140.0) / constant(1.0) - 1");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testDivideFloatFloat3(){@Test}
+        resultf = flt140 / -1.0;
+        LogResult.logStdOut("float(140.0) / constant(-1.0) - 3");
+        LogResult.assertFloatEqual1(-140, resultf);
+    end
+
+    function testDivideFloatFloat4a(){@Test}
+        resultf = flt140 / flt1;
+        LogResult.logStdOut("float(140.0) / float(1.0) - 4a");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testDivideFloatFloat4b(){@Test}
+        resultf = flt140 / flt1dot5;
+        LogResult.logStdOut("float(140.0) / float(1.5) - 4b");
+        LogResult.assertFloatEqual1(93.33333333333333, resultf);
+    end
+
+    function testDivideFloatFloat5b(){@Test}
+        resultf = flt140 / flt0dot5;
+        LogResult.logStdOut("float(140.0) / float(0.5) - 5b");
+        LogResult.assertFloatEqual1(280, resultf);
+    end
+
+    function testDivideFloatFloat6a(){@Test}
+        resultf = flt140 / fltm1;
+        LogResult.logStdOut("float(140.0) / float(-1.0) - 6a");
+        LogResult.assertFloatEqual1(-140, resultf);
+    end
+
+    function testDivideFloatFloat6b(){@Test}
+        resultf = flt140 / fltm1dot5;
+        LogResult.logStdOut("float(140.0) / float(-1.5) - 6b");
+        LogResult.assertFloatEqual1(-93.33333333333333, resultf);
+    end
+
+    function testDivideEIntegerInteger1(){@Test}
+        result = int140;
+        result /= 1;
+        LogResult.logStdOut("Integer(140) / constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testDivideEIntegerInteger3(){@Test}
+        result = int140;
+        result /= -1;
+        LogResult.logStdOut("Integer(140) / constant(-1) - 3");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testDivideEIntegerInteger4(){@Test}
+        result = int140;
+        result /= int1;
+        LogResult.logStdOut("Integer(140) / Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testDivideEIntegerInteger6(){@Test}
+        result = int140;
+        result /= intm1;
+        LogResult.logStdOut("Integer(140) / Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(-140, result);
+    end
+
+    function testDivideEIntegerInteger8(){@Test}
+        result = int140;
+        result /= int3;
+        LogResult.logStdOut("Integer(140) / Integer(3) - 8");
+        LogResult.assertBigIntEqual1(46, result);
+    end
+
+    function testRemainderIntegerInteger1(){@Test}
+        result = int140 % 1;
+        LogResult.logStdOut("Integer(140) % constant(1) - 1");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderIntegerInteger3(){@Test}
+        result = int140 % -1;
+        LogResult.logStdOut("Integer(140) % constant(-1) - 3");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderIntegerInteger4(){@Test}
+        result = int140 % int1;
+        LogResult.logStdOut("Integer(140) % Integer(1) - 4");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderIntegerInteger6(){@Test}
+        result = int140 % intm1;
+        LogResult.logStdOut("Integer(140) % Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderEIntegerInteger1(){@Test}
+        result = int140;
+        result %= 1;
+        LogResult.logStdOut("Integer(140) % constant(1) - 1");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderEIntegerInteger3(){@Test}
+        result = int140;
+        result %= -1;
+        LogResult.logStdOut("Integer(140) % constant(-1) - 3");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderEIntegerInteger4(){@Test}
+        result = int140;
+        result %= int1;
+        LogResult.logStdOut("Integer(140) % Integer(1) - 4");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderEIntegerInteger6(){@Test}
+        result = int140;
+        result %= intm1;
+        LogResult.logStdOut("Integer(140) % Integer(-1) - 6");
+        LogResult.assertBigIntEqual1(0, result);
+    end
+
+    function testRemainderEIntegerInteger7(){@Test}
+        result = int140;
+        result %= 50.5;
+        LogResult.logStdOut("Integer(140) % constant(50.5) - 7");
+        LogResult.assertBigIntEqual1(39, result);
+    end
+
+    function testExponentIntegerInteger1(){@Test}
+        result = int140 ** 1;
+        LogResult.logStdOut("Integer(140) ** constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testExponentIntegerInteger2(){@Test}
+        result = int140 ** 0;
+        LogResult.logStdOut("Integer(140) ** constant(0) - 2");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testExponentIntegerInteger4(){@Test}
+        result = int140 ** int1;
+        LogResult.logStdOut("Integer(140) ** Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testExponentIntegerInteger5(){@Test}
+        result = int140 ** int0;
+        LogResult.logStdOut("Integer(140) ** Integer(0) - 5");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testExponentFloatFloat1(){@Test}
+        resultf = flt140 ** 1.0;
+        LogResult.logStdOut("float(140.0) ** constant(1.0) - 1");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testExponentFloatFloat2(){@Test}
+        resultf = flt140 ** 0.0;
+        LogResult.logStdOut("float(140.0) ** constant(0.0) - 2");
+        LogResult.assertFloatEqual1(1, resultf);
+    end
+
+    function testExponentFloatFloat3(){@Test}
+        resultf = flt140 ** -1.0;
+        LogResult.logStdOut("float(140.0) ** constant(-1.0) - 3");
+        LogResult.assertFloatEqual1(0.007142857142857143, resultf);
+    end
+
+    function testExponentFloatFloat4a(){@Test}
+        resultf = flt140 ** flt1;
+        LogResult.logStdOut("float(140.0) ** float(1.0) - 4a");
+        LogResult.assertFloatEqual1(140, resultf);
+    end
+
+    function testExponentFloatFloat4b(){@Test}
+        resultf = flt140 ** flt1dot5;
+        LogResult.logStdOut("float(140.0) ** float(1.5) - 4b");
+        LogResult.assertFloatEqual1(1656.5023392678925, resultf);
+    end
+
+    function testExponentFloatFloat5a(){@Test}
+        resultf = flt140 ** flt0;
+        LogResult.logStdOut("float(140.0) ** float(0.0) - 5a");
+        LogResult.assertFloatEqual1(1, resultf);
+    end
+
+    function testExponentFloatFloat5b(){@Test}
+        resultf = flt140 ** flt0dot5;
+        LogResult.logStdOut("float(140.0) ** float(0.5) - 5b");
+        LogResult.assertFloatEqual1(11.832159566199232, resultf);
+    end
+
+    function testExponentFloatFloat6a(){@Test}
+        resultf = flt140 ** fltm1;
+        LogResult.logStdOut("float(140.0) ** float(-1.0) - 6a");
+        LogResult.assertFloatEqual1(0.007142857142857143, resultf);
+    end
+
+    function testExponentFloatFloat6b(){@Test}
+        resultf = flt140 ** fltm1dot5;
+        LogResult.logStdOut("float(140.0) ** float(-1.5) - 6b");
+        LogResult.assertFloatEqual1(6.03681610520369E-4, resultf);
+    end
+
+    function testExponentEIntegerInteger1(){@Test}
+        result = int140;
+        result **= 1;
+        LogResult.logStdOut("Integer(140) ** constant(1) - 1");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testExponentEIntegerInteger2(){@Test}
+        result = int140;
+        result **= 0;
+        LogResult.logStdOut("Integer(140) ** constant(0) - 2");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testExponentEIntegerInteger4(){@Test}
+        result = int140;
+        result **= int1;
+        LogResult.logStdOut("Integer(140) ** Integer(1) - 4");
+        LogResult.assertBigIntEqual1(140, result);
+    end
+
+    function testExponentEIntegerInteger5(){@Test}
+        result = int140;
+        result **= int0;
+        LogResult.logStdOut("Integer(140) ** Integer(0) - 5");
+        LogResult.assertBigIntEqual1(1, result);
+    end
+
+    function testExponentEIntegerInteger7(){@Test}
+        result = int140;
+        result **= 2;
+        LogResult.logStdOut("Integer(140) ** constant(2) - 7");
+        LogResult.assertBigIntEqual1(19600, result);
+    end
+
+    function testMalicious(){@Test}
+//        result int = 1 / 1 * 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 +
+//                        1 + 1 - 1 * 1 / 1 * 1;
+//        LogResult.logStdOut("Malicious Test - 1");
+//        LogResult.assertBigIntEqual1(248, result);
+		LogResult.skipped("Bug 361299");
+    end
+
+end

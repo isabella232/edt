@@ -1,0 +1,126 @@
+package services;
+
+import interfaces.INullPassing;
+import data.NullRecord;
+
+ //service
+Service NullPassing 
+	
+	 //Function Declarations
+	function nullStringIn(nullString string? in) returns(string)
+		if (nullString == null)
+			return ("String == null");
+		else
+			return ("String = " + nullString);
+		end
+	end
+	
+	function nullStringInout(nullString string? inout)
+		nullString = null;
+	end
+	
+	function nullStringOut(nullString string? out)
+		nullString  = null;
+	end
+	
+	function nullStringAll(nullString1 string? in, nullString2 string? inout, nullstring3 string? out) returns (string?)
+		nullString3 = nullString1;
+		nullString3 = null;
+		nullString2 = null;
+		return (nullString1);
+	end
+	
+	function nullintIn(nullint int? in) returns(string)
+		if (nullint == null)
+			return ("int == null");
+		else
+			return ("int = " + nullInt);
+		end
+	end
+	
+	function nullintInout(nullint int? inout)
+		nullint = null;
+	end
+	
+	function nullintOut(nullint int? out)
+		nullint  = null;
+	end
+	
+	function nullintAll(nullint1 int? in, nullint2 int? inout, nullint3 int? out) returns (int?)
+		nullint3 = nullint1;
+		nullint3 = null;
+		nullint2 = null;
+		return (nullint1);
+	end	
+	
+	function nullStringArrayIn(nullStringArray string[]? in) returns(string)
+		if (nullStringArray == null)
+			return ("StringArray == null");
+		else
+			return ("StringArray[1] = " + nullStringArray[1]);
+		end
+	end
+	
+	function nullStringArrayInout(nullStringArray string[]? inout)
+		nullStringArray = null;
+	end
+	
+	function nullStringArrayOut(nullStringArray string[]? out)
+		nullStringArray = null;
+	end
+	
+	function nullStringArrayAll(nullStringArray1 string[]? in, nullStringArray2 string[]? inout, nullStringArray3 string[]? out) returns (string[]?)
+		nullStringArray3 = nullStringArray1;
+		nullStringArray3 = null;
+		nullStringArray2 = null;
+		return (nullStringArray1);
+	end
+
+	function nullRecordItemIn(nullRecord NullRecord in) returns(string)
+		if (nullRecord.item1 == null)
+			return ("null");
+		else
+			return (nullRecord.item1);
+		end
+	end
+	
+	function nullRecordItemInout(nullRecord NullRecord inout)
+		nullRecord.item1 = null;
+	end
+	
+	function nullRecordItemOut1a(nullRecord NullRecord out)
+		nullRecord.item1 = null;
+	end
+	
+	function nullRecordItemAll(nullRecord1 NullRecord in, nullRecord2 NullRecord inout, nullRecord3 NullRecord out) returns (string)
+		nullRecord3 = nullRecord1;
+		nullRecord3.item1 = null;
+		nullRecord2.item1 = null;
+		return (nullRecord1.item1);
+	end
+	
+
+	function nullRecordIn(nullRecord NullRecord? in) returns(string)
+		if (nullRecord == null)
+			return ("null");
+		else
+			return (nullRecord.item1);
+		end
+	end
+	
+	function nullRecordInout(nullRecord NullRecord? inout)
+		nullRecord = null;
+	end
+	
+	function nullRecordOut(nullRecord NullRecord? out)
+		nullRecord  = null;
+	end
+	
+	function nullRecordAll(nullRecord1 NullRecord? in, nullRecord2 NullRecord? inout, nullRecord3 NullRecord? out) returns (string)
+		nullRecord1 = nullRecord2;
+		nullRecord3 = null;
+		nullRecord2 = null;
+		return (nullRecord1.item1);
+	end
+
+end

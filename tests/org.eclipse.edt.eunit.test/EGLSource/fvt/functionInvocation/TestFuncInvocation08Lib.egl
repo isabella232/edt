@@ -1,0 +1,1067 @@
+package fvt.functionInvocation;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestFuncInvocation08Lib
+* @title The function test program for the EGL Function Invocation
+* @keywords EGL Function Invocation
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library is designed to test the EGL Function Invocation
+*/
+
+library TestFuncInvocation08Lib
+
+    gblArray string[] =["abc", "cde", "efg"];
+
+    s string[] =["abc", "cde", "efg"];
+    i int[] =[10, 11, 12];
+    rec myRecord[] = new myRecord[3];
+
+    rec1 myRecord[];
+
+    function testLocalInParameters1a(){@Test}
+        localInStringArray1a(s);
+    end
+
+    function testLocalInParameters1b(){@Test}
+        localInStringArray1b(s);
+    end
+
+    function testLocalInParameters1c(){@Test}
+        localInStringArray1c(s);
+    end
+
+    function testLocalInParameters1d(){@Test}
+        localInStringArray1d(s);
+    end
+
+    function testLocalInParameters1e(){@Test}
+        LogResult.logStdOut("Local function IN String[] parameter - 1e");
+        LogResult.assertStringEqual1("mno", s[1]);
+    end
+
+    function testLocalInParameters1f(){@Test}
+        LogResult.logStdOut("Local function IN String[] parameter - 1f");
+        LogResult.assertStringEqual1("pqr", s[2]);
+    end
+
+    function testLocalInParameters1g(){@Test}
+        LogResult.logStdOut("Local function IN String[] parameter - 1g");
+        LogResult.assertStringEqual1("stu", s[3]);
+    end
+
+    function testLocalInParameters2a(){@Test}
+        localInIntArray2a(i);
+    end
+
+    function testLocalInParameters2b(){@Test}
+        localInIntArray2b(i);
+    end
+
+    function testLocalInParameters2c(){@Test}
+        localInIntArray2c(i);
+    end
+
+    function testLocalInParameters2d(){@Test}
+        localInIntArray2d(i);
+    end
+
+    function testLocalInParameters2e(){@Test}
+        LogResult.logStdOut("Local function IN integer[] parameter - 2e");
+        LogResult.assertBigIntEqual1(10, i[1]);
+    end
+
+    function testLocalInParameters2f(){@Test}
+        LogResult.logStdOut("Local function IN integer[] parameter - 2f");
+        LogResult.assertBigIntEqual1(11, i[2]);
+    end
+
+    function testLocalInParameters2g(){@Test}
+        LogResult.logStdOut("Local function IN integer[] parameter - 2g");
+        LogResult.assertBigIntEqual1(12, i[3]);
+    end
+
+    function testLocalInParameters3a2(){@Test}
+        rec[1] = new myRecord{s = "abc", i = 10};
+        rec[2] = new myRecord{s = "cde", i = 11};
+        rec[3] = new myRecord{s = "efg", i = 12};
+        localInRecordArray23a2(rec);
+    end
+
+    function testLocalInParameters3b2(){@Test}
+        localInRecordArray23b2(rec);
+    end
+
+    function testLocalInParameters3c2(){@Test}
+        localInRecordArray23c2(rec);
+    end
+
+    function testLocalInParameters3e2(){@Test}
+        localInRecordArray23e2(rec);
+    end
+
+    function testLocalInParameters3e(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3e");
+        LogResult.assertTrue1((rec[1].s == "abc") &&(rec[1].i == 10));
+    end
+
+    function testLocalInParameters3f(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3f");
+        LogResult.assertTrue1((rec[2].s == "cde") &&(rec[2].i == 11));
+    end
+
+    function testLocalInParameters3g(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3g");
+        LogResult.assertTrue1((rec[3].s == "efg") &&(rec[3].i == 12));
+    end
+
+    function testLocalInParameters3a(){@Test}
+        localInRecordArray3a(rec);
+    end
+
+    function testLocalInParameters3b(){@Test}
+        localInRecordArray3b(rec);
+    end
+
+    function testLocalInParameters3c(){@Test}
+        localInRecordArray3c(rec);
+    end
+
+    function testLocalInParameters3e_1(){@Test}
+        localInRecordArray3e(rec);
+    end
+
+    function testLocalInParameters3h(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3h");
+        LogResult.assertTrue1((rec[1].s == "mno") &&(rec[1].i == 5));
+    end
+
+    function testLocalInParameters3i(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3i");
+        LogResult.assertTrue1((rec[2].s == "pqr") &&(rec[2].i == 6));
+    end
+
+    function testLocalInParameters3j(){@Test}
+        LogResult.logStdOut("Local function IN record[] parameter - 3j");
+        LogResult.assertTrue1((rec[3].s == "stu") &&(rec[3].i == 7));
+    end
+
+    function testLocalOutParameters1(){@Test}
+        s =["abc", "cde", "efg"];
+        localOutStringArray1(s);
+    end
+    
+    function testLocalOutNullableParameters1(){@Test}
+        nullableArray string[]? = ["abc", "cde", "efg"];
+        localOutStringNullableArray1(nullableArray);
+    end
+
+    function testLocalOutParameters1a(){@Test}
+        localOutStringArray1a(s);
+    end
+
+    function testLocalOutParameters1b(){@Test}
+        localOutStringArray1b(s);
+    end
+
+    function testLocalOutParameters1c(){@Test}
+        localOutStringArray1c(s);
+    end
+
+    function testLocalOutParameters1d(){@Test}
+        localOutStringArray1d(s);
+    end
+
+    function testLocalOutParameters1e(){@Test}
+        LogResult.logStdOut("Local function OUT String[] parameter - 1e");
+        LogResult.assertBigIntEqual1(3, s.getSize());
+    end
+
+    function testLocalOutParameters1f(){@Test}
+        LogResult.logStdOut("Local function OUT String[] parameter - 1f");
+        LogResult.assertStringEqual1("mno", s[1]);
+    end
+
+    function testLocalOutParameters1g(){@Test}
+        LogResult.logStdOut("Local function OUT String[] parameter - 1g");
+        LogResult.assertStringEqual1("pqr", s[2]);
+    end
+
+    function testLocalOutParameters1h(){@Test}
+        LogResult.logStdOut("Local function OUT String[] parameter - 1h");
+        LogResult.assertStringEqual1("stu", s[3]);
+    end
+
+    function testLocalOutParameters2(){@Test}
+        i =[10, 11, 12];
+        localOutIntArray2(i);
+    end
+
+    function testLocalOutParameters2a(){@Test}
+        localOutIntArray2a(i);
+    end
+
+    function testLocalOutParameters2b(){@Test}
+        localOutIntArray2b(i);
+    end
+
+    function testLocalOutParameters2c(){@Test}
+        localOutIntArray2c(i);
+    end
+
+    function testLocalOutParameters2d(){@Test}
+        localOutIntArray2d(i);
+    end
+
+    function testLocalOutParameters2e(){@Test}
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2e");
+        LogResult.assertBigIntEqual1(3, i.getSize());
+    end
+
+    function testLocalOutParameters2f(){@Test}
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2f");
+        LogResult.assertBigIntEqual1(5, i[1]);
+    end
+
+    function testLocalOutParameters2g(){@Test}
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2g");
+        LogResult.assertBigIntEqual1(6, i[2]);
+    end
+
+    function testLocalOutParameters2h(){@Test}
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2h");
+        LogResult.assertBigIntEqual1(7, i[3]);
+    end
+
+    function testLocalOutParameters5(){@Test}
+        LogResult.logStdOut("Local function record[] - 5");
+        LogResult.assertTrue1(rec1 != null);
+    end
+
+    function testLocalOutParameters3(){@Test}
+        rec1 = new myRecord[3];
+        rec1[1] = new myRecord{s = "abc", i = 10};
+        rec1[2] = new myRecord{s = "cde", i = 11};
+        rec1[3] = new myRecord{s = "efg", i = 12};
+        localOutRecordArray3(rec1);
+    end
+
+    function testLocalOutParameters3a(){@Test}
+        localOutRecordArray3a(rec1);
+    end
+
+    function testLocalOutParameters3b(){@Test}
+        localOutRecordArray3b(rec1);
+    end
+
+    function testLocalOutParameters3c(){@Test}
+        localOutRecordArray3c(rec1);
+    end
+
+    function testLocalOutParameters3e_1(){@Test}
+        localOutRecordArray3e_1(rec1);
+    end
+
+    function testLocalOutParameters3e(){@Test}
+        LogResult.logStdOut("Local function OUT record[] parameter - 3e");
+        LogResult.assertBigIntEqual1(3, rec1.getSize());
+    end
+
+    function testLocalOutParameters3f(){@Test}
+        LogResult.logStdOut("Local function OUT record[] parameter - 3f");
+        LogResult.assertTrue1((rec1[1].s == "mno") &&(rec1[1].i == 5));
+    end
+
+    function testLocalOutParameters3g(){@Test}
+        LogResult.logStdOut("Local function OUT record[] parameter - 3g");
+        LogResult.assertTrue1((rec1[2].s == "pqr") &&(rec1[2].i == 6));
+    end
+
+    function testLocalOutParameters3h(){@Test}
+        LogResult.logStdOut("Local function OUT record[] parameter - 3h");
+        LogResult.assertTrue1((rec1[3].s == "stu") &&(rec1[3].i == 7));
+    end
+
+    function testLocalInOutParameters1a(){@Test}
+        s =["abc", "cde", "efg"];
+        localInOutStringArray1a(s);
+    end
+
+    function testLocalInOutParameters1b(){@Test}
+        localInOutStringArray1b(s);
+    end
+
+    function testLocalInOutParameters1c(){@Test}
+        localInOutStringArray1c(s);
+    end
+
+    function testLocalInOutParameters1d(){@Test}
+        localInOutStringArray1d(s);
+    end
+
+    function testLocalInOutParameters1e(){@Test}
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1e");
+        LogResult.assertBigIntEqual1(3, s.getSize());
+    end
+
+    function testLocalInOutParameters1f(){@Test}
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1f");
+        LogResult.assertStringEqual1("mno", s[1]);
+    end
+
+    function testLocalInOutParameters1g(){@Test}
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1g");
+        LogResult.assertStringEqual1("pqr", s[2]);
+    end
+
+    function testLocalInOutParameters1h(){@Test}
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1h");
+        LogResult.assertStringEqual1("stu", s[3]);
+    end
+
+    function testLocalInOutParameters2a(){@Test}
+        i =[10, 11, 12];
+        localInOutIntArray2a(i);
+    end
+
+    function testLocalInOutParameters2b(){@Test}
+        localInOutIntArray2b(i);
+    end
+
+    function testLocalInOutParameters2c(){@Test}
+        localInOutIntArray2c(i);
+    end
+
+    function testLocalInOutParameters2d(){@Test}
+        localInOutIntArray2d(i);
+    end
+
+    function testLocalInOutParameters2e(){@Test}
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2e");
+        LogResult.assertBigIntEqual1(3, i.getSize());
+    end
+
+    function testLocalInOutParameters2f(){@Test}
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2f");
+        LogResult.assertBigIntEqual1(5, i[1]);
+    end
+
+    function testLocalInOutParameters2g(){@Test}
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2g");
+        LogResult.assertBigIntEqual1(6, i[2]);
+    end
+
+    function testLocalInOutParameters2h(){@Test}
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2h");
+        LogResult.assertBigIntEqual1(7, i[3]);
+    end
+
+    function testLocalInOutParameters3a(){@Test}
+        rec[1] = new myRecord{s = "abc", i = 10};
+        rec[2] = new myRecord{s = "cde", i = 11};
+        rec[3] = new myRecord{s = "efg", i = 12};
+        localInOutRecordArray3a(rec);
+    end
+
+    function testLocalInOutParameters3b(){@Test}
+        localInOutRecordArray3b(rec);
+    end
+
+    function testLocalInOutParameters3c(){@Test}
+        localInOutRecordArray3c(rec);
+    end
+
+    function testLocalInOutParameters3e_1(){@Test}
+        localInOutRecordArray3e_1(rec);
+    end
+
+    function testLocalInOutParameters3e(){@Test}
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3e");
+        LogResult.assertBigIntEqual1(3, rec.getSize());
+    end
+
+    function testLocalInOutParameters3f(){@Test}
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3f");
+        LogResult.assertTrue1((rec[1].s == "mno") &&(rec[1].i == 5));
+    end
+
+    function testLocalInOutParameters3g(){@Test}
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3g");
+        LogResult.assertTrue1((rec[2].s == "pqr") &&(rec[2].i == 6));
+    end
+
+    function testLocalInOutParameters3h(){@Test}
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3h");
+        LogResult.assertTrue1((rec[3].s == "stu") &&(rec[3].i == 7));
+    end
+
+    function testGlobalParameters1a(){@Test}
+        gblArray =["abc", "cde", "efg"];
+        localInStringArray21a(gblArray);
+    end
+
+    function testGlobalParameters1b(){@Test}
+        localInStringArray21b(gblArray);
+    end
+
+    function testGlobalParameters1c(){@Test}
+        localInStringArray21c(gblArray);
+    end
+
+    function testGlobalParameters1d(){@Test}
+        localInStringArray21d(gblArray);
+    end
+
+    function testGlobalParameters1e(){@Test}
+        localInStringArray21e(gblArray);
+    end
+
+    function testGlobalParameters1f(){@Test}
+        localInStringArray21f(gblArray);
+    end
+
+    function testGlobalParameters1g(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 1g");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function testGlobalParameters1h(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 1h");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function testGlobalParameters1i(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 1i");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function testGlobalParameters2a(){@Test}
+        gblArray =["abc", "cde", "efg"];
+        localInStringArray32a(gblArray);
+    end
+
+    function testGlobalParameters2b(){@Test}
+        localInStringArray32b(gblArray);
+    end
+
+    function testGlobalParameters2c(){@Test}
+        localInStringArray32c(gblArray);
+    end
+
+    function testGlobalParameters2d(){@Test}
+        localInStringArray32d(gblArray);
+    end
+
+    function testGlobalParameters2e(){@Test}
+        localInStringArray32e(gblArray);
+    end
+
+    function testGlobalParameters2f(){@Test}
+        localInStringArray32f(gblArray);
+    end
+
+    function testGlobalParameters2g(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 2g");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function testGlobalParameters2h(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 2h");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function testGlobalParameters2i(){@Test}
+        LogResult.logStdOut("Global array parameter as IN String[] - 2i");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+    end
+
+    function testGlobalParametersOUT1(){@Test}
+        gblArray =["abc", "cde", "efg"];
+        localOutStringArray21(gblArray);
+    end
+
+    function testGlobalParametersOUT1a(){@Test}
+        localOutStringArray21a(gblArray);
+    end
+
+    function testGlobalParametersOUT1b(){@Test}
+        localOutStringArray21b(gblArray);
+    end
+
+    function testGlobalParametersOUT1c(){@Test}
+        localOutStringArray21c(gblArray);
+    end
+
+    function testGlobalParametersOUT1d(){@Test}
+        localOutStringArray21d(gblArray);
+    end
+
+    function testGlobalParametersOUT1e(){@Test}
+        localOutStringArray21e(gblArray);
+    end
+
+    function testGlobalParametersOUT1f(){@Test}
+        localOutStringArray21f(gblArray);
+    end
+
+    function testGlobalParametersOUT1g(){@Test}
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1g");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function testGlobalParametersOUT1h(){@Test}
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1h");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function testGlobalParametersOUT1i(){@Test}
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1i");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function testGlobalParametersINOUT1a(){@Test}
+        gblArray =["abc", "cde", "efg"];
+        localInOutStringArray21a(gblArray);
+    end
+
+    function testGlobalParametersINOUT1b(){@Test}
+        localInOutStringArray21b(gblArray);
+    end
+
+    function testGlobalParametersINOUT1c(){@Test}
+        localInOutStringArray21c(gblArray);
+    end
+
+    function testGlobalParametersINOUT1d(){@Test}
+        localInOutStringArray21d(gblArray);
+    end
+
+    function testGlobalParametersINOUT1e(){@Test}
+        localInOutStringArray21e(gblArray);
+    end
+
+    function testGlobalParametersINOUT1f(){@Test}
+        localInOutStringArray21f(gblArray);
+    end
+
+    function testGlobalParametersINOUT1g(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1g");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function testGlobalParametersINOUT1h(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1h");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function testGlobalParametersINOUT1i(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1i");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function testGlobalParametersINOUT2a(){@Test}
+        gblArray =["abc", "cde", "efg"];
+        localInOutStringArray32a(gblArray);
+    end
+
+    function testGlobalParametersINOUT2b(){@Test}
+        localInOutStringArray32b(gblArray);
+    end
+
+    function testGlobalParametersINOUT2c(){@Test}
+        localInOutStringArray32c(gblArray);
+    end
+
+    function testGlobalParametersINOUT2d(){@Test}
+        localInOutStringArray32d(gblArray);
+    end
+
+    function testGlobalParametersINOUT2e(){@Test}
+        localInOutStringArray32e(gblArray);
+    end
+
+    function testGlobalParametersINOUT2f(){@Test}
+        localInOutStringArray32f(gblArray);
+    end
+
+    function testGlobalParametersINOUT2g(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2g");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function testGlobalParametersINOUT2h(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2h");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function testGlobalParametersINOUT2i(){@Test}
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2i");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    /**********************************************************************/
+
+    function localInStringArray1a(s string[] in)
+        LogResult.logStdOut("Local function IN String[] parameter - 1a");
+        LogResult.assertBigIntEqual1(3, s.getSize());
+    end
+
+    function localInStringArray1b(s string[] in)
+        LogResult.logStdOut("Local function IN String[] parameter - 1b");
+        LogResult.assertStringEqual1("abc", s[1]);
+    end
+
+    function localInStringArray1c(s string[] in)
+        LogResult.logStdOut("Local function IN String[] parameter - 1c");
+        LogResult.assertStringEqual1("cde", s[2]);
+    end
+
+    function localInStringArray1d(s string[] in)
+        LogResult.logStdOut("Local function IN String[] parameter - 1d");
+        LogResult.assertStringEqual1("efg", s[3]);
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInStringArray21a(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1a");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function localInStringArray21b(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1b");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function localInStringArray21c(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1c");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInStringArray21d(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1d");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function localInStringArray21e(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1e");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function localInStringArray21f(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 1f");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function localInStringArray32a(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2a");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function localInStringArray32b(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2b");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function localInStringArray32c(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2c");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+
+        s = new string[3];
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInStringArray32d(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2d");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function localInStringArray32e(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2e");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function localInStringArray32f(s string[] in)
+        LogResult.logStdOut("Global array parameter as IN String[] - 2f");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+    end
+
+    function localOutStringArray21(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1");
+        LogResult.assertTrue1(s != null && s.getSize() == 0);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+    end
+
+    function localOutStringArray21a(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1a");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+    end
+
+    function localOutStringArray21b(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1b");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+    end
+
+    function localOutStringArray21c(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1c");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+
+    end
+
+    function localOutStringArray21d(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1d");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+    end
+
+    function localOutStringArray21e(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1e");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+        s = new string[3];
+        s[1] = "abc";
+        s[2] = "cde";
+        s[3] = "efg";
+    end
+
+    function localOutStringArray21f(s string[] out)
+        LogResult.logStdOut("Global array parameter as OUT String[] - 1f");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+        s = new string[3];
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInOutStringArray21a(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1a");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function localInOutStringArray21b(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1b");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function localInOutStringArray21c(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1c");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInOutStringArray21d(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1d");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function localInOutStringArray21e(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1e");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function localInOutStringArray21f(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 1f");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function localInOutStringArray32a(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2a");
+        LogResult.assertStringEqual1("abc", gblArray[1]);
+    end
+
+    function localInOutStringArray32b(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2b");
+        LogResult.assertStringEqual1("cde", gblArray[2]);
+    end
+
+    function localInOutStringArray32c(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2c");
+        LogResult.assertStringEqual1("efg", gblArray[3]);
+
+        s = new string[3];
+        s[1] = "mno";
+        s[2] = "pqr";
+        s[3] = "stu";
+    end
+
+    function localInOutStringArray32d(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2d");
+        LogResult.assertStringEqual1("mno", gblArray[1]);
+    end
+
+    function localInOutStringArray32e(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2e");
+        LogResult.assertStringEqual1("pqr", gblArray[2]);
+    end
+
+    function localInOutStringArray32f(s string[] inOut)
+        LogResult.logStdOut("Global array parameter as INOUT String[] - 2f");
+        LogResult.assertStringEqual1("stu", gblArray[3]);
+    end
+
+    function localInIntArray2a(i int[] in)
+        LogResult.logStdOut("Local function IN integer[] parameter - 2a");
+        LogResult.assertBigIntEqual1(3, i.getSize());
+    end
+
+    function localInIntArray2b(i int[] in)
+        LogResult.logStdOut("Local function IN integer[] parameter - 2b");
+        LogResult.assertBigIntEqual1(10, i[1]);
+    end
+
+    function localInIntArray2c(i int[] in)
+        LogResult.logStdOut("Local function IN integer[] parameter - 2c");
+        LogResult.assertBigIntEqual1(11, i[2]);
+    end
+
+    function localInIntArray2d(i int[] in)
+        LogResult.logStdOut("Local function IN integer[] parameter - 2d");
+        LogResult.assertBigIntEqual1(12, i[3]);
+        i =[5, 6, 7];
+    end
+
+    function localInRecordArray3a(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3a");
+        LogResult.assertBigIntEqual1(3, rec.getSize());
+    end
+
+    function localInRecordArray3b(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3b");
+        LogResult.assertTrue1((rec[1].s == "abc") &&(rec[1].i == 10));
+    end
+
+    function localInRecordArray3c(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3c");
+        LogResult.assertTrue1((rec[2].s == "cde") &&(rec[2].i == 11));
+    end
+
+    function localInRecordArray3e(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3e");
+        LogResult.assertTrue1((rec[3].s == "efg") &&(rec[3].i == 12));
+
+        rec[1] = new myRecord{s = "mno", i = 5};
+        rec[2] = new myRecord{s = "pqr", i = 6};
+        rec[3] = new myRecord{s = "stu", i = 7};
+    end
+
+    function localInRecordArray23a2(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3a2");
+        LogResult.assertBigIntEqual1(3, rec.getSize());
+    end
+
+    function localInRecordArray23b2(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3b2");
+        LogResult.assertTrue1((rec[1].s == "abc") &&(rec[1].i == 10));
+    end
+
+    function localInRecordArray23c2(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3c2");
+        LogResult.assertTrue1((rec[2].s == "cde") &&(rec[2].i == 11));
+    end
+
+    function localInRecordArray23e2(rec myRecord[] in)
+        LogResult.logStdOut("Local function IN record[] parameter - 3e2");
+        LogResult.assertTrue1((rec[3].s == "efg") &&(rec[3].i == 12));
+
+        rec = new myRecord[3];
+        rec[1] = new myRecord{s = "mno", i = 5};
+        rec[2] = new myRecord{s = "pqr", i = 6};
+        rec[3] = new myRecord{s = "stu", i = 7};
+    end
+
+    function localOutStringArray1(s string[] out)
+        LogResult.logStdOut("Local function OUT String[] parameter - 1");
+        LogResult.assertTrue1(s != null && s.getSize() == 0);
+    end
+
+    function localOutStringNullableArray1(s string[]? out)
+        LogResult.logStdOut("Local function OUT String[] parameter - 1");
+        LogResult.assertTrue1(s == null);
+    end
+    
+    function localOutStringArray1a(s string[] out)
+        s = new string[3];
+        LogResult.logStdOut("Local function OUT String[] parameter - 1a");
+        LogResult.assertBigIntEqual1(3, s.getSize());
+    end
+
+    function localOutStringArray1b(s string[] out)
+        s = new string[3];
+        LogResult.logStdOut("Local function OUT String[] parameter - 1b");
+        LogResult.assertStringEqual1("", s[1]);
+    end
+
+    function localOutStringArray1c(s string[] out)
+        s = new string[3];
+        LogResult.logStdOut("Local function OUT String[] parameter - 1c");
+        LogResult.assertStringEqual1("", s[2]);
+    end
+
+    function localOutStringArray1d(s string[] out)
+        s = new string[3];
+        LogResult.logStdOut("Local function OUT String[] parameter - 1d");
+        LogResult.assertStringEqual1("", s[3]);
+        s =["mno", "pqr", "stu"];
+    end
+
+    function localOutIntArray2(i int[] out)
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2");
+        LogResult.assertTrue1(i != null && i.getSize() == 0);
+    end
+
+    function localOutIntArray2a(i int[] out)
+        i = new int[3];
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2a");
+        LogResult.assertBigIntEqual1(3, i.getSize());
+    end
+
+    function localOutIntArray2b(i int[] out)
+        i = new int[3];
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2b");
+        LogResult.assertBigIntEqual1(0, i[1]);
+    end
+
+    function localOutIntArray2c(i int[] out)
+        i = new int[3];
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2c");
+        LogResult.assertBigIntEqual1(0, i[2]);
+    end
+
+    function localOutIntArray2d(i int[] out)
+        i = new int[3];
+        LogResult.logStdOut("Local function OUT integer[] parameter - 2d");
+        LogResult.assertBigIntEqual1(0, i[3]);
+        i =[5, 6, 7];
+    end
+
+    function localOutRecordArray3(rec myRecord[] out)
+        LogResult.logStdOut("Local function OUT record[] parameter - 3");
+		LogResult.assertTrue1(rec != null && rec.getSize() == 0);
+    end
+
+    function localOutRecordArray3a(rec myRecord[] out)
+        rec = new myRecord[3];
+        LogResult.logStdOut("Local function OUT record[] parameter - 3a");
+        LogResult.assertBigIntEqual1(3, rec.getSize());
+    end
+
+    function localOutRecordArray3b(rec myRecord[] out)
+        rec = new myRecord[3];
+        LogResult.logStdOut("Local function OUT record[] parameter - 3b");
+        LogResult.assertTrue1((rec[1].s == "") &&(rec[1].i == 0));
+    end
+
+    function localOutRecordArray3c(rec myRecord[] out)
+        rec = new myRecord[3];
+        LogResult.logStdOut("Local function OUT record[] parameter - 3c");
+        LogResult.assertTrue1((rec[2].s == "") &&(rec[2].i == 0));
+    end
+
+    function localOutRecordArray3e_1(rec myRecord[] out)
+        rec = new myRecord[3];
+        LogResult.logStdOut("Local function OUT record[] parameter - 3e");
+        LogResult.assertTrue1((rec[3].s == "") &&(rec[3].i == 0));
+
+        rec[1] = new myRecord{s = "mno", i = 5};
+        rec[2] = new myRecord{s = "pqr", i = 6};
+        rec[3] = new myRecord{s = "stu", i = 7};
+    end
+
+    function localInOutStringArray1a(s string[] inOut)
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1a");
+        LogResult.assertBigIntEqual1(3, s.getSize());
+    end
+
+    function localInOutStringArray1b(s string[] inOut)
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1b");
+        LogResult.assertStringEqual1("abc", s[1]);
+    end
+
+    function localInOutStringArray1c(s string[] inOut)
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1c");
+        LogResult.assertStringEqual1("cde", s[2]);
+    end
+
+    function localInOutStringArray1d(s string[] inOut)
+        LogResult.logStdOut("Local function INOUT String[] parameter - 1d");
+        LogResult.assertStringEqual1("efg", s[3]);
+        s =["mno", "pqr", "stu"];
+    end
+
+    function localInOutIntArray2a(i int[] inOut)
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2a");
+        LogResult.assertBigIntEqual1(3, i.getSize());
+    end
+
+    function localInOutIntArray2b(i int[] inOut)
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2b");
+        LogResult.assertBigIntEqual1(10, i[1]);
+    end
+
+    function localInOutIntArray2c(i int[] inOut)
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2c");
+        LogResult.assertBigIntEqual1(11, i[2]);
+    end
+
+    function localInOutIntArray2d(i int[] inOut)
+        LogResult.logStdOut("Local function INOUT integer[] parameter - 2d");
+        LogResult.assertBigIntEqual1(12, i[3]);
+        i =[5, 6, 7];
+    end
+
+    function localInOutRecordArray3a(rec myRecord[] inOut)
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3a");
+        LogResult.assertBigIntEqual1(3, rec.getSize());
+    end
+
+    function localInOutRecordArray3b(rec myRecord[] inOut)
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3b");
+        LogResult.assertTrue1((rec[1].s == "abc") &&(rec[1].i == 10));
+    end
+
+    function localInOutRecordArray3c(rec myRecord[] inOut)
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3c");
+        LogResult.assertTrue1((rec[2].s == "cde") &&(rec[2].i == 11));
+    end
+
+    function localInOutRecordArray3e_1(rec myRecord[] inOut)
+        LogResult.logStdOut("Local function INOUT record[] parameter - 3e");
+        LogResult.assertTrue1((rec[3].s == "efg") &&(rec[3].i == 12));
+
+        rec[1] = new myRecord{s = "mno", i = 5};
+        rec[2] = new myRecord{s = "pqr", i = 6};
+        rec[3] = new myRecord{s = "stu", i = 7};
+    end
+
+end

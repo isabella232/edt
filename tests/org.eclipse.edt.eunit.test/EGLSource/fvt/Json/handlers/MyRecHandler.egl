@@ -1,0 +1,9 @@
+package fvt.Json.handlers;
+
+
+
+handler MyRecHandler
+//f1 num(5, 2);
+    f1 decimal(5, 2); //change for EDT 0.7
+    f2 decimal(5, 2);
+end

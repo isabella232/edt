@@ -1,0 +1,123 @@
+package fvt.xml;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.targetLangKind;
+import eglx.xml.XmlLib;
+
+/* 
+* @name DCR43684Lib
+* @title The function test program for XML conversion with dictionary, primitives, record
+* @keywords dictionary primitives record
+* @author EDT team
+* @createDate 2011/08/23
+* @description 
+* Test XML conversion with dictionary, with primitives, with record
+*/
+
+library DCR43684Lib
+
+    function testDictionaryTo(){@Test}
+        LogResult.logStdOut("DCR43684: Invalid object: dictionary to XML");
+        try
+            dict Dictionary{abc = "abc", name = "name"};
+            xml string = convertTo(dict);
+            LogResult.assertTrue("Fail in dictionary to XML", false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testDictionaryFrom(){@Test}
+        LogResult.logStdOut("DCR43684: Invalid object: dictionary From XML");
+        try
+            dict Dictionary{abc = "abc", name = "name"};
+            convertFrom(dict, "");
+            LogResult.assertTrue("Fail in dictionary from XML", false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testPrimitivesTo(){@Test}
+        LogResult.logStdOut("DCR43684: Invalid object: int to XML");
+        try
+            i int = 30;
+            xml string = convertTo(i);
+            LogResult.assertTrue("Fail in int to XML", false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    function testPrimitivesFrom(){@Test}
+        LogResult.logStdOut("DCR43684: Invalid object: int From XML");
+        try
+            i int = 30;
+            convertFrom(i, "");
+            LogResult.assertTrue("Fail in int from XML", false);
+        onException(ex AnyException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+	function testXMLOnJava() {@Test{targetLang = [JAVA]}}
+		// Revert all the Test annotations to include Java execution
+		// on this enhancement has been worked
+		LogResult.skipped("Java Only Bug 351892");
+	end
+	
+    function testRecordsTo(){@Test{targetLang = [JAVASCRIPT]}}
+        xml string;
+        emp Employee{EmpNo{department = "sales", value = 10}, LastName = "Smith"};
+        initialRecord(emp);
+
+        LogResult.logStdOut("DCR43684: record to XML");
+        try
+            xml = convertTo(emp);
+            LogResult.logStdOut("<xmp>" + xml + "</xmp>");
+            LogResult.assertTrue1(true);
+        onException(ex AnyException)
+            LogResult.assertTrue("Fail in record to XML", false);
+        end
+    end
+
+    function testRecordsFrom(){@Test{targetLang = [JAVASCRIPT]}}
+        xml string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><stump><EmpNo dept=\"sales\">10</EmpNo><array dept=\"shipping\">20</array><array dept=\"admin\">20</array><dict><abc>abc</abc><cde>cde</cde><ids>1</ids><ids>3</ids><ids>5</ids><ids>9</ids><dictempno1 dept=\"shipping\">20</dictempno1></dict><LastName>Smith</LastName></stump>";
+        emp Employee{EmpNo{department = "sales", value = 10}, LastName = "Smith"};
+        initialRecord(emp);
+
+        LogResult.logStdOut("DCR43684: fixed record From XML");
+        try
+            convertFrom(emp, xml);
+            LogResult.assertTrue1(true);
+        onException(ex AnyException)
+            LogResult.assertTrue("Fail in record from XML", false);
+        end
+    end
+
+    function convertFrom(target any in, value string in)
+        XMLLib.convertFromXML(value, target);
+    end
+
+    function convertTo(target any in) returns(string)
+        return(XMLLib.convertToXML(target, true));
+    end
+
+    function initialRecord(emp Employee)
+        emp.dict = new Dictionary{abc = "abc", cde = "cde"};
+
+        empNo1 EmpNumber{department = "shipping", value = 20};
+        emp.array.appendElement(empNo1);
+        empNo2 EmpNumber{department = "admin", value = 20};
+        emp.array.appendElement(empNo2);
+
+        ID int[] =[1, 3, 5, 9];
+        lastName string[] =["Cervantes", "Moliere", "Twain", "Tolstoy"];
+        firstName string[] =["Miguel", "", "Mark", "Lev"];
+        age int[] =[90, 29, 30, 55];
+
+        emp.dict["IDs"] = ID;
+        emp.dict["dictEmpNo1"] = empNo1;
+    end
+end

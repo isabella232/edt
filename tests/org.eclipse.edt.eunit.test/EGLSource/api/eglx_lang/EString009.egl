@@ -1,0 +1,494 @@
+package api.eglx_lang;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name EdtString009
+  * @title EdtString009 - runConversionFunction
+  * @description testing conversion from string to/from other types
+  * @testcases runConversionFunction01 - runConverstionFunction32
+  * @sources EdtString009.egl
+  * @keywords string, asString
+ **/
+library EString009 {}
+
+	expectedStr string?;
+	variation string;
+	alternateStr string;  // for JavaScript
+
+ 	function compileError(defectNo String in)
+ 		myInfo String = variation + " skipped due to compiler error " + defectNo;
+ 		LogResult.skipped(myInfo);
+ 	end
+
+	// TODO test the boundary conditions 
+	function runConversionFunction01(){@Test}
+		actual smallint = 7;
+		actualStr string = actual;
+		expectedStr = "7";
+		LogResult.assertTrue("smallInt asString conversion", (actualStr == expectedStr) );
+	end
+	
+	function runConversionFunction02(){@Test}		
+		actual smallint = -7;
+		actualStr string = actual;
+		expectedStr = "-7";
+		LogResult.assertTrue("smallInt asString conversion", (actualStr == expectedStr) );
+	end
+	
+	function runConversionFunction03(){@Test}
+		actual int = 7777;
+		actualStr string = actual;
+		expectedStr = "7777";
+		LogResult.assertTrue("int asString conversion", (actualStr == expectedStr) );
+	end
+	
+	function runConversionFunction04(){@Test}		
+		actual int = -7777;
+		actualStr string = actual;
+		expectedStr = "-7777";
+		LogResult.assertTrue("int asString conversion", (actualStr == expectedStr) );
+	end
+	
+	function runConversionFunction05(){@Test}
+		actual decimal(5,2) = 123.45;
+		actualStr string = actual;
+		expectedStr = "123.45";
+		LogResult.assertTrue("decimal asString conversion", (actualStr == expectedStr) );
+	end
+	
+	function runConversionFunction06(){@Test}
+		actual decimal(5,2) = -123.45;
+		actualStr string = actual;
+		expectedStr = "-123.45";
+		LogResult.assertTrue("decimal asString conversion", (actualStr == expectedStr) );
+	end
+	
+ 	function runConversionFunction07(){@Test}
+		actual float = 2.539E7;
+		actualStr string = actual;
+		expectedStr = "2.539E7";
+		alternateStr = "25390000";
+		if (( expectedStr == actualStr) || (alternateStr == actualStr))
+			LogResult.passed("OK");
+		else
+			LogResult.assertStringEqual("float asString conversion1", expectedStr, actualStr);
+		end
+	end
+	
+	function runConversionFunction08(){@Test}
+		actual float = -2.539e7;
+		actualStr string = actual;
+		expectedStr = "-2.539E7";
+		alternateStr = "-25390000";
+		if (( expectedStr == actualStr) || (alternateStr == actualStr))
+			LogResult.passed("OK");
+		else
+			LogResult.assertStringEqual("float asString conversion2", expectedStr, actualStr);
+		end
+	end
+	
+	function runConversionFunction09(){@Test}
+		actual smallFloat = 2.539E7;
+		actualStr string = actual;
+		expectedStr = "2.539E7";	
+		alternateStr = "25390000";
+		if (( expectedStr == actualStr) || (alternateStr == actualStr))
+			LogResult.passed("OK");
+		else
+			LogResult.assertStringEqual("smallFloat asString conversion1", expectedStr, actualStr);
+		end
+	end
+	
+	function runConversionFunction10(){@Test}
+		actual smallFloat = -2.539e7;
+		actualStr string = actual;
+		expectedStr = "-2.539E7";
+		alternateStr = "-25390000";
+		if (( expectedStr == actualStr) || (alternateStr == actualStr))
+			LogResult.passed("OK");
+		else
+			LogResult.assertStringEqual("smallFloat asString conversion2", expectedStr, actualStr);
+		end
+	end	
+ 	function runConversionFunction11(){@Test}
+		variation = "date asString conversion";
+
+	    // add more variations using different characters and formats
+		try
+			actual date; 
+	 		actual = "10/15/1966";  
+			actualStr string = actual;
+			expectedStr = "10/15/1966";
+			LogResult.assertStringEqual(variation, expectedStr, actualStr);
+		onException(oops TypeCastException)
+			LogResult.failed(variation);
+		end	
+
+	end	
+	
+ 	function runConversionFunction12(){@Test}
+		variation = "date asString conversion";
+
+	    // add more variations using different characters and formats
+		try
+			actual date; 
+	 		actual = "1/9/1966";  
+			actualStr string = actual;
+			expectedStr = "01/09/1966";
+			LogResult.assertStringEqual1(expectedStr, actualStr);
+		onException(oops TypeCastException)
+			LogResult.skipped("JS ONLY 382632");
+		end	
+	end	
+				
+	function runConversionFunction13(){@Test}
+		variation = "date asString conversion";
+
+	    // add more variations using different characters and formats
+		try
+			actual date = "04/01/0009";  // 4-1-9
+			actualStr string = actual;
+			expectedStr = "04/01/0009";
+			LogResult.assertStringEqual(variation, expectedStr, actualStr);
+		onException(oops TypeCastException)
+			LogResult.failed(" Got an TypeCastException ");
+		end	
+
+	end	
+	
+	function runConversionFunction14(){@Test}
+		actual date = "10/11/1999";  // 
+		actualStr string = actual;
+		expectedStr = "10/11/1999";
+		LogResult.assertStringEqual1(expectedStr, actualStr);
+	end
+	
+	function runConversionFunction15(){@Test}
+		try
+			actual date = "99/11/1999";  // "99999999"
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConversionFunction16(){@Test}
+		try
+			actual date = "10/99/1999";  // "99999999"
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConversionFunction17(){@Test}
+		try
+			actual date = "10/11/-999";  // "99999999"
+			LogResult.failed("No Exception  ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConversionFunction18(){@Test}
+		try
+			actual date = "99/99/9999";  // "99999999"
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+
+	function runConversionFunction19(){@Test}
+		actual timestamp("yyyyMMddHHmmssffffff") = "2009-04-01-13-14-15-161718";   
+		actualStr string = actual;
+		expectedStr = "2009-04-01 13:14:15.161000";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end	
+
+	function runConversionFunction20(){@Test}
+		actual timestamp("yyyyMMddHHmmss") = "2009-04-01-13-14-15"; 
+		actualStr string = actual;
+		expectedStr = "2009-04-01 13:14:15";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end	
+	
+	function runConversionFunction21(){@Test}
+		actual timestamp("yyyyMMddHHmmssffff") = "2009-04-01-13-14-15-1617";
+		  
+		actualStr string = actual;
+		// NOTE: As of 6/25/2012, the supported runtimes (Java and JavaScript) only store precision out to MS (3 digits).  This is why the trailing 7 is converted to a 0.
+		expectedStr = "2009-04-01 13:14:15.1610";   
+		LogResult.assertStringEqual1( expectedStr, actualStr ); 
+	end	
+		
+	function runConversionFunction21_less1(){@Test}
+	    try
+			actual timestamp("yyyyMMddHHmmssff") = "2009-04-01-13-14-15-3";  
+			
+			LogResult.skipped("Bug 382632 TypeCastException");
+		onException(oops TypeCastException)
+			LogResult.passed("OK");
+		end		
+	end	
+	
+	function runConversionFunction21_less2(){@Test}
+	    try
+			actual timestamp("yyyyMMddHHmmssff") = "2009-04-01-13-14-15-";  
+			
+			LogResult.skipped("Bug 382632 TypeCastException");
+		onException(oops TypeCastException)
+			LogResult.passed("OK");
+		end		
+	end	
+	
+	function runConversionFunction21_less3(){@Test}
+	    try
+			actual timestamp("yyyyMMddHHmmssff") = "2009-04-01-13-14-15";  
+			actualStr string = actual;
+			
+			LogResult.skipped("Bug 382632 TypeCastException");
+		onException(oops TypeCastException)
+			LogResult.passed("OK");
+		end		
+	end	
+	
+	
+	function runConversionFunction21_more(){@Test}
+	    try
+			actual timestamp("yyyyMMddHHmmssffff") = "2009-04-01-13-14-15-1617456";  
+			
+			LogResult.skipped("Bug 382632 TypeCastException");
+		onException(oops TypeCastException)
+			LogResult.passed("OK");
+		end		
+	end	
+
+	function runConversionFunction22(){@Test}
+		actual timestamp("yyyyMMddHHmmss") = "2009-04-01-13-14-15";
+		actualStr string = actual;
+		expectedStr = "2009-04-01 13:14:15";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end	
+	
+	function runConversionFunction23(){@Test}
+		actual timestamp("yyyyMMddHHmm") = "1965*10*31*10*35";  
+		actualStr string = actual;
+		expectedStr = "1965-10-31 10:35";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end
+	
+	function runConversionFunction24(){@Test}
+		actual timestamp("yyyyMMddHHmmss") = "1965*10*31*10*35*55";  
+		actualStr string = actual;
+		expectedStr = "1965-10-31 10:35:55";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end
+	
+	function runConversionFunction24b(){@Test}
+		actual timestamp("yyyyMMddHHmmss") = "2012*02/29:10(35)55";  
+		actualStr string = actual;
+		expectedStr = "2012-02-29 10:35:55";
+		LogResult.assertStringEqual1( expectedStr, actualStr);
+	end
+	
+	function runConverstionFunction25() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "65*10*31*10*35*55";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+
+	function runConverstionFunction26() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "1965*99*31*10*35*55";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConverstionFunction27() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "1965*10*99*10*35*55";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConverstionFunction28() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "1965*10*31*99*35*55";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConverstionFunction29() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "1965*10*31*10*99*55";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end
+	
+	function runConverstionFunction30() {@Test}
+		try
+			actual timestamp("yyyyMMddHHmmss") = "1965*10*31*10*35*99";  
+			LogResult.failed("No Exception ");
+		onException(oops AnyException) //TypeCastException)
+			if (oops isa TypeCastException)
+				LogResult.passed("OK");
+			else
+				localDetails string = " Wrong Exception " + oops.message;
+				LogResult.failed(localDetails);
+			end
+		end	
+	end	
+	
+	function runConversionFunction31(){@Test}
+		actual date = "10/31/1965";  // 
+		actualStr string = actual;
+		expectedStr = "10/31/1965";
+		LogResult.assertStringEqual1(expectedStr, actualStr);
+	end
+	
+	function runConversionFunction32(){@Test}
+		try
+			actual date = "10/31/65";  // when is it 1965 vs 0065?
+			actualStr string = actual;
+			baseDate date = "01/01/1900";
+			expectedStr = "10/31/1965";
+			LogResult.assertTrue("expecting 65 to be year 0065", (actual < baseDate));
+		onException(oops TypeCastException)
+			LogResult.skipped("JS ONLY 382632");
+		end	
+	end
+	
+	function runConverstionFunction33()
+		actual time = "13:12:05";
+		actualStr string = actual;
+		expectedStr = "13:12:05";
+		LogResult.assertStringEqual1(expectedStr, actualStr);
+	end
+	
+	function runConverstionFunction34() {@Test}
+		try
+			actual time = "13-12-05";
+			LogResult.failed("No Exception");
+		onException(oops TypeCastException)
+			LogResult.passed("OK");
+		end	
+	end	
+
+	function runConverstionFunction35() {@Test}
+		actual bytes = 0x66726f67;
+		actualStr string = EString.fromBytes( actual, "US-ASCII" );
+		expectedStr = "frog";
+		LogResult.assertStringEqual("EString.fromBytes, US-ASCII", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction36() {@Test}
+		actual bytes = 0x636865657365e282ac30e1baacc2a3e3858130;
+		actualStr string = EString.fromBytes( actual, "UTF-8" );
+		expectedStr = "cheese" :: EString.fromBytes( 0x20ac, "UTF-16BE" ) :: "0" :: EString.fromBytes( 0x1eac00a33141, "UTF-16BE" ) :: "0";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-8", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction37() {@Test}
+		actual bytes = 0x0031003200330034;
+		actualStr string = EString.fromBytes( actual, "UTF-16BE" );
+		expectedStr = "1234";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-16BE", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction38() {@Test}
+		actual bytes = 0x3100320033003400;
+		actualStr string = EString.fromBytes( actual, "UTF-16LE" );
+		expectedStr = "1234";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-16LE", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction39() {@Test}
+		try
+			actualStr string = EString.fromBytes( 0x313233, "-<JUNK>-" );
+			LogResult.assertTrue( "Expecting exception from EString.fromBytes()", false );
+		onException ( ex InvalidArgumentException )
+			LogResult.assertTrue( "Expecting exception from EString.fromBytes()", true );
+		end
+	end
+	
+	function runConverstionFunction40() {@Test}
+		actual bytes = 0xFFFE3100320033003400;
+		actualStr string = EString.fromBytes( actual, "UTF-16" );
+		expectedStr = "1234";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-16, LE BOM", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction41() {@Test}
+		actual bytes = 0xFEFF0031003200330034;
+		actualStr string = EString.fromBytes( actual, "UTF-16" );
+		expectedStr = "1234";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-16, BE BOM", expectedStr, actualStr);
+	end	
+	
+	function runConverstionFunction42() {@Test}
+		actual bytes = 0x0031003200330034;
+		actualStr string = EString.fromBytes( actual, "UTF-16" );
+		expectedStr = "1234";
+		LogResult.assertStringEqual("EString.fromBytes, UTF-16, no BOM", expectedStr, actualStr);
+	end	
+
+end // EdtString009

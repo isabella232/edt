@@ -1,0 +1,721 @@
+package api.eglx_lang;
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/** @test
+  * @name ESmallint002
+  * @title ESmallint002 - runBitwiseFunction
+  * @description testing smallint bitwise functions
+  * @testcases runBitwiseFunction01 - runBitwiseFunction57; runFvtBitwiseFunction01 - runFvtBitwiseFunction12; runFvtNullableBitwiseFunction01 - runFvtNullableBitwiseFunction15
+  * @sources ESmallint002.egl
+  * @keywords smallint, bit-wise
+ **/
+library ESmallint002 {}
+	
+	// Variable Declarations
+	int1 smallint = 13;
+	int2 smallint = 27;
+	int3 smallint = 7;
+	int4 smallint = 0;
+	int5 smallint = 0;
+	expected int = 0;
+	actual int = 0;
+	variation string = "undefined";
+	null1 smallint?;
+	null2 smallint?;
+	null3 smallint?;
+	
+	a smallint = 15;  // 000F
+	b smallint = 16;  // 0010
+	c smallint = -1;  // FFFF
+	d smallint;
+	
+	aNull smallint? = 15;  // 000F
+	bNull smallint? = 16;  // 0010
+	cNull smallint? = -1;  // FFFF
+	dNull smallint?;
+	flag boolean = false;
+ 
+ 	function assertTrue()
+ 		LogResult.assertBigintEqual(variation, expected, actual);
+	 	revert();
+ 	end
+ 	
+ 	function revert()
+ 		int1 = 13;
+		int2 = 27;
+		int3 = 7;
+		int4 = 0;
+		int5 = 0;
+		expected = 0;
+		actual  = 0;
+ 	end
+	
+	function runBitwiseFunction01(){@Test}
+		variation = "int1 & int2";
+		actual = int1 & int2;
+		expected = 9;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction02(){@Test}
+		variation = "int1 | int2";
+		actual = int1 | int2;
+		expected = 31;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction03(){@Test}
+		variation = "int1 xor int2";
+		actual = int1 xor int2;
+		expected = 22;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction04(){@Test}
+		variation = "int1 & int2 | int3";
+		actual = int1 & int2 | int3;
+		expected = 15;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction05(){@Test}
+		variation = "int1 & ( int2 | int3 )";
+		actual = int1 & ( int2 | int3 );
+		expected = 13;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction06(){@Test}
+		variation = "int1 | int2 xor int3";
+		actual = int1 | int2 xor int3;
+		expected = 24;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction07(){@Test}
+		variation = "int1 | ( int2 xor int3 )";
+		actual = int1 | ( int2 xor int3 );
+		expected = 29;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction08(){@Test}
+		variation = "13i & 27i";
+		actual = 13i & 27i;
+		expected = 9;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction09(){@Test}
+		variation = "13i | 27i";
+		actual = 13i | 27i;
+		expected = 31;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction10(){@Test}
+		variation = "13i xor 27i";
+		actual = 13i xor 27i;
+		expected = 22;
+		assertTrue();  
+	end
+	
+	function runBitwiseFunction11(){@Test}
+		variation = "13i & 27i | 7i";
+		actual = 13i & 27i | 7i;
+		expected = 15;
+		assertTrue();  
+	end
+	
+	function runBitwiseFunction12(){@Test}
+		variation = "13i & ( 27i | 7i )";
+		actual = 13i & ( 27i | 7i );
+		expected = 13;
+		assertTrue();  
+	end
+	
+	function runBitwiseFunction13(){@Test}
+		variation = "13i | 27i xor 7i";
+		actual = 13i | 27i xor 7i;
+		expected = 24;
+		assertTrue();  
+	end
+	
+	function runBitwiseFunction14(){@Test}
+		variation = "13i | ( 27i xor 7i )";
+		actual = 13i | ( 27i xor 7i );
+		expected = 29;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction15(){@Test}
+		try
+			variation = "null1 & int2";
+			null1 = null;
+			actual = null1 & int2;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction16(){@Test}
+		try
+			variation = "int1 | null2";
+			null2 = null;
+		    actual = int1 | null2;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		onException (wrong AnyException)
+			failDetails  String = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runBitwiseFunction17(){@Test}
+		try
+			variation = "null1 xor int2";
+			null1 = null;
+			actual = null1 xor int2;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		onException (wrong AnyException)
+			failDetails  String = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runBitwiseFunction18(){@Test}
+		try
+			variation = "int1 & null2 | int3";
+			null2 = null;
+			actual = int1 & null2 | int3;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		onException (wrong AnyException)
+			failDetails  String = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runBitwiseFunction19(){@Test}
+		try
+			variation = "int1 & ( int2 | null3 )";
+			null3 = null;
+			actual = int1 & ( int2 | null3 );
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		end
+	end
+	
+	function runBitwiseFunction20(){@Test}
+		try
+			variation = "null1 | int2 xor int3";
+			null1 = null;
+			actual = null1 | int2 xor int3;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		onException (wrong AnyException)
+			failDetails  String = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runBitwiseFunction21(){@Test}
+	 	try
+			variation = "int1 | ( null2 xor int3 )";
+			null2 = null;
+			actual = int1 | ( null2 xor int3 );
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.assertTrue1(true);
+		onException (wrong AnyException)
+			failDetails  String = variation + " wrong exception " + wrong.message;
+			LogResult.failed(failDetails);
+		end
+	end
+	
+	function runBitwiseFunction22(){@Test}
+		try
+			variation = "13i | ( 27i xor null3 )";
+	 		null3 = null;
+			actual = 13i | ( 27i xor null3 );
+			LogResult.failed("No exception"); 
+		onException(oops NullValueException)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction23(){@Test}
+		variation = "int1 << 2i";
+		actual = int1 << 2i;
+		expected = 52;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction24(){@Test}
+		variation = "int1 << int2";
+		actual = int1 << int2;
+		expected = 1744830464;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction25(){@Test}
+		// Shift by a huge amount (only the lowest 5 bits of the amount are used).
+		variation = "int2 << 1025i";
+		actual = int2 << 1025i;
+		expected = 54;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction26(){@Test}
+		// Shift by a negative amount (only the lowest 5 bits of the amount are used).
+		variation = "int2 << -2i";
+		actual = int2 << -2i;
+		expected = -1073741824;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction27(){@Test}
+		// Shift a 1 bit into the sign position so the value becomes negative.
+		variation = "int3 << 30i";
+		actual = int3 << 30i;
+		expected = -1073741824;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction28(){@Test}
+		// Shift away all of the 1 bits so the result is zero.
+		variation = "1024i << int2";
+		actual = 1024i << int2;
+		expected = 0;
+		assertTrue();
+	end
+
+	function runBitwiseFunction29(){@Test}
+		variation = "int1 <<= 2i";
+		actual = int1;
+		actual <<= 2i;
+		expected = 52;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction30(){@Test}
+		variation = "int1 <<= int2";
+		actual = int1;
+		actual <<= int2;
+		expected = 1744830464;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction31(){@Test}
+		try
+			variation = "int1 << null1";
+			null1 = null;
+			actual = int1 << null1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction32(){@Test}
+		try
+			variation = "null1 << int1";
+			null1 = null;
+			actual = null1 << int1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction33(){@Test}
+		try
+			variation = "int1 <<= null1";
+			null1 = null;
+			int1 <<= null1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction34(){@Test}
+		try
+			variation = "null1 <<= int1";
+			null1 = null;
+			null1 <<= int1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction35(){@Test}
+		variation = "~int1";
+		actual = ~int1;
+		expected = -14;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction36(){@Test}
+		variation = "~d";
+		d = 23794;
+		actual = ~d;
+		expected = -23795;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction37(){@Test}
+		variation = "~null1";
+		null1 = -27919;
+		actual = ~null1;
+		expected = 27918;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction38(){@Test}
+		try
+			variation = "~null1";
+			null1 = null;
+			actual = ~null1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction39(){@Test}
+		variation = "int1 >> 2i";
+		actual = int1 >> 2i;
+		expected = 3;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction40(){@Test}
+		variation = "int1 >> int2";
+		actual = int1 >> int2;
+		expected = 0;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction41(){@Test}
+		variation = "int2 >> 1025i";
+		actual = int2 >> 1025i;
+		expected = 13;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction42(){@Test}
+		variation = "29348i >> -15i";
+		actual = 29348i >> -15i;
+		expected = 0;
+		assertTrue();
+	end
+
+	function runBitwiseFunction43(){@Test}
+		variation = "int1 >>= 2i";
+		int1 >>= 2i;
+		actual = int1;
+		expected = 3;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction44(){@Test}
+		variation = "int1 >>= int2";
+		int1 >>= int2;
+		actual = int1;
+		expected = 0;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction45(){@Test}
+		try
+			variation = "int1 >>= null1";
+			null1 = null;
+			int1 >>= null1;
+			actual = int1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction46(){@Test}
+		try
+			variation = "null1 >>= int1";
+			null1 = null;
+			null1 >>= int1;
+			actual = null1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction47(){@Test}
+		variation = "-int1 >> 2i";
+		actual = -int1 >> 2i;
+		expected = -4;
+		assertTrue();
+	end
+
+	function runBitwiseFunction48(){@Test}
+		variation = "int1 >>> 2i";
+		actual = int1 >>> 2i;
+		expected = 3;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction49(){@Test}
+		variation = "int1 >>> int2";
+		actual = int1 >>> int2;
+		expected = 0;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction50(){@Test}
+		variation = "d >>> 12i";
+		d = -12345;
+		actual = d >>> 12i;
+		expected = 1048572;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction51(){@Test}
+		variation = "int2 >>> 1025i";
+		actual = int2 >>> 1025i;
+		expected = 13;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction52(){@Test}
+		variation = "-1i >>> -15i";
+		actual = -1i >>> -15i;
+		expected = 32767;
+		assertTrue();
+	end
+
+	function runBitwiseFunction53(){@Test}
+		variation = "int1 >>>= 2i";
+		actual = int1;
+		actual >>>= 2i;
+		expected = 3;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction54(){@Test}
+		variation = "int1 >>>= int2";
+		actual = int1;
+		actual >>>= int2;
+		expected = 0;
+		assertTrue();
+	end
+	
+	function runBitwiseFunction55(){@Test}
+		try
+			variation = "int1 >>>= null1";
+			null1 = null;
+			int1 >>>= null1;
+			actual = int1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+	
+	function runBitwiseFunction56(){@Test}
+		try
+			variation = "null1 >>>= int1";
+			null1 = null;
+			null1 >>>= int1;
+			actual = null1;
+			LogResult.failed("No exception");
+		onException (expect nullvalueexception)
+			LogResult.passed("OK");
+		end
+	end
+
+	function runBitwiseFunction57(){@Test}
+		variation = "-int1 >>> 2i";
+		actual = -int1 >>> 2i;
+		expected = 1073741820;
+		assertTrue();
+	end
+	
+	function runFvtBitwiseFunction01() {@Test}
+		d = a & b;
+		LogResult.assertTrue1( d == 0 );
+	end
+	
+	function runFvtBitwiseFunction02() {@Test}
+		d = a & c;
+		LogResult.assertTrue1( d == 15 );
+	end	
+	
+	function runFvtBitwiseFunction03() {@Test}
+		d = a | b;
+		LogResult.assertTrue1( d == 31 );
+	end
+	
+	function runFvtBitwiseFunction04() {@Test}
+		d = a | c;
+		LogResult.assertTrue1( d == -1 );
+	end
+	
+	function runFvtBitwiseFunction05() {@Test}
+		d = a xor b;
+		LogResult.assertTrue1( d == 31 );
+	end
+	
+	function runFvtBitwiseFunction06() {@Test}
+		d = a xor c;
+		LogResult.assertTrue1( d == -16 );
+	end	
+	
+	function runFvtBitwiseFunction07() {@Test}
+		d = a;
+		d &= b;
+		LogResult.assertTrue1( d == 0 );
+	end
+	
+	function runFvtBitwiseFunction08() {@Test}
+		d = a;
+		d &= c;
+		LogResult.assertTrue1( d == 15 );
+	end
+	
+	function runFvtBitwiseFunction09() {@Test}
+		d = a;
+		d |= b;
+		LogResult.assertTrue1( d == 31 );
+	end
+	
+	function runFvtBitwiseFunction10() {@Test}
+		d = a;
+		d |= c;
+		LogResult.assertTrue1( d == -1 );
+	end	
+	
+	function runFvtBitwiseFunction11() {@Test}
+		d = a;
+		d xor= b;
+		LogResult.assertTrue1( d == 31 );
+	end
+	
+	function runFvtBitwiseFunction12() {@Test}
+		d = a;
+		d xor= c;
+		LogResult.assertTrue1( d == -16 );
+	end
+
+	function runFvtNullableBitwiseFunction01() {@Test}
+		dNull = aNull & bNull;
+		LogResult.assertTrue1( dNull == 0 );
+	end
+	
+	function runFvtNullableBitwiseFunction02() {@Test}
+		dNull = aNull & cNull;
+		LogResult.assertTrue1( dNull == 15 );
+	end	
+	
+	function runFvtNullableBitwiseFunction03() {@Test}
+		dNull = aNull | bNull;
+		LogResult.assertTrue1( dNull == 31 );
+	end
+	
+	function runFvtNullableBitwiseFunction04() {@Test}
+		dNull = aNull | cNull;
+		LogResult.assertTrue1( dNull == -1 );
+	end
+	
+	function runFvtNullableBitwiseFunction05() {@Test}
+		dNull = aNull xor bNull;
+		LogResult.assertTrue1( dNull == 31 );
+	end
+	
+	function runFvtNullableBitwiseFunction06() {@Test}
+		dNull = aNull xor cNull;
+		LogResult.assertTrue1( dNull == -16 );
+	end	
+	
+	function runFvtNullableBitwiseFunction07() {@Test}
+		dNull = aNull;
+		dNull &= bNull;
+		LogResult.assertTrue1( dNull == 0 );
+	end
+	
+	function runFvtNullableBitwiseFunction08() {@Test}
+		dNull = aNull;
+		dNull &= cNull;
+		LogResult.assertTrue1( dNull == 15 );
+	end
+	
+	function runFvtNullableBitwiseFunction09() {@Test}
+		dNull = aNull;
+		dNull |= bNull;
+		LogResult.assertTrue1( dNull == 31 );
+	end
+	
+	function runFvtNullableBitwiseFunction10() {@Test}
+		dNull = aNull;
+		dNull |= cNull;
+		LogResult.assertTrue1( dNull == -1 );
+	end	
+	
+	function runFvtNullableBitwiseFunction11() {@Test}
+		dNull = aNull;
+		dNull xor= bNull;
+		LogResult.assertTrue1( dNull == 31 );
+	end
+	
+	function runFvtNullableBitwiseFunction12() {@Test}
+		dNull = aNull;
+		dNull xor= cNull;
+		LogResult.assertTrue1( dNull == -16 );
+	end
+	
+	function runFvtNullableBitwiseFunction13() {@Test}	
+		flag = false;
+		aNull = null;
+		try		
+			dNull = aNull & bNull;
+		onException ( x NullValueException )
+			flag = true;
+		end
+		LogResult.assertTrue("No Exception", flag);
+	end	
+	
+	function runFvtNullableBitwiseFunction14() {@Test}
+		flag = false;
+		dNull = null;
+		try		
+			dNull xor= cNull;
+		onException ( x NullValueException )
+			flag = true;
+		end
+		LogResult.assertTrue("No Exception", flag);
+	end
+	
+	function runFvtNullableBitwiseFunction15() {@Test}
+		flag = false;
+		cNull = null;
+		bNull = 10;
+		try		
+			bNull |= cNull;
+		onException ( x NullValueException )
+			flag = true;
+		end
+		LogResult.assertTrue("No Exception", flag);
+	end
+end
+

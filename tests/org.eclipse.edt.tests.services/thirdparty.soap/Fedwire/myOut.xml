@@ -1,0 +1,437 @@
+<ns1:Envelope xmlns:ns1="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:ns2="http://www.webservicex.net/">
+	<ns1:Body>
+		<ns2:GetParticipantsByLocation>
+			<ns2:City>boston</ns2:City>
+			<ns2:StateCode>ma</ns2:StateCode>
+		</ns2:GetParticipantsByLocation>
+	</ns1:Body>
+</ns1:Envelope>
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns3="http://www.webservicex.net/">
+	<soapenv:Body>
+		<tns3:GetParticipantsByLocation>
+			<tns3:City>boston</tns3:City>
+			<tns3:StateCode>ma</tns3:StateCode>
+		</tns3:GetParticipantsByLocation>
+	</soapenv:Body>
+</soapenv:Envelope>
+
+<ns1:Envelope xmlns:ns1="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:ns2="http://www.webservicex.net/">
+	<ns1:Body>
+		<ns2:GetParticipantsByLocation>
+			<ns2:City>boston</ns2:City>
+			<ns2:StateCode>ma</ns2:StateCode>
+		</ns2:GetParticipantsByLocation>
+	</ns1:Body>
+</ns1:Envelope>
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soap:Body>
+		<GetParticipantsByLocationResponse
+			xmlns="http://www.webservicex.net/">
+			<GetParticipantsByLocationResult>true
+			</GetParticipantsByLocationResult>
+			<FedWireLists>
+				<FedWires>
+					<FedWireData>
+						<RoutingNumber>211070023</RoutingNumber>
+						<TelegraphicName>MT WASH COOP S BOS</TelegraphicName>
+						<CustomerName>MT. WASHINGTON CO-OPERATIVE         </CustomerName>
+						<State>MA</State>
+						<City>SOUTH BOSTON             </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20020517</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211072733</RoutingNumber>
+						<TelegraphicName>UNION FED BOSTON  </TelegraphicName>
+						<CustomerName>BAY STATE FEDERAL SAVINGS BA        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>N</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20030821</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211073237</RoutingNumber>
+						<TelegraphicName>PEOPLES BRIGHTON  </TelegraphicName>
+						<CustomerName>PEOPLES FEDERAL SAVINGS BANK        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211073473</RoutingNumber>
+						<TelegraphicName>FST FED SVGS BOS  </TelegraphicName>
+						<CustomerName>FIRST FEDERAL SAVINGS BANK          </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211075086</RoutingNumber>
+						<TelegraphicName>FST TRADE UN BOS  </TelegraphicName>
+						<CustomerName>FIRST TRADE UNION SAVINGS BK        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211080725</RoutingNumber>
+						<TelegraphicName>POSTAL COMM CU    </TelegraphicName>
+						<CustomerName>POSTAL COMMUNITY CREDIT UNION       </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20011009</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211080767</RoutingNumber>
+						<TelegraphicName>UNIVERSITY CU BOS </TelegraphicName>
+						<CustomerName>UNIVERSITY CU                       </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211080783</RoutingNumber>
+						<TelegraphicName>CABOT BOSTON CU   </TelegraphicName>
+						<CustomerName>CABOT BOSTON CU                     </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211080880</RoutingNumber>
+						<TelegraphicName>FED RES BOS EMP CU</TelegraphicName>
+						<CustomerName>FED. RES. BOSTON EMP FED CR UNION   </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>N</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>19991222</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211081203</RoutingNumber>
+						<TelegraphicName>MASS STATE ECU    </TelegraphicName>
+						<CustomerName>MASS. STATE EMPLOYEES CU            </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20010809</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211081216</RoutingNumber>
+						<TelegraphicName>TEL WORKERS CU BOS</TelegraphicName>
+						<CustomerName>TELEPHONE WORKERS CREDIT UNI        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20010430</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211081232</RoutingNumber>
+						<TelegraphicName>GREATER BOS FCU   </TelegraphicName>
+						<CustomerName>GREATER BOSTON FCU                  </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>N</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>19991220</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>211083557</RoutingNumber>
+						<TelegraphicName>MBTA EMP CU J P   </TelegraphicName>
+						<CustomerName>MBTA EMPLOYEES CU                   </CustomerName>
+						<State>MA</State>
+						<City>SOUTH BOSTON             </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>19991014</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011000015</RoutingNumber>
+						<TelegraphicName>FRB-BOS           </TelegraphicName>
+						<CustomerName>FEDERAL RESERVE BANK OF BOSTON      </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20040910</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011000028</RoutingNumber>
+						<TelegraphicName>STATE ST BOS      </TelegraphicName>
+						<CustomerName>STATE STREET BOSTON                 </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011000138</RoutingNumber>
+						<TelegraphicName>FLEET NATL BANK MA</TelegraphicName>
+						<CustomerName>FLEET NATIONAL BANK, MA             </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20010604</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011000390</RoutingNumber>
+						<TelegraphicName>FLEET NATL BK MA  </TelegraphicName>
+						<CustomerName>FLEET NATIONAL BANK, MA             </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20010604</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011000536</RoutingNumber>
+						<TelegraphicName>FHLB BOSTON       </TelegraphicName>
+						<CustomerName>FEDERAL HOME LOAN BANK              </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011001234</RoutingNumber>
+						<TelegraphicName>MELLON TRUST OF NE</TelegraphicName>
+						<CustomerName>MELLON TRUST OF NEW ENGLAND        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20030917</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011001276</RoutingNumber>
+						<TelegraphicName>ONEUNITED BANK    </TelegraphicName>
+						<CustomerName>ONEUNITED BANK                      </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20021231</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011001438</RoutingNumber>
+						<TelegraphicName>INVESTORS BK BOS  </TelegraphicName>
+						<CustomerName>INVESTORS BANK &amp; TRUST CO.          </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011001881</RoutingNumber>
+						<TelegraphicName>FIDUCIARY TR BOS  </TelegraphicName>
+						<CustomerName>FIDUCIARY TRUST COMPANY             </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011002343</RoutingNumber>
+						<TelegraphicName>BOSTON PRIVATE BK </TelegraphicName>
+						<CustomerName>THE BOSTON PRIVATE BK. &amp; TR CO      </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011002550</RoutingNumber>
+						<TelegraphicName>WAINWRIGHT BOSTON </TelegraphicName>
+						<CustomerName>WAINWRIGHT BANK                     </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011002628</RoutingNumber>
+						<TelegraphicName>CAPITAL CROSSING  </TelegraphicName>
+						<CustomerName>CAPITAL CROSSING BANK               </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>19990913</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011002725</RoutingNumber>
+						<TelegraphicName>MERCANTILE BOST   </TelegraphicName>
+						<CustomerName>MERCANTILE BK&amp;TR.CO.                </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>
+						</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011002877</RoutingNumber>
+						<TelegraphicName>ASIAN AMER BT BOST</TelegraphicName>
+						<CustomerName>ASIAN AMERICAN BK&amp;TR CO             </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>19991222</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011075202</RoutingNumber>
+						<TelegraphicName>SOVEREIGN NEW ENGL</TelegraphicName>
+						<CustomerName>SOVERIGN BANK NEW ENGLAND           </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>N
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20010802</DateOfLastRevision>
+					</FedWireData>
+					<FedWireData>
+						<RoutingNumber>011301798</RoutingNumber>
+						<TelegraphicName>EASTERN BANK LYNN </TelegraphicName>
+						<CustomerName>EASTERN BANK                        </CustomerName>
+						<State>MA</State>
+						<City>BOSTON                   </City>
+						<FundsTransferStatus>Y</FundsTransferStatus>
+						<FundsSettlementOnlyStatus>
+						</FundsSettlementOnlyStatus>
+						<BookEntrySecuritiesTransferStatus>Y
+						</BookEntrySecuritiesTransferStatus>
+						<DateOfLastRevision>20020501</DateOfLastRevision>
+					</FedWireData>
+				</FedWires>
+				<TotalRecords>29</TotalRecords>
+			</FedWireLists>
+		</GetParticipantsByLocationResponse>
+	</soap:Body>
+</soap:Envelope>
+

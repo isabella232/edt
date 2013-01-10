@@ -1,0 +1,7 @@
+package fvt.xml.handlers.data;
+
+handler masterFlex
+    mf3 simpleFlex[][];
+    mf4 primitiveAndNestedFlex[];
+    mf5 primitive2dArrayFlex[];
+end

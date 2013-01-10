@@ -1,0 +1,42 @@
+package server.host.programs.data.records;
+
+import eglx.jtopen.annotations.StructBin2;
+import eglx.jtopen.annotations.StructBin4;
+import eglx.jtopen.annotations.StructBin8;
+import eglx.jtopen.annotations.StructDate;
+import eglx.jtopen.annotations.StructFloat4;
+import eglx.jtopen.annotations.StructFloat8;
+import eglx.jtopen.annotations.StructPackedDecimal;
+import eglx.jtopen.annotations.StructText;
+import eglx.jtopen.annotations.StructTime;
+import eglx.jtopen.annotations.StructTimestamp;
+import eglx.jtopen.annotations.StructUnsignedBin2;
+import eglx.jtopen.annotations.StructUnsignedBin4;
+import eglx.jtopen.annotations.StructZonedDecimal;
+import eglx.services.Encoding;
+
+
+record Record2
+	char20 string{@StructText{length = 20}}; 
+	lchar20 string(20){@StructText{}}; 
+	unicode20 string{@StructText{length = 20, encoding = "UTF-16BE"}}; 
+	lunicode20 string(20){@StructText{encoding = "UTF-16BE"}}; 
+	bin2sign smallint{@StructBin2{}};
+	bin4sign int{@StructBin4{}};
+	bin8sign bigint{@StructBin8{}};
+	dec112 decimal(11,2){@StructPackedDecimal{}};
+	dec15 decimal(15){@StructPackedDecimal{}};
+	num6 decimal(6){@StructZonedDecimal {}};
+	num103 decimal(10,3){@StructZonedDecimal {}};
+	bin2 int{@StructUnsignedBin2{}};
+	bin4 bigint{@StructUnsignedBin4{}};
+	date1 date{@StructDate};
+	date2 date{@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = "^"}};
+	date3 date{@StructDate {ibmiFormat=com.ibm.as400.access.AS400Date.FORMAT_USA, ibmiSeparatorChar = null}};
+	time1 time{@StructTime};
+	time2 time{@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = "^"}};
+	time3 time{@StructTime {ibmiFormat=com.ibm.as400.access.AS400Time.FORMAT_EUR, ibmiSeparatorChar = null}};
+	timestamp1 timestamp("yyyyMMddHHmmss"){@StructTimestamp{}};
+	float4 smallfloat{@StructFloat4};
+	float8 float{@StructFloat8};
+end

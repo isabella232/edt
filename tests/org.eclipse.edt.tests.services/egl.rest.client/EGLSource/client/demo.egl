@@ -1,0 +1,31 @@
+package client;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.widgets.GridLayout;
+import services.ArrayPassing;
+
+//
+//
+
+handler demo type RUIhandler{initialUI =[ui
+            ], onConstructionFunction = start, cssFile = "css/client.rest.css", title = ""}
+
+    ui GridLayout{columns = 3, rows = 4, cellPadding = 4, children =[]};
+
+    function start()
+    	TestListMgr.bindingType = ServiceBindingType.DEPLOYED;
+    	http HttpRest = sysLib.getResource("binding:file:egl_rest#arraysTgt");
+    	ar string[];
+    	ar.appendElement("index1");
+		ar.appendElement("index2");
+		ar.appendElement("index3");
+    	call ArrayPassing.singleIn(ar) using http returning to showresult onException ex;
+    end
+    function showresult(str string in)
+    	syslib.writeStdout(str);
+    end
+    function ex(ae AnyException in)
+    	syslib.writeStderr(ae.message);
+    end
+end

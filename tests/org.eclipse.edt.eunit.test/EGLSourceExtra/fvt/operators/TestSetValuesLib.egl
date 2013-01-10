@@ -1,0 +1,505 @@
+package fvt.operators;
+
+import FVT.operators.Nested1;
+import FVT.operators.Nested2;
+import FVT.operators.setValuesRec;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/*
+* @name TestSetValuesLib
+* @title The function test program for the EGL Assignment Operators
+* @keywords Assignment Operators
+* @author EDT team
+* @createDate 2011/08/09
+* @description 
+* This library id designed to test the EGL Assignment Operators, 
+* mainly focus on the method of setting value for Array, Dictionary and Record
+*/
+
+library TestSetValuesLib
+
+    array int[];
+    d dictionary;
+    r setValuesRec;
+    copy setValuesRec;
+    //arr setValuesRec[2];
+    arr setValuesRec[] = new setValuesRec[2];
+    nestedRec nested1;
+    nestedRec2 nested1;
+    nestedRec3 nested1;
+
+    function testArraysExpr1(){@Test}
+        array = new int[]{};
+        LogResult.logStdOut("array = new array with {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 0));
+    end
+
+    function testArraysExpr2(){@Test}
+        array = new int[]{247};  // changed for EDT 0.8
+        LogResult.logStdOut("array = new array with one literal in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 1) &&(array[1] == 247));
+    end
+
+    function testArraysExpr3(){@Test}
+        array = new int[]{5, 4, 3}; // changed for EDT 0.8
+        LogResult.logStdOut("array = new array with three literals in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 3) &&(array[1] == 5) &&(array[2] == 4) &&(array[3] == 3));
+    end
+
+    function testArraysExpr4(){@Test}
+        a int = 5;
+        b int = 4;
+        c int = 3;
+        array = new int[]{a, b, c}; // changed for EDT 0.8
+        LogResult.logStdOut("array = new array with three variables in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 3) &&(array[1] == 5) &&(array[2] == 4) &&(array[3] == 3));
+    end
+
+    //    function testArraysStmt1(){@Test}
+    //        array = null;
+    //        LogResult.logStdOut("array - set to null");
+    //        LogResult.assertTrue1(array == null);
+    //    end
+    
+    function testArraysStmt2(){@Test}
+        array{};
+        LogResult.logStdOut("array - with {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 0));
+    end
+
+    function testArraysStmt3(){@Test}
+        array.resize(1);
+        array{247};
+        LogResult.logStdOut("array - with one literal in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 1) &&(array[1] == 247));
+    end
+
+    function testArraysStmt4(){@Test}
+        array.resize(3);
+        array{5, 4, 3};
+        LogResult.logStdOut("array - with three literals in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 3) &&(array[1] == 5) &&(array[2] == 4) &&(array[3] == 3));
+    end
+
+    function testArraysStmt5(){@Test}
+        a int = 5;
+        b int = 4;
+        c int = 3;
+        array{a, b, c};
+        LogResult.logStdOut("array - with three variables in {}");
+        LogResult.assertTrue1(array != null &&(array.getSize() == 3) &&(array[1] == 5) &&(array[2] == 4) &&(array[3] == 3));
+    end
+
+    function testArraysStmt6(){@Test}
+        LogResult.logStdOut("array - set values thows exception when size not given");
+        try
+            array2 int[]{7, 24, 247};
+            LogResult.assertTrue1(false);
+        //onException(iobe IndexOutOfBoundsException)
+        onException(iobe InvalidIndexException)
+            LogResult.assertTrue1(true);
+        end
+    end
+
+    //    function testDictionariesExpr1(){@Test}
+    //        d = null;
+    //        LogResult.logStdOut("dictionary - set to null");
+    //        LogResult.assertTrue1(d == null);
+    //    end
+    
+    function testDictionariesExpr2(){@Test}
+        d = new dictionary;
+        LogResult.logStdOut("dictionary = new dictionary");
+        LogResult.assertTrue1(d != null &&(d.size() == 0));
+    end
+
+    function testDictionariesExpr3(){@Test}
+        d = new dictionary{};
+        LogResult.logStdOut("dictionary = new dictionary with {}");
+        LogResult.assertTrue1(d != null &&(d.size() == 0));
+    end
+
+    function testDictionariesExpr4(){@Test}
+        d = new dictionary{foo = 3};
+        LogResult.logStdOut("dictionary = new dictionary with one literal in {}");
+        LogResult.assertTrue1(d != null &&(d.size() == 1) &&(d.foo as int == 3));
+    end
+
+    function testDictionariesExpr5(){@Test}
+        d = new dictionary{foo = 3, bar = "text", man = true};
+        LogResult.logStdOut("dictionary = new dictionary with three literals in {}");
+        LogResult.assertTrue1(d != null &&(d.size() == 3) &&(d.foo as int == 3) &&(d.bar as string == "text") &&(d.man as boolean == true));
+    end
+
+    function testDictionariesExpr6(){@Test}
+        i int = 3;
+        s string = "text";
+        b boolean = true;
+        d = new dictionary{foo = i, bar = s, man = b};
+        LogResult.logStdOut("dictionary = new dictionary with three variables in {}");
+        LogResult.assertTrue1(d != null &&(d.size() == 3) &&(d.foo as int == 3) &&(d.bar as string == "text") &&(d.man as boolean == true));
+    end
+
+    function testDictionariesExpr7(){@Test}
+        d = new dictionary{foo = 777};
+        LogResult.logStdOut("dictionary = new dictionary with one in {}, verifying old keys removed");
+        LogResult.assertTrue1(d != null &&(d.size() == 1) &&(d.foo as int == 777));
+    end
+
+    //    function testDictionariesStmt1(){@Test}
+    //        d = null;
+    //        LogResult.logStdOut("dictionary - set to null");
+    //        LogResult.assertTrue1(d == null);
+    //    end
+    //
+    //    function testDictionariesStmt2(){@Test}
+    //        d = null;
+    //        d{};
+    //        LogResult.logStdOut("dictionary - with {}");
+    //        LogResult.assertTrue1(d != null &&(d.size() == 0));
+    //    end
+    //
+    //    function testDictionariesStmt3(){@Test}
+    //        d = null;
+    //        d{foo = 3};
+    //        LogResult.logStdOut("dictionary - with one variable in {}");
+    //        LogResult.assertTrue1(d != null &&(d.size() == 1) &&(d.foo as int == 3));
+    //    end
+    //
+    //    function testDictionariesStmt4(){@Test}
+    //        d = null;
+    //        d{foo = 3, bar = "text", man = true};
+    //        LogResult.logStdOut("dictionary - with three variables in {}");
+    //        LogResult.assertTrue1(d != null &&(d.size() == 3) &&(d.foo as int == 3) &&(d.bar as string == "text") &&(d.man as boolean == true));
+    //    end
+    
+    function testDictionariesStmt5(){@Test}
+        i int = 3;
+        s string = "text";
+        b boolean = true;
+        d{foo = i, bar = s, man = b};
+        LogResult.logStdOut("dictionary - with three variables in {}");
+        LogResult.assertTrue1(d != null &&(d.size() == 3) &&(d.foo as int == 3) &&(d.bar as string == "text") &&(d.man as boolean == true));
+    end
+
+    function testDictionariesStmt6(){@Test}
+        d{foo = 777};
+        LogResult.logStdOut("dictionary - with one in {}, verifying old keys still exist");
+        LogResult.assertTrue1(d != null &&(d.size() == 3) &&(d.foo as int == 777) &&(d.bar as string == "text") &&(d.man as boolean == true));
+    end
+
+    function testRecordsExpr1(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        r = new setValuesRec;
+        LogResult.logStdOut("record = new rec (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsExpr2(){@Test}
+        LogResult.logStdOut("record = new rec (blank fields)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 0));
+    end
+
+    function testRecordsExpr3(){@Test}
+        LogResult.logStdOut("record = new rec (blank fields)");
+        LogResult.assertTrue1(r.b != null &&(r.b == ""));
+    end
+
+    function testRecordsExpr4(){@Test}
+        LogResult.logStdOut("record = new rec (blank fields)");
+        LogResult.assertTrue1(r.c != null &&(r.c == false));
+    end
+
+    function testRecordsExpr5(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        r = new setValuesRec{};
+        LogResult.logStdOut("record = new rec with {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsExpr6(){@Test}
+        LogResult.logStdOut("record = new rec with {} (blank fields)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 0));
+    end
+
+    function testRecordsExpr7(){@Test}
+        LogResult.logStdOut("record = new rec with {} (blank fields)");
+        LogResult.assertTrue1(r.b != null &&(r.b == ""));
+    end
+
+    function testRecordsExpr8(){@Test}
+        LogResult.logStdOut("record = new rec with {} (blank fields)");
+        LogResult.assertTrue1(r.c != null &&(r.c == false));
+    end
+
+    function testRecordsExpr9(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        other int = 100;
+        r = new setValuesRec{a = other, b = "sentence", c = false};
+        LogResult.logStdOut("record = new rec with three in {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsExpr10(){@Test}
+        LogResult.logStdOut("record = new rec with three in {} (int field)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 100));
+    end
+
+    function testRecordsExpr11(){@Test}
+        LogResult.logStdOut("record = new rec with three in {} (string field)");
+        LogResult.assertTrue1(r.b != null &&(r.b == "sentence"));
+    end
+
+    function testRecordsExpr12(){@Test}
+        LogResult.logStdOut("record = new rec with three in {} (boolean field)");
+        LogResult.assertTrue1(r.c != null &&(r.c == false));
+    end
+
+    function testRecordsExpr13(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        r = new setValuesRec{a = 247};
+        LogResult.logStdOut("record = new rec with only one in {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsExpr14(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (int field changed)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 247));
+    end
+
+    function testRecordsExpr15(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (string field reset)");
+        LogResult.assertTrue1(r.b != null &&(r.b == ""));
+    end
+
+    function testRecordsExpr16(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (boolean field reset)");
+        LogResult.assertTrue1(r.c != null &&(r.c == false));
+    end
+
+    function testRecordsStmt1(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        r{};
+        LogResult.logStdOut("record with {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsStmt2(){@Test}
+        LogResult.logStdOut("record with {} (int not reset)");
+        LogResult.assertTrue1(r.a != null &&(r.a == -99));
+    end
+
+    function testRecordsStmt3(){@Test}
+        LogResult.logStdOut("record with {} (string not reset)");
+        LogResult.assertTrue1(r.b != null &&(r.b == "word"));
+    end
+
+    function testRecordsStmt4(){@Test}
+        LogResult.logStdOut("record with {} (boolean not reset)");
+        LogResult.assertTrue1(r.c != null &&(r.c == true));
+    end
+
+    function testRecordsStmt5(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        other int = 100;
+        r{a = other, b = "sentence", c = false};
+        LogResult.logStdOut("record with three in {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsStmt6(){@Test}
+        LogResult.logStdOut("record with three in {} (int field)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 100));
+    end
+
+    function testRecordsStmt7(){@Test}
+        LogResult.logStdOut("record with three in {} (string field)");
+        LogResult.assertTrue1(r.b != null &&(r.b == "sentence"));
+    end
+
+    function testRecordsStmt8(){@Test}
+        LogResult.logStdOut("record with three in {} (boolean field)");
+        LogResult.assertTrue1(r.c != null &&(r.c == false));
+    end
+
+    function testRecordsStmt9(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        r{a = 247};
+        LogResult.logStdOut("record = new rec with only one in {} (not null)");
+        LogResult.assertTrue1(r != null);
+    end
+
+    function testRecordsStmt10(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (int field changed)");
+        LogResult.assertTrue1(r.a != null &&(r.a == 247));
+    end
+
+    function testRecordsStmt11(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (string field unchanged)");
+        LogResult.assertTrue1(r.b != null &&(r.b == "word"));
+    end
+
+    function testRecordsStmt12(){@Test}
+        LogResult.logStdOut("record = new rec with only one in {} (boolean field unchanged)");
+        LogResult.assertTrue1(r.c != null &&(r.c == true));
+    end
+
+    function testRecordsOps1(){@Test}
+        r.a = -99;
+        r.b = "word";
+        r.c = true;
+        copy = r{b = "sentence"};
+        LogResult.logStdOut("assignment with set values expression on right (int not reset)");
+        LogResult.assertTrue1(r.a != null &&(r.a == -99));
+    end
+
+    function testRecordsOps2(){@Test}
+        LogResult.logStdOut("assignment with set values expression on right (string changed)");
+        LogResult.assertTrue1(r.b != null &&(r.b == "sentence"));
+    end
+
+    function testRecordsOps3(){@Test}
+        LogResult.logStdOut("assignment with set values expression on right (boolean not reset)");
+        LogResult.assertTrue1(r.c != null &&(r.c == true));
+    end
+
+    function testRecordsOps4(){@Test}
+        LogResult.logStdOut("assigned copy with set values expression on right (int)");
+        LogResult.assertTrue1(copy.a != null &&(copy.a == -99));
+    end
+
+    function testRecordsOps5(){@Test}
+        LogResult.logStdOut("assigned copy with set values expression on right (string)");
+        LogResult.assertTrue1(copy.b != null &&(copy.b == "sentence"));
+    end
+
+    function testRecordsOps6(){@Test}
+        LogResult.logStdOut("assigned copy with set values expression on right (boolean)");
+        LogResult.assertTrue1(copy.c != null &&(copy.c == true));
+    end
+
+    function testRecordsOps7(){@Test}
+        arr =[new setValuesRec{a = 333, b = "paragraph", c = true}, new setValuesRec{b = "essay"}];
+        LogResult.logStdOut("Rec array assignment [0] (int)");
+        LogResult.assertBigIntEqual1(333, arr[1].a);
+    end
+
+    function testRecordsOps8(){@Test}
+        LogResult.logStdOut("Rec array assignment [0] (string)");
+        LogResult.assertStringEqual1("paragraph", arr[1].b);
+    end
+
+    function testRecordsOps9(){@Test}
+        LogResult.logStdOut("Rec array assignment [0] (boolean)");
+        LogResult.assertTrue1((arr[1].c == true));
+    end
+
+    function testRecordsOps10(){@Test}
+        LogResult.logStdOut("Rec array assignment [1] (int initial)");
+        LogResult.assertBigIntEqual1(0, arr[2].a);
+    end
+
+    function testRecordsOps11(){@Test}
+        LogResult.logStdOut("Rec array assignment [1] (string)");
+        LogResult.assertStringEqual1("essay", arr[2].b);
+    end
+
+    function testRecordsOps12(){@Test}
+        LogResult.logStdOut("Rec array assignment [1] (boolean initial)");
+        LogResult.assertTrue1((arr[2].c == false));
+    end
+
+    function testNestedFields1(){@Test}
+        nestedRec = new nested1{nest.i = 88, nest.s = "andy"};
+        LogResult.logStdOut("record = new nested record not null");
+        LogResult.assertTrue1(nestedRec != null);
+    end
+
+    function testNestedFields2(){@Test}
+        LogResult.logStdOut("record = new nested inner record not null");
+        LogResult.assertTrue1(nestedRec != null && nestedRec.nest != null);
+    end
+
+    function testNestedFields3(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (int)");
+        LogResult.assertTrue1(nestedRec != null &&(nestedRec.nest.i == 88));
+    end
+
+    function testNestedFields4(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (string)");
+        LogResult.assertTrue1(nestedRec != null &&(nestedRec.nest.s == "andy"));
+    end
+
+    function testNestedFields5(){@Test}
+        nestedRec2{nest.i = 88, nest.s = "andy"};
+        LogResult.logStdOut("record = new nested record not null");
+        LogResult.assertTrue1(nestedRec2 != null);
+    end
+
+    function testNestedFields6(){@Test}
+        LogResult.logStdOut("record = new nested inner record not null");
+        LogResult.assertTrue1(nestedRec2 != null && nestedRec2.nest != null);
+    end
+
+    function testNestedFields7(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (int)");
+        LogResult.assertTrue1(nestedRec2 != null &&(nestedRec2.nest.i == 88));
+    end
+
+    function testNestedFields8(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (string)");
+        LogResult.assertTrue1(nestedRec2 != null &&(nestedRec2.nest.s == "andy"));
+    end
+
+    function testNestedFields9(){@Test}
+        nestedRec3 = new nested1{nest = new Nested2{i = 88, s = "andy"}};
+        LogResult.logStdOut("record = new nested record not null");
+        LogResult.assertTrue1(nestedRec3 != null);
+    end
+
+    function testNestedFields10(){@Test}
+        LogResult.logStdOut("record = new nested inner record not null");
+        LogResult.assertTrue1(nestedRec3 != null && nestedRec3.nest != null);
+    end
+
+    function testNestedFields11(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (int)");
+        LogResult.assertTrue1(nestedRec3 != null &&(nestedRec3.nest.i == 88));
+    end
+
+    function testNestedFields12(){@Test}
+        LogResult.logStdOut("record = new nested inner record field set (string)");
+        LogResult.assertTrue1(nestedRec3 != null &&(nestedRec3.nest.s == "andy"));
+    end
+
+end
+
+record setValuesRec
+    a int;
+    b string;
+    c boolean;
+end
+
+record Nested1
+    nest nested2;
+end
+
+record Nested2
+    i int;
+    s string;
+end

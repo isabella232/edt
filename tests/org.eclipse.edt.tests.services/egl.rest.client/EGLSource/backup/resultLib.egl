@@ -1,0 +1,230 @@
+package backup;
+
+// basic library
+library resultLib
+
+	private const ACTUALHEADER string = "Actual value = ";
+    private const EXPECTEDHEADER string = "Expected value = ";
+    private const ACTUALSIZEHEADER string = "Actual array size = ";
+    private const EXPECTEDSIZEHEADER string = "Exepcted array size = ";
+	
+	function assertBigIntEqual(message String in, expected bigint in, actual bigint in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertBigIntEqual1(expected bigint in, actual bigint in)
+		assertBigIntEqual("", expected, actual);
+	end
+			
+	function assertStringEqual(message String in, expected String in, actual String in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertStringEqual1(expected String in, actual String in)
+		assertStringEqual("", expected, actual);
+	end	
+		
+	function assertStringArrayEqual(message String in, expected String[] in, actual String[] in)
+		isArrayEqual boolean = true;
+		expectedSize int = expected.getSize();		
+		actualSize int = actual.getSize();
+		failedReason String;
+
+		if(expectedSize == actualSize)
+			failedHeader String = "Array element No.[";
+			expectedValues String = EXPECTEDHEADER + "[";
+			actualValues String = ACTUALHEADER + "[";
+			for(i int from 1 to expectedSize)
+				if(expected[i] != actual[i])
+					if(!isArrayEqual)
+						failedHeader += ", ";
+					end	
+					isArrayEqual = false;					
+					failedHeader += i as String;								
+				end			
+				
+				expectedValues += expected[i];
+				actualValues += actual[i];
+				if(i != expectedSize)
+					expectedValues += ", ";
+					actualValues += ", ";
+				end
+			end
+			failedHeader += "] differs; ";
+			expectedValues += "]; ";
+			actualValues += "] ";
+			failedReason = failedHeader + expectedValues + actualValues;
+		else
+			isArrayEqual = false;	
+			failedReason = "Failed: " + EXPECTEDSIZEHEADER + "'" + expectedSize + "' " + ACTUALSIZEHEADER + "'" + actualSize + "' ";								
+		end
+		if(message != null && message != "");
+			failedReason = message + " - " + failedReason;
+		end
+		assertTrue(failedReason, isArrayEqual);
+	end	
+	
+	function assertStringArrayEqual1(expected String[] in, actual String[] in)
+		assertStringArrayEqual("", expected, actual);
+	end	
+	
+	function assertDateEqual(message String in, expected Date in, actual Date in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertDateEqual1(expected Date in, actual Date in)
+		assertDateEqual("", expected, actual);
+	end
+		
+	function assertTimestampEqual(message String in, expected Timestamp in, actual Timestamp in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);		
+	end
+	
+	function assertTimestampEqual1(expected Timestamp in, actual Timestamp in)
+		assertTimestampEqual("", expected, actual);
+	end
+
+	function assertTimeEqual(message String in, expected Time in, actual Time in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);		
+	end
+	
+	function assertTimeEqual1(expected Time in, actual Time in)
+		assertTimestampEqual("", expected, actual);
+	end
+			
+	function assertDecimalEqual(message String in, expected decimal in, actual decimal in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);				
+	end
+	
+	function assertDecimalEqual1(expected decimal in, actual decimal in)
+		assertDecimalEqual("", expected, actual);
+	end
+		
+	function assertFloatEqual(message String in, expected float in, actual float in)
+		isEqual boolean = isFloatEqual(expected, actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertFloatEqual1(expected float in, actual float in)
+		assertFloatEqual("", expected, actual);
+	end
+	
+	//private helper methods
+	private function isFloatEqual(expected float in, actual float in) returns (boolean)
+		normalExpected, normalActual, delta float;
+		mantissaExpected, mantissaActual int;
+		signExpected, signActual String;
+		deltaLimit float = 1E-14;
+		normalExpected = normalFloat(expected, mantissaExpected, signExpected);
+		normalActual = normalFloat(actual, mantissaActual, signActual);
+		delta = normalExpected - normalActual;
+		delta = MathLib.abs(delta);
+		isEqual boolean = (signExpected == signActual) && 
+					(mantissaExpected == mantissaActual) &&
+					(delta < deltaLimit);
+					
+		return(isEqual);			
+	end	
+	
+	function assertSmallFloatEqual(message String in, expected smallfloat in, actual smallfloat in)
+		isEqual boolean = isSmallFloatEqual(expected, actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertSmallFloatEqual1(expected smallfloat in, actual smallfloat in)
+		assertSmallFloatEqual("", expected, actual);
+	end
+	
+	//private helper methods
+	private function isSmallFloatEqual(expected smallfloat in, actual smallfloat in) returns (boolean)
+		normalExpected, normalActual, delta smallfloat;
+		mantissaExpected, mantissaActual int;
+		signExpected, signActual String;
+		deltaLimit float = 1E-4;
+		normalExpected = normalSmallFloat(expected, mantissaExpected, signExpected);
+		normalActual = normalSmallFloat(actual, mantissaActual, signActual);
+		delta = normalExpected - normalActual;
+		delta = MathLib.abs(delta);
+		isEqual boolean = (signExpected == signActual) && 
+					(mantissaExpected == mantissaActual) &&
+					(delta < deltaLimit);
+					
+		return(isEqual);			
+	end	
+	private function expectAssertTrue(message String in, expected any in, actual any in, isEqual boolean in)
+		failedReason String = buildFailedReason(message, expected, actual);
+		assertTrue(failedReason, isEqual);		
+	end
+	function assertTrue(failedReason String in, testCondition boolean in)
+		assertTrueException(failedReason, testCondition, true);
+	end	
+	private function assertTrueException(failedReason String in, testCondition boolean in, throwsFailException boolean in)
+		if(testCondition)
+			syslib.writeStdout("OK");
+		else
+			failed(failedReason);
+			if(throwsFailException)
+//				throw new AssertionFailedException{message = s.reason};
+			end
+		end
+	end	
+	private function buildFailedReason(message String in, expected any in, actual any in) returns (String)
+		failedReason String = expect(expected, actual);
+		if(message != null && message != "") 
+			failedReason = message + " - " + failedReason;
+		end
+		return (failedReason);
+	end
+    private function expect(expected any in, actual any in) returns (String)
+        standardMsg string = "Failed: " + EXPECTEDHEADER + "'" + expected + "' " + ACTUALHEADER + "'" + actual + "' ";
+        return (standardMsg);
+    end
+		
+    private function normalFloat(afloat float in, mantissa int out, sign string out) returns(float)
+        mantissa = 0;
+        if(aFloat >= 0)
+            sign = "+";
+        else
+            sign = "-";
+            aFloat = aFloat * -1;
+        end
+        if(aFloat != null && aFloat != 0)
+            while(aFloat < 1)
+                aFloat = aFloat * 10;
+                mantissa = mantissa - 1;
+            end
+            while(aFloat >= 10)
+                aFloat = aFloat / 10;
+                mantissa = mantissa + 1;
+            end
+        end
+        return(aFloat);
+    end
+    
+   private function normalSmallFloat(afloat smallfloat in, mantissa int out, sign string out) returns(smallfloat)
+        mantissa = 0;
+        if(aFloat >= 0)
+            sign = "+";
+        else
+            sign = "-";
+            aFloat = aFloat * -1;
+        end
+        if(aFloat != null && aFloat != 0)
+            while(aFloat < 1)
+                aFloat = aFloat * 10;
+                mantissa = mantissa - 1;
+            end
+            while(aFloat >= 10)
+                aFloat = aFloat / 10;
+                mantissa = mantissa + 1;
+            end
+        end
+        return(aFloat);
+    end
+end

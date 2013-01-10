@@ -1,0 +1,37 @@
+package sql.test;
+
+import eglx.lang.AnyException;
+import eglx.persistence.sql.SQLDataSource;
+
+// basic library
+library dataSourceLibrary
+
+	use commonFunctionLibrary ;
+	
+	ds SQLDataSource? ;
+	
+	function connect ( )
+		connect (Constants.dbURL) ;
+	end	
+	
+	function connect ( connectionURL string in )	
+		// trouble doing this for DB2Express
+		if (Constants.isBindingDerby())	
+			ds = commonFunctionLibrary.connect( connectionURL ) ;
+		else
+			ds = Resources.getResource("binding:" + Constants.binding);
+		end
+		createSchema ( ) ;
+		ds.setCurrentSchema("EUNIT"); 
+	end	
+	
+	private function createSchema()
+		try
+			execute from ds with #sql{
+				CREATE SCHEMA EUNIT 
+			};
+		onException (ex anyException )
+		end			
+	end
+	
+end

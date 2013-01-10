@@ -1,0 +1,42 @@
+package lang.expressions;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+library TestTernaryExpression
+
+	function testIfThenElse01() {@Test}
+		a int = 1;
+		b int = 2;
+		c int = (a > b) ?? a : b;
+		LogResult.assertBigintEqual( "ternary ?? : with ints", 2, c );
+	end
+
+	function testIfThenElse02() {@Test}
+		s string = "";
+		i int = 927;
+		ts timestamp("yyyyMMddHH") = "1932 03 15 08";
+		s = (i > 7) ?? i : ts;
+		LogResult.assertStringEqual( "ternary ?? : with mixed types #1", "927", s );
+	end
+
+	function testIfThenElse03() {@Test}
+		s string = "";
+		i int = -927;
+		ts timestamp("yyyyMMddHH") = "1932 03 15 08";
+		s = (i > 7) ?? i : ts;
+		LogResult.assertStringEqual( "ternary ?? : with mixed types #2", "1932-03-15 08", s );
+	end
+	
+	function testIfThenElse04() {@Test}
+		s string = "result: ";
+		i int = 927;
+		ts timestamp("yyyyMMddHH") = "1932 03 15 08";
+		a int = 123456;
+		b int = 7;
+		s2 string;
+		
+		s2 = s :: ((((a - 123456 <= 0) ?? a : b) as string).length() > i + 1 - i) ?? b + i + 3 : ts;
+		LogResult.assertStringEqual( "nested and complex ternary ?? : expressions", "result: 937", s2 );
+	end
+end

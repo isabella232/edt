@@ -1,0 +1,115 @@
+package fvt.datatypes;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/**
+  * @name TestFlexibleRecordsLib
+  * @title TestFlexibleRecordsLib - RunFlexibleRecordsFunctions
+  * @description test case for "Flexible Records" data type behavior
+  * @sources TestFlexibleRecordsLib.egl
+  * @keywords FlexibleRecords, functions
+ **/
+
+library TestFlexibleRecordsLib
+
+    aFlexRec FlxFlexRecord;
+    //testResultMsg string[0];
+    testResultMsg string[] = new string[0];
+    const actualValue string = "Actual value = ";
+    const expectedValue string = "Expected value = ";
+
+    function runFlexRecordsBasicsFunction01(){@Test}
+        LogResult.logStdOut("Flex Record Basics 1");
+        LogResult.assertTrue("aFlexRec.aString == \"\"", aFlexRec.aString == "");
+    end
+
+    function runFlexRecordsBasicsFunction02(){@Test}
+        aFlexRec.aString = "string value";
+        LogResult.logStdOut("Flex Record Basics 2");
+        LogResult.assertStringEqual1(aFlexRec.aString, "string value");
+    end
+
+    function runFlexRecordsBasicsFunction03(){@Test}
+        aFlexRec.anInt = 100;
+        intA int = aFlexRec.anInt;
+        LogResult.logStdOut("Flex Record Basics 3");
+        LogResult.assertTrue("compareInt(intA, 100)", intA == 100);
+    end
+
+    function runFlexRecordsBasicsFunction04(){@Test}
+        aFlexRec.sf = 12345678.90;
+        sf smallFloat = aFlexRec.anint;
+        LogResult.logStdOut("Flex Record Basics 4");
+        LogResult.assertTrue("compareInt(sf, 100)", sf == 100);
+    end
+
+    function runFlexRecordsBasicsFunction05(){@Test}
+        aFlexRec.sf = 12345678.90;
+        sf smallFloat = aFlexRec.anint;
+        aFlexRec.sf = sf;
+        LogResult.logStdOut("Flex Record Basics 5");
+        LogResult.assertTrue("compareInt(aFlexRec.sf, sf)", aFlexRec.sf == sf);
+    end
+
+    function runFlexRecordsBasicsFunction06(){@Test}
+        aFlexRec.sf = 12345678.90;
+        sf smallFloat = aFlexRec.anint;
+        aFlexRec.sf = sf * 3 / 3;
+        LogResult.logStdOut("Flex Record Basics 6");
+        LogResult.assertTrue("compareInt(aFlexRec.sf, sf)", aFlexRec.sf == sf);
+    end
+
+    function runFlexRecordsBasicsFunction07(){@Test}
+        aFlexRec.sf = 0.000;
+        LogResult.logStdOut("Flex Record Basics 7");
+        LogResult.assertTrue("compareInt(aFlexRec.sf, 0)", aFlexRec.sf == 0);
+
+    end
+
+    function runFlexRecordsBasicsFunction08(){@Test}
+        aFlexRec.sf = 10 / 3;
+        LogResult.logStdOut("Flex Record Basics 8");
+        LogResult.assertTrue("compareInt(aFlexRec.sf, 10 / 3)", aFlexRec.sf == 10 / 3);
+
+    end
+
+    function runFlexRecordsBasicsFunction09(){@Test}
+        LogResult.logStdOut("Flex Record Basics 9");
+        pass boolean = false;
+        try
+            aFlexRec.sf = 10 / 0;
+        onException(ex anyexception)
+        	pass = true;
+        end
+        LogResult.assertTrue("want exception from div by zero", pass);
+    end
+
+    function runFlexRecordsBasicsFunction10(){@Test}
+        aFlexRec.sf = 123456789123456789.12;
+        localFloat smallFloat = 123456789123456789.12;
+        rc boolean =(localFloat == aFlexRec.sf);
+        LogResult.logStdOut("Flex Record Basics 10");
+        LogResult.assertTrue("rc", rc);
+    end
+
+    function runFlexRecordsRelationsFunction01(){@Test}
+        LogResult.logStdOut("Flex Record Relations 1");
+        LogResult.assertTrue("aFlexRec.aFlexRec.aString == \"\"", aFlexRec.aFlexRec.aString == "");
+    end
+
+    function runFlexRecordsRelationsFunction02(){@Test}
+        aFlexRec.aFlexRec.aString = "string value";
+        LogResult.logStdOut("Flex Record Relations 2");
+        LogResult.assertStringEqual1(aFlexRec.aFlexRec.aString, "string value");
+    end
+
+    //    function runFlexRecordsRelationsFunction03(){@Test}
+    //        aMoney money;
+    //        aFlexRec.aFlexRec.aMoney = 100;
+    //        aMoney = aFlexRec.aFlexRec.aMoney;
+    //        LogResult.logStdOut("Flex Record Relations 3");
+    //        LogResult.assertTrue("compareNumber(aMoney, 100)", aMoney == 100);
+    //    end
+    
+end

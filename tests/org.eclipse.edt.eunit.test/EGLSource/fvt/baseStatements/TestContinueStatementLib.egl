@@ -1,0 +1,127 @@
+package fvt.baseStatements;
+
+
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name 
+* @title The function test program for valid CONTINUE in EDT for RichUI
+* @keywords CONTINUE
+* @author EDT team
+* @createDate 2011/08/03
+* @description The testContinue function tests that the continue statement works without a modifier in
+* a while or for loop. The function tests that if a continue statement with a for modifier
+* is used in a nested while statement, execution is continued at the termination processing
+* of the for statement. The function tests that if a continue statement with a while modifier
+* is used in a nested for statement, execution is continued at the termination processing
+* of the while statement. When the forEach statement is ready, a test needs to be added for it. 
+*/
+
+Library TestContinueStatementLib
+	
+	// Test the continue statement, continuing the current loop block
+	Function testContinueDefault(){@Test}
+		counter smallInt;
+		start smallInt;
+		delta int;
+		stop bigInt;
+		total int;  // Used to check for succesful result from testFor functions
+		
+		LogResult.logStdOut("Continue without modifier in FOR statement");
+		total = 0;
+		delta = 1;
+		stop = 5;
+		
+		// Test default continuation within for loop
+		for ( counter to stop by delta )
+			if (counter > 3)
+				continue;
+			end
+						
+			total = total + counter;
+		end
+		LogResult.assertTrue1( total == 6);
+		
+		LogResult.logStdOut("Continue without modifier in WHILE statement");
+		counter = 0;
+		// Test default continuation within while loop
+		while ( counter < stop )
+			counter = counter + 1;
+			
+			if ( counter <= 3 )
+				continue;
+			end
+			
+			total = total + counter;
+		end
+		
+		LogResult.assertTrue1( total == 15);
+	end	
+	
+	
+	// Test the continue while statement
+	Function testContinueWhile(){@Test}
+		counter smallInt;
+		i smallint;
+		start smallInt;
+		delta int;
+		stop bigInt;
+		total int;  // Used to check for succesful result from testFor functions
+		
+		// Record start of variation 
+		LogResult.logStdOut("Continue with WHILE modifier in nested FOR statement");		
+		total = 0;
+		delta = 1;
+		stop = 1;
+		i = 0;
+		
+		// Test continue outer WHILE loop
+		while ( i < 5 )
+			i = i + 1;
+			
+			for ( counter from 5 to stop decrement by delta )
+				if ( (counter % 2) == 0 ) // If even
+					continue while;
+				end
+							
+				total = total - i;					
+			end
+		end
+		
+		LogResult.assertTrue1( total == -15);
+	end	
+	
+	// Test the continue for statement
+	Function testContinueFor(){@Test}
+		counter smallInt;
+		i smallint;
+		start smallInt;
+		delta int;
+		stop bigInt;
+		total int;  // Used to check for succesful result from testFor functions
+		
+		// Record start of variation 
+		LogResult.logStdOut("Continue with FOR modifier in nested WHILE statement");		
+		total = 0;
+		delta = 1;
+		stop = 5;
+		
+		// Test continue outer FOR loop
+		for ( counter to stop by delta )
+			i = 1;
+			
+			while ( i <= stop )
+				if ( (i % 2) == 0 ) // If even
+					continue for;
+				end
+						
+				total = total + counter;					
+				i = i + 1;
+			end
+		end
+		LogResult.assertTrue1( total == 15);
+	end	
+	
+end

@@ -1,0 +1,390 @@
+package fvt.primitives;
+
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+
+/* 
+* @name TestIntsLib
+* @title The function test program for Int datatype in EDT for RichUI
+* @keywords Int, bigInt and bigInt
+* @author EDT team
+* @createDate 2011/08/03
+* @description 
+* Test the functionality of int types(Int, bigInt and bigInt) in EDT, including 
+* initialization and value assignment operations.
+*/
+
+library TestIntsLib
+
+    i int;
+    b boolean;
+    bi bigInt;
+    si smallInt;
+
+    function testForInt1(){@Test}
+        LogResult.logStdOut("Initial value of int");
+        LogResult.assertTrue1(checkInts(i, "0"));
+    end
+
+    function testForInt2(){@Test}
+        LogResult.logStdOut("Assign to int #1");
+        i = 1;
+        LogResult.assertTrue1(checkInts(i, "1"));
+    end
+
+    function testForInt3(){@Test}
+        LogResult.logStdOut("Assign to int #2");
+        i = -1;
+        LogResult.assertTrue1(checkInts(i, "-1"));
+    end
+
+    function testForInt4(){@Test}
+        LogResult.logStdOut("Assign to int #3");
+        i = 2147483647;
+        LogResult.assertTrue1(checkInts(i, "2147483647"));
+    end
+
+    function testForInt5(){@Test}
+        LogResult.logStdOut("Assign to int #4");
+        i = -2147483648;
+        LogResult.assertTrue1(checkInts(i, "-2147483648"));
+    end
+
+    function testForInt6(){@Test}
+        LogResult.logStdOut("Assign to int #5 (overflow)");
+        try
+            i = 2147483648;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForInt7(){@Test}
+        LogResult.logStdOut("Assign to int #6 (overflow)");
+        try
+            i = -2147483649;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForInt8(){@Test}
+        LogResult.logStdOut("Assign to int #7");
+        i = 1.23456789;
+        LogResult.assertTrue1(checkInts(i, "1"));
+    end
+
+    function testForInt9(){@Test}
+        LogResult.logStdOut("Assign to int #8");
+        i = 1.23456789e2;
+        LogResult.assertTrue1(checkInts(i, "123"));
+    end
+
+    function testForInt10(){@Test}
+        LogResult.logStdOut("Assign to int #9");
+        i = 2.9999;
+        LogResult.assertTrue1(checkInts(i, "2"));
+    end
+
+    function testForInt11(){@Test}
+        LogResult.logStdOut("Assign to int #10");
+        i = 2.0001;
+        LogResult.assertTrue1(checkInts(i, "2"));
+    end
+
+    function testForInt12(){@Test}
+        LogResult.logStdOut("Assign to int #11");
+        i = -2.9999;
+        LogResult.assertTrue1(checkInts(i, "-2"));
+    end
+
+    function testForInt13(){@Test}
+        LogResult.logStdOut("Assign to int #12");
+        i = -2.0001;
+        LogResult.assertTrue1(checkInts(i, "-2"));
+    end
+
+    function testForInt14(){@Test}
+        LogResult.logStdOut("Assign to int #13");
+        i = 2.9999e0;
+        LogResult.assertTrue1(checkInts(i, "2"));
+    end
+
+    function testForInt15(){@Test}
+        LogResult.logStdOut("Assign to int #14");
+        i = 2.231e0;
+        LogResult.assertTrue1(checkInts(i, "2"));
+    end
+
+    function testForInt16(){@Test}
+        LogResult.logStdOut("Assign to int #15");
+        i = -2.9999e0;
+        LogResult.assertTrue1(checkInts(i, "-2"));
+    end
+
+    function testForInt17(){@Test}
+        LogResult.logStdOut("Assign to int #16");
+        i = -2.231e0;
+        LogResult.assertTrue1(checkInts(i, "-2"));
+    end
+
+    function testForBigint1(){@Test}
+        LogResult.logStdOut("Initial value of bigint");
+        LogResult.assertTrue1(checkBigints(bi, "0"));
+    end
+
+    function testForBigint2(){@Test}
+        LogResult.logStdOut("Assign to bigint #1");
+        bi = 1;
+        LogResult.assertTrue1(checkBigints(bi, "1"));
+    end
+
+    function testForBigint3(){@Test}
+        LogResult.logStdOut("Assign to bigint #2");
+        bi = -1;
+        LogResult.assertTrue1(checkBigints(bi, "-1"));
+    end
+
+    function testForBigint4(){@Test}
+        LogResult.logStdOut("Assign to bigint #3");
+        bi = 9223372036854775807;
+        LogResult.assertTrue1(checkBigints(bi, "9223372036854775807"));
+    end
+
+    function testForBigint5(){@Test}
+        LogResult.logStdOut("Assign to bigint #4");
+        bi = -9223372036854775808;
+        LogResult.assertTrue1(checkBigints(bi, "-9223372036854775808"));
+    end
+
+    function testForBigint6(){@Test}
+        LogResult.logStdOut("Assign to bigint #5 (overflow)");
+        try
+            bi = 9223372036854775808;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForBigint7(){@Test}
+        LogResult.logStdOut("Assign to bigint #6 (overflow)");
+        try
+            bi = -9223372036854775809;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForBigint8(){@Test}
+        LogResult.logStdOut("Assign to bigint #7");
+        bi = 1.23456789;
+        LogResult.assertTrue1(checkBigints(bi, "1"));
+    end
+
+    function testForBigint9(){@Test}
+        LogResult.logStdOut("Assign to bigint #8");
+        bi = 1.23456789e2;
+        LogResult.assertTrue1(checkBigints(bi, "123"));
+    end
+
+    function testForBigint10(){@Test}
+        LogResult.logStdOut("Assign to bigint #9");
+        bi = 2.9999;
+        LogResult.assertTrue1(checkBigints(bi, "2"));
+    end
+
+    function testForBigint11(){@Test}
+        LogResult.logStdOut("Assign to bigint #10");
+        bi = 2.0001;
+        LogResult.assertTrue1(checkBigints(bi, "2"));
+    end
+
+    function testForBigint12(){@Test}
+        LogResult.logStdOut("Assign to bigint #11");
+        bi = -2.9999;
+        LogResult.assertTrue1(checkBigints(bi, "-2"));
+    end
+
+    function testForBigint13(){@Test}
+        LogResult.logStdOut("Assign to bigint #12");
+        bi = -2.0001;
+        LogResult.assertTrue1(checkBigints(bi, "-2"));
+    end
+
+    function testForBigint14(){@Test}
+        LogResult.logStdOut("Assign to bigint #13");
+        bi = 2.9999e0;
+        LogResult.assertTrue1(checkBigints(bi, "3"));
+    end
+
+    function testForBigint15(){@Test}
+        LogResult.logStdOut("Assign to bigint #14");
+        bi = 2.231e0;
+        LogResult.assertTrue1(checkBigints(bi, "2"));
+    end
+
+    function testForBigint16(){@Test}
+        LogResult.logStdOut("Assign to bigint #15");
+        bi = -2.9999e0;
+        LogResult.assertTrue1(checkBigints(bi, "-3"));
+    end
+
+    function testForBigint17(){@Test}
+        LogResult.logStdOut("Assign to bigint #16");
+        bi = -2.231e0;
+        LogResult.assertTrue1(checkBigints(bi, "-2"));
+    end
+
+    function testForSmallint1(){@Test}
+        LogResult.logStdOut("Initial value of smallint");
+        LogResult.assertTrue1(checkSmallints(si, "0"));
+    end
+
+    function testForSmallint2(){@Test}
+        LogResult.logStdOut("Assign to smallint #1");
+        si = 1;
+        LogResult.assertTrue1(checkSmallints(si, "1"));
+    end
+
+    function testForSmallint3(){@Test}
+        LogResult.logStdOut("Assign to smallint #2");
+        si = -1;
+        LogResult.assertTrue1(checkSmallints(si, "-1"));
+    end
+
+    function testForSmallint4(){@Test}
+        LogResult.logStdOut("Assign to smallint #3");
+        si = 32767;
+        LogResult.assertTrue1(checkSmallints(si, "32767"));
+    end
+
+    function testForSmallint5(){@Test}
+        LogResult.logStdOut("Assign to smallint #4");
+        si = -32768;
+        LogResult.assertTrue1(checkSmallints(si, "-32768"));
+    end
+
+    function testForSmallint6(){@Test}
+        LogResult.logStdOut("Assign to smallint #5 (overflow)");
+        try
+            si = 32768;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForSmallint7(){@Test}
+        LogResult.logStdOut("Assign to smallint #6 (overflow)");
+        try
+            si = -32769;
+            b = false;
+        onException(r AnyException)
+            b = true;
+        end
+        LogResult.assertTrue1(b);
+    end
+
+    function testForSmallint8(){@Test}
+        LogResult.logStdOut("Assign to smallint #7");
+        si = 1.23456789;
+        LogResult.assertTrue1(checkSmallints(si, "1"));
+    end
+
+    function testForSmallint9(){@Test}
+        LogResult.logStdOut("Assign to smallint #8");
+        si = 1.23456789e2;
+        LogResult.assertTrue1(checkSmallints(si, "123"));
+    end
+
+    function testForSmallint10(){@Test}
+        LogResult.logStdOut("Assign to smallint #9");
+        si = 2.9999;
+        LogResult.assertTrue1(checkSmallints(si, "2"));
+    end
+
+    function testForSmallint11(){@Test}
+        LogResult.logStdOut("Assign to smallint #10");
+        si = 2.0001;
+        LogResult.assertTrue1(checkSmallints(si, "2"));
+    end
+
+    function testForSmallint12(){@Test}
+        LogResult.logStdOut("Assign to smallint #11");
+        si = -2.9999;
+        LogResult.assertTrue1(checkSmallints(si, "-2"));
+    end
+
+    function testForSmallint13(){@Test}
+        LogResult.logStdOut("Assign to smallint #12");
+        si = -2.0001;
+        LogResult.assertTrue1(checkSmallints(si, "-2"));
+    end
+
+    function testForSmallint14(){@Test}
+        LogResult.logStdOut("Assign to smallint #13");
+        si = 2.9999e0;
+        LogResult.assertTrue1(checkSmallints(si, "2"));
+    end
+
+    function testForSmallint15(){@Test}
+        LogResult.logStdOut("Assign to smallint #14");
+        si = 2.231e0;
+        LogResult.assertTrue1(checkSmallints(si, "2"));
+    end
+
+    function testForSmallint16(){@Test}
+        LogResult.logStdOut("Assign to smallint #15");
+        si = -2.9999e0;
+        LogResult.assertTrue1(checkSmallints(si, "-2"));
+    end
+
+    function testForSmallint17(){@Test}
+        LogResult.logStdOut("Assign to smallint #16");
+        si = -2.231e0;
+        LogResult.assertTrue1(checkSmallints(si, "-2"));
+    end
+
+    function checkInts(i int in, s string in) returns(boolean)
+        s2 string = i;
+        i2 int = s;
+
+        // Add 't' to the numeric strings so JavaScript doesn't compare them as numbers.
+        s = "t" :: s;
+        s2 = "t" :: s2;
+
+        return(i == i2 && s == s2);
+    end
+
+    function checkSmallints(i smallInt in, s string in) returns(boolean)
+        s2 string = i;
+        i2 smallInt = s;
+
+        // Add 't' to the numeric strings so JavaScript doesn't compare them as numbers.
+        s = "t" :: s;
+        s2 = "t" :: s2;
+
+        return(i == i2 && s == s2);
+    end
+
+    function checkBigints(i bigInt in, s string in) returns(boolean)
+        s2 string = i;
+        i2 bigInt = s;
+
+        // Add 't' to the numeric strings so JavaScript doesn't compare them as numbers.
+        s = "t" :: s;
+        s2 = "t" :: s2;
+
+        return(i == i2 && s == s2);
+    end
+
+end

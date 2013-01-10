@@ -1,0 +1,14 @@
+package fvt.baseStatements;
+
+
+library ExceptionLibrary
+	function throwsRuntimeException1()
+		aNum decimal(1) ; 
+		aNum = 5 ;
+		aNum = aNum / 0 ;		
+	end
+	
+	function throwsRuntimeException2()
+		throw new AnyException;
+	end
+end
