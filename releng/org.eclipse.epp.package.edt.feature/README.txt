@@ -7,20 +7,23 @@ To create an Eclipse product for the running platform:
 2. Update the version of org.eclipse.epp.package.edt and org.eclipse.epp.package.edt.feature, replacing
    .qualifier with .v<timestamp> (e.g. 0.7.0.v201112071300). Use this same value for every platform being
    exported. There are four places to update: MANIFEST.MF, feature.xml, and epp.product (Overview tab's version
-   and Dependencies tab feature version).
+   and Dependencies tab feature version). Also update the version in about.properties and epp.product's "About Dialog"
+   text on the Branding tab.
 
-3. Right-click the epp.product file > Export > Plug-in Development > Eclipse Product.
+3. Update copyrights if necessary. Do a file search for the previous year to make sure places like the license text are updated too.
 
-4. Make sure 'Synchronize before exporting' and 'Generate metadata directory' are both checked,
+4. Right-click the epp.product file > Export > Plug-in Development > Eclipse Product.
+
+5. Make sure 'Synchronize before exporting' and 'Generate metadata directory' are both checked,
    specify the destination Directory, then click Finish (if the destination directory exists from,
    a previous export, delete it before running another export).
    
    Note: delete any 'juno' update sites in your eclipse workspace before exporting, otherwise for
          some reason they get included. Verify the update sites in the exported package.
 
-5. It will take a few minutes and the result will be an eclipse folder and a repository folder.
+6. It will take a few minutes and the result will be an eclipse folder and a repository folder.
 
-6. Zip up the eclipse folder, and then add the repository folder to the 'release' update site.
+7. Zip up the eclipse folder, and then add the repository folder to the 'release' update site.
    Note: If exporting for multiple platforms, you'll need to merge the repository directories for
          each platform into a single repository. Use the 'merge.sh' script to do this (read it first!).
 
