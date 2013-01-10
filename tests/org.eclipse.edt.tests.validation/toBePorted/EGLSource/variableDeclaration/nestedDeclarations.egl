@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -72,7 +72,7 @@ Program Declarations {allowUnqualifiedItemReferences=yes}
 			g int; 		//0
 		else
 			e int;	//1 same name
-			f int;	//0 {OK.  There’s another ‘f’ but the scopes of the two variables don’t overlap.}
+			f int;	//0 {OK.  Thereï¿½s another ï¿½fï¿½ but the scopes of the two variables donï¿½t overlap.}
 			g = 22; //1 g cannot be resolved {Invalid, g is declared in the other branch of the 'if' stmt.}
 			
 			f int;	//1 same name

@@ -1,33 +1,14 @@
-handler hand1
-	field1 int {@property{}};  //0
-	field2 int {@property{getmethod = "getit"}};  //0
-	field3 int {@property{setmethod = "setit"}};  //0
-	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //0
-	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //0
-	
-	function getit() returns (int) end
-	function setit(p1 int in) end
-	
-	function test()
-		temp int;
-		arr int[];
-		
-		field2 = 3;  //1
-		temp = field3; //1
-		
-		field4 = 3; //0
-		temp = field4; //0
-		
-		temp = field2 + 1; //0
-		temp = arr[field2]; //0
-		temp = -field2;     //0
-
-		temp = field3 + 1; //1
-		temp = arr[field3]; //1
-		temp = -field3;     //1
-	end
-end
-
+/*******************************************************************************
+ * Copyright © 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 record rec1
 	recField1 int;
 	recField2 int;
@@ -37,35 +18,95 @@ record rec1
 	recField6 int;
 end
 
-library lib1
-	hand1 hand1;
+library testlib
+	et et1;
 	temp int;
 	arr int[];
 	
 	rec1 rec1 {
-		recField1 = hand1.field2,   //0
-		recField2 = hand1.field3,   //1
-		recfield3 = arr[hand1.field2],  //0
-		recfield4 = arr[hand1.field3],  //1
-		recfield4 = -hand1.field2,  //0
-		recfield5 = -hand1.field3   //1
+		recField1 = et.field2,   //0
+		recField2 = et.field3,   //1
+		recfield3 = arr[et.field2],  //0
+		recfield4 = arr[et.field3],  //1
+		recfield4 = et.field2,  //0
+		recfield5 = et.field3   //1
 	};
 	
 	function f1()
-		hand1.field2 = 3;  //1
-		temp = hand1.field3; //1
+		et.field2 = 3;  //1
+		temp = et.field3; //1
 		
-		hand1.field4 = 3; //0
-		temp = hand1.field4; //0
+		et.field4 = 3; //0
+		temp = et.field4; //0
 		
-		temp = hand1.field2 + 1; //0
-		temp = arr[hand1.field2]; //0
-		temp = -hand1.field2;     //0
+		temp = et.field2 + 1; //0
+		temp = arr[et.field2]; //0
+		temp = -et.field2;     //0
 
-		temp = hand1.field3 + 1; //1
-		temp = arr[hand1.field3]; //1
-		temp = -hand1.field3;     //1
+		temp = et.field3 + 1; //1
+		temp = arr[et.field3]; //1
+		temp = -et.field3;     //1
 		
 	end
 	
+end
+
+externaltype et1
+	field1 int {@property{}};  //0
+	field2 int {@property{getmethod = "getit"}};  //0
+	field3 int {@property{setmethod = "setit"}};  //0
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //0
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //0
+	function getit() returns (int);
+	function setit(p1 int in);
+end
+
+handler h1
+	field1 int {@property{}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field2 int {@property{getmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field3 int {@property{setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	function getit() returns (int);
+	function setit(p1 int in);
+end
+
+class c1
+	field1 int {@property{}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field2 int {@property{getmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field3 int {@property{setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	function getit() returns (int);
+	function setit(p1 int in);
+end
+
+program p1
+	field1 int {@property{}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field2 int {@property{getmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field3 int {@property{setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	function getit() returns (int);
+	function setit(p1 int in);
+end
+
+library l1
+	field1 int {@property{}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field2 int {@property{getmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field3 int {@property{setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	function getit() returns (int);
+	function setit(p1 int in);
+end
+
+service s1
+	field1 int {@property{}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field2 int {@property{getmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field3 int {@property{setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field4 int {@property{getmethod = "getit", setmethod = "setit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	field5 int {@property{getmethod = "setit", setmethod = "getit"}};  //1 The annotation @Property can only be specified on fields inside ExternalTypes.
+	function getit() returns (int);
+	function setit(p1 int in);
 end

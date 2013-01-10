@@ -30,7 +30,17 @@ if ( !egl.javascript )
 /* 1999.03.05 simplify; changes from discussion with J. Bloch         */
 /* 1999.03.13 1.00 release to IBM Centre for Java Technology          */
 /* 1999.07.10 1.04 flag serialization unused                          */
-/* 2000.01.01 1.06 copyright update                                   */
+/*******************************************************************************
+ * Copyright © 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 /* ------------------------------------------------------------------ */
 
 

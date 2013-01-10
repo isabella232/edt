@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright © 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 //I ran across this validation problem recently. Validation was not allowing you to set
 //a dictionary entry to null. This is because it was returning a type of ANY instead of ANY?
 library lib1

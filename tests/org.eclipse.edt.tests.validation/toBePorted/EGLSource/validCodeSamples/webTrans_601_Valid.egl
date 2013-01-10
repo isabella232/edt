@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,46 +12,46 @@
 // NO_ERROR
 
 // VGUIRecord Item properties:
-// •	displayNames – different labels to be used for each array item (eg. it can be used to display different labels for each array button item) 
-// •	ProgramLinkData
-// •	numElementsItem FieldRef  - Only valid on array field
-// •	uiType  UITypeKind – value to associate an HTML tag to be produced for the item in the generated JSP page
-// •	selectedIndexItem FieldRef 
+// ï¿½	displayNames ï¿½ different labels to be used for each array item (eg. it can be used to display different labels for each array button item) 
+// ï¿½	ProgramLinkData
+// ï¿½	numElementsItem FieldRef  - Only valid on array field
+// ï¿½	uiType  UITypeKind ï¿½ value to associate an HTML tag to be produced for the item in the generated JSP page
+// ï¿½	selectedIndexItem FieldRef 
 //
 // Common Item Properties applicable for VGUIRecord item are:
-// •	displayName 
-// •	value – not applicable but use initializer
-// •	help
-// •	alias  -  runtime part name to be used on generation
+// ï¿½	displayName 
+// ï¿½	value ï¿½ not applicable but use initializer
+// ï¿½	help
+// ï¿½	alias  -  runtime part name to be used on generation
 //
 // Common validation properties applicable for a VGUIRecord item are:
-// •	inputRequired
-// •	inputRequiredMsgKey
-// •	minimumInput
-// •	minimumInputMsgKey
-// •	needsSOSI
-// •	typeChkMsgKey
-// •	validValues 
-// •	validValuesMsgKey
-// •	runValidatorFromProgram
-// •	validatorFunction
-// •	validatorFunctionMsgKey
-// •	validatorDataTable
-// •	validatorDataTableMsgKey
-// •	validationOrder
+// ï¿½	inputRequired
+// ï¿½	inputRequiredMsgKey
+// ï¿½	minimumInput
+// ï¿½	minimumInputMsgKey
+// ï¿½	needsSOSI
+// ï¿½	typeChkMsgKey
+// ï¿½	validValues 
+// ï¿½	validValuesMsgKey
+// ï¿½	runValidatorFromProgram
+// ï¿½	validatorFunction
+// ï¿½	validatorFunctionMsgKey
+// ï¿½	validatorDataTable
+// ï¿½	validatorDataTableMsgKey
+// ï¿½	validationOrder
 //
 // Common item formatting properties supported for a VGUIRecord Item are:
-// •	numericFormat – property of a string value created by combining currency, currencySymbol, sign, numeric separator and zero edit into a proper numeric format specifier.  Alternatively, the following formatting attributes are also allowed:
-// •	currency
-// •	currencySymbol
-// •	numericSeparator
-// •	sign
-// •	zeroFormat
-// •	dateFormat – default based on locale setting
-// •	fillCharacter
-// •	isBoolean
-// •	timeFormat – default to "HH:mm:ss"
-// •	uppercase
+// ï¿½	numericFormat ï¿½ property of a string value created by combining currency, currencySymbol, sign, numeric separator and zero edit into a proper numeric format specifier.  Alternatively, the following formatting attributes are also allowed:
+// ï¿½	currency
+// ï¿½	currencySymbol
+// ï¿½	numericSeparator
+// ï¿½	sign
+// ï¿½	zeroFormat
+// ï¿½	dateFormat ï¿½ default based on locale setting
+// ï¿½	fillCharacter
+// ï¿½	isBoolean
+// ï¿½	timeFormat ï¿½ default to "HH:mm:ss"
+// ï¿½	uppercase
 
 
 

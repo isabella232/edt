@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -1016,19 +1016,19 @@ Form TR101M01 type textForm
   FUNCKEY_LABEL char(8) [16] 
   { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
     intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
-    value = " HJÆLP",
+    value = " HJï¿½LP",
     this [2] { position = [27,2], value = " " },
     this [3] { position = [26,12], value = "ANDRE" },
     this [4] { position = [27,12], value = "F-TASTER" },
     this [5] { position = [26,22], value = "OPDATER" },
     this [6] { position = [27,22], value = " " },
-    this [7] { position = [26,32], value = " NÆSTE" },
+    this [7] { position = [26,32], value = " Nï¿½STE" },
     this [8] { position = [27,32], value = " KUNDE" },
     this [9] { position = [26,42], value = " FAKTU-" },
     this [10] { position = [27,42], value = " RERING" },
     this [11] { position = [26,52], value = " TRANSP." },
-    this [12] { position = [27,52], value = "PLANLÆG." },
-    this [13] { position = [26,62], value = "MÆRKE &" },
+    this [12] { position = [27,52], value = "PLANLï¿½G." },
+    this [13] { position = [26,62], value = "Mï¿½RKE &" },
     this [14] { position = [27,62], value = "NUMMER" },
     this [15] { position = [26,72], value = "  EXIT" },
     this [16] { position = [27,72], value = " " }
@@ -2528,19 +2528,19 @@ Form TR101M05 type textForm
   FUNCKEY_LABEL char(8) [16] 
   { position = [26,2], fieldLen = 8, color = cyan, highlight = reverse, 
     intensity = bold, protect = skipProtect, align = none, fillCharacter = nullFill,
-    value = " HJÆLP",
+    value = " HJï¿½LP",
     this [2] { position = [27,2], value = " " },
     this [3] { position = [26,12], value = "ANDRE" },
     this [4] { position = [27,12], value = "F-TASTER" },
     this [5] { position = [26,22], value = "OPDATER" },
     this [6] { position = [27,22], value = " " },
-    this [7] { position = [26,32], value = " NÆSTE" },
+    this [7] { position = [26,32], value = " Nï¿½STE" },
     this [8] { position = [27,32], value = " KUNDE" },
     this [9] { position = [26,42], value = " FAKTU-" },
     this [10] { position = [27,42], value = " RERING" },
     this [11] { position = [26,52], value = " TRANSP." },
-    this [12] { position = [27,52], value = "PLANLÆG." },
-    this [13] { position = [26,62], value = "MÆRKE &" },
+    this [12] { position = [27,52], value = "PLANLï¿½G." },
+    this [13] { position = [26,62], value = "Mï¿½RKE &" },
     this [14] { position = [27,62], value = "NUMMER" },
     this [15] { position = [26,72], value = "  EXIT" },
     this [16] { position = [27,72], value = " " }

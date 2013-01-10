@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,14 +11,14 @@
  *******************************************************************************/
 package test;
 
-// ÊİÜÜíÏ ÇáÊÚÜÜÏíá
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem AMNDFLAG num(1)  {
   currency = no, numericSeparator = no, sign = none, align = right, 
   fillCharacter = " ", inputRequired = no
 }
 end
 
-// ÃÓã ÇáİÑÚ
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem BRNNM char(14)  {
   align = left, fillCharacter = nullFill, inputRequired = no
 }
@@ -99,7 +99,7 @@ DataItem FLAGNM char(8)  {
 }
 end
 
-//                  ÇäæÇÚ ÇáÊÃãíä
+//                  ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem INS40 num(2)  {
   currency = no, numericSeparator = no, sign = none, align = left, 
   fillCharacter = " ", validValues = [[01,09]], inputRequired = no, 
@@ -173,7 +173,7 @@ DataItem NODB num(2)  {
 }
 end
 
-//  ããÈÒ ÇáãÈáÛ :  1ÏÇÆä  2ãÏíä
+//  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ :  1ï¿½ï¿½ï¿½ï¿½  2ï¿½ï¿½ï¿½ï¿½
 DataItem NTRDS num(1)  {
   currency = no, numericSeparator = no, sign = none, align = right, 
   fillCharacter = " ", inputRequired = no
@@ -250,14 +250,14 @@ DataItem SW9 num(1)  {
 }
 end
 
-// ÇÌãÇáí ÇáÌÇäÈ ÇáÏÇÆä
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem TOTCR num(10)  {
   currency = no, numericSeparator = no, sign = none, align = right, 
   fillCharacter = " ", inputRequired = no
 }
 end
 
-// ÇÌãÇáí ÇáÌÇäÈ ÇáãÏíä
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem TOTDB num(10)  {
   currency = no, numericSeparator = no, sign = none, align = right, 
   fillCharacter = " ", inputRequired = no
@@ -283,7 +283,7 @@ DataItem VUHDS num(1)  {
 }
 end
 
-// ÑŞã ÇÓÜÜÊÚÇÖÜÉ äŞÏíÉ
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 DataItem VUHNO num(8)  {
   currency = no, numericSeparator = no, sign = none, align = right, 
   fillCharacter = " ", inputRequired = no

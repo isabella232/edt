@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,9 +52,9 @@ Program consoleUI_valid
 		// alternative menu, arranged a little more like I4GL
 		// will work once parser is regened
 //		OpenUI new Menu {title="Menu1", menuItems {new MenuItem {labelKey=(getKeyCode("PKEY_F1")),
-//						name=”Cmd1”, labelText=”Command1”}}
+//						name=ï¿½Cmd1ï¿½, labelText=ï¿½Command1ï¿½}}
 //						}
-//				OnEvent(MENU_ACTION:“Cmd1”)
+//				OnEvent(MENU_ACTION:ï¿½Cmd1ï¿½)
 //					exit openUI;
 //		end
 		
@@ -110,7 +110,7 @@ Program consoleUI_valid
 				exit openUI;
 			OnEvent(BEFORE_OPENUI )
 				exit openUI;
-			OnEvent(BEFORE_FIELD:"field1”,”field2") 
+			OnEvent(BEFORE_FIELD:"field1ï¿½,ï¿½field2") 
 				exit openUI;
 		end
 		
@@ -183,7 +183,7 @@ srArray arrayDictionary { activity=activity, commandCode=commandCode };
 End
 
 Record SampleForm4 type ConsoleForm { formSize=[14,80] }
-	// Constant fields don’t need names 
+	// Constant fields donï¿½t need names 
 * ConsoleField { position=[1,31], value="Sample Dynamic Form" } ; 
 * ConsoleField { position=[3,18], value="Activity:" } ;
 * ConsoleField { position=[3,61], value="Command Code:" } ;
