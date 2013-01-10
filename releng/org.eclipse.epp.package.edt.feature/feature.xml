@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.epp.package.edt.feature"
       label="%featureName"
-      version="0.8.0.v201204061050"
+      version="0.8.2.v201301101050"
       provider-name="%providerName"
       plugin="org.eclipse.epp.package.edt">
 

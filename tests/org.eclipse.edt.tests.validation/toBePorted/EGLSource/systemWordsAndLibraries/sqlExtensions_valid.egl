@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2012 IBM Corporation and others.
+ * Copyright Â© 2012, 2013 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -33,7 +33,7 @@ Library sqlExtensionsLibrary_valid
 	
 	function defineDatabaseAliasTest()
 		aliasname, dbname string ;
-		// Connect to a database with alias “alias”.  It will become
+		// Connect to a database with alias ï¿½aliasï¿½.  It will become
 		// the current connection.
 		defineDatabaseAlias( "alias", "database" );
 		aliasname = "alias";

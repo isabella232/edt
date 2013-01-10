@@ -3,6 +3,7 @@
 	<name>org.eclipse.edt.rui</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.edt.compiler</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

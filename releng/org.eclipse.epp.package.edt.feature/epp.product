@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse IDE for EGL Web Developers" uid="epp.package.edt" id="org.eclipse.epp.package.edt.product" application="org.eclipse.ui.ide.workbench" version="0.8.0.v201204061050" useFeatures="true" includeLaunchers="true">
+<product name="Eclipse IDE for EGL Web Developers" uid="epp.package.edt" id="org.eclipse.epp.package.edt.product" application="org.eclipse.ui.ide.workbench" version="0.8.2.v201301101050" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.epp.package.edt/about.png"/>
       <text>
          Eclipse IDE for EGL Web Developers
 
-Version: 0.8.0
+Version: 0.8.2
 
-(c) Copyright Eclipse contributors and others 2011, 2012.  All rights reserved.
+(c) Copyright Eclipse contributors and others 2011, 2013.  All rights reserved.
 Visit http://www.eclipse.org/edt
       </text>
    </aboutInfo>
@@ -44,6 +44,7 @@ Visit http://www.eclipse.org/edt
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
@@ -155,7 +156,7 @@ Java and all Java-based trademarks are trademarks of Sun Microsystems, Inc. in t
    </plugins>
 
    <features>
-      <feature id="org.eclipse.epp.package.edt.feature" version="0.8.0.v201204061050"/>
+      <feature id="org.eclipse.epp.package.edt.feature" version="0.8.2.v201301101050"/>
    </features>
 
 

@@ -59,7 +59,7 @@
          </property>
          <property
                name="aboutText"
-               value="Eclipse IDE for EGL Web Developers&#x0A;&#x0A;Version: 0.8.0&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011, 2012.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
+               value="Eclipse IDE for EGL Web Developers&#x0A;&#x0A;Version: 0.8.2&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011, 2013.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
          </property>
       </product>
    </extension>
